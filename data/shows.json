@@ -1,0 +1,139 @@
+{
+  "generatedAt": "2026-08-15T01:24:17.997Z",
+  "policy": "Data is copied verbatim from venue websites by this script. Nothing is inferred or projected.",
+  "venues": [
+    {
+      "id": "funky-biscuit",
+      "name": "Funky Biscuit",
+      "city": "Boca Raton",
+      "calendarUrl": "https://www.funkybiscuit.com/",
+      "status": "error",
+      "method": null,
+      "fetchedAt": "2026-08-15T01:24:17.139Z",
+      "showCount": 0,
+      "error": "HTTP 403"
+    },
+    {
+      "id": "crazy-uncle-mikes",
+      "name": "Crazy Uncle Mike's",
+      "city": "Boca Raton",
+      "calendarUrl": "https://www.crazyunclemikes.com/",
+      "status": "error",
+      "method": null,
+      "fetchedAt": "2026-08-15T01:24:17.264Z",
+      "showCount": 0,
+      "error": "HTTP 403"
+    },
+    {
+      "id": "boca-black-box",
+      "name": "Boca Black Box",
+      "city": "Boca Raton",
+      "calendarUrl": "https://bocablackbox.com/",
+      "status": "error",
+      "method": null,
+      "fetchedAt": "2026-08-15T01:24:17.267Z",
+      "showCount": 0,
+      "error": "HTTP 403"
+    },
+    {
+      "id": "barrel-of-monks",
+      "name": "Barrel of Monks",
+      "city": "Boca Raton",
+      "calendarUrl": "https://barrelofmonks.com/",
+      "status": "error",
+      "method": null,
+      "fetchedAt": "2026-08-15T01:24:17.268Z",
+      "showCount": 0,
+      "error": "HTTP 403"
+    },
+    {
+      "id": "tin-roof-delray",
+      "name": "Tin Roof Delray Beach",
+      "city": "Delray Beach",
+      "calendarUrl": "https://tinroofdelraybeach.com/calendar/",
+      "status": "error",
+      "method": null,
+      "fetchedAt": "2026-08-15T01:24:17.269Z",
+      "showCount": 0,
+      "error": "HTTP 403"
+    },
+    {
+      "id": "revolution-live",
+      "name": "Revolution Live",
+      "city": "Fort Lauderdale",
+      "calendarUrl": "https://www.jointherevolution.net/concerts/",
+      "status": "error",
+      "method": null,
+      "fetchedAt": "2026-08-15T01:24:17.271Z",
+      "showCount": 0,
+      "error": "HTTP 403"
+    },
+    {
+      "id": "tin-roof-ftl",
+      "name": "Tin Roof Ft Lauderdale",
+      "city": "Fort Lauderdale",
+      "calendarUrl": "https://tinroofftlauderdale.com/calendar/",
+      "status": "error",
+      "method": null,
+      "fetchedAt": "2026-08-15T01:24:17.272Z",
+      "showCount": 0,
+      "error": "HTTP 403"
+    },
+    {
+      "id": "tarpon-river",
+      "name": "Tarpon River Brewing",
+      "city": "Fort Lauderdale",
+      "calendarUrl": "https://tarponriverbrewing.com/",
+      "status": "error",
+      "method": null,
+      "fetchedAt": "2026-08-15T01:24:17.273Z",
+      "showCount": 0,
+      "error": "HTTP 403"
+    },
+    {
+      "id": "funky-buddha",
+      "name": "Funky Buddha Brewery",
+      "city": "Oakland Park",
+      "calendarUrl": "https://funkybuddhabrewery.com/",
+      "status": "error",
+      "method": null,
+      "fetchedAt": "2026-08-15T01:24:17.274Z",
+      "showCount": 0,
+      "error": "HTTP 403"
+    },
+    {
+      "id": "ball-and-chain",
+      "name": "Ball & Chain",
+      "city": "Miami",
+      "calendarUrl": "https://ballandchainmiami.com/upcoming-events/",
+      "status": "error",
+      "method": null,
+      "fetchedAt": "2026-08-15T01:24:17.277Z",
+      "showCount": 0,
+      "error": "HTTP 403"
+    },
+    {
+      "id": "lagniappe",
+      "name": "Lagniappe",
+      "city": "Miami",
+      "calendarUrl": "https://lagniappehouse.com/",
+      "status": "error",
+      "method": null,
+      "fetchedAt": "2026-08-15T01:24:17.278Z",
+      "showCount": 0,
+      "error": "HTTP 403"
+    },
+    {
+      "id": "churchills",
+      "name": "Churchill's Pub",
+      "city": "Miami",
+      "calendarUrl": "https://churchillspub.com/",
+      "status": "error",
+      "method": null,
+      "fetchedAt": "2026-08-15T01:24:17.278Z",
+      "showCount": 0,
+      "error": "HTTP 403"
+    }
+  ],
+  "shows": []
+}

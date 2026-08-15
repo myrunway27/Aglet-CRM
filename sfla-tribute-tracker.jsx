@@ -1,244 +1,102 @@
 import React, { useMemo, useState } from "react";
+import data from "./data/shows.json";
 
 /**
- * SFLA Tribute & Cover Band Tracker — Miami to Boca Raton
+ * SFLA Tribute & Cover Tracker — Miami to Boca Raton.
  *
- * DATA INTEGRITY POLICY (the rule this app lives by):
- *   Every show in SHOWS must be confirmed against the venue's official
- *   calendar or ticketing page. Each entry carries the source URL it was
- *   verified against and the date it was verified. No inferred shows, no
- *   placeholders, no "probably plays every Friday" entries. Ever.
- *
- * THIS BUILD (2026-08-15):
- *   Rebuilt in an environment whose network policy blocks direct access to
- *   venue calendars, so ZERO shows are pre-loaded. That is deliberate: an
- *   empty list is honest; an unverifiable list is not. The venue registry
- *   below is complete for the Miami-to-Boca corridor, and every venue links
- *   straight to its official calendar so shows can be verified and added.
- *
- * To add a verified show, append to SHOWS:
- *   {
- *     id: "fb-2026-08-22-petty",          // unique
- *     date: "2026-08-22",                  // YYYY-MM-DD
- *     band: "Free Fallin'",
- *     tributeTo: "Tom Petty",              // null for original/cover-mix acts
- *     venueId: "funky-biscuit",
- *     time: "8:00 PM",                     // null if not listed
- *     price: "$15",                        // null if not listed
- *     sourceUrl: "https://...",            // the page it was verified on — REQUIRED
- *     verifiedOn: "2026-08-15",            // REQUIRED
- *     warning: null,                       // or e.g. "Date listed on flyer only, not ticketing"
- *   }
+ * All data comes from data/shows.json, written by `node scripts/refresh.mjs`,
+ * which copies listings verbatim from each venue's own website. This component
+ * only displays; it never invents. A show's tribute tag appears only when the
+ * venue's listing text literally contains the evidence phrase shown.
+ * Refresh = re-run the script. Fetch failures render as failures.
  */
 
-const BUILD = {
-  date: "2026-08-15",
-  note:
-    "Rebuilt from scratch. No shows pre-loaded — venue calendars were unreachable " +
-    "from the build environment, and this tracker does not ship unverified data.",
+const STATUS = {
+  ok: { label: "fetched", cls: "ok" },
+  "no-structured-data": { label: "needs manual check", cls: "warn" },
+  error: { label: "fetch failed", cls: "err" },
+  skipped: { label: "skipped", cls: "warn" },
 };
 
-// Coverage statuses:
-//   "full"    — official calendar fully checked through the horizon date
-//   "partial" — some shows verified, calendar not exhaustively checked
-//   "none"    — not audited; use the official calendar link directly
-const VENUES = [
-  // ——— Boca Raton ———
-  { id: "funky-biscuit",    name: "Funky Biscuit",         city: "Boca Raton",      calendarUrl: "https://www.funkybiscuit.com/",               coverage: "none", lastChecked: null },
-  { id: "crazy-uncle-mikes",name: "Crazy Uncle Mike's",    city: "Boca Raton",      calendarUrl: "https://www.crazyunclemikes.com/",            coverage: "none", lastChecked: null },
-  { id: "boca-black-box",   name: "Boca Black Box",        city: "Boca Raton",      calendarUrl: "https://bocablackbox.com/",                   coverage: "none", lastChecked: null },
-  { id: "barrel-of-monks",  name: "Barrel of Monks",       city: "Boca Raton",      calendarUrl: "https://barrelofmonks.com/",                  coverage: "none", lastChecked: null },
-  // ——— Delray Beach ———
-  { id: "tin-roof-delray",  name: "Tin Roof Delray Beach", city: "Delray Beach",    calendarUrl: "https://tinroofdelraybeach.com/calendar/",    coverage: "none", lastChecked: null },
-  // ——— Fort Lauderdale / Oakland Park ———
-  { id: "revolution-live",  name: "Revolution Live",       city: "Fort Lauderdale", calendarUrl: "https://www.jointherevolution.net/concerts/", coverage: "none", lastChecked: null },
-  { id: "tin-roof-ftl",     name: "Tin Roof Ft Lauderdale",city: "Fort Lauderdale", calendarUrl: "https://tinroofftlauderdale.com/calendar/",   coverage: "none", lastChecked: null },
-  { id: "tarpon-river",     name: "Tarpon River Brewing",  city: "Fort Lauderdale", calendarUrl: "https://tarponriverbrewing.com/",             coverage: "none", lastChecked: null },
-  { id: "funky-buddha",     name: "Funky Buddha Brewery",  city: "Oakland Park",    calendarUrl: "https://funkybuddhabrewery.com/",             coverage: "none", lastChecked: null },
-  // ——— Miami ———
-  { id: "ball-and-chain",   name: "Ball & Chain",          city: "Miami",           calendarUrl: "https://ballandchainmiami.com/upcoming-events/", coverage: "none", lastChecked: null },
-  { id: "lagniappe",        name: "Lagniappe",             city: "Miami",           calendarUrl: "https://lagniappehouse.com/",                 coverage: "none", lastChecked: null },
-  { id: "churchills",       name: "Churchill's Pub",       city: "Miami",           calendarUrl: "https://churchillspub.com/",                  coverage: "none", lastChecked: null },
-];
-
-// Verified shows only. See the data integrity policy above.
-const SHOWS = [];
-
-// ————————————————————————————————————————————————————————————————
-
-const COVERAGE_META = {
-  full:    { label: "Fully checked", color: "#4ade80" },
-  partial: { label: "Partially checked", color: "#fbbf24" },
-  none:    { label: "Not audited", color: "#f87171" },
-};
-
-const CITIES = ["All", ...Array.from(new Set(VENUES.map((v) => v.city)))];
-
-function formatDate(iso) {
+const fmtDate = (iso) => {
   const [y, m, d] = iso.split("-").map(Number);
-  return new Date(y, m - 1, d).toLocaleDateString("en-US", {
-    weekday: "long",
-    month: "long",
-    day: "numeric",
-  });
-}
+  return new Date(y, m - 1, d).toLocaleDateString("en-US", { weekday: "long", month: "long", day: "numeric" });
+};
+const fmtStamp = (iso) => (iso ? new Date(iso).toLocaleString("en-US", { month: "short", day: "numeric", hour: "numeric", minute: "2-digit" }) : "never");
 
 export default function TributeTracker() {
   const [city, setCity] = useState("All");
   const [tributeOnly, setTributeOnly] = useState(false);
-  const [showCoverage, setShowCoverage] = useState(true);
+  const [showPanel, setShowPanel] = useState(true);
 
-  const venueById = useMemo(
-    () => Object.fromEntries(VENUES.map((v) => [v.id, v])),
-    []
-  );
-
-  const counts = useMemo(() => {
-    const c = { full: 0, partial: 0, none: 0 };
-    VENUES.forEach((v) => c[v.coverage]++);
-    return c;
-  }, []);
-
-  const visibleShows = useMemo(() => {
-    return SHOWS.filter((s) => {
-      const venue = venueById[s.venueId];
-      if (!venue) return false;
-      if (city !== "All" && venue.city !== city) return false;
-      if (tributeOnly && !s.tributeTo) return false;
-      return true;
-    }).sort((a, b) =>
-      a.date === b.date
-        ? (a.time || "").localeCompare(b.time || "")
-        : a.date.localeCompare(b.date)
-    );
-  }, [city, tributeOnly, venueById]);
+  const venueById = useMemo(() => Object.fromEntries(data.venues.map((v) => [v.id, v])), []);
+  const cities = useMemo(() => ["All", ...new Set(data.venues.map((v) => v.city))], []);
+  const okCount = data.venues.filter((v) => v.status === "ok").length;
+  const failCount = data.venues.length - okCount;
 
   const nights = useMemo(() => {
-    const grouped = [];
-    let current = null;
-    visibleShows.forEach((s) => {
-      if (!current || current.date !== s.date) {
-        current = { date: s.date, shows: [] };
-        grouped.push(current);
-      }
-      current.shows.push(s);
+    const shows = data.shows.filter((s) => {
+      const v = venueById[s.venueId];
+      return v && (city === "All" || v.city === city) && (!tributeOnly || s.tributeEvidence);
     });
+    const grouped = [];
+    for (const s of shows) {
+      const last = grouped[grouped.length - 1];
+      if (last && last.date === s.date) last.shows.push(s);
+      else grouped.push({ date: s.date, shows: [s] });
+    }
     return grouped;
-  }, [visibleShows]);
+  }, [city, tributeOnly, venueById]);
 
-  const filteredVenues =
-    city === "All" ? VENUES : VENUES.filter((v) => v.city === city);
+  const venues = city === "All" ? data.venues : data.venues.filter((v) => v.city === city);
 
   return (
-    <div style={styles.app}>
-      <header style={styles.header}>
-        <h1 style={styles.title}>SFLA Tribute &amp; Cover Tracker</h1>
-        <p style={styles.subtitle}>Miami → Boca Raton · verified shows only</p>
-      </header>
+    <div className="app">
+      <style>{CSS}</style>
+      <h1>SFLA Tribute &amp; Cover Tracker</h1>
+      <p className="sub">Miami → Boca · data copied verbatim from venue sites · nothing inferred</p>
 
-      {/* Coverage-transparency banner */}
-      <div style={styles.banner}>
-        <div style={styles.bannerRow}>
-          {Object.entries(COVERAGE_META).map(([key, meta]) => (
-            <span key={key} style={styles.bannerStat}>
-              <span style={{ ...styles.dot, background: meta.color }} />
-              {counts[key]} {meta.label.toLowerCase()}
-            </span>
-          ))}
-        </div>
-        <p style={styles.bannerNote}>
-          Every show listed here was confirmed on an official venue calendar or
-          ticketing page, with a source link and verification date. Anything not
-          listed may still be happening — check the venue calendars below.
-        </p>
-        <p style={styles.buildNote}>
-          Build {BUILD.date}: {BUILD.note}
-        </p>
+      <div className="banner">
+        <b>{data.shows.length}</b> shows from <b>{okCount}</b> venues fetched OK
+        {failCount > 0 && <> · <span className="err">{failCount} venues failed or need a manual check</span></>}
+        <div className="dim">Last refresh: {fmtStamp(data.generatedAt)} · run <code>node scripts/refresh.mjs</code> to update</div>
       </div>
 
-      {/* Filters */}
-      <div style={styles.filters}>
-        {CITIES.map((c) => (
-          <button
-            key={c}
-            onClick={() => setCity(c)}
-            style={{
-              ...styles.chip,
-              ...(city === c ? styles.chipActive : null),
-            }}
-          >
-            {c}
-          </button>
+      <div className="chips">
+        {cities.map((c) => (
+          <button key={c} className={city === c ? "chip on" : "chip"} onClick={() => setCity(c)}>{c}</button>
         ))}
-        <button
-          onClick={() => setTributeOnly((t) => !t)}
-          style={{
-            ...styles.chip,
-            ...(tributeOnly ? styles.chipActive : null),
-          }}
-        >
-          Tribute acts only
-        </button>
+        <button className={tributeOnly ? "chip on" : "chip"} onClick={() => setTributeOnly((t) => !t)}>Tribute only</button>
       </div>
 
-      {/* Show list, grouped night by night */}
       {nights.length === 0 ? (
-        <div style={styles.empty}>
-          <p style={styles.emptyTitle}>No verified shows loaded.</p>
-          <p style={styles.emptyBody}>
-            This is not a claim that nothing is happening — it means nothing has
-            been verified yet in this build. Tap a venue below to open its
-            official calendar.
+        <div className="empty">
+          <b>No shows in the current data.</b>
+          <p>
+            {okCount === 0
+              ? "Every venue fetch failed in the last refresh (statuses below) — this list is empty because no real data was retrievable, not because nothing is happening."
+              : "No listings match the current filters."}
+            {" "}Venue calendar links below always work.
           </p>
         </div>
       ) : (
-        nights.map((night) => (
-          <section key={night.date}>
-            <div style={styles.nightDivider}>
-              <span style={styles.nightLabel}>{formatDate(night.date)}</span>
-              <span style={styles.nightLine} />
-            </div>
-            {night.shows.map((s) => {
-              const venue = venueById[s.venueId];
+        nights.map((n) => (
+          <section key={n.date}>
+            <div className="night"><span>{fmtDate(n.date)}</span><i /></div>
+            {n.shows.map((s) => {
+              const v = venueById[s.venueId];
               return (
-                <div key={s.id} style={styles.card}>
-                  <div style={styles.cardTop}>
-                    <span style={styles.band}>{s.band}</span>
-                    {s.tributeTo && (
-                      <span style={styles.tributeTag}>
-                        tribute · {s.tributeTo}
-                      </span>
-                    )}
+                <div className="card" key={s.id}>
+                  <div className="row">
+                    <b>{s.band}</b>
+                    {s.tributeEvidence && <span className="tag" title={`Listing text: “${s.tributeEvidence}”`}>tribute (per listing)</span>}
                   </div>
-                  <div style={styles.cardMeta}>
-                    <a
-                      href={venue.calendarUrl}
-                      target="_blank"
-                      rel="noreferrer"
-                      style={styles.venueLink}
-                    >
-                      {venue.name}
-                    </a>
-                    <span style={styles.metaDim}> · {venue.city}</span>
-                    {s.time && <span style={styles.metaDim}> · {s.time}</span>}
-                    {s.price && <span style={styles.metaDim}> · {s.price}</span>}
+                  <div className="dim">
+                    <a href={v.calendarUrl} target="_blank" rel="noreferrer">{v.name}</a> · {v.city}{s.time && ` · ${s.time}`}
                   </div>
-                  {s.warning && (
-                    <div style={styles.warning}>⚠ {s.warning}</div>
-                  )}
-                  <div style={styles.verified}>
-                    <a
-                      href={s.sourceUrl}
-                      target="_blank"
-                      rel="noreferrer"
-                      style={styles.sourceLink}
-                    >
-                      source
-                    </a>
-                    <span style={styles.metaDim}>
-                      {" "}
-                      · verified {s.verifiedOn}
-                    </span>
+                  <div className="src">
+                    <a href={s.sourceUrl} target="_blank" rel="noreferrer">source</a>
+                    <span className="dim"> · fetched {fmtStamp(s.fetchedAt)} via {s.method}</span>
                   </div>
                 </div>
               );
@@ -247,184 +105,56 @@ export default function TributeTracker() {
         ))
       )}
 
-      {/* Per-venue coverage panel */}
-      <div style={styles.coverageHeader}>
-        <button
-          onClick={() => setShowCoverage((s) => !s)}
-          style={styles.coverageToggle}
-        >
-          Venue coverage ({filteredVenues.length}){" "}
-          {showCoverage ? "▾" : "▸"}
-        </button>
-      </div>
-      {showCoverage && (
-        <div>
-          {filteredVenues.map((v) => {
-            const meta = COVERAGE_META[v.coverage];
-            return (
-              <div key={v.id} style={styles.venueRow}>
-                <div>
-                  <div style={styles.venueName}>{v.name}</div>
-                  <div style={styles.metaDim}>
-                    {v.city} ·{" "}
-                    <span style={{ color: meta.color }}>{meta.label}</span>
-                    {v.lastChecked && ` · checked ${v.lastChecked}`}
-                  </div>
-                </div>
-                <a
-                  href={v.calendarUrl}
-                  target="_blank"
-                  rel="noreferrer"
-                  style={styles.calBtn}
-                >
-                  Official calendar ↗
-                </a>
+      <button className="toggle" onClick={() => setShowPanel((s) => !s)}>
+        Venue fetch status ({venues.length}) {showPanel ? "▾" : "▸"}
+      </button>
+      {showPanel && venues.map((v) => {
+        const st = STATUS[v.status] || STATUS.error;
+        return (
+          <div className="vrow" key={v.id}>
+            <div>
+              <b>{v.name}</b>
+              <div className="dim">
+                {v.city} · <span className={st.cls}>{st.label}</span>
+                {v.status === "ok" && ` · ${v.showCount} shows · ${fmtStamp(v.fetchedAt)}`}
+                {v.error && <span className="errnote"> — {v.error}</span>}
               </div>
-            );
-          })}
-        </div>
-      )}
+            </div>
+            <a className="cal" href={v.calendarUrl} target="_blank" rel="noreferrer">calendar ↗</a>
+          </div>
+        );
+      })}
 
-      <footer style={styles.footer}>
-        Verified-only policy: no inferred or placeholder shows. If it's listed,
-        it has a source link; if it doesn't, it doesn't belong here.
-      </footer>
+      <footer>{data.policy}</footer>
     </div>
   );
 }
 
-const styles = {
-  app: {
-    maxWidth: 640,
-    margin: "0 auto",
-    padding: "24px 16px 48px",
-    background: "#0f1117",
-    color: "#e5e7eb",
-    fontFamily:
-      "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif",
-    minHeight: "100vh",
-  },
-  header: { marginBottom: 16 },
-  title: { margin: 0, fontSize: 24, fontWeight: 700, color: "#fff" },
-  subtitle: { margin: "4px 0 0", color: "#9ca3af", fontSize: 14 },
-  banner: {
-    background: "#1a1d27",
-    border: "1px solid #2d3140",
-    borderRadius: 10,
-    padding: "12px 14px",
-    marginBottom: 16,
-  },
-  bannerRow: { display: "flex", gap: 16, flexWrap: "wrap", marginBottom: 8 },
-  bannerStat: { fontSize: 13, display: "inline-flex", alignItems: "center", gap: 6 },
-  dot: { width: 8, height: 8, borderRadius: "50%", display: "inline-block" },
-  bannerNote: { margin: 0, fontSize: 12.5, color: "#9ca3af", lineHeight: 1.5 },
-  buildNote: {
-    margin: "8px 0 0",
-    fontSize: 12,
-    color: "#fbbf24",
-    lineHeight: 1.5,
-  },
-  filters: { display: "flex", gap: 8, flexWrap: "wrap", marginBottom: 20 },
-  chip: {
-    background: "#1a1d27",
-    border: "1px solid #2d3140",
-    color: "#d1d5db",
-    borderRadius: 999,
-    padding: "6px 14px",
-    fontSize: 13,
-    cursor: "pointer",
-  },
-  chipActive: { background: "#4f46e5", borderColor: "#4f46e5", color: "#fff" },
-  empty: {
-    background: "#1a1d27",
-    border: "1px dashed #3f4453",
-    borderRadius: 10,
-    padding: "28px 20px",
-    textAlign: "center",
-    marginBottom: 24,
-  },
-  emptyTitle: { margin: 0, fontSize: 16, fontWeight: 600, color: "#fff" },
-  emptyBody: {
-    margin: "8px auto 0",
-    fontSize: 13.5,
-    color: "#9ca3af",
-    lineHeight: 1.6,
-    maxWidth: 440,
-  },
-  nightDivider: {
-    display: "flex",
-    alignItems: "center",
-    gap: 12,
-    margin: "22px 0 10px",
-  },
-  nightLabel: { fontSize: 14, fontWeight: 700, color: "#a5b4fc", whiteSpace: "nowrap" },
-  nightLine: { flex: 1, height: 1, background: "#2d3140" },
-  card: {
-    background: "#1a1d27",
-    border: "1px solid #2d3140",
-    borderRadius: 10,
-    padding: "12px 14px",
-    marginBottom: 8,
-  },
-  cardTop: { display: "flex", alignItems: "center", gap: 10, flexWrap: "wrap" },
-  band: { fontSize: 16, fontWeight: 600, color: "#fff" },
-  tributeTag: {
-    fontSize: 11.5,
-    background: "#312e81",
-    color: "#c7d2fe",
-    borderRadius: 6,
-    padding: "2px 8px",
-  },
-  cardMeta: { marginTop: 4, fontSize: 13.5 },
-  venueLink: { color: "#a5b4fc", textDecoration: "none" },
-  metaDim: { color: "#9ca3af", fontSize: 13 },
-  warning: {
-    marginTop: 6,
-    fontSize: 12.5,
-    color: "#fbbf24",
-    background: "rgba(251,191,36,.08)",
-    borderRadius: 6,
-    padding: "4px 8px",
-  },
-  verified: { marginTop: 6, fontSize: 12 },
-  sourceLink: { color: "#4ade80", textDecoration: "none" },
-  coverageHeader: { margin: "28px 0 10px" },
-  coverageToggle: {
-    background: "none",
-    border: "none",
-    color: "#fff",
-    fontSize: 15,
-    fontWeight: 700,
-    cursor: "pointer",
-    padding: 0,
-  },
-  venueRow: {
-    display: "flex",
-    justifyContent: "space-between",
-    alignItems: "center",
-    gap: 12,
-    background: "#1a1d27",
-    border: "1px solid #2d3140",
-    borderRadius: 10,
-    padding: "10px 14px",
-    marginBottom: 8,
-  },
-  venueName: { fontSize: 14.5, fontWeight: 600, color: "#fff" },
-  calBtn: {
-    fontSize: 12.5,
-    color: "#a5b4fc",
-    textDecoration: "none",
-    border: "1px solid #3f4453",
-    borderRadius: 8,
-    padding: "6px 10px",
-    whiteSpace: "nowrap",
-  },
-  footer: {
-    marginTop: 32,
-    fontSize: 12,
-    color: "#6b7280",
-    lineHeight: 1.6,
-    borderTop: "1px solid #2d3140",
-    paddingTop: 14,
-  },
-};
+const CSS = `
+.app{max-width:640px;margin:0 auto;padding:24px 16px 48px;background:#0f1117;color:#e5e7eb;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;min-height:100vh}
+.app h1{margin:0;font-size:24px;color:#fff}
+.sub{margin:4px 0 16px;color:#9ca3af;font-size:13.5px}
+.banner{background:#1a1d27;border:1px solid #2d3140;border-radius:10px;padding:12px 14px;margin-bottom:16px;font-size:13.5px;line-height:1.6}
+.banner code{color:#a5b4fc}
+.dim{color:#9ca3af;font-size:12.5px}
+.ok{color:#4ade80}.warn{color:#fbbf24}.err{color:#f87171}
+.errnote{color:#f87171;font-size:12px}
+.chips{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:20px}
+.chip{background:#1a1d27;border:1px solid #2d3140;color:#d1d5db;border-radius:999px;padding:6px 14px;font-size:13px;cursor:pointer}
+.chip.on{background:#4f46e5;border-color:#4f46e5;color:#fff}
+.empty{background:#1a1d27;border:1px dashed #3f4453;border-radius:10px;padding:24px 20px;text-align:center;margin-bottom:24px;font-size:14px}
+.empty p{color:#9ca3af;font-size:13px;line-height:1.6;max-width:460px;margin:8px auto 0}
+.night{display:flex;align-items:center;gap:12px;margin:22px 0 10px}
+.night span{font-size:14px;font-weight:700;color:#a5b4fc;white-space:nowrap}
+.night i{flex:1;height:1px;background:#2d3140}
+.card{background:#1a1d27;border:1px solid #2d3140;border-radius:10px;padding:12px 14px;margin-bottom:8px}
+.card .row{display:flex;gap:10px;align-items:center;flex-wrap:wrap;font-size:15.5px;color:#fff}
+.tag{font-size:11px;background:#312e81;color:#c7d2fe;border-radius:6px;padding:2px 8px;cursor:help}
+.card a,.vrow a{color:#a5b4fc;text-decoration:none}
+.src{margin-top:4px;font-size:12px}
+.src a{color:#4ade80}
+.toggle{background:none;border:none;color:#fff;font-size:15px;font-weight:700;cursor:pointer;padding:0;margin:28px 0 10px;display:block}
+.vrow{display:flex;justify-content:space-between;align-items:center;gap:12px;background:#1a1d27;border:1px solid #2d3140;border-radius:10px;padding:10px 14px;margin-bottom:8px;font-size:14px}
+.cal{font-size:12.5px;border:1px solid #3f4453;border-radius:8px;padding:6px 10px;white-space:nowrap}
+footer{margin-top:32px;font-size:12px;color:#6b7280;line-height:1.6;border-top:1px solid #2d3140;padding-top:14px}
+`;
