@@ -252,7 +252,7 @@ if (testIdx !== -1) {
   process.exit(r.status === "ok" ? 0 : 1);
 }
 
-const only = new Set(process.argv.slice(2));
+const only = new Set(process.argv.slice(2).filter((a) => !a.startsWith("--")));
 const targets = only.size ? VENUES.filter((v) => only.has(v.id)) : VENUES;
 
 const results = await Promise.all(targets.map(async (v) => [v.id, await refreshVenue(v)]));
