@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-08-15T02:28:32.949Z",
+  "generatedAt": "2026-08-15T02:29:53.884Z",
   "policy": "Data is copied verbatim from venue websites by this script. Nothing is inferred or projected.",
   "venues": [
     {
@@ -9,7 +9,7 @@
       "calendarUrl": "https://www.funkybiscuit.com/",
       "status": "no-structured-data",
       "method": null,
-      "fetchedAt": "2026-08-15T02:28:27.030Z",
+      "fetchedAt": "2026-08-15T02:29:49.974Z",
       "showCount": 0,
       "error": "Page fetched but no schema.org events or ICS feed found — check the calendar manually."
     },
@@ -20,7 +20,7 @@
       "calendarUrl": "https://www.crazyunclemikes.com/",
       "status": "no-structured-data",
       "method": null,
-      "fetchedAt": "2026-08-15T02:28:27.080Z",
+      "fetchedAt": "2026-08-15T02:29:50.019Z",
       "showCount": 0,
       "error": "Page fetched but no schema.org events or ICS feed found — check the calendar manually."
     },
@@ -31,7 +31,7 @@
       "calendarUrl": "https://bocablackbox.com/",
       "status": "no-structured-data",
       "method": null,
-      "fetchedAt": "2026-08-15T02:28:27.083Z",
+      "fetchedAt": "2026-08-15T02:29:50.020Z",
       "showCount": 0,
       "error": "Page fetched but no schema.org events or ICS feed found — check the calendar manually."
     },
@@ -42,7 +42,7 @@
       "calendarUrl": "https://barrelofmonks.com/",
       "status": "ok",
       "method": "json-ld",
-      "fetchedAt": "2026-08-15T02:28:27.084Z",
+      "fetchedAt": "2026-08-15T02:29:50.022Z",
       "showCount": 6,
       "error": null
     },
@@ -53,7 +53,7 @@
       "calendarUrl": "https://tinroofdelraybeach.com/calendar/",
       "status": "no-structured-data",
       "method": null,
-      "fetchedAt": "2026-08-15T02:28:27.085Z",
+      "fetchedAt": "2026-08-15T02:29:50.022Z",
       "showCount": 0,
       "error": "Page fetched but no schema.org events or ICS feed found — check the calendar manually."
     },
@@ -64,7 +64,7 @@
       "calendarUrl": "https://www.jointherevolution.net/concerts/",
       "status": "no-structured-data",
       "method": null,
-      "fetchedAt": "2026-08-15T02:28:27.086Z",
+      "fetchedAt": "2026-08-15T02:29:50.024Z",
       "showCount": 0,
       "error": "Page fetched but no schema.org events or ICS feed found — check the calendar manually."
     },
@@ -75,7 +75,7 @@
       "calendarUrl": "https://tinroofftlauderdale.com/calendar/",
       "status": "no-structured-data",
       "method": null,
-      "fetchedAt": "2026-08-15T02:28:27.087Z",
+      "fetchedAt": "2026-08-15T02:29:50.025Z",
       "showCount": 0,
       "error": "Page fetched but no schema.org events or ICS feed found — check the calendar manually."
     },
@@ -86,7 +86,7 @@
       "calendarUrl": "https://tarponriverbrewing.com/",
       "status": "ok",
       "method": "json-ld",
-      "fetchedAt": "2026-08-15T02:28:27.088Z",
+      "fetchedAt": "2026-08-15T02:29:50.025Z",
       "showCount": 5,
       "error": null
     },
@@ -97,7 +97,7 @@
       "calendarUrl": "https://funkybuddhabrewery.com/",
       "status": "error",
       "method": null,
-      "fetchedAt": "2026-08-15T02:28:27.089Z",
+      "fetchedAt": "2026-08-15T02:29:50.026Z",
       "showCount": 0,
       "error": "fetch failed"
     },
@@ -108,7 +108,7 @@
       "calendarUrl": "https://ballandchainmiami.com/upcoming-events/",
       "status": "no-structured-data",
       "method": null,
-      "fetchedAt": "2026-08-15T02:28:27.091Z",
+      "fetchedAt": "2026-08-15T02:29:50.028Z",
       "showCount": 0,
       "error": "Page fetched but no schema.org events or ICS feed found — check the calendar manually."
     },
@@ -119,7 +119,7 @@
       "calendarUrl": "https://lagniappehouse.com/",
       "status": "error",
       "method": null,
-      "fetchedAt": "2026-08-15T02:28:27.092Z",
+      "fetchedAt": "2026-08-15T02:29:50.029Z",
       "showCount": 0,
       "error": "fetch failed"
     },
@@ -130,7 +130,7 @@
       "calendarUrl": "https://churchillspub.com/",
       "status": "no-structured-data",
       "method": null,
-      "fetchedAt": "2026-08-15T02:28:27.093Z",
+      "fetchedAt": "2026-08-15T02:29:50.030Z",
       "showCount": 0,
       "error": "Page fetched but no schema.org events or ICS feed found — check the calendar manually."
     }
@@ -145,7 +145,7 @@
       "tributeEvidence": "tribute",
       "sourceUrl": "https://tarponriverbrewing.com/event/free-live-music-colors-in-the-void-aug/",
       "method": "json-ld",
-      "fetchedAt": "2026-08-15T02:28:27.088Z"
+      "fetchedAt": "2026-08-15T02:29:50.025Z"
     },
     {
       "id": "barrel-of-monks-2026-08-15-comedy-attic-august-15th",
@@ -156,7 +156,7 @@
       "tributeEvidence": null,
       "sourceUrl": "https://barrelofmonks.com/event/comedy-attic-august-15th/",
       "method": "json-ld",
-      "fetchedAt": "2026-08-15T02:28:27.084Z"
+      "fetchedAt": "2026-08-15T02:29:50.022Z"
     },
     {
       "id": "barrel-of-monks-2026-08-16-brotherhood-new-member-registration",
@@ -167,7 +167,7 @@
       "tributeEvidence": null,
       "sourceUrl": "https://barrelofmonks.com/event/brotherhood-new-member-registration/",
       "method": "json-ld",
-      "fetchedAt": "2026-08-15T02:28:27.084Z"
+      "fetchedAt": "2026-08-15T02:29:50.022Z"
     },
     {
       "id": "tarpon-river-2026-08-21-free-live-music-the-working-class-underg",
@@ -178,7 +178,7 @@
       "tributeEvidence": null,
       "sourceUrl": "https://tarponriverbrewing.com/event/free-live-music-the-working-class-underground-aug/",
       "method": "json-ld",
-      "fetchedAt": "2026-08-15T02:28:27.088Z"
+      "fetchedAt": "2026-08-15T02:29:50.025Z"
     },
     {
       "id": "barrel-of-monks-2026-08-22-the-listening-room-saturday-august-22nd-",
@@ -189,7 +189,7 @@
       "tributeEvidence": null,
       "sourceUrl": "https://barrelofmonks.com/event/the-listening-room-saturday-august-22nd/",
       "method": "json-ld",
-      "fetchedAt": "2026-08-15T02:28:27.084Z"
+      "fetchedAt": "2026-08-15T02:29:50.022Z"
     },
     {
       "id": "tarpon-river-2026-08-22-free-live-music-crazy-fingers",
@@ -200,7 +200,7 @@
       "tributeEvidence": "tribute",
       "sourceUrl": "https://tarponriverbrewing.com/event/free-live-music-crazy-fingers-aug/",
       "method": "json-ld",
-      "fetchedAt": "2026-08-15T02:28:27.088Z"
+      "fetchedAt": "2026-08-15T02:29:50.025Z"
     },
     {
       "id": "barrel-of-monks-2026-08-23-acs-kickoff-event-sunday-august-23rd-",
@@ -211,7 +211,7 @@
       "tributeEvidence": null,
       "sourceUrl": "https://barrelofmonks.com/event/acs-kickoff-event-sunday-august-23rd/",
       "method": "json-ld",
-      "fetchedAt": "2026-08-15T02:28:27.084Z"
+      "fetchedAt": "2026-08-15T02:29:50.022Z"
     },
     {
       "id": "tarpon-river-2026-08-23-fight-night",
@@ -222,7 +222,7 @@
       "tributeEvidence": null,
       "sourceUrl": "https://tarponriverbrewing.com/event/fight-night/",
       "method": "json-ld",
-      "fetchedAt": "2026-08-15T02:28:27.088Z"
+      "fetchedAt": "2026-08-15T02:29:50.025Z"
     },
     {
       "id": "barrel-of-monks-2026-08-27-acs-bingo-august-27th-",
@@ -233,7 +233,7 @@
       "tributeEvidence": null,
       "sourceUrl": "https://barrelofmonks.com/event/acs-bingo-august-27th/",
       "method": "json-ld",
-      "fetchedAt": "2026-08-15T02:28:27.084Z"
+      "fetchedAt": "2026-08-15T02:29:50.022Z"
     },
     {
       "id": "tarpon-river-2026-08-28-free-live-music-tasty-vibrations",
@@ -244,7 +244,7 @@
       "tributeEvidence": null,
       "sourceUrl": "https://tarponriverbrewing.com/event/free-live-music-tasty-vibrations-aug/",
       "method": "json-ld",
-      "fetchedAt": "2026-08-15T02:28:27.088Z"
+      "fetchedAt": "2026-08-15T02:29:50.025Z"
     },
     {
       "id": "barrel-of-monks-2026-08-29-riff-roulette-august-29th",
@@ -255,7 +255,7 @@
       "tributeEvidence": null,
       "sourceUrl": "https://barrelofmonks.com/event/riff-roulette-august-29th/",
       "method": "json-ld",
-      "fetchedAt": "2026-08-15T02:28:27.084Z"
+      "fetchedAt": "2026-08-15T02:29:50.022Z"
     }
   ]
 }
