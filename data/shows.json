@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-08-15T02:27:38.537Z",
+  "generatedAt": "2026-08-15T02:28:32.949Z",
   "policy": "Data is copied verbatim from venue websites by this script. Nothing is inferred or projected.",
   "venues": [
     {
@@ -7,133 +7,255 @@
       "name": "Funky Biscuit",
       "city": "Boca Raton",
       "calendarUrl": "https://www.funkybiscuit.com/",
-      "status": "skipped",
+      "status": "no-structured-data",
       "method": null,
-      "fetchedAt": null,
+      "fetchedAt": "2026-08-15T02:28:27.030Z",
       "showCount": 0,
-      "error": "Not included in this refresh run."
+      "error": "Page fetched but no schema.org events or ICS feed found — check the calendar manually."
     },
     {
       "id": "crazy-uncle-mikes",
       "name": "Crazy Uncle Mike's",
       "city": "Boca Raton",
       "calendarUrl": "https://www.crazyunclemikes.com/",
-      "status": "skipped",
+      "status": "no-structured-data",
       "method": null,
-      "fetchedAt": null,
+      "fetchedAt": "2026-08-15T02:28:27.080Z",
       "showCount": 0,
-      "error": "Not included in this refresh run."
+      "error": "Page fetched but no schema.org events or ICS feed found — check the calendar manually."
     },
     {
       "id": "boca-black-box",
       "name": "Boca Black Box",
       "city": "Boca Raton",
       "calendarUrl": "https://bocablackbox.com/",
-      "status": "skipped",
+      "status": "no-structured-data",
       "method": null,
-      "fetchedAt": null,
+      "fetchedAt": "2026-08-15T02:28:27.083Z",
       "showCount": 0,
-      "error": "Not included in this refresh run."
+      "error": "Page fetched but no schema.org events or ICS feed found — check the calendar manually."
     },
     {
       "id": "barrel-of-monks",
       "name": "Barrel of Monks",
       "city": "Boca Raton",
       "calendarUrl": "https://barrelofmonks.com/",
-      "status": "skipped",
-      "method": null,
-      "fetchedAt": null,
-      "showCount": 0,
-      "error": "Not included in this refresh run."
+      "status": "ok",
+      "method": "json-ld",
+      "fetchedAt": "2026-08-15T02:28:27.084Z",
+      "showCount": 6,
+      "error": null
     },
     {
       "id": "tin-roof-delray",
       "name": "Tin Roof Delray Beach",
       "city": "Delray Beach",
       "calendarUrl": "https://tinroofdelraybeach.com/calendar/",
-      "status": "skipped",
+      "status": "no-structured-data",
       "method": null,
-      "fetchedAt": null,
+      "fetchedAt": "2026-08-15T02:28:27.085Z",
       "showCount": 0,
-      "error": "Not included in this refresh run."
+      "error": "Page fetched but no schema.org events or ICS feed found — check the calendar manually."
     },
     {
       "id": "revolution-live",
       "name": "Revolution Live",
       "city": "Fort Lauderdale",
       "calendarUrl": "https://www.jointherevolution.net/concerts/",
-      "status": "skipped",
+      "status": "no-structured-data",
       "method": null,
-      "fetchedAt": null,
+      "fetchedAt": "2026-08-15T02:28:27.086Z",
       "showCount": 0,
-      "error": "Not included in this refresh run."
+      "error": "Page fetched but no schema.org events or ICS feed found — check the calendar manually."
     },
     {
       "id": "tin-roof-ftl",
       "name": "Tin Roof Ft Lauderdale",
       "city": "Fort Lauderdale",
       "calendarUrl": "https://tinroofftlauderdale.com/calendar/",
-      "status": "skipped",
+      "status": "no-structured-data",
       "method": null,
-      "fetchedAt": null,
+      "fetchedAt": "2026-08-15T02:28:27.087Z",
       "showCount": 0,
-      "error": "Not included in this refresh run."
+      "error": "Page fetched but no schema.org events or ICS feed found — check the calendar manually."
     },
     {
       "id": "tarpon-river",
       "name": "Tarpon River Brewing",
       "city": "Fort Lauderdale",
       "calendarUrl": "https://tarponriverbrewing.com/",
-      "status": "skipped",
-      "method": null,
-      "fetchedAt": null,
-      "showCount": 0,
-      "error": "Not included in this refresh run."
+      "status": "ok",
+      "method": "json-ld",
+      "fetchedAt": "2026-08-15T02:28:27.088Z",
+      "showCount": 5,
+      "error": null
     },
     {
       "id": "funky-buddha",
       "name": "Funky Buddha Brewery",
       "city": "Oakland Park",
       "calendarUrl": "https://funkybuddhabrewery.com/",
-      "status": "skipped",
+      "status": "error",
       "method": null,
-      "fetchedAt": null,
+      "fetchedAt": "2026-08-15T02:28:27.089Z",
       "showCount": 0,
-      "error": "Not included in this refresh run."
+      "error": "fetch failed"
     },
     {
       "id": "ball-and-chain",
       "name": "Ball & Chain",
       "city": "Miami",
       "calendarUrl": "https://ballandchainmiami.com/upcoming-events/",
-      "status": "skipped",
+      "status": "no-structured-data",
       "method": null,
-      "fetchedAt": null,
+      "fetchedAt": "2026-08-15T02:28:27.091Z",
       "showCount": 0,
-      "error": "Not included in this refresh run."
+      "error": "Page fetched but no schema.org events or ICS feed found — check the calendar manually."
     },
     {
       "id": "lagniappe",
       "name": "Lagniappe",
       "city": "Miami",
       "calendarUrl": "https://lagniappehouse.com/",
-      "status": "skipped",
+      "status": "error",
       "method": null,
-      "fetchedAt": null,
+      "fetchedAt": "2026-08-15T02:28:27.092Z",
       "showCount": 0,
-      "error": "Not included in this refresh run."
+      "error": "fetch failed"
     },
     {
       "id": "churchills",
       "name": "Churchill's Pub",
       "city": "Miami",
       "calendarUrl": "https://churchillspub.com/",
-      "status": "skipped",
+      "status": "no-structured-data",
       "method": null,
-      "fetchedAt": null,
+      "fetchedAt": "2026-08-15T02:28:27.093Z",
       "showCount": 0,
-      "error": "Not included in this refresh run."
+      "error": "Page fetched but no schema.org events or ICS feed found — check the calendar manually."
     }
   ],
-  "shows": []
+  "shows": [
+    {
+      "id": "tarpon-river-2026-08-15-free-live-music-colors-in-the-void",
+      "date": "2026-08-15",
+      "time": "08:00",
+      "band": "FREE Live Music | Colors In The Void",
+      "venueId": "tarpon-river",
+      "tributeEvidence": "tribute",
+      "sourceUrl": "https://tarponriverbrewing.com/event/free-live-music-colors-in-the-void-aug/",
+      "method": "json-ld",
+      "fetchedAt": "2026-08-15T02:28:27.088Z"
+    },
+    {
+      "id": "barrel-of-monks-2026-08-15-comedy-attic-august-15th",
+      "date": "2026-08-15",
+      "time": "20:00",
+      "band": "Comedy Attic – August 15th",
+      "venueId": "barrel-of-monks",
+      "tributeEvidence": null,
+      "sourceUrl": "https://barrelofmonks.com/event/comedy-attic-august-15th/",
+      "method": "json-ld",
+      "fetchedAt": "2026-08-15T02:28:27.084Z"
+    },
+    {
+      "id": "barrel-of-monks-2026-08-16-brotherhood-new-member-registration",
+      "date": "2026-08-16",
+      "time": "00:00",
+      "band": "Brotherhood New Member Registration",
+      "venueId": "barrel-of-monks",
+      "tributeEvidence": null,
+      "sourceUrl": "https://barrelofmonks.com/event/brotherhood-new-member-registration/",
+      "method": "json-ld",
+      "fetchedAt": "2026-08-15T02:28:27.084Z"
+    },
+    {
+      "id": "tarpon-river-2026-08-21-free-live-music-the-working-class-underg",
+      "date": "2026-08-21",
+      "time": "18:30",
+      "band": "FREE Live Music | The Working Class Underground",
+      "venueId": "tarpon-river",
+      "tributeEvidence": null,
+      "sourceUrl": "https://tarponriverbrewing.com/event/free-live-music-the-working-class-underground-aug/",
+      "method": "json-ld",
+      "fetchedAt": "2026-08-15T02:28:27.088Z"
+    },
+    {
+      "id": "barrel-of-monks-2026-08-22-the-listening-room-saturday-august-22nd-",
+      "date": "2026-08-22",
+      "time": "19:45",
+      "band": "The Listening Room (Saturday, August 22nd)",
+      "venueId": "barrel-of-monks",
+      "tributeEvidence": null,
+      "sourceUrl": "https://barrelofmonks.com/event/the-listening-room-saturday-august-22nd/",
+      "method": "json-ld",
+      "fetchedAt": "2026-08-15T02:28:27.084Z"
+    },
+    {
+      "id": "tarpon-river-2026-08-22-free-live-music-crazy-fingers",
+      "date": "2026-08-22",
+      "time": "20:00",
+      "band": "FREE Live Music | Crazy Fingers",
+      "venueId": "tarpon-river",
+      "tributeEvidence": "tribute",
+      "sourceUrl": "https://tarponriverbrewing.com/event/free-live-music-crazy-fingers-aug/",
+      "method": "json-ld",
+      "fetchedAt": "2026-08-15T02:28:27.088Z"
+    },
+    {
+      "id": "barrel-of-monks-2026-08-23-acs-kickoff-event-sunday-august-23rd-",
+      "date": "2026-08-23",
+      "time": "13:00",
+      "band": "ACS Kickoff Event (Sunday, August 23rd)",
+      "venueId": "barrel-of-monks",
+      "tributeEvidence": null,
+      "sourceUrl": "https://barrelofmonks.com/event/acs-kickoff-event-sunday-august-23rd/",
+      "method": "json-ld",
+      "fetchedAt": "2026-08-15T02:28:27.084Z"
+    },
+    {
+      "id": "tarpon-river-2026-08-23-fight-night",
+      "date": "2026-08-23",
+      "time": "16:00",
+      "band": "Fight Night",
+      "venueId": "tarpon-river",
+      "tributeEvidence": null,
+      "sourceUrl": "https://tarponriverbrewing.com/event/fight-night/",
+      "method": "json-ld",
+      "fetchedAt": "2026-08-15T02:28:27.088Z"
+    },
+    {
+      "id": "barrel-of-monks-2026-08-27-acs-bingo-august-27th-",
+      "date": "2026-08-27",
+      "time": "17:45",
+      "band": "ACS Bingo (August 27th)",
+      "venueId": "barrel-of-monks",
+      "tributeEvidence": null,
+      "sourceUrl": "https://barrelofmonks.com/event/acs-bingo-august-27th/",
+      "method": "json-ld",
+      "fetchedAt": "2026-08-15T02:28:27.084Z"
+    },
+    {
+      "id": "tarpon-river-2026-08-28-free-live-music-tasty-vibrations",
+      "date": "2026-08-28",
+      "time": "18:30",
+      "band": "FREE Live Music | Tasty Vibrations",
+      "venueId": "tarpon-river",
+      "tributeEvidence": null,
+      "sourceUrl": "https://tarponriverbrewing.com/event/free-live-music-tasty-vibrations-aug/",
+      "method": "json-ld",
+      "fetchedAt": "2026-08-15T02:28:27.088Z"
+    },
+    {
+      "id": "barrel-of-monks-2026-08-29-riff-roulette-august-29th",
+      "date": "2026-08-29",
+      "time": "20:00",
+      "band": "Riff Roulette – August 29th",
+      "venueId": "barrel-of-monks",
+      "tributeEvidence": null,
+      "sourceUrl": "https://barrelofmonks.com/event/riff-roulette-august-29th/",
+      "method": "json-ld",
+      "fetchedAt": "2026-08-15T02:28:27.084Z"
+    }
+  ]
 }
