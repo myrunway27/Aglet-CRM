@@ -22,7 +22,10 @@ import { fileURLToPath } from "node:url";
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
 const OUT = join(ROOT, "data", "shows.json");
 const TIMEOUT_MS = 20000;
-const UA = "sfla-tribute-tracker/1.0 (personal show tracker; contact via repo)";
+// Some venue sites refuse non-browser clients outright, so identify as a
+// mainstream browser. We fetch each public calendar once a day — the same
+// page any visitor loads.
+const UA = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36";
 
 export const VENUES = [
   { id: "funky-biscuit",     name: "Funky Biscuit",          city: "Boca Raton",      calendarUrl: "https://www.funkybiscuit.com/" },
@@ -40,17 +43,67 @@ export const VENUES = [
 ];
 
 // The listing text itself decides the tribute flag — a match is recorded with
-// the exact phrase that triggered it, so the UI can show its evidence.
+// the exact phrase that triggered it, so the UI can show its evidence, and the
+// honored artist is pattern-matched out of that same text. Deterministic:
+// if the listing doesn't name the artist, tributeTo stays null.
 const TRIBUTE_RE = /\btribute(?:\s+to\s+[\w .&'-]+)?|celebrating the music of\s+[\w .&'-]+|\ba tribute\b/i;
 
+const QUALIFIER_RE = /^(?:an?|the|ultimate|premier|premiere|original|official|authentic|greatest|live|first|longest|running|only|&|world'?s|america'?s|florida'?s|south florida'?s|#?\s?1|no\.?\s?1|favou?rite)\s+/i;
+
+function cleanTarget(s) {
+  const t = s.replace(/\s+/g, " ").replace(/[.,;:!\s]+$/g, "").trim();
+  return t.length >= 2 && t.length <= 45 ? t : null;
+}
+
+function deriveTribute(text) {
+  // "tribute to X" / "celebrating the music of X"
+  let m = text.match(/\b(?:a\s+)?(?:tribute\s+to|celebrating\s+the\s+music\s+of)\s+(?:the\s+music\s+of\s+)?["“']?(.{2,60}?)["”']?\s*(?:$|[.!?;()\[\]|]|\s+(?:w\/|with\s|feat\b|featuring\b|performing\b|playing\b|plus\s|at\s|--?\s))/i);
+  if (m) return { evidence: m[0].replace(/[.!?;()\[\]|]\s*$/, "").trim(), target: cleanTarget(m[1]) };
+  // "X Tribute (Band|Experience|Show|Night)" — the words before "tribute",
+  // with marketing qualifiers ("The Ultimate", "America's #1") stripped
+  m = text.match(/([A-Za-z0-9][\w.'&!\s]{1,45}?)\s+tribute(?:\s+(?:band|experience|show|night|act))?\b/i);
+  if (m) {
+    let t = m[1], prev;
+    do { prev = t; t = t.replace(QUALIFIER_RE, ""); } while (t !== prev);
+    return { evidence: m[0].trim(), target: cleanTarget(t) };
+  }
+  m = text.match(TRIBUTE_RE);
+  return m ? { evidence: m[0].trim(), target: null } : null;
+}
+
 async function get(url) {
-  const res = await fetch(url, {
-    headers: { "user-agent": UA, accept: "text/html,text/calendar,application/json;q=0.9,*/*;q=0.8" },
-    redirect: "follow",
-    signal: AbortSignal.timeout(TIMEOUT_MS),
-  });
-  if (!res.ok) throw new Error(`HTTP ${res.status}`);
-  return res.text();
+  try {
+    const res = await fetch(url, {
+      headers: {
+        "user-agent": UA,
+        accept: "text/html,text/calendar,application/json;q=0.9,*/*;q=0.8",
+        "accept-language": "en-US,en;q=0.9",
+      },
+      redirect: "follow",
+      signal: AbortSignal.timeout(TIMEOUT_MS),
+    });
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    return res.text();
+  } catch (err) {
+    const cause = err.cause?.code || err.cause?.message;
+    throw new Error(cause ? `${err.message} (${cause})` : err.message);
+  }
+}
+
+// Retry the venue's landing page with the www./naked host variant — a common
+// cause of hard connection failures on small-venue DNS setups.
+async function getWithHostRetry(url) {
+  try {
+    return { html: await get(url), url };
+  } catch (err) {
+    const u = new URL(url);
+    u.hostname = u.hostname.startsWith("www.") ? u.hostname.slice(4) : `www.${u.hostname}`;
+    try {
+      return { html: await get(u.href), url: u.href };
+    } catch {
+      throw err; // report the original host's error
+    }
+  }
 }
 
 // ——— JSON-LD (schema.org Event) extraction ———
@@ -308,15 +361,17 @@ function normalize(raw, venue, fetchedAt) {
   const dateOnly = raw.startDate.slice(0, 10);
   if (!/^\d{4}-\d{2}-\d{2}$/.test(dateOnly)) return null;
   const timeMatch = raw.startDate.match(/T(\d{2}:\d{2})/);
-  const hay = `${raw.name} ${raw.description || ""}`;
-  const tribute = hay.match(TRIBUTE_RE);
+  // Name first; the description only if the name itself names no tribute —
+  // keeps long description prose from polluting the captured artist.
+  const tribute = deriveTribute(raw.name) || (raw.description ? deriveTribute(raw.description) : null);
   return {
     id: `${venue.id}-${dateOnly}-${raw.name.toLowerCase().replace(/[^a-z0-9]+/g, "-").slice(0, 40)}`,
     date: dateOnly,
     time: timeMatch ? timeMatch[1] : null,
     band: raw.name,
     venueId: venue.id,
-    tributeEvidence: tribute ? tribute[0] : null, // exact phrase from the listing, or null
+    tributeEvidence: tribute ? tribute.evidence : null, // exact phrase from the listing, or null
+    tributeTo: tribute ? tribute.target : null,         // artist named in that phrase, or null
     sourceUrl: raw.offersUrl || raw.url,
     method: raw.method,
     fetchedAt,
@@ -335,18 +390,18 @@ function snapshot(venueId, tag, content) {
 async function refreshVenue(venue) {
   const fetchedAt = new Date().toISOString();
   try {
-    const html = await get(venue.calendarUrl);
+    const { html, url: pageUrl } = await getWithHostRetry(venue.calendarUrl);
     snapshot(venue.id, "", html);
-    let events = extractFromHtml(html, venue.calendarUrl);
-    if (events.length === 0) events = await eventsFromTribeApi(html, venue.calendarUrl);
+    let events = extractFromHtml(html, pageUrl);
+    if (events.length === 0) events = await eventsFromTribeApi(html, pageUrl);
     if (events.length === 0) {
-      const icsUrl = discoverIcsUrl(html, venue.calendarUrl);
+      const icsUrl = discoverIcsUrl(html, pageUrl);
       if (icsUrl) events = eventsFromIcs(await get(icsUrl), icsUrl);
     }
     if (events.length === 0) {
       // Follow the page's own event/calendar links (real links, never guessed)
       let i = 0;
-      for (const link of eventPageLinks(html, venue.calendarUrl)) {
+      for (const link of eventPageLinks(html, pageUrl)) {
         try {
           const sub = await get(link);
           snapshot(venue.id, `link${++i}`, sub);

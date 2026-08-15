@@ -89,7 +89,11 @@ export default function TributeTracker() {
                 <div className="card" key={s.id}>
                   <div className="row">
                     <b>{s.band}</b>
-                    {s.tributeEvidence && <span className="tag" title={`Listing text: “${s.tributeEvidence}”`}>tribute (per listing)</span>}
+                    {s.tributeEvidence && (
+                      <span className="tag" title={`Listing text: “${s.tributeEvidence}”`}>
+                        {s.tributeTo ? `tribute · ${s.tributeTo}` : "tribute (per listing)"}
+                      </span>
+                    )}
                   </div>
                   <div className="dim">
                     <a href={v.calendarUrl} target="_blank" rel="noreferrer">{v.name}</a> · {v.city}{s.time && ` · ${s.time}`}
