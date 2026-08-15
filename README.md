@@ -35,11 +35,11 @@ node scripts/refresh.mjs funky-biscuit   # just one
 node scripts/refresh.mjs --test <url>    # dry-run the parser on any URL
 ```
 
-Note: the committed `data/shows.json` was generated in a sandboxed environment
-that blocks outbound requests to venue sites, so it records an HTTP 403 for
-every venue and zero shows — which the app displays as exactly that. Run the
-refresh from a normal network to populate real listings. The parser itself is
-tested (JSON-LD and ICS paths) against fixtures.
+The committed `data/shows.json` is refreshed automatically by a daily GitHub
+Actions workflow (`.github/workflows/refresh.yml`), which runs the script on
+GitHub's runners and commits the result. Trigger it manually from the Actions
+tab for an immediate refresh. The parser is
+tested against fixtures and real venue page snapshots.
 
 ## Venues (12)
 
