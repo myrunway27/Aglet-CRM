@@ -139,6 +139,31 @@ function eventsFromIcs(ics, sourceUrl) {
   return out;
 }
 
+// ——— same-site link discovery ———
+// If the main page has no structured events, follow links THE PAGE ITSELF
+// contains whose href/text suggests an events listing. Real links only —
+// nothing is guessed.
+
+const LINK_HINT = /event|calendar|show|concert|music|live|lineup|schedule/i;
+
+function eventPageLinks(html, pageUrl, limit = 4) {
+  const base = new URL(pageUrl);
+  const seen = new Set();
+  const out = [];
+  for (const m of html.matchAll(/<a[^>]+href=["']([^"'#]+)["'][^>]*>([\s\S]{0,120}?)<\/a>/gi)) {
+    let href;
+    try { href = new URL(m[1], pageUrl); } catch { continue; }
+    if (href.origin !== base.origin) continue;
+    if (href.href === base.href || seen.has(href.href)) continue;
+    if (/\.(ics|jpg|png|pdf|css|js)([?#]|$)/i.test(href.pathname)) continue;
+    if (!LINK_HINT.test(href.pathname) && !LINK_HINT.test(m[2])) continue;
+    seen.add(href.href);
+    out.push(href.href);
+    if (out.length >= limit) break;
+  }
+  return out;
+}
+
 // ——— per-venue pipeline ———
 
 function normalize(raw, venue, fetchedAt) {
@@ -160,15 +185,41 @@ function normalize(raw, venue, fetchedAt) {
   };
 }
 
+const DEBUG = process.argv.includes("--debug");
+const DEBUG_DIR = join(ROOT, "data", "debug");
+
+function snapshot(venueId, tag, content) {
+  if (!DEBUG) return;
+  mkdirSync(DEBUG_DIR, { recursive: true });
+  writeFileSync(join(DEBUG_DIR, `${venueId}${tag ? `-${tag}` : ""}.html`), content.slice(0, 400_000));
+}
+
 async function refreshVenue(venue) {
   const fetchedAt = new Date().toISOString();
   try {
     const html = await get(venue.calendarUrl);
+    snapshot(venue.id, "", html);
     let events = eventsFromJsonLd(html, venue.calendarUrl);
     let method = "json-ld";
     if (events.length === 0) {
       const icsUrl = discoverIcsUrl(html, venue.calendarUrl);
       if (icsUrl) { events = eventsFromIcs(await get(icsUrl), icsUrl); method = "ics"; }
+    }
+    if (events.length === 0) {
+      // Follow the page's own event/calendar links (real links, never guessed)
+      let i = 0;
+      for (const link of eventPageLinks(html, venue.calendarUrl)) {
+        try {
+          const sub = await get(link);
+          snapshot(venue.id, `link${++i}`, sub);
+          events.push(...eventsFromJsonLd(sub, link));
+          if (events.length === 0) {
+            const ics = discoverIcsUrl(sub, link);
+            if (ics) { events.push(...eventsFromIcs(await get(ics), ics)); method = "ics"; }
+          }
+        } catch { /* dead link: skip */ }
+        if (events.length > 0) break;
+      }
     }
     const today = new Date().toISOString().slice(0, 10);
     const seen = new Set();
