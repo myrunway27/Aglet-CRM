@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-08-15T01:24:17.997Z",
+  "generatedAt": "2026-08-15T02:27:38.537Z",
   "policy": "Data is copied verbatim from venue websites by this script. Nothing is inferred or projected.",
   "venues": [
     {
@@ -7,132 +7,132 @@
       "name": "Funky Biscuit",
       "city": "Boca Raton",
       "calendarUrl": "https://www.funkybiscuit.com/",
-      "status": "error",
+      "status": "skipped",
       "method": null,
-      "fetchedAt": "2026-08-15T01:24:17.139Z",
+      "fetchedAt": null,
       "showCount": 0,
-      "error": "HTTP 403"
+      "error": "Not included in this refresh run."
     },
     {
       "id": "crazy-uncle-mikes",
       "name": "Crazy Uncle Mike's",
       "city": "Boca Raton",
       "calendarUrl": "https://www.crazyunclemikes.com/",
-      "status": "error",
+      "status": "skipped",
       "method": null,
-      "fetchedAt": "2026-08-15T01:24:17.264Z",
+      "fetchedAt": null,
       "showCount": 0,
-      "error": "HTTP 403"
+      "error": "Not included in this refresh run."
     },
     {
       "id": "boca-black-box",
       "name": "Boca Black Box",
       "city": "Boca Raton",
       "calendarUrl": "https://bocablackbox.com/",
-      "status": "error",
+      "status": "skipped",
       "method": null,
-      "fetchedAt": "2026-08-15T01:24:17.267Z",
+      "fetchedAt": null,
       "showCount": 0,
-      "error": "HTTP 403"
+      "error": "Not included in this refresh run."
     },
     {
       "id": "barrel-of-monks",
       "name": "Barrel of Monks",
       "city": "Boca Raton",
       "calendarUrl": "https://barrelofmonks.com/",
-      "status": "error",
+      "status": "skipped",
       "method": null,
-      "fetchedAt": "2026-08-15T01:24:17.268Z",
+      "fetchedAt": null,
       "showCount": 0,
-      "error": "HTTP 403"
+      "error": "Not included in this refresh run."
     },
     {
       "id": "tin-roof-delray",
       "name": "Tin Roof Delray Beach",
       "city": "Delray Beach",
       "calendarUrl": "https://tinroofdelraybeach.com/calendar/",
-      "status": "error",
+      "status": "skipped",
       "method": null,
-      "fetchedAt": "2026-08-15T01:24:17.269Z",
+      "fetchedAt": null,
       "showCount": 0,
-      "error": "HTTP 403"
+      "error": "Not included in this refresh run."
     },
     {
       "id": "revolution-live",
       "name": "Revolution Live",
       "city": "Fort Lauderdale",
       "calendarUrl": "https://www.jointherevolution.net/concerts/",
-      "status": "error",
+      "status": "skipped",
       "method": null,
-      "fetchedAt": "2026-08-15T01:24:17.271Z",
+      "fetchedAt": null,
       "showCount": 0,
-      "error": "HTTP 403"
+      "error": "Not included in this refresh run."
     },
     {
       "id": "tin-roof-ftl",
       "name": "Tin Roof Ft Lauderdale",
       "city": "Fort Lauderdale",
       "calendarUrl": "https://tinroofftlauderdale.com/calendar/",
-      "status": "error",
+      "status": "skipped",
       "method": null,
-      "fetchedAt": "2026-08-15T01:24:17.272Z",
+      "fetchedAt": null,
       "showCount": 0,
-      "error": "HTTP 403"
+      "error": "Not included in this refresh run."
     },
     {
       "id": "tarpon-river",
       "name": "Tarpon River Brewing",
       "city": "Fort Lauderdale",
       "calendarUrl": "https://tarponriverbrewing.com/",
-      "status": "error",
+      "status": "skipped",
       "method": null,
-      "fetchedAt": "2026-08-15T01:24:17.273Z",
+      "fetchedAt": null,
       "showCount": 0,
-      "error": "HTTP 403"
+      "error": "Not included in this refresh run."
     },
     {
       "id": "funky-buddha",
       "name": "Funky Buddha Brewery",
       "city": "Oakland Park",
       "calendarUrl": "https://funkybuddhabrewery.com/",
-      "status": "error",
+      "status": "skipped",
       "method": null,
-      "fetchedAt": "2026-08-15T01:24:17.274Z",
+      "fetchedAt": null,
       "showCount": 0,
-      "error": "HTTP 403"
+      "error": "Not included in this refresh run."
     },
     {
       "id": "ball-and-chain",
       "name": "Ball & Chain",
       "city": "Miami",
       "calendarUrl": "https://ballandchainmiami.com/upcoming-events/",
-      "status": "error",
+      "status": "skipped",
       "method": null,
-      "fetchedAt": "2026-08-15T01:24:17.277Z",
+      "fetchedAt": null,
       "showCount": 0,
-      "error": "HTTP 403"
+      "error": "Not included in this refresh run."
     },
     {
       "id": "lagniappe",
       "name": "Lagniappe",
       "city": "Miami",
       "calendarUrl": "https://lagniappehouse.com/",
-      "status": "error",
+      "status": "skipped",
       "method": null,
-      "fetchedAt": "2026-08-15T01:24:17.278Z",
+      "fetchedAt": null,
       "showCount": 0,
-      "error": "HTTP 403"
+      "error": "Not included in this refresh run."
     },
     {
       "id": "churchills",
       "name": "Churchill's Pub",
       "city": "Miami",
       "calendarUrl": "https://churchillspub.com/",
-      "status": "error",
+      "status": "skipped",
       "method": null,
-      "fetchedAt": "2026-08-15T01:24:17.278Z",
+      "fetchedAt": null,
       "showCount": 0,
-      "error": "HTTP 403"
+      "error": "Not included in this refresh run."
     }
   ],
   "shows": []
