@@ -16,6 +16,7 @@
  */
 
 import { writeFileSync, mkdirSync } from "node:fs";
+import { execFileSync } from "node:child_process";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -39,7 +40,15 @@ export const VENUES = [
   { id: "funky-buddha",      name: "Funky Buddha Brewery",   city: "Oakland Park",    calendarUrl: "https://funkybuddhabrewery.com/" },
   { id: "ball-and-chain",    name: "Ball & Chain",           city: "Miami",           calendarUrl: "https://ballandchainmiami.com/upcoming-events/" },
   { id: "lagniappe",         name: "Lagniappe",              city: "Miami",           calendarUrl: "https://lagniappehouse.com/" },
-  { id: "churchills",        name: "Churchill's Pub",        city: "Miami",           calendarUrl: "https://churchillspub.com/" },
+  { id: "churchills",        name: "Churchill's Pub",        city: "Miami",           calendarUrl: "https://churchillspub.com/", altUrls: ["https://churchills.miami/"] },
+  { id: "culture-room",      name: "Culture Room",           city: "Fort Lauderdale", calendarUrl: "https://www.cultureroom.net/" },
+  { id: "the-parker",        name: "The Parker",             city: "Fort Lauderdale", calendarUrl: "https://www.parkerplayhouse.com/" },
+  { id: "pompano-amp",       name: "Pompano Beach Amphitheater", city: "Pompano Beach", calendarUrl: "https://www.pompanobeacharts.org/" },
+  { id: "arts-garage",       name: "Arts Garage",            city: "Delray Beach",    calendarUrl: "https://artsgarage.org/" },
+  { id: "johnnie-browns",    name: "Johnnie Brown's",        city: "Delray Beach",    calendarUrl: "https://johnniebrowns.com/" },
+  { id: "mathews-brewing",   name: "Mathews Brewing",        city: "Lake Worth",      calendarUrl: "https://mathewsbrewing.com/" },
+  { id: "respectable-street",name: "Respectable Street",     city: "West Palm Beach", calendarUrl: "https://respectablestreet.com/" },
+  { id: "guanabanas",        name: "Guanabanas",             city: "Jupiter",         calendarUrl: "https://www.guanabanas.com/" },
 ];
 
 // The listing text itself decides the tribute flag — a match is recorded with
@@ -355,6 +364,32 @@ function eventPageLinks(html, pageUrl, limit = 4) {
   return out;
 }
 
+// ——— headless Chrome fallback ———
+// For calendars rendered by JavaScript and for hosts that reject non-browser
+// TLS stacks. Chrome loads the page like any visitor; we then run the same
+// extractors over the rendered DOM. Still deterministic — still the venue's
+// own published data.
+
+let chromeBin;
+function findChrome() {
+  if (chromeBin !== undefined) return chromeBin;
+  for (const bin of ["google-chrome", "google-chrome-stable", "chromium-browser", "chromium"]) {
+    try { execFileSync(bin, ["--version"], { stdio: "pipe" }); return (chromeBin = bin); } catch { /* next */ }
+  }
+  return (chromeBin = null);
+}
+
+function chromeDump(url) {
+  const bin = findChrome();
+  if (!bin) return null;
+  try {
+    return execFileSync(bin, [
+      "--headless=new", "--disable-gpu", "--no-sandbox", "--hide-scrollbars",
+      `--user-agent=${UA}`, "--virtual-time-budget=15000", "--dump-dom", url,
+    ], { encoding: "utf8", maxBuffer: 64 * 1024 * 1024, timeout: 60000, stdio: ["ignore", "pipe", "pipe"] });
+  } catch { return null; }
+}
+
 // ——— per-venue pipeline ———
 
 function normalize(raw, venue, fetchedAt) {
@@ -387,33 +422,59 @@ function snapshot(venueId, tag, content) {
   writeFileSync(join(DEBUG_DIR, `${venueId}${tag ? `-${tag}` : ""}.html`), content.slice(0, 400_000));
 }
 
+async function harvestUrl(venue, pageUrl, snapTag) {
+  const { html, url } = await getWithHostRetry(pageUrl);
+  snapshot(venue.id, snapTag, html);
+  let events = extractFromHtml(html, url);
+  if (events.length === 0) events = await eventsFromTribeApi(html, url);
+  if (events.length === 0) {
+    const icsUrl = discoverIcsUrl(html, url);
+    if (icsUrl) events = eventsFromIcs(await get(icsUrl), icsUrl);
+  }
+  if (events.length === 0) {
+    // Follow the page's own event/calendar links (real links, never guessed)
+    let i = 0;
+    for (const link of eventPageLinks(html, url)) {
+      try {
+        const sub = await get(link);
+        snapshot(venue.id, `${snapTag}link${++i}`, sub);
+        events.push(...extractFromHtml(sub, link));
+        if (events.length === 0) {
+          const ics = discoverIcsUrl(sub, link);
+          if (ics) events.push(...eventsFromIcs(await get(ics), ics));
+        }
+      } catch { /* dead link: skip */ }
+      if (events.length > 0) break;
+    }
+  }
+  return events;
+}
+
 async function refreshVenue(venue) {
   const fetchedAt = new Date().toISOString();
+  const urls = [venue.calendarUrl, ...(venue.altUrls || [])];
   try {
-    const { html, url: pageUrl } = await getWithHostRetry(venue.calendarUrl);
-    snapshot(venue.id, "", html);
-    let events = extractFromHtml(html, pageUrl);
-    if (events.length === 0) events = await eventsFromTribeApi(html, pageUrl);
-    if (events.length === 0) {
-      const icsUrl = discoverIcsUrl(html, pageUrl);
-      if (icsUrl) events = eventsFromIcs(await get(icsUrl), icsUrl);
+    let events = [];
+    let fetchedAny = false;
+    let lastErr = null;
+    for (let u = 0; u < urls.length && events.length === 0; u++) {
+      try {
+        events = await harvestUrl(venue, urls[u], u ? `alt${u}-` : "");
+        fetchedAny = true;
+      } catch (err) { lastErr = err; }
     }
     if (events.length === 0) {
-      // Follow the page's own event/calendar links (real links, never guessed)
-      let i = 0;
-      for (const link of eventPageLinks(html, pageUrl)) {
-        try {
-          const sub = await get(link);
-          snapshot(venue.id, `link${++i}`, sub);
-          events.push(...extractFromHtml(sub, link));
-          if (events.length === 0) {
-            const ics = discoverIcsUrl(sub, link);
-            if (ics) events.push(...eventsFromIcs(await get(ics), ics));
-          }
-        } catch { /* dead link: skip */ }
-        if (events.length > 0) break;
+      for (let u = 0; u < urls.length && events.length === 0; u++) {
+        const dom = chromeDump(urls[u]);
+        if (dom === null) break; // no Chrome on this machine
+        snapshot(venue.id, u ? `chrome-alt${u}` : "chrome", dom);
+        fetchedAny = true;
+        events = extractFromHtml(dom, urls[u]);
+        if (events.length === 0) events = await eventsFromTribeApi(dom, urls[u]).catch(() => []);
+        if (events.length > 0) events = events.map((e) => ({ ...e, method: `${e.method}+chrome` }));
       }
     }
+    if (!fetchedAny && lastErr) throw lastErr;
     const method = events[0]?.method ?? null;
     const today = new Date().toISOString().slice(0, 10);
     const seen = new Set();
