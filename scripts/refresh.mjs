@@ -510,7 +510,24 @@ if (testIdx !== -1) {
 const only = new Set(process.argv.slice(2).filter((a) => !a.startsWith("--")));
 const targets = only.size ? VENUES.filter((v) => only.has(v.id)) : VENUES;
 
-const results = await Promise.all(targets.map(async (v) => [v.id, await refreshVenue(v)]));
+// A stalled socket can let Node's event loop drain mid-run (AbortSignal
+// timers don't hold the process open), which kills the script with an
+// "unsettled top-level await". Hold the loop open for the whole run and cap
+// each venue with a hard watchdog so one bad host can't sink the rest.
+const keepAlive = setInterval(() => {}, 30_000);
+const VENUE_BUDGET_MS = 150_000;
+function withWatchdog(promise, venue) {
+  return Promise.race([
+    promise,
+    new Promise((resolve) => setTimeout(resolve, VENUE_BUDGET_MS, {
+      status: "error", method: null, fetchedAt: new Date().toISOString(),
+      showCount: 0, error: `no response within ${VENUE_BUDGET_MS / 1000}s`, shows: [],
+    })),
+  ]);
+}
+
+const results = await Promise.all(targets.map(async (v) => [v.id, await withWatchdog(refreshVenue(v), v)]));
+clearInterval(keepAlive);
 const byVenue = Object.fromEntries(results);
 
 const out = {
