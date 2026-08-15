@@ -113,6 +113,144 @@ function eventsFromJsonLd(html, pageUrl) {
   return out;
 }
 
+// ——— "Add to Google Calendar" links (WordPress event plugins emit these) ———
+// The link's query string carries the event name, exact start datetime in the
+// venue's timezone, and the event page URL. Data is the venue's own, verbatim.
+
+function eventsFromGcalLinks(html, pageUrl) {
+  const out = [];
+  for (const m of html.matchAll(/href="(https:\/\/www\.google\.com\/calendar\/event\?[^"]+)"/g)) {
+    let q;
+    try { q = new URL(decodeEntities(m[1])).searchParams; } catch { continue; }
+    const name = q.get("text");
+    const dates = q.get("dates");
+    if (!name || !dates || !/^\d{8}T\d{6}/.test(dates)) continue;
+    const d = dates.split("/")[0];
+    const sprop = q.getAll("sprop").find((s) => s.startsWith("http"));
+    out.push({
+      name: name.trim(),
+      startDate: `${d.slice(0, 4)}-${d.slice(4, 6)}-${d.slice(6, 8)}T${d.slice(9, 11)}:${d.slice(11, 13)}`,
+      url: sprop || pageUrl,
+      description: (q.get("details") || "").slice(0, 400) || null,
+      offersUrl: null,
+      method: "gcal-link",
+    });
+  }
+  return out;
+}
+
+// ——— SeeTickets embedded listing (event-info-block markup) ———
+// Listing shows "Fri Aug 14"-style dates without a year; the year is resolved
+// by deterministic calendar math (next occurrence, tolerating ~45 days past).
+
+const MONTHS = { Jan: 1, Feb: 2, Mar: 3, Apr: 4, May: 5, Jun: 6, Jul: 7, Aug: 8, Sep: 9, Oct: 10, Nov: 11, Dec: 12 };
+
+function resolveYear(mon, day, now) {
+  const y = now.getFullYear();
+  const cand = new Date(y, mon - 1, day);
+  return cand < new Date(now.getFullYear(), now.getMonth(), now.getDate() - 45) ? y + 1 : y;
+}
+
+function to24h(t) {
+  const m = t.match(/(\d{1,2}):(\d{2})\s*(AM|PM)/i);
+  if (!m) return null;
+  let h = Number(m[1]) % 12;
+  if (/pm/i.test(m[3])) h += 12;
+  return `${String(h).padStart(2, "0")}:${m[2]}`;
+}
+
+function eventsFromSeeTickets(html, pageUrl) {
+  const out = [];
+  const now = new Date();
+  for (const block of html.split(/event-info-block/).slice(1)) {
+    const chunk = block.slice(0, 3000);
+    const date = chunk.match(/event-date"[^>]*>\s*(?:Mon|Tue|Wed|Thu|Fri|Sat|Sun)[a-z]*,?\s+([A-Z][a-z]{2})[a-z]*\.?\s+(\d{1,2})/);
+    const title = chunk.match(/event-title"[^>]*>\s*<a\s+href=["']?([^"' >]+)["']?[^>]*>([\s\S]*?)<\/a>/);
+    if (!date || !title || !MONTHS[date[1]]) continue;
+    const mon = MONTHS[date[1]], day = Number(date[2]);
+    const show = chunk.match(/see-showtime[^>]*>\s*([^<]+)</);
+    const time = show ? to24h(show[1]) : null;
+    out.push({
+      name: decodeEntities(title[2].replace(/<[^>]+>/g, "")),
+      startDate: `${resolveYear(mon, day, now)}-${String(mon).padStart(2, "0")}-${String(day).padStart(2, "0")}${time ? `T${time}` : ""}`,
+      url: new URL(decodeEntities(title[1]), pageUrl).href,
+      description: null,
+      offersUrl: null,
+      method: "seetickets",
+    });
+  }
+  return out;
+}
+
+// ——— Next.js __NEXT_DATA__ (TinaCMS-style event nodes) ———
+
+function toEastern(iso) {
+  const d = new Date(iso);
+  if (isNaN(d)) return String(iso);
+  const parts = new Intl.DateTimeFormat("en-CA", {
+    timeZone: "America/New_York", year: "numeric", month: "2-digit", day: "2-digit",
+    hour: "2-digit", minute: "2-digit", hour12: false,
+  }).formatToParts(d);
+  const g = (t) => parts.find((p) => p.type === t).value;
+  return `${g("year")}-${g("month")}-${g("day")}T${g("hour")}:${g("minute")}`;
+}
+
+function eventsFromNextData(html, pageUrl) {
+  const m = html.match(/id="__NEXT_DATA__"[^>]*>([\s\S]*?)<\/script>/);
+  if (!m) return [];
+  let data;
+  try { data = JSON.parse(m[1]); } catch { return []; }
+  const out = [];
+  (function walk(node) {
+    if (!node || typeof node !== "object") return;
+    if (Array.isArray(node)) return node.forEach(walk);
+    if (typeof node.title === "string" && Array.isArray(node.event_info)) {
+      if (String(node.active_status).toLowerCase() === "false") return;
+      for (const info of node.event_info) {
+        if (!info?.event_date) continue;
+        out.push({
+          name: node.title.trim(),
+          startDate: /Z$/.test(info.event_date) ? toEastern(info.event_date) : String(info.event_date),
+          url: typeof info.ticket_link === "string" && info.ticket_link.startsWith("http") ? info.ticket_link : pageUrl,
+          description: null,
+          offersUrl: null,
+          method: "next-data",
+        });
+      }
+      return;
+    }
+    Object.values(node).forEach(walk);
+  })(data);
+  return out;
+}
+
+// ——— The Events Calendar (tribe) REST API ———
+// Only queried when the page itself shows tribe-events markers; the endpoint
+// is the plugin's standard public API on the venue's own domain.
+
+async function eventsFromTribeApi(html, pageUrl) {
+  if (!/tribe-events|The Events Calendar/i.test(html)) return [];
+  const api = new URL("/wp-json/tribe/events/v1/events?per_page=50", pageUrl).href;
+  let json;
+  try { json = JSON.parse(await get(api)); } catch { return []; }
+  return (json.events || []).map((e) => ({
+    name: decodeEntities(String(e.title).replace(/<[^>]+>/g, "")),
+    startDate: String(e.start_date || "").replace(" ", "T"),
+    url: e.url || pageUrl,
+    description: e.description ? decodeEntities(e.description.replace(/<[^>]+>/g, " ")).slice(0, 400) : null,
+    offersUrl: typeof e.website === "string" && e.website.startsWith("http") ? e.website : null,
+    method: "tribe-rest",
+  })).filter((e) => e.name && /^\d{4}-\d{2}-\d{2}/.test(e.startDate));
+}
+
+function extractFromHtml(html, pageUrl) {
+  for (const fn of [eventsFromJsonLd, eventsFromGcalLinks, eventsFromSeeTickets, eventsFromNextData]) {
+    const events = fn(html, pageUrl);
+    if (events.length) return events;
+  }
+  return [];
+}
+
 // ——— ICS fallback ———
 
 function discoverIcsUrl(html, pageUrl) {
@@ -199,11 +337,11 @@ async function refreshVenue(venue) {
   try {
     const html = await get(venue.calendarUrl);
     snapshot(venue.id, "", html);
-    let events = eventsFromJsonLd(html, venue.calendarUrl);
-    let method = "json-ld";
+    let events = extractFromHtml(html, venue.calendarUrl);
+    if (events.length === 0) events = await eventsFromTribeApi(html, venue.calendarUrl);
     if (events.length === 0) {
       const icsUrl = discoverIcsUrl(html, venue.calendarUrl);
-      if (icsUrl) { events = eventsFromIcs(await get(icsUrl), icsUrl); method = "ics"; }
+      if (icsUrl) events = eventsFromIcs(await get(icsUrl), icsUrl);
     }
     if (events.length === 0) {
       // Follow the page's own event/calendar links (real links, never guessed)
@@ -212,15 +350,16 @@ async function refreshVenue(venue) {
         try {
           const sub = await get(link);
           snapshot(venue.id, `link${++i}`, sub);
-          events.push(...eventsFromJsonLd(sub, link));
+          events.push(...extractFromHtml(sub, link));
           if (events.length === 0) {
             const ics = discoverIcsUrl(sub, link);
-            if (ics) { events.push(...eventsFromIcs(await get(ics), ics)); method = "ics"; }
+            if (ics) events.push(...eventsFromIcs(await get(ics), ics));
           }
         } catch { /* dead link: skip */ }
         if (events.length > 0) break;
       }
     }
+    const method = events[0]?.method ?? null;
     const today = new Date().toISOString().slice(0, 10);
     const seen = new Set();
     const shows = events
