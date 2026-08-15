@@ -2,7 +2,7 @@ import React, { useMemo, useState } from "react";
 import data from "./data/shows.json";
 
 /**
- * SFLA Tribute & Cover Tracker — Miami to Boca Raton.
+ * SFLA Tribute & Cover Tracker — Miami to Jupiter.
  *
  * All data comes from data/shows.json, written by `node scripts/refresh.mjs`,
  * which copies listings verbatim from each venue's own website. This component
@@ -54,7 +54,7 @@ export default function TributeTracker() {
     <div className="app">
       <style>{CSS}</style>
       <h1>SFLA Tribute &amp; Cover Tracker</h1>
-      <p className="sub">Miami → Boca · data copied verbatim from venue sites · nothing inferred</p>
+      <p className="sub">Miami → Jupiter · data copied verbatim from venue sites · nothing inferred</p>
 
       <div className="banner">
         <b>{data.shows.length}</b> shows from <b>{okCount}</b> venues fetched OK

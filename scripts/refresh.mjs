@@ -305,8 +305,32 @@ async function eventsFromTribeApi(html, pageUrl) {
   })).filter((e) => e.name && /^\d{4}-\d{2}-\d{2}/.test(e.startDate));
 }
 
+// ——— "event-date" markup (Carbonhouse and similar venue platforms) ———
+// Blocks shaped like: <div class="m-event-date">Sep 12, 2026</div> ...
+// <h3><a href="/events/detail/x">Show Name</a></h3>
+
+const MONTH_FULL = { January:1,February:2,March:3,April:4,May:5,June:6,July:7,August:8,September:9,October:10,November:11,December:12 };
+
+function eventsFromEventDateMarkup(html, pageUrl) {
+  const out = [];
+  const re = /class="[^"]*event-date[^"]*"[^>]*>\s*([A-Z][a-z]+)\.?\s+(\d{1,2}),?\s+(\d{4})[\s\S]{0,600}?<h[23][^>]*>\s*<a\s+href="([^"]+)"[^>]*>([\s\S]*?)<\/a>/g;
+  for (const m of html.matchAll(re)) {
+    const mon = MONTH_FULL[m[1]] || MONTHS[m[1].slice(0, 3)];
+    if (!mon) continue;
+    out.push({
+      name: decodeEntities(m[5].replace(/<[^>]+>/g, "")),
+      startDate: `${m[3]}-${String(mon).padStart(2, "0")}-${String(m[2]).padStart(2, "0")}`,
+      url: new URL(decodeEntities(m[4]), pageUrl).href,
+      description: null,
+      offersUrl: null,
+      method: "event-date-markup",
+    });
+  }
+  return out;
+}
+
 function extractFromHtml(html, pageUrl) {
-  for (const fn of [eventsFromJsonLd, eventsFromGcalLinks, eventsFromSeeTickets, eventsFromNextData]) {
+  for (const fn of [eventsFromJsonLd, eventsFromGcalLinks, eventsFromSeeTickets, eventsFromNextData, eventsFromEventDateMarkup]) {
     const events = fn(html, pageUrl);
     if (events.length) return events;
   }
@@ -450,11 +474,32 @@ async function harvestUrl(venue, pageUrl, snapTag) {
           const ics = discoverIcsUrl(sub, link);
           if (ics) events.push(...eventsFromIcs(await get(ics), ics));
         }
+        if (events.length === 0) events.push(...await harvestEventIndex(sub, link));
       } catch { /* dead link: skip */ }
       if (events.length > 0) break;
     }
   }
+  if (events.length === 0) events = await harvestEventIndex(html, url);
   return events;
+}
+
+// An index page dense with /events/<slug> links (city CMS sites): fetch each
+// event's own page — up to 20 — and extract from it.
+async function harvestEventIndex(html, pageUrl) {
+  const base = new URL(pageUrl);
+  const slugs = new Set();
+  for (const m of html.matchAll(/href="([^"']*\/events?\/[a-z0-9][a-z0-9-]+\/?)"/gi)) {
+    try {
+      const u = new URL(decodeEntities(m[1]), pageUrl);
+      if (u.origin === base.origin && !/photo|gallery|category|tag|page/.test(u.pathname)) slugs.add(u.href);
+    } catch { /* bad href */ }
+  }
+  if (slugs.size < 5) return [];
+  const out = [];
+  await Promise.all([...slugs].slice(0, 20).map(async (link) => {
+    try { out.push(...extractFromHtml(await get(link), link)); } catch { /* skip */ }
+  }));
+  return out;
 }
 
 async function refreshVenue(venue) {
