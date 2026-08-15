@@ -48,20 +48,20 @@ export const VENUES = [
 // if the listing doesn't name the artist, tributeTo stays null.
 const TRIBUTE_RE = /\btribute(?:\s+to\s+[\w .&'-]+)?|celebrating the music of\s+[\w .&'-]+|\ba tribute\b/i;
 
-const QUALIFIER_RE = /^(?:an?|the|ultimate|premier|premiere|original|official|authentic|greatest|live|first|longest|running|only|&|world'?s|america'?s|florida'?s|south florida'?s|#?\s?1|no\.?\s?1|favou?rite)\s+/i;
+const QUALIFIER_RE = /^(?:an?|the|ultimate|premier|premiere|original|official|authentic|greatest|live|first|longest|running|only|&|sensational|professional|acclaimed|legendary|renowned|award[- ]winning|world['’]?s|america['’]?s|florida['’]?s|south florida['’]?s|#?\s?1|no\.?\s?1|favou?rite)\s+/i;
 
 function cleanTarget(s) {
   const t = s.replace(/\s+/g, " ").replace(/[.,;:!\s]+$/g, "").trim();
-  return t.length >= 2 && t.length <= 45 ? t : null;
+  return t.length >= 2 && t.length <= 45 && t.split(" ").length <= 6 ? t : null;
 }
 
 function deriveTribute(text) {
   // "tribute to X" / "celebrating the music of X"
-  let m = text.match(/\b(?:a\s+)?(?:tribute\s+to|celebrating\s+the\s+music\s+of)\s+(?:the\s+music\s+of\s+)?["“']?(.{2,60}?)["”']?\s*(?:$|[.!?;()\[\]|]|\s+(?:w\/|with\s|feat\b|featuring\b|performing\b|playing\b|plus\s|at\s|--?\s))/i);
-  if (m) return { evidence: m[0].replace(/[.!?;()\[\]|]\s*$/, "").trim(), target: cleanTarget(m[1]) };
+  let m = text.match(/\b(?:a\s+)?(?:tribute\s+to|celebrating\s+the\s+music\s+of)\s+(?:the\s+music\s+of\s+)?["“']?(.{2,60}?)["”']?\s*(?:$|[.!?;()\[\]|—–]|\s+(?:w\/|with\s|feat\b|featuring\b|performing\b|playing\b|plus\s|at\s|--?\s))/i);
+  if (m) return { evidence: m[0].replace(/[.!?;()\[\]|—–]\s*$/, "").trim(), target: cleanTarget(m[1]) };
   // "X Tribute (Band|Experience|Show|Night)" — the words before "tribute",
   // with marketing qualifiers ("The Ultimate", "America's #1") stripped
-  m = text.match(/([A-Za-z0-9][\w.'&!\s]{1,45}?)\s+tribute(?:\s+(?:band|experience|show|night|act))?\b/i);
+  m = text.match(/([A-Za-z0-9][\w.'’&!\s]{1,45}?)\s+tribute(?:\s+(?:band|experience|show|night|act))?\b/i);
   if (m) {
     let t = m[1], prev;
     do { prev = t; t = t.replace(QUALIFIER_RE, ""); } while (t !== prev);
