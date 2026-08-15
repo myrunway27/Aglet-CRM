@@ -16,7 +16,7 @@
  */
 
 import { writeFileSync, mkdirSync } from "node:fs";
-import { execFileSync } from "node:child_process";
+import { execFile, execFileSync } from "node:child_process";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -379,15 +379,22 @@ function findChrome() {
   return (chromeBin = null);
 }
 
+// Chrome runs asynchronously (never blocking other venues' fetches) and one
+// at a time via a queue, so a dozen fallbacks don't spawn a dozen browsers.
+let chromeQueue = Promise.resolve();
 function chromeDump(url) {
   const bin = findChrome();
-  if (!bin) return null;
-  try {
-    return execFileSync(bin, [
+  if (!bin) return Promise.resolve(null);
+  const run = () => new Promise((resolve) => {
+    execFile(bin, [
       "--headless=new", "--disable-gpu", "--no-sandbox", "--hide-scrollbars",
       `--user-agent=${UA}`, "--virtual-time-budget=15000", "--dump-dom", url,
-    ], { encoding: "utf8", maxBuffer: 64 * 1024 * 1024, timeout: 60000, stdio: ["ignore", "pipe", "pipe"] });
-  } catch { return null; }
+    ], { encoding: "utf8", maxBuffer: 64 * 1024 * 1024, timeout: 45000 },
+    (err, stdout) => resolve(stdout && stdout.length > 500 ? stdout : null));
+  });
+  const p = chromeQueue.then(run, run);
+  chromeQueue = p.then(() => {}, () => {});
+  return p;
 }
 
 // ——— per-venue pipeline ———
@@ -464,9 +471,9 @@ async function refreshVenue(venue) {
       } catch (err) { lastErr = err; }
     }
     if (events.length === 0) {
-      for (let u = 0; u < urls.length && events.length === 0; u++) {
-        const dom = chromeDump(urls[u]);
-        if (dom === null) break; // no Chrome on this machine
+      for (let u = 0; u < urls.length && events.length === 0 && findChrome(); u++) {
+        const dom = await chromeDump(urls[u]);
+        if (!dom) continue;
         snapshot(venue.id, u ? `chrome-alt${u}` : "chrome", dom);
         fetchedAny = true;
         events = extractFromHtml(dom, urls[u]);
@@ -515,7 +522,7 @@ const targets = only.size ? VENUES.filter((v) => only.has(v.id)) : VENUES;
 // "unsettled top-level await". Hold the loop open for the whole run and cap
 // each venue with a hard watchdog so one bad host can't sink the rest.
 const keepAlive = setInterval(() => {}, 30_000);
-const VENUE_BUDGET_MS = 150_000;
+const VENUE_BUDGET_MS = 600_000; // generous: includes waiting in the Chrome queue
 function withWatchdog(promise, venue) {
   return Promise.race([
     promise,
