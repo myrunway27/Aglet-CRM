@@ -22,4 +22,4 @@ COPY --from=builder /app/package.json ./
 VOLUME ["/data"]
 
 EXPOSE 3000
-CMD ["sh", "-c", "mkdir -p \"$UPLOAD_DIR\" && npx prisma db push --skip-generate && npx next start -p 3000"]
+CMD ["sh", "-c", "mkdir -p \"$UPLOAD_DIR\" && npx prisma db push --skip-generate && npx next start -p ${PORT:-3000}"]
