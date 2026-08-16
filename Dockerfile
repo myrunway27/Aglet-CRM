@@ -16,10 +16,12 @@ COPY --from=builder /app/.next ./.next
 COPY --from=builder /app/public ./public
 COPY --from=builder /app/prisma ./prisma
 COPY --from=builder /app/package.json ./
+COPY --from=builder /app/scripts/bootstrap-admin.mjs ./scripts/bootstrap-admin.mjs
 
 # /data holds the SQLite database AND review photos (UPLOAD_DIR).
 # Mount it as a persistent volume or all data is lost on redeploy.
-VOLUME ["/data"]
+# (No VOLUME directive: Railway rejects it — the /data volume is attached
+# on the platform side there, and fly.toml's [mounts] covers Fly.)
 
 EXPOSE 3000
-CMD ["sh", "-c", "mkdir -p \"$UPLOAD_DIR\" && npx prisma db push --skip-generate && npx next start -p ${PORT:-3000}"]
+CMD ["sh", "-c", "mkdir -p \"$UPLOAD_DIR\" && npx prisma db push --skip-generate && node scripts/bootstrap-admin.mjs && npx next start -p ${PORT:-3000}"]

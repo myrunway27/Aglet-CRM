@@ -6,5 +6,5 @@ prisma/*.db-journal
 public/uploads/*
 .env
 .env.local
-scripts
+scripts/e2e.mjs
 README.md
