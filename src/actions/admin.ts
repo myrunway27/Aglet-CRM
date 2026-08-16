@@ -3,10 +3,14 @@
 import { revalidatePath } from "next/cache";
 import { prisma } from "@/lib/db";
 import { requireAdmin } from "@/lib/auth";
+import { notifyUser } from "@/lib/notify";
 
 export async function decideClaim(claimId: string, approve: boolean) {
   await requireAdmin();
-  const claim = await prisma.ownerClaim.findUniqueOrThrow({ where: { id: claimId } });
+  const claim = await prisma.ownerClaim.findUniqueOrThrow({
+    where: { id: claimId },
+    include: { business: true },
+  });
 
   if (approve) {
     await prisma.$transaction([
@@ -24,6 +28,13 @@ export async function decideClaim(claimId: string, approve: boolean) {
   } else {
     await prisma.ownerClaim.update({ where: { id: claimId }, data: { status: "REJECTED" } });
   }
+  await notifyUser(
+    claim.userId,
+    approve
+      ? `Your owner claim for ${claim.business.name} was approved — you can now reply to reviews`
+      : `Your owner claim for ${claim.business.name} was not approved`,
+    approve ? "/owner" : `/business/${claim.business.slug}`
+  );
   revalidatePath("/admin");
 }
 
@@ -45,6 +56,15 @@ export async function moderateReview(reviewId: string, action: "hide" | "clear")
     where: { reviewId, status: "OPEN" },
     data: { status: action === "hide" ? "REVIEW_HIDDEN" : "DISMISSED" },
   });
+
+  if (action === "hide") {
+    await notifyUser(
+      review.userId,
+      `Your review of ${review.business.name} was removed by moderators`,
+      "/account",
+      { email: false }
+    );
+  }
 
   revalidatePath("/admin");
   revalidatePath(`/business/${review.business.slug}`);

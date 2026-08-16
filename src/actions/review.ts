@@ -6,9 +6,10 @@ import path from "node:path";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { prisma } from "@/lib/db";
-import { getCurrentUser } from "@/lib/auth";
+import { getCurrentUser, VERIFY_REQUIRED_ERROR } from "@/lib/auth";
 import { generatePseudonym } from "@/lib/pseudonym";
 import { detectSuspiciousReview, isOverDailyLimit, MAX_REVIEWS_PER_DAY } from "@/lib/moderation";
+import { notifyUser } from "@/lib/notify";
 
 export type FormState = { error?: string } | undefined;
 
@@ -24,6 +25,7 @@ export async function postReview(_prev: FormState, formData: FormData): Promise<
   const user = await getCurrentUser();
   const slug = String(formData.get("slug") ?? "");
   if (!user) redirect(`/login?next=/business/${slug}`);
+  if (!user.emailVerifiedAt) return { error: VERIFY_REQUIRED_ERROR };
 
   const businessId = String(formData.get("businessId") ?? "");
   const rating = Number(formData.get("rating"));
@@ -95,6 +97,14 @@ export async function postReview(_prev: FormState, formData: FormData): Promise<
     },
   });
 
+  if (business.ownerId) {
+    await notifyUser(
+      business.ownerId,
+      `New ${rating}-star anonymous review on ${business.name}`,
+      `/business/${business.slug}`
+    );
+  }
+
   revalidatePath(`/business/${business.slug}`);
   redirect(`/business/${business.slug}?posted=1${flagReason ? "&flagged=1" : ""}`);
 }
@@ -102,6 +112,7 @@ export async function postReview(_prev: FormState, formData: FormData): Promise<
 export async function toggleHelpful(reviewId: string, slug: string) {
   const user = await getCurrentUser();
   if (!user) redirect(`/login?next=/business/${slug}`);
+  if (!user.emailVerifiedAt) redirect(`/verify?next=/business/${slug}`);
 
   const existing = await prisma.helpfulVote.findUnique({
     where: { reviewId_userId: { reviewId, userId: user.id } },
@@ -118,6 +129,7 @@ export async function reportReview(_prev: FormState, formData: FormData): Promis
   const user = await getCurrentUser();
   const slug = String(formData.get("slug") ?? "");
   if (!user) redirect(`/login?next=/business/${slug}`);
+  if (!user.emailVerifiedAt) return { error: VERIFY_REQUIRED_ERROR };
 
   const reviewId = String(formData.get("reviewId") ?? "");
   const reason = String(formData.get("reason") ?? "").trim();

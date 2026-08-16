@@ -3,7 +3,7 @@
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { prisma } from "@/lib/db";
-import { getCurrentUser } from "@/lib/auth";
+import { getCurrentUser, VERIFY_REQUIRED_ERROR } from "@/lib/auth";
 
 export type FormState = { error?: string; ok?: boolean } | undefined;
 
@@ -13,6 +13,7 @@ export async function submitClaim(_prev: FormState, formData: FormData): Promise
   const business = await prisma.business.findUnique({ where: { id: businessId } });
   if (!business) return { error: "Business not found." };
   if (!user) redirect(`/login?next=/business/${business.slug}/claim`);
+  if (!user.emailVerifiedAt) return { error: VERIFY_REQUIRED_ERROR };
 
   const evidence = String(formData.get("evidence") ?? "").trim();
   if (evidence.length < 20) {
@@ -45,6 +46,7 @@ export async function submitClaim(_prev: FormState, formData: FormData): Promise
 export async function replyToReview(_prev: FormState, formData: FormData): Promise<FormState> {
   const user = await getCurrentUser();
   if (!user) return { error: "Not signed in." };
+  if (!user.emailVerifiedAt) return { error: VERIFY_REQUIRED_ERROR };
 
   const reviewId = String(formData.get("reviewId") ?? "");
   const text = String(formData.get("text") ?? "").trim();

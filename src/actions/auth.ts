@@ -2,7 +2,8 @@
 
 import { redirect } from "next/navigation";
 import { prisma } from "@/lib/db";
-import { createSession, destroySession, hashPassword, verifyPassword } from "@/lib/auth";
+import { createSession, destroySession, getCurrentUser, hashPassword, verifyPassword } from "@/lib/auth";
+import { confirmVerificationCode, issueVerificationCode } from "@/lib/verification";
 
 export type FormState = { error?: string } | undefined;
 
@@ -23,7 +24,8 @@ export async function signup(_prev: FormState, formData: FormData): Promise<Form
     data: { email, passwordHash: hashPassword(password) },
   });
   await createSession(user.id);
-  redirect(next.startsWith("/") ? next : "/");
+  await issueVerificationCode(user.id);
+  redirect(`/verify?next=${encodeURIComponent(next.startsWith("/") ? next : "/")}`);
 }
 
 export async function login(_prev: FormState, formData: FormData): Promise<FormState> {
@@ -38,10 +40,33 @@ export async function login(_prev: FormState, formData: FormData): Promise<FormS
   if (user.isBanned) return { error: "This account has been suspended." };
 
   await createSession(user.id);
-  redirect(next.startsWith("/") ? next : "/");
+  const safeNext = next.startsWith("/") ? next : "/";
+  if (!user.emailVerifiedAt) {
+    redirect(`/verify?next=${encodeURIComponent(safeNext)}`);
+  }
+  redirect(safeNext);
 }
 
 export async function logout() {
   await destroySession();
   redirect("/");
+}
+
+export async function verifyEmail(_prev: FormState, formData: FormData): Promise<FormState> {
+  const user = await getCurrentUser();
+  if (!user) redirect("/login?next=/verify");
+
+  const code = String(formData.get("code") ?? "");
+  const next = String(formData.get("next") ?? "/");
+
+  const result = await confirmVerificationCode(user.id, code);
+  if (result.error) return { error: result.error };
+  redirect(next.startsWith("/") ? next : "/");
+}
+
+export async function resendCode(_prev: FormState, _formData: FormData): Promise<FormState> {
+  const user = await getCurrentUser();
+  if (!user) redirect("/login?next=/verify");
+  const result = await issueVerificationCode(user.id);
+  return result.error ? { error: result.error } : {};
 }

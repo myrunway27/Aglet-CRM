@@ -15,13 +15,44 @@ model User {
   isBanned     Boolean  @default(false)
   createdAt    DateTime @default(now())
 
+  emailVerifiedAt     DateTime?
+  verifyCode          String?
+  verifyCodeExpiresAt DateTime?
+  verifyCodeIssuedAt  DateTime?
+
   sessions      Session[]
   reviews       Review[]
   helpfulVotes  HelpfulVote[]
   ownerClaims   OwnerClaim[]
   reports       Report[]
+  notifications Notification[]
   addedBusinesses Business[] @relation("AddedBy")
   ownedBusinesses Business[] @relation("OwnedBy")
+}
+
+model Notification {
+  id        String    @id @default(cuid())
+  userId    String
+  message   String
+  link      String
+  readAt    DateTime?
+  createdAt DateTime  @default(now())
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, readAt])
+}
+
+// Every outgoing email is recorded here. When SMTP isn't configured
+// (local development), this doubles as the inbox: /admin/outbox.
+model EmailOutbox {
+  id        String   @id @default(cuid())
+  to        String
+  subject   String
+  body      String
+  sentVia   String // "smtp" | "outbox"
+  createdAt DateTime @default(now())
+
+  @@index([createdAt])
 }
 
 model Session {

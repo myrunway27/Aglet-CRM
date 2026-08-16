@@ -2,7 +2,7 @@
 
 import { redirect } from "next/navigation";
 import { prisma } from "@/lib/db";
-import { getCurrentUser } from "@/lib/auth";
+import { getCurrentUser, VERIFY_REQUIRED_ERROR } from "@/lib/auth";
 import { slugify } from "@/lib/slug";
 import { CATEGORIES } from "@/lib/categories";
 
@@ -11,6 +11,7 @@ export type FormState = { error?: string } | undefined;
 export async function addBusiness(_prev: FormState, formData: FormData): Promise<FormState> {
   const user = await getCurrentUser();
   if (!user) redirect("/login?next=/add-business");
+  if (!user.emailVerifiedAt) return { error: VERIFY_REQUIRED_ERROR };
 
   const name = String(formData.get("name") ?? "").trim();
   const category = String(formData.get("category") ?? "").trim();

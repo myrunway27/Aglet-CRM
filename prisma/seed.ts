@@ -11,11 +11,12 @@ function hashPassword(password: string): string {
 async function main() {
   const admin = await prisma.user.upsert({
     where: { email: "admin@truereview.local" },
-    update: { isAdmin: true },
+    update: { isAdmin: true, emailVerifiedAt: new Date() },
     create: {
       email: "admin@truereview.local",
       passwordHash: hashPassword("admin1234"),
       isAdmin: true,
+      emailVerifiedAt: new Date(),
     },
   });
 
@@ -24,10 +25,11 @@ async function main() {
     reviewers.push(
       await prisma.user.upsert({
         where: { email: `demo${i}@truereview.local` },
-        update: {},
+        update: { emailVerifiedAt: new Date() },
         create: {
           email: `demo${i}@truereview.local`,
           passwordHash: hashPassword("demo1234"),
+          emailVerifiedAt: new Date(),
           // Backdate so seeded reviews don't trip the new-account heuristic
           createdAt: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000),
         },

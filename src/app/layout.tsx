@@ -12,9 +12,12 @@ export const metadata: Metadata = {
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
   const user = await getCurrentUser();
-  const ownsBusinesses = user
-    ? (await prisma.business.count({ where: { ownerId: user.id } })) > 0
-    : false;
+  const [ownsBusinesses, unreadCount] = user
+    ? await Promise.all([
+        prisma.business.count({ where: { ownerId: user.id } }).then((n) => n > 0),
+        prisma.notification.count({ where: { userId: user.id, readAt: null } }),
+      ])
+    : [false, 0];
 
   return (
     <html lang="en">
@@ -30,6 +33,18 @@ export default async function RootLayout({ children }: { children: React.ReactNo
               </Link>
               {user ? (
                 <>
+                  <Link
+                    href="/notifications"
+                    className="relative px-2.5 py-1.5 rounded hover:bg-brand-800"
+                    aria-label="Notifications"
+                  >
+                    🔔
+                    {unreadCount > 0 && (
+                      <span className="absolute -top-0.5 -right-0.5 bg-star text-brand-900 text-[10px] font-bold rounded-full min-w-4 h-4 px-0.5 flex items-center justify-center">
+                        {unreadCount > 9 ? "9+" : unreadCount}
+                      </span>
+                    )}
+                  </Link>
                   {ownsBusinesses && (
                     <Link href="/owner" className="px-2.5 py-1.5 rounded hover:bg-brand-800">
                       My businesses
@@ -65,6 +80,14 @@ export default async function RootLayout({ children }: { children: React.ReactNo
             </nav>
           </div>
         </header>
+        {user && !user.emailVerifiedAt && (
+          <div className="bg-amber-100 text-amber-900 text-sm text-center px-4 py-2">
+            Your email isn&apos;t verified yet — you can browse, but not post.{" "}
+            <Link href="/verify" className="font-semibold underline">
+              Verify now
+            </Link>
+          </div>
+        )}
         <main className="flex-1 mx-auto w-full max-w-4xl px-4 py-6">{children}</main>
         <footer className="text-center text-xs text-stone-500 py-6 px-4">
           The True Review — reviews are anonymous. Your identity is never shown to businesses or

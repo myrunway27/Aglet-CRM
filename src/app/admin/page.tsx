@@ -31,7 +31,12 @@ export default async function AdminPage() {
 
   return (
     <div>
-      <h1 className="text-2xl font-bold mt-4">Moderation</h1>
+      <div className="flex items-center justify-between mt-4 flex-wrap gap-2">
+        <h1 className="text-2xl font-bold">Moderation</h1>
+        <Link href="/admin/outbox" className="text-sm text-brand-700 hover:underline">
+          Email outbox →
+        </Link>
+      </div>
       <p className="text-sm text-stone-600 mt-1">
         Only admins see this page — including the real accounts behind reviews, which stay hidden
         everywhere else.

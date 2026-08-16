@@ -24,7 +24,8 @@ Production: `npm run build && npm start`.
 ## How it works
 
 ### Anonymity model
-- Sign-up requires only email + password. Email is used to log in and to enforce anti-abuse rules — nothing else.
+- Sign-up requires only email + password, confirmed with a 6-digit verification code. Email is used to log in, verify you're real, and enforce anti-abuse rules — nothing else.
+- Unverified accounts can browse but cannot post reviews, businesses, claims, replies, or reports.
 - Reviews display a random pen name generated at posting time. No public page ever shows who wrote a review.
 - Only admins can see the account behind a review, and only inside the moderation panel (needed to fight abuse).
 
@@ -45,6 +46,14 @@ Production: `npm run build && npm start`.
 
 ### Businesses
 - Any signed-in user can add a missing business (name, category, city). Exact duplicates (same name + city) are rejected.
+
+### Notifications & email
+- In-app notification bell: owners hear about new reviews, claimants about claim decisions, authors about removed reviews.
+- Emails (verification codes + notifications) send via SMTP when `SMTP_HOST`/`SMTP_PORT`/`SMTP_USER`/`SMTP_PASS`/`SMTP_FROM` are set. Without SMTP, they're recorded in a dev outbox that admins can read at `/admin/outbox` — that's where verification codes live during local development.
+
+## Deploying
+
+See [DEPLOY.md](./DEPLOY.md) — Dockerfile included, with instructions for Fly.io or any VPS, required env vars, and a first-run checklist.
 
 ## Tech
 

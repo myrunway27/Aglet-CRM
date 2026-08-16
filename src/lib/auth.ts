@@ -63,6 +63,9 @@ export async function requireUser() {
   return user;
 }
 
+export const VERIFY_REQUIRED_ERROR =
+  "Please verify your email first — check your inbox for the code, or visit the Verify page from the banner above.";
+
 export async function requireAdmin() {
   const user = await getCurrentUser();
   if (!user?.isAdmin) throw new Error("Admin only");

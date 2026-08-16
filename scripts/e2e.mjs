@@ -1,25 +1,51 @@
+// End-to-end test. Run the production build on :3100 first:
+//   npx next build && npx next start -p 3100
+// then: node scripts/e2e.mjs
 import { chromium } from "playwright-core";
 import { readdirSync } from "node:fs";
+import { PrismaClient } from "@prisma/client";
 
 const base = "http://localhost:3100";
 const chromiumDir = readdirSync("/opt/pw-browsers").find((d) => /^chromium-\d+$/.test(d));
 const executablePath = `/opt/pw-browsers/${chromiumDir}/chrome-linux/chrome`;
 
+const prisma = new PrismaClient();
 const browser = await chromium.launch({ executablePath, args: ["--no-sandbox"] });
 const page = await browser.newPage({ viewport: { width: 390, height: 844 } });
 const email = `e2e-${Date.now()}@test.local`;
 const results = [];
 const check = (name, ok) => { results.push(`${ok ? "PASS" : "FAIL"} ${name}`); };
 
+async function login(userEmail, password) {
+  await page.goto(`${base}/login`);
+  await page.fill('input[name="email"]', userEmail);
+  await page.fill('input[name="password"]', password);
+  await page.click("button:has-text('Log in')");
+  await page.waitForURL((u) => !u.pathname.startsWith("/login"));
+}
+
 try {
-  // 1. Signup
+  // 1. Signup -> lands on /verify
   await page.goto(`${base}/signup`);
   await page.fill('input[name="email"]', email);
   await page.fill('input[name="password"]', "password123");
   await page.click("button:has-text('Sign up')");
+  await page.waitForURL(/\/verify/);
+  check("signup redirects to verify", true);
+  check("unverified banner shown", await page.isVisible("text=isn't verified yet"));
+
+  // 1b. Verification email recorded; enter the code
+  const freshUser = await prisma.user.findUnique({ where: { email } });
+  const outboxMail = await prisma.emailOutbox.findFirst({
+    where: { to: email },
+    orderBy: { createdAt: "desc" },
+  });
+  check("verification code created + emailed", !!freshUser?.verifyCode && !!outboxMail?.body.includes(freshUser.verifyCode));
+  await page.fill('input[name="code"]', freshUser.verifyCode);
+  await page.click("button:has-text('Verify email')");
   await page.waitForURL(`${base}/`);
-  check("signup + redirect home", true);
-  check("nav shows Log out", await page.isVisible("button:has-text('Log out')"));
+  check("code accepted, redirected home", true);
+  check("banner gone after verify", !(await page.isVisible("text=isn't verified yet")));
 
   // 2. Post a 1-star review as a brand-new account -> should publish AND flag
   await page.goto(`${base}/business/rapid-fix-auto-demo`);
@@ -50,31 +76,41 @@ try {
   await page.waitForSelector("text=Claim submitted");
   check("owner claim submitted", true);
 
-  // 6. Admin: see flagged review + claim, approve claim, keep review
+  // 6. Admin: see flagged review + claim, approve claim
   await page.click("button:has-text('Log out')");
-  await page.goto(`${base}/login`);
-  await page.fill('input[name="email"]', "admin@truereview.local");
-  await page.fill('input[name="password"]', "admin1234");
-  await page.click("button:has-text('Log in')");
-  await page.waitForURL(`${base}/`);
+  await login("admin@truereview.local", "admin1234");
   await page.goto(`${base}/admin`);
   const adminText = await page.textContent("body");
   check("admin sees flagged review", adminText.includes("account less than 24 hours old"));
   check("admin sees pending claim", adminText.includes("glowdayspa.example"));
   await page.click("button:has-text('Approve')");
   await page.waitForLoadState("networkidle");
-  check("claim approved", !(await page.textContent("body")).includes("glowdayspa.example"));
+  check("admin outbox link", await page.isVisible("text=Email outbox"));
 
-  // 7. Owner reply: log back in as e2e user, reply on owned business
+  // 7. Another user posts a review on the now-owned business -> owner notification
   await page.click("button:has-text('Log out')");
-  await page.goto(`${base}/login`);
-  await page.fill('input[name="email"]', email);
-  await page.fill('input[name="password"]', "password123");
-  await page.click("button:has-text('Log in')");
-  await page.waitForURL(`${base}/`);
+  await login("demo1@truereview.local", "demo1234");
+  await page.goto(`${base}/business/glow-day-spa-demo`);
+  await page.click("button[aria-label='4 stars']");
+  await page.fill('textarea[name="text"]', "Really pleasant experience overall, friendly staff and a calm atmosphere throughout my visit.");
+  await page.click("button:has-text('Post anonymous review')");
+  await page.waitForURL(/posted=1/);
+  check("second user review posted", true);
+
+  // 8. Owner logs in: bell shows unread, notifications page lists both events
+  await page.click("button:has-text('Log out')");
+  await login(email, "password123");
+  await page.waitForSelector("a[aria-label='Notifications']");
+  const bellText = await page.textContent("a[aria-label='Notifications']");
+  check("bell shows unread count", /\d/.test(bellText));
+  await page.goto(`${base}/notifications`);
+  const notifText = await page.textContent("body");
+  check("claim-approved notification", notifText.includes("was approved"));
+  check("new-review notification", notifText.includes("New 4-star anonymous review on Glow Day Spa"));
+
+  // 9. Owner reply from dashboard
   await page.goto(`${base}/owner`);
-  const ownerText = await page.textContent("body");
-  check("owner dashboard shows business", ownerText.includes("Glow Day Spa"));
+  check("owner dashboard shows business", (await page.textContent("body")).includes("Glow Day Spa"));
   await page.click("summary:has-text('Reply as owner')");
   await page.fill('textarea[name="text"]', "Thank you so much! Hope to see you again soon.");
   await page.click("button:has-text('Post reply')");
@@ -84,7 +120,7 @@ try {
   check("owner reply visible with badge", bizText.includes("Response from the owner") && bizText.includes("Hope to see you again"));
   check("owner verified badge shown", bizText.includes("Owner verified"));
 
-  // 8. Report a review
+  // 10. Report a review
   await page.click("summary:has-text('Report this review')");
   await page.fill('textarea[name="reason"]', "This looks like it was written by a competitor.");
   await page.click("button:has-text('Send report')");
@@ -92,8 +128,11 @@ try {
   check("report submitted", true);
 } catch (err) {
   results.push(`ERROR: ${err.message.split("\n")[0]}`);
-  await page.screenshot({ path: "/tmp/claude-0/-home-user-Aglet-CRM/c58eca02-ecaa-513e-91ed-5e0fb27b6abb/scratchpad/fail.png" });
+  await page.screenshot({ path: "/tmp/e2e-fail.png" }).catch(() => {});
 }
 
 console.log(results.join("\n"));
 await browser.close();
+await prisma.$disconnect();
+const failed = results.some((r) => !r.startsWith("PASS"));
+process.exit(failed ? 1 : 0);
