@@ -1,0 +1,27 @@
+# Fly.io config for The True Review.
+# The app name must be globally unique — adjust before `fly deploy` if taken.
+app = "the-true-review"
+primary_region = "fra"
+
+[env]
+  UPLOAD_DIR = "/data/uploads"
+  DATABASE_URL = "file:/data/prod.db"
+  # Update to the real domain once one is attached:
+  APP_URL = "https://the-true-review.fly.dev"
+
+[mounts]
+  source = "data"
+  destination = "/data"
+
+[http_service]
+  internal_port = 3000
+  force_https = true
+  auto_stop_machines = "stop"
+  auto_start_machines = true
+  # SQLite lives on one machine's volume — never scale this above 1
+  # without moving to Postgres first.
+  min_machines_running = 0
+
+[[vm]]
+  size = "shared-cpu-1x"
+  memory = "512mb"

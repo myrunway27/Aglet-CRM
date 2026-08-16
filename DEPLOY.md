@@ -7,6 +7,7 @@ The app is a single Node server with a SQLite database file and an uploads folde
 | Variable | Required | Purpose |
 | --- | --- | --- |
 | `DATABASE_URL` | yes | `file:/data/prod.db` (default in the Dockerfile) |
+| `UPLOAD_DIR` | yes | Where review photos are stored — `/data/uploads` keeps them on the same persistent volume as the database |
 | `APP_URL` | recommended | Public URL, used in notification emails (e.g. `https://truereview.example`) |
 | `SMTP_HOST`, `SMTP_PORT` | for real email | Your email provider's SMTP server |
 | `SMTP_USER`, `SMTP_PASS` | for real email | SMTP credentials |
@@ -17,27 +18,11 @@ Without SMTP variables, emails (verification codes, owner notifications) are **n
 
 ## Fly.io (example)
 
-```bash
-fly launch --no-deploy          # accept the detected Dockerfile
-fly volumes create data --size 1
-fly volumes create uploads --size 1
-```
-
-Add to `fly.toml`:
-
-```toml
-[mounts]
-  source = "data"
-  destination = "/data"
-
-[[mounts]]
-  source = "uploads"
-  destination = "/app/public/uploads"
-```
-
-Then:
+A ready `fly.toml` is included (single `/data` volume holds both the database and photos — Fly machines allow one volume). Change the `app` name if it's taken, then:
 
 ```bash
+fly apps create <your-app-name>
+fly volumes create data --size 1 --region fra
 fly secrets set SMTP_HOST=... SMTP_PORT=587 SMTP_USER=... SMTP_PASS=... SMTP_FROM="The True Review <hello@yourdomain>" APP_URL=https://yourapp.fly.dev
 fly deploy
 fly certs add yourdomain.com    # after pointing DNS at the app
@@ -49,7 +34,6 @@ fly certs add yourdomain.com    # after pointing DNS at the app
 docker build -t truereview .
 docker run -d -p 3000:3000 \
   -v truereview-data:/data \
-  -v truereview-uploads:/app/public/uploads \
   -e SMTP_HOST=... -e SMTP_PORT=587 -e SMTP_USER=... -e SMTP_PASS=... \
   -e SMTP_FROM="The True Review <hello@yourdomain>" \
   -e APP_URL=https://yourdomain.com \

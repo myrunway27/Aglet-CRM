@@ -10,6 +10,7 @@ import { getCurrentUser, VERIFY_REQUIRED_ERROR } from "@/lib/auth";
 import { generatePseudonym } from "@/lib/pseudonym";
 import { detectSuspiciousReview, isOverDailyLimit, MAX_REVIEWS_PER_DAY } from "@/lib/moderation";
 import { notifyUser } from "@/lib/notify";
+import { UPLOAD_DIR } from "@/lib/uploads";
 
 export type FormState = { error?: string } | undefined;
 
@@ -75,12 +76,11 @@ export async function postReview(_prev: FormState, formData: FormData): Promise<
 
   const savedPaths: string[] = [];
   if (photos.length > 0) {
-    const uploadDir = path.join(process.cwd(), "public", "uploads");
-    await mkdir(uploadDir, { recursive: true });
+    await mkdir(UPLOAD_DIR, { recursive: true });
     for (const photo of photos) {
       const filename = `${randomBytes(12).toString("hex")}${PHOTO_TYPES[photo.type]}`;
-      await writeFile(path.join(uploadDir, filename), Buffer.from(await photo.arrayBuffer()));
-      savedPaths.push(`/uploads/${filename}`);
+      await writeFile(path.join(UPLOAD_DIR, filename), Buffer.from(await photo.arrayBuffer()));
+      savedPaths.push(`/photos/${filename}`);
     }
   }
 
