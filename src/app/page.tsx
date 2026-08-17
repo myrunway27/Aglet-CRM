@@ -105,7 +105,8 @@ export default async function HomePage({
         <h1 className="text-3xl sm:text-4xl font-bold tracking-tight">
           Find great places. <span className="text-brand-600">Review them freely.</span>
         </h1>
-        <p className="mt-2 text-stone-600 max-w-xl mx-auto">
+        <p className="mt-2 text-brand-700 font-medium">Reviewed by the people, for the people.</p>
+        <p className="mt-1 text-stone-600 max-w-xl mx-auto">
           Honest, 100% anonymous reviews of restaurants, cafes and every kind of business. Owners
           can reply — but they never see who you are.
         </p>
@@ -182,7 +183,7 @@ export default async function HomePage({
           <div className="sm:col-span-2 text-center py-12 text-stone-500">
             <p>No businesses found{q ? ` for “${q}”` : ""}.</p>
             <Link href="/add-business" className="text-brand-700 font-medium hover:underline">
-              Add it to The True Review →
+              Add it to True Review →
             </Link>
           </div>
         )}

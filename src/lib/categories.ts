@@ -12,3 +12,11 @@ export const CATEGORIES = [
   "Travel & Hotels",
   "Other",
 ] as const;
+
+// Dietary and food-specific filters are only meaningful for these. A garage
+// has no business being asked whether it's cholov yisroel.
+export const FOOD_CATEGORIES: readonly string[] = ["Restaurants & Cafes"];
+
+export function isFoodCategory(category: string | undefined | null): boolean {
+  return !!category && FOOD_CATEGORIES.includes(category);
+}

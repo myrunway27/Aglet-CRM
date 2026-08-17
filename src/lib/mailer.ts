@@ -22,7 +22,7 @@ export async function sendMail(to: string, subject: string, body: string) {
           : undefined,
       });
       await transport.sendMail({
-        from: process.env.SMTP_FROM ?? "The True Review <no-reply@localhost>",
+        from: process.env.SMTP_FROM ?? "True Review <no-reply@localhost>",
         to,
         subject,
         text: body,

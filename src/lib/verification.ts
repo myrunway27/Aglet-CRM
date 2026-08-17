@@ -30,7 +30,7 @@ export async function issueVerificationCode(userId: string): Promise<{ error?: s
   await sendMail(
     user.email,
     `${code} is your True Review verification code`,
-    `Welcome to The True Review!\n\nYour verification code is: ${code}\n\nIt expires in 30 minutes. If you didn't sign up, you can ignore this email.\n\nRemember: your email is never shown on reviews — you post under a random pen name.`
+    `Welcome to True Review!\n\nYour verification code is: ${code}\n\nIt expires in 30 minutes. If you didn't sign up, you can ignore this email.\n\nRemember: your email is never shown on reviews — you post under a random pen name.`
   );
   return {};
 }

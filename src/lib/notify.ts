@@ -16,6 +16,6 @@ export async function notifyUser(
 
   if (email && user.emailVerifiedAt) {
     const base = process.env.APP_URL ?? "http://localhost:3000";
-    await sendMail(user.email, `The True Review: ${message}`, `${message}\n\n${base}${link}`);
+    await sendMail(user.email, `True Review: ${message}`, `${message}\n\n${base}${link}`);
   }
 }

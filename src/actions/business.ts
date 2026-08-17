@@ -37,21 +37,23 @@ export async function addBusiness(_prev: FormState, formData: FormData): Promise
   let website = String(formData.get("website") ?? "").trim().slice(0, 120);
   if (website && !/^https?:\/\//i.test(website)) website = `https://${website}`;
 
+  // Only the name is required. Everything else can be filled in later — a
+  // half-finished listing is far better than one nobody bothered to add.
   if (name.length < 2 || name.length > 100) {
-    return { error: "Business name must be 2–100 characters." };
+    return { error: "Please give the business a name (2–100 characters)." };
   }
-  if (!(CATEGORIES as readonly string[]).includes(category)) {
-    return { error: "Please pick a category." };
+  if (category && !(CATEGORIES as readonly string[]).includes(category)) {
+    return { error: "That category isn't one of the options." };
   }
-  if (city.length < 2 || city.length > 60) {
-    return { error: "Please enter the city (2–60 characters)." };
+  if (city.length > 60) {
+    return { error: "City name is too long." };
   }
 
   const duplicate = await prisma.business.findFirst({
     where: { name: { equals: name }, city: { equals: city } },
   });
   if (duplicate) {
-    return { error: `"${name}" in ${city} is already listed.` };
+    return { error: `"${name}"${city ? ` in ${city}` : ""} is already listed.` };
   }
 
   const business = await prisma.business.create({
@@ -70,7 +72,7 @@ export async function addBusiness(_prev: FormState, formData: FormData): Promise
       phone,
       website,
       hours,
-      slug: slugify(`${name} ${city}`),
+      slug: slugify(city ? `${name} ${city}` : name),
       addedById: user.id,
     },
   });

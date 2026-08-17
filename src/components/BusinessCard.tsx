@@ -35,7 +35,7 @@ export function BusinessCard(props: {
         )}
       </div>
       <p className="text-sm text-stone-500 mt-0.5">
-        {category} · {city}
+        {[category, city].filter(Boolean).join(" · ") || "Details coming"}
         {priceLevel > 0 && ` · ${PRICE_LABELS[priceLevel]}`}
         {isOpen !== null && (
           <span className={isOpen ? "text-brand-700 font-medium" : "text-stone-400"}>

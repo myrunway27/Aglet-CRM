@@ -10,7 +10,8 @@ export default async function AddBusinessPage() {
     <div>
       <h1 className="text-2xl font-bold text-center mt-4">Add a business</h1>
       <p className="text-center text-stone-600 text-sm mt-1">
-        Can&apos;t find the place you want to review? Add it here.
+        Can&apos;t find the place you want to review? Just give us the name — that&apos;s the only
+        thing we actually need. Everything else is optional and takes seconds.
       </p>
       <AddBusinessForm />
     </div>

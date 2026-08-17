@@ -11,7 +11,8 @@ import { AddToList } from "@/components/AddToList";
 import { DietPanel, type DietClaim } from "@/components/DietPanel";
 import { buildSnapshot } from "@/lib/snapshot";
 import { parseTags, tagLabel } from "@/lib/tags";
-import { parseStandards, freshnessOf, standardLabel } from "@/lib/diet";
+import { parseStandards, freshnessOf } from "@/lib/diet";
+import { isFoodCategory } from "@/lib/categories";
 import { isThin, plainAverage } from "@/lib/rating";
 import { groupByDay, openStatusLabel, minutesToLabel, DAY_SHORT, PRICE_LABELS } from "@/lib/hours";
 
@@ -65,7 +66,8 @@ export default async function BusinessPage({
   const lovedCount = scored.filter((r) => r.loved).length;
 
   const tags = parseTags(business.tags);
-  const standards = parseStandards(business.tags);
+  // Dietary claims only apply to places that serve food.
+  const standards = isFoodCategory(business.category) ? parseStandards(business.tags) : [];
 
   // Latest confirmation per dietary claim, so the page can say how fresh it is.
   const claims: DietClaim[] = standards.map((tag) => {
@@ -120,7 +122,7 @@ export default async function BusinessPage({
           <div>
             <h1 className="text-2xl font-bold">{business.name}</h1>
             <p className="text-sm text-stone-500 mt-0.5">
-              {business.category} · {business.city}
+              {[business.category, business.city].filter(Boolean).join(" · ")}
               {business.priceLevel > 0 && ` · ${PRICE_LABELS[business.priceLevel]}`}
             </p>
             {business.cityRank > 0 && (

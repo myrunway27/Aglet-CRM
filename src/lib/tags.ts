@@ -2,25 +2,28 @@
 // Stored on Business.tags as a comma-wrapped slug list (",kosher,vegan,")
 // so a single LIKE on ",slug," matches exactly one tag.
 export const TAGS = [
-  { slug: "kosher", label: "Kosher" },
-  { slug: "halal", label: "Halal" },
-  { slug: "vegan", label: "Vegan" },
-  { slug: "vegetarian", label: "Vegetarian" },
-  { slug: "gluten-free", label: "Gluten-free" },
-  { slug: "dairy-free", label: "Dairy-free" },
-  { slug: "organic", label: "Organic" },
-  { slug: "kid-friendly", label: "Kid-friendly" },
-  { slug: "pet-friendly", label: "Pet-friendly" },
-  { slug: "wheelchair-accessible", label: "Wheelchair accessible" },
-  { slug: "outdoor-seating", label: "Outdoor seating" },
-  { slug: "delivery", label: "Delivery" },
-  { slug: "takeout", label: "Takeout" },
-  { slug: "open-late", label: "Open late" },
-  { slug: "budget-friendly", label: "Budget-friendly" },
-  { slug: "fine-dining", label: "Fine dining" },
-  { slug: "free-wifi", label: "Free wifi" },
-  { slug: "parking", label: "Parking" },
+  { slug: "kosher", label: "Kosher", food: true },
+  { slug: "halal", label: "Halal", food: true },
+  { slug: "vegan", label: "Vegan", food: true },
+  { slug: "vegetarian", label: "Vegetarian", food: true },
+  { slug: "gluten-free", label: "Gluten-free", food: true },
+  { slug: "dairy-free", label: "Dairy-free", food: true },
+  { slug: "organic", label: "Organic", food: true },
+  { slug: "outdoor-seating", label: "Outdoor seating", food: true },
+  { slug: "delivery", label: "Delivery", food: true },
+  { slug: "takeout", label: "Takeout", food: true },
+  { slug: "fine-dining", label: "Fine dining", food: true },
+  { slug: "kid-friendly", label: "Kid-friendly", food: false },
+  { slug: "pet-friendly", label: "Pet-friendly", food: false },
+  { slug: "wheelchair-accessible", label: "Wheelchair accessible", food: false },
+  { slug: "open-late", label: "Open late", food: false },
+  { slug: "budget-friendly", label: "Budget-friendly", food: false },
+  { slug: "free-wifi", label: "Free wifi", food: false },
+  { slug: "parking", label: "Parking", food: false },
 ] as const;
+
+export const FOOD_TAGS = TAGS.filter((t) => t.food);
+export const GENERAL_TAGS = TAGS.filter((t) => !t.food);
 
 export type TagSlug = (typeof TAGS)[number]["slug"];
 

@@ -79,7 +79,7 @@ export async function startEmailClaim(
   await sendMail(
     email,
     `${code} is your True Review owner-verification code`,
-    `Someone signed in to The True Review as ${user.email} is claiming ${business.name} and entered this address as the business's own email.\n\nTheir verification code is: ${code}\n\nEnter it on the claim page to confirm — it expires in 30 minutes.\n\nIf this wasn't you or anyone at your business, just ignore this email; the claim will not go through.`
+    `Someone signed in to True Review as ${user.email} is claiming ${business.name} and entered this address as the business's own email.\n\nTheir verification code is: ${code}\n\nEnter it on the claim page to confirm — it expires in 30 minutes.\n\nIf this wasn't you or anyone at your business, just ignore this email; the claim will not go through.`
   );
   return { codeSent: true };
 }

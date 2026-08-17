@@ -6,8 +6,9 @@ import { prisma } from "@/lib/db";
 import { logout } from "@/actions/auth";
 
 export const metadata: Metadata = {
-  title: "The True Review",
-  description: "100% anonymous reviews for every kind of business.",
+  title: "True Review — reviewed by the people, for the people",
+  description:
+    "Reviewed by the people, for the people. 100% anonymous reviews for every kind of business.",
 };
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
@@ -29,8 +30,13 @@ export default async function RootLayout({ children }: { children: React.ReactNo
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img src="/logo.svg" alt="" className="h-6 w-6" />
               </span>
-              <span className="font-bold text-lg tracking-tight leading-none">
-                The True<span className="text-star"> Review</span>
+              <span className="leading-tight">
+                <span className="font-bold text-lg tracking-tight block">
+                  True<span className="text-star"> Review</span>
+                </span>
+                <span className="hidden sm:block text-[10px] text-white/70 tracking-wide">
+                  reviewed by the people, for the people
+                </span>
               </span>
             </Link>
             <nav className="ml-auto flex items-center gap-1 text-sm">
@@ -100,8 +106,8 @@ export default async function RootLayout({ children }: { children: React.ReactNo
         <main className="flex-1 mx-auto w-full max-w-4xl px-4 py-6">{children}</main>
         <footer className="text-center text-xs text-stone-500 py-6 px-4">
           <p>
-            The True Review — reviews are anonymous. Your identity is never shown to businesses or
-            other users.
+            True Review — reviewed by the people, for the people. Reviews are anonymous; your
+            identity is never shown to businesses or other users.
           </p>
           <p className="mt-1">
             <Link href="/trust" className="text-brand-700 hover:underline">

@@ -2,12 +2,15 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { CATEGORIES } from "@/lib/categories";
-import { TAGS } from "@/lib/tags";
+import { CATEGORIES, isFoodCategory } from "@/lib/categories";
+import { GENERAL_TAGS, FOOD_TAGS } from "@/lib/tags";
 import { DIET_STANDARDS } from "@/lib/diet";
 
 // The handful of filters most people reach for; the rest sit behind "More".
-const FEATURED = ["kosher", "vegan", "vegetarian", "gluten-free", "kid-friendly", "delivery"];
+const FEATURED_FOOD = ["kosher", "vegan", "vegetarian", "gluten-free", "delivery", "outdoor-seating"];
+const FEATURED_GENERAL = [
+  "kid-friendly", "wheelchair-accessible", "parking", "free-wifi", "open-late", "budget-friendly",
+];
 
 export function FilterBar({
   q,
@@ -56,8 +59,13 @@ export function FilterBar({
   const togglePrice = (n: number) =>
     go({ prices: prices.includes(n) ? prices.filter((x) => x !== n) : [...prices, n] });
 
-  const visibleTags = TAGS.filter(
-    (t) => expanded || FEATURED.includes(t.slug) || activeTags.includes(t.slug)
+  // Food and dietary filters only make sense once a food category is chosen —
+  // nobody needs to know whether a garage is gluten-free.
+  const foodMode = isFoodCategory(category);
+  const pool = foodMode ? [...FOOD_TAGS, ...GENERAL_TAGS] : GENERAL_TAGS;
+  const featured = foodMode ? FEATURED_FOOD : FEATURED_GENERAL;
+  const visibleTags = pool.filter(
+    (t) => expanded || featured.includes(t.slug) || activeTags.includes(t.slug)
   );
   const activeCount = activeTags.length + prices.length + (openNow ? 1 : 0);
 
@@ -69,7 +77,7 @@ export function FilterBar({
     }`;
 
   return (
-    <div className="bg-white rounded-xl border border-stone-200 p-3 space-y-2.5">
+    <div data-testid="filter-bar" className="bg-white rounded-xl border border-stone-200 p-3 space-y-2.5">
       <div className="flex items-center gap-2 flex-wrap">
         <select
           aria-label="Category"
@@ -132,6 +140,7 @@ export function FilterBar({
           </button>
         ))}
         {expanded &&
+          foodMode &&
           DIET_STANDARDS.map((s) => (
             <button
               key={s.slug}

@@ -6,6 +6,8 @@ import { prisma } from "./db";
 // Ranked on the cached score, which already handles recency and thin evidence.
 
 export async function refreshCityRanks(city: string, category: string) {
+  // Unplaced listings (no city or category yet) are simply not ranked.
+  if (!city || !category) return;
   const businesses = await prisma.business.findMany({
     where: { city, category },
     select: { id: true, scoreAvg: true, scoreCount: true },
