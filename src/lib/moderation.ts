@@ -84,3 +84,44 @@ export async function detectSuspiciousReview(params: {
 
   return null;
 }
+
+const BURST_WINDOW_MS = 48 * 60 * 60 * 1000;
+/** A quiet business getting this many reviews in 48h is worth a human look. */
+export const BURST_MIN_COUNT = 6;
+/** ...or this many times its own recent baseline, whichever is larger. */
+export const BURST_MULTIPLE = 4;
+
+/**
+ * Detects a sudden spike of reviews for one business. Fake reviews are
+ * overwhelmingly positive and arrive in batches, so a burst freezes the
+ * displayed score at its pre-burst value until an admin clears it — the
+ * reviews stay visible throughout.
+ *
+ * Returns a reason string when the business was just frozen, else null.
+ */
+export async function checkReviewBurst(businessId: string): Promise<string | null> {
+  const business = await prisma.business.findUnique({
+    where: { id: businessId },
+    select: { scoreFrozen: true, createdAt: true },
+  });
+  if (!business || business.scoreFrozen) return null;
+
+  const now = Date.now();
+  const recent = await prisma.review.count({
+    where: { businessId, createdAt: { gte: new Date(now - BURST_WINDOW_MS) } },
+  });
+  if (recent < BURST_MIN_COUNT) return null;
+
+  // Baseline: average reviews per 48h since the business was listed.
+  const total = await prisma.review.count({ where: { businessId } });
+  const ageMs = Math.max(now - business.createdAt.getTime(), BURST_WINDOW_MS);
+  const baseline = (total - recent) / (ageMs / BURST_WINDOW_MS);
+
+  if (recent < Math.max(BURST_MIN_COUNT, baseline * BURST_MULTIPLE)) return null;
+
+  await prisma.business.update({
+    where: { id: businessId },
+    data: { scoreFrozen: true, scoreFrozenAt: new Date() },
+  });
+  return `${recent} reviews in 48 hours (usual pace ≈ ${baseline.toFixed(1)})`;
+}

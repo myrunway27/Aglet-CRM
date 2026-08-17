@@ -34,6 +34,9 @@ export default async function RootLayout({ children }: { children: React.ReactNo
               </span>
             </Link>
             <nav className="ml-auto flex items-center gap-1 text-sm">
+              <Link href="/map" className="px-2.5 py-1.5 rounded hover:bg-brand-800">
+                Map
+              </Link>
               <Link href="/add-business" className="px-2.5 py-1.5 rounded hover:bg-brand-800">
                 Add business
               </Link>
@@ -96,8 +99,15 @@ export default async function RootLayout({ children }: { children: React.ReactNo
         )}
         <main className="flex-1 mx-auto w-full max-w-4xl px-4 py-6">{children}</main>
         <footer className="text-center text-xs text-stone-500 py-6 px-4">
-          The True Review — reviews are anonymous. Your identity is never shown to businesses or
-          other users.
+          <p>
+            The True Review — reviews are anonymous. Your identity is never shown to businesses or
+            other users.
+          </p>
+          <p className="mt-1">
+            <Link href="/trust" className="text-brand-700 hover:underline">
+              How we keep reviews honest
+            </Link>
+          </p>
         </footer>
       </body>
     </html>

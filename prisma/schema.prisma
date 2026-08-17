@@ -30,8 +30,16 @@ model User {
   ownerClaims   OwnerClaim[]
   reports       Report[]
   notifications Notification[]
-  addedBusinesses Business[] @relation("AddedBy")
-  ownedBusinesses Business[] @relation("OwnedBy")
+  // The user's own dietary line, e.g. ",cholov-yisroel,celiac," — every
+  // search and listing is filtered/annotated against it. See src/lib/diet.ts
+  dietStandard  String         @default("")
+
+  addedBusinesses Business[]        @relation("AddedBy")
+  ownedBusinesses Business[]        @relation("OwnedBy")
+  saves           Save[]
+  lists           UserList[]
+  confirmations   TagConfirmation[]
+  reviewFlags     ReviewFlag[]
 }
 
 model Notification {
@@ -69,23 +77,39 @@ model Session {
 }
 
 model Business {
-  id          String   @id @default(cuid())
-  slug        String   @unique
+  id          String @id @default(cuid())
+  slug        String @unique
   name        String
   category    String
   city        String
-  description String   @default("")
+  description String @default("")
   // Comma-wrapped attribute slugs, e.g. ",kosher,vegan," — see src/lib/tags.ts
-  tags        String   @default("")
+  tags        String @default("")
 
   // Location & contact, filled manually or via the OpenStreetMap lookup
-  address String @default("")
-  zip     String @default("")
-  phone   String @default("")
-  website String @default("")
-  // Free-text opening hours, e.g. "Sun-Thu 9:00-22:00, Fri 9:00-14:00"
-  hours   String @default("")
-  createdAt   DateTime @default(now())
+  address    String @default("")
+  zip        String @default("")
+  phone      String @default("")
+  website    String @default("")
+  // Free-text opening hours, kept as a human-readable fallback/summary
+  hours      String @default("")
+  // 1-4, shown as $ to $$$$; 0 = unknown
+  priceLevel Int    @default(0)
+  // Kosher/halal certifying agency, e.g. "OU", "Star-K" — see src/lib/diet.ts
+  certifier  String @default("")
+  lat        Float?
+  lng        Float?
+
+  // Cached scores, recomputed on review write — see src/lib/rating.ts
+  scoreAvg      Float     @default(0)
+  scoreCount    Int       @default(0)
+  // Rank within (city, category) by score; 0 = not yet ranked
+  cityRank      Int       @default(0)
+  cityRankSize  Int       @default(0)
+  // Frozen while a suspicious burst is under review
+  scoreFrozen   Boolean   @default(false)
+  scoreFrozenAt DateTime?
+  createdAt     DateTime  @default(now())
 
   addedById String?
   addedBy   User?   @relation("AddedBy", fields: [addedById], references: [id], onDelete: SetNull)
@@ -94,11 +118,94 @@ model Business {
   ownerId String?
   owner   User?   @relation("OwnedBy", fields: [ownerId], references: [id], onDelete: SetNull)
 
-  reviews Review[]
-  claims  OwnerClaim[]
+  reviews       Review[]
+  claims        OwnerClaim[]
+  openingHours  OpeningHour[]
+  saves         Save[]
+  listItems     ListItem[]
+  confirmations TagConfirmation[]
 
   @@index([category])
   @@index([city])
+  @@index([city, category])
+  @@index([priceLevel])
+}
+
+// Structured opening hours: one row per day per span (handles split shifts).
+// dayOfWeek 0 = Sunday. Minutes since midnight; closeMin > 1440 means the
+// span runs past midnight into the next day.
+model OpeningHour {
+  id         String   @id @default(cuid())
+  businessId String
+  dayOfWeek  Int
+  openMin    Int
+  closeMin   Int
+  business   Business @relation(fields: [businessId], references: [id], onDelete: Cascade)
+
+  @@index([businessId, dayOfWeek])
+}
+
+// A dietary claim confirmed (or disputed) by a visitor, so listings show
+// "confirmed 3 months ago" instead of silently going stale.
+model TagConfirmation {
+  id         String   @id @default(cuid())
+  businessId String
+  userId     String
+  tag        String
+  stillTrue  Boolean
+  createdAt  DateTime @default(now())
+
+  business Business @relation(fields: [businessId], references: [id], onDelete: Cascade)
+  user     User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([businessId, userId, tag])
+  @@index([businessId, tag])
+}
+
+// "Want to go" / "Been there" — the low-commitment on-ramp before reviewing.
+model Save {
+  id         String   @id @default(cuid())
+  userId     String
+  businessId String
+  kind       String // "WANT" | "BEEN"
+  createdAt  DateTime @default(now())
+
+  user     User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  business Business @relation(fields: [businessId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, businessId, kind])
+  @@index([userId, kind])
+}
+
+// A titled, ordered, shareable collection. The unguessable slug is the
+// share credential; lists are unlisted unless the owner publishes them.
+model UserList {
+  id        String   @id @default(cuid())
+  slug      String   @unique
+  userId    String
+  title     String
+  note      String   @default("")
+  isPublic  Boolean  @default(false)
+  createdAt DateTime @default(now())
+
+  user  User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  items ListItem[]
+
+  @@index([userId])
+}
+
+model ListItem {
+  id         String @id @default(cuid())
+  listId     String
+  businessId String
+  note       String @default("")
+  position   Int    @default(0)
+
+  list     UserList @relation(fields: [listId], references: [id], onDelete: Cascade)
+  business Business @relation(fields: [businessId], references: [id], onDelete: Cascade)
+
+  @@unique([listId, businessId])
+  @@index([listId, position])
 }
 
 // Review status:
@@ -106,16 +213,25 @@ model Business {
 //   FLAGGED   - live, but tripped a fake-detection heuristic; in admin queue
 //   HIDDEN    - removed from public view by an admin
 model Review {
-  id         String   @id @default(cuid())
-  businessId String
-  userId     String
-  rating     Int
-  text       String
+  id              String   @id @default(cuid())
+  businessId      String
+  userId          String
+  // Half-star precision: 0.5 - 5.0
+  rating          Float
+  // "I love this place", independent of the score
+  loved           Boolean  @default(false)
+  // Comma-wrapped quick-tag slugs, e.g. ",huge-portions,loud," — src/lib/quicktags.ts
+  quickTags       String   @default("")
+  text            String
   // Random pen name shown publicly instead of any real identity
-  pseudonym  String
-  status     String   @default("PUBLISHED")
-  flagReason String?
-  createdAt  DateTime @default(now())
+  pseudonym       String
+  status          String   @default("PUBLISHED")
+  flagReason      String?
+  // Suspicious reviews stay visible but stop counting toward the score,
+  // rather than being deleted (see /trust for the public explanation).
+  includedInScore Boolean  @default(true)
+  excludeReason   String?
+  createdAt       DateTime @default(now())
 
   business Business @relation(fields: [businessId], references: [id], onDelete: Cascade)
   user     User     @relation(fields: [userId], references: [id], onDelete: Cascade)
@@ -124,6 +240,7 @@ model Review {
   helpfulVotes HelpfulVote[]
   reports      Report[]
   ownerReply   OwnerReply?
+  flags        ReviewFlag[]
 
   // Safeguard: one review per user per business
   @@unique([businessId, userId])
@@ -184,6 +301,24 @@ model OwnerClaim {
   user     User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([businessId, userId])
+  @@index([status])
+}
+
+// An owner disputing a review. Unlike Trustpilot, an unanswered dispute
+// never deletes the review — it drops out of the score but stays readable.
+// Status: OPEN | UPHELD (review excluded) | DISMISSED
+model ReviewFlag {
+  id        String   @id @default(cuid())
+  reviewId  String
+  ownerId   String
+  evidence  String
+  status    String   @default("OPEN")
+  createdAt DateTime @default(now())
+
+  review Review @relation(fields: [reviewId], references: [id], onDelete: Cascade)
+  owner  User   @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+
+  @@unique([reviewId, ownerId])
   @@index([status])
 }
 

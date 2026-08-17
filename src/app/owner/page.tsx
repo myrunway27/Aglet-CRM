@@ -24,6 +24,7 @@ export default async function OwnerDashboard({
         include: { ownerReply: true },
         orderBy: { createdAt: "desc" },
       },
+      saves: true,
     },
   });
 
@@ -40,7 +41,9 @@ export default async function OwnerDashboard({
       <h1 className="text-2xl font-bold mt-4">My businesses</h1>
       <p className="text-sm text-stone-600 mt-1">
         Reply publicly to reviews. Reviewers are anonymous — pen names are all anyone sees. If a
-        review looks fake, report it from the business page and moderators will investigate.
+        review is genuinely wrong, use &ldquo;Dispute this review&rdquo; on the business page and
+        give us evidence; upheld disputes stop a review counting toward your rating, though we
+        never delete it.
       </p>
 
       {businesses.length === 0 && (
@@ -64,6 +67,33 @@ export default async function OwnerDashboard({
                 ✓ Verified owner
               </span>
             </div>
+            <div className="mt-3 grid grid-cols-2 sm:grid-cols-4 gap-2">
+              {[
+                { label: "Rating", value: b.scoreCount ? b.scoreAvg.toFixed(1) : "—" },
+                { label: "Reviews", value: b.scoreCount },
+                {
+                  label: "Awaiting reply",
+                  value: b.reviews.filter((r) => !r.ownerReply).length,
+                },
+                { label: "Saved by", value: b.saves.length },
+              ].map((s) => (
+                <div key={s.label} className="bg-stone-50 rounded-lg border border-stone-200 p-2 text-center">
+                  <p className="text-xl font-bold tabular-nums">{s.value}</p>
+                  <p className="text-xs text-stone-600">{s.label}</p>
+                </div>
+              ))}
+            </div>
+            {b.cityRank > 0 && (
+              <p className="mt-2 text-sm text-brand-700">
+                Ranked #{b.cityRank} of {b.cityRankSize} {b.category.toLowerCase()} in {b.city}
+              </p>
+            )}
+            {b.scoreFrozen && (
+              <p className="mt-2 text-xs text-amber-800 bg-amber-50 border border-amber-200 rounded-lg px-3 py-2">
+                Your score is temporarily on hold after an unusual burst of reviews. A moderator is
+                looking — nothing has been deleted.
+              </p>
+            )}
             <div className="mt-3 space-y-3">
               {b.reviews.map((r) => (
                 <div key={r.id} className="border-t border-stone-100 pt-3">

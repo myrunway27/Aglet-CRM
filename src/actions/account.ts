@@ -4,6 +4,7 @@ import { revalidatePath } from "next/cache";
 import { prisma } from "@/lib/db";
 import { getCurrentUser } from "@/lib/auth";
 import { generatePseudonym, isValidPenName, PEN_NAME_MAX, PEN_NAME_MIN } from "@/lib/pseudonym";
+import { storeStandards } from "@/lib/diet";
 
 export type PenNameState = { error?: string; ok?: boolean } | undefined;
 
@@ -49,5 +50,21 @@ export async function choosePenName(_prev: PenNameState, formData: FormData): Pr
   if (taken) return { error: "That pen name is taken — try another." };
 
   await applyPenName(user.id, name);
+  return { ok: true };
+}
+
+// A person's own dietary line. Kept private — it's sensitive, and it never
+// appears on reviews or any public page.
+export async function saveDietStandard(
+  _prev: PenNameState,
+  formData: FormData
+): Promise<PenNameState> {
+  const user = await getCurrentUser();
+  if (!user) return { error: "Not signed in." };
+
+  const dietStandard = storeStandards(formData.getAll("standards").map(String));
+  await prisma.user.update({ where: { id: user.id }, data: { dietStandard } });
+  revalidatePath("/account");
+  revalidatePath("/");
   return { ok: true };
 }

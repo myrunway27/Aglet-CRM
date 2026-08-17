@@ -23,6 +23,8 @@ export async function GET(req: NextRequest) {
 
     type Row = {
       display_name?: string;
+      lat?: string;
+      lon?: string;
       address?: Record<string, string>;
       extratags?: Record<string, string>;
     };
@@ -39,6 +41,8 @@ export async function GET(req: NextRequest) {
         phone: r.extratags?.phone ?? r.extratags?.["contact:phone"] ?? "",
         website: r.extratags?.website ?? r.extratags?.["contact:website"] ?? "",
         label: (r.display_name ?? "").split(",").slice(0, 4).join(",").trim(),
+        lat: r.lat ? Number(r.lat) : undefined,
+        lng: r.lon ? Number(r.lon) : undefined,
       };
     });
     return NextResponse.json({ results });

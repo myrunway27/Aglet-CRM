@@ -4,6 +4,8 @@ import { prisma } from "@/lib/db";
 import { getCurrentUser } from "@/lib/auth";
 import { Stars } from "@/components/Stars";
 import { PenNameCard } from "@/components/PenNameCard";
+import { DietStandardCard } from "@/components/DietStandardCard";
+import { parseStandards } from "@/lib/diet";
 
 export const dynamic = "force-dynamic";
 
@@ -17,7 +19,7 @@ export default async function AccountPage() {
   const user = await getCurrentUser();
   if (!user) redirect("/login?next=/account");
 
-  const [reviews, claims] = await Promise.all([
+  const [reviews, claims, saves] = await Promise.all([
     prisma.review.findMany({
       where: { userId: user.id },
       include: { business: true },
@@ -28,7 +30,14 @@ export default async function AccountPage() {
       include: { business: true },
       orderBy: { createdAt: "desc" },
     }),
+    prisma.save.findMany({
+      where: { userId: user.id },
+      include: { business: true },
+      orderBy: { createdAt: "desc" },
+    }),
   ]);
+  const want = saves.filter((s) => s.kind === "WANT");
+  const been = saves.filter((s) => s.kind === "BEEN");
 
   return (
     <div className="max-w-lg mx-auto">
@@ -39,6 +48,55 @@ export default async function AccountPage() {
       </p>
 
       <PenNameCard penName={user.pseudonym} />
+      <DietStandardCard current={parseStandards(user.dietStandard)} />
+
+      <div className="mt-4 flex gap-2 flex-wrap text-sm">
+        <Link href="/lists" className="text-brand-700 hover:underline">
+          Your lists →
+        </Link>
+        <span className="text-stone-300">·</span>
+        <Link href="/year" className="text-brand-700 hover:underline">
+          Your year in review →
+        </Link>
+      </div>
+
+      {(want.length > 0 || been.length > 0) && (
+        <section className="mt-6">
+          <h2 className="font-semibold">Saved places</h2>
+          {want.length > 0 && (
+            <>
+              <p className="text-sm text-stone-500 mt-2">Want to go ({want.length})</p>
+              <div className="mt-1 flex flex-wrap gap-1.5">
+                {want.map((s) => (
+                  <Link
+                    key={s.id}
+                    href={`/business/${s.business.slug}`}
+                    className="text-xs bg-white border border-stone-200 rounded-full px-3 py-1.5 hover:border-brand-600"
+                  >
+                    {s.business.name}
+                  </Link>
+                ))}
+              </div>
+            </>
+          )}
+          {been.length > 0 && (
+            <>
+              <p className="text-sm text-stone-500 mt-3">Been there ({been.length})</p>
+              <div className="mt-1 flex flex-wrap gap-1.5">
+                {been.map((s) => (
+                  <Link
+                    key={s.id}
+                    href={`/business/${s.business.slug}`}
+                    className="text-xs bg-white border border-stone-200 rounded-full px-3 py-1.5 hover:border-brand-600"
+                  >
+                    {s.business.name}
+                  </Link>
+                ))}
+              </div>
+            </>
+          )}
+        </section>
+      )}
 
       <h2 className="font-semibold mt-6">Your reviews ({reviews.length})</h2>
       <div className="mt-2 space-y-2">

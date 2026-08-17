@@ -8,7 +8,15 @@ import { redirect } from "next/navigation";
 import { prisma } from "@/lib/db";
 import { getCurrentUser, VERIFY_REQUIRED_ERROR } from "@/lib/auth";
 import { generatePseudonym } from "@/lib/pseudonym";
-import { detectSuspiciousReview, isOverDailyLimit, MAX_REVIEWS_PER_DAY } from "@/lib/moderation";
+import {
+  checkReviewBurst,
+  detectSuspiciousReview,
+  isOverDailyLimit,
+  MAX_REVIEWS_PER_DAY,
+} from "@/lib/moderation";
+import { refreshBusinessScore } from "@/lib/rating";
+import { refreshCityRanks } from "@/lib/rank";
+import { storeQuickTags } from "@/lib/quicktags";
 import { notifyUser } from "@/lib/notify";
 import { UPLOAD_DIR } from "@/lib/uploads";
 
@@ -30,11 +38,14 @@ export async function postReview(_prev: FormState, formData: FormData): Promise<
 
   const businessId = String(formData.get("businessId") ?? "");
   const rating = Number(formData.get("rating"));
+  const loved = formData.get("loved") === "on";
+  const quickTags = storeQuickTags(formData.getAll("quickTags").map(String));
   const text = String(formData.get("text") ?? "").trim();
 
   const business = await prisma.business.findUnique({ where: { id: businessId } });
   if (!business) return { error: "Business not found." };
-  if (!Number.isInteger(rating) || rating < 1 || rating > 5) {
+  // Half-star precision: 0.5 - 5.0 in 0.5 steps
+  if (!Number.isFinite(rating) || rating < 0.5 || rating > 5 || Math.round(rating * 2) !== rating * 2) {
     return { error: "Please pick a star rating." };
   }
   if (text.length < 30) {
@@ -97,6 +108,8 @@ export async function postReview(_prev: FormState, formData: FormData): Promise<
       businessId,
       userId: user.id,
       rating,
+      loved,
+      quickTags,
       text,
       pseudonym,
       status: flagReason ? "FLAGGED" : "PUBLISHED",
@@ -104,6 +117,21 @@ export async function postReview(_prev: FormState, formData: FormData): Promise<
       photos: { create: savedPaths.map((p) => ({ path: p })) },
     },
   });
+
+  const burst = await checkReviewBurst(businessId);
+  await refreshBusinessScore(businessId);
+  await refreshCityRanks(business.city, business.category);
+
+  if (burst) {
+    const admins = await prisma.user.findMany({ where: { isAdmin: true }, select: { id: true } });
+    for (const admin of admins) {
+      await notifyUser(
+        admin.id,
+        `Unusual review activity on ${business.name}: ${burst} — score frozen pending review`,
+        "/admin"
+      );
+    }
+  }
 
   if (business.ownerId) {
     await notifyUser(

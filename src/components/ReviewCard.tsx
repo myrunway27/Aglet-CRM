@@ -1,12 +1,18 @@
 /* eslint-disable @next/next/no-img-element */
+"use client";
+
 import { toggleHelpful } from "@/actions/review";
 import { Stars } from "./Stars";
 import { ReportForm } from "./ReportForm";
 import { OwnerReplyForm } from "./OwnerReplyForm";
+import { DisputeForm } from "./DisputeForm";
+import { parseQuickTags, quickTagIsGood, quickTagLabel } from "@/lib/quicktags";
 
 type ReviewData = {
   id: string;
   rating: number;
+  loved: boolean;
+  quickTags: string;
   text: string;
   pseudonym: string;
   createdAt: Date;
@@ -14,6 +20,9 @@ type ReviewData = {
   ownerReply: { text: string; createdAt: Date } | null;
   helpfulCount: number;
   viewerVoted: boolean;
+  includedInScore: boolean;
+  excludeReason: string | null;
+  disputed: boolean;
 };
 
 export function ReviewCard({
@@ -30,12 +39,30 @@ export function ReviewCard({
   viewerIsLoggedIn: boolean;
 }) {
   return (
-    <article className="bg-white rounded-xl border border-stone-200 p-4">
+    <article
+      className={`rounded-xl border p-4 ${
+        review.includedInScore
+          ? "bg-white border-stone-200"
+          : "bg-stone-50 border-stone-300 border-dashed"
+      }`}
+    >
+      {!review.includedInScore && (
+        <p className="mb-2 text-xs text-stone-600 bg-stone-200/70 rounded-lg px-2.5 py-1.5">
+          Not counted in the rating — {review.excludeReason ?? "under review"}. We leave it here to
+          read rather than deleting it.
+        </p>
+      )}
       <div className="flex items-center justify-between gap-2">
         <div>
           <p className="font-medium text-sm">🕶️ {review.pseudonym}</p>
           <div className="flex items-center gap-2 mt-0.5">
             <Stars rating={review.rating} size="text-sm" />
+            <span className="text-xs text-stone-500">{review.rating.toFixed(1)}</span>
+            {review.loved && (
+              <span className="text-xs text-rose-600" title="Loves this place">
+                ♥
+              </span>
+            )}
             <span className="text-xs text-stone-500">
               {review.createdAt.toLocaleDateString("en-US", {
                 year: "numeric",
@@ -46,6 +73,23 @@ export function ReviewCard({
           </div>
         </div>
       </div>
+
+      {parseQuickTags(review.quickTags).length > 0 && (
+        <div className="mt-2 flex flex-wrap gap-1">
+          {parseQuickTags(review.quickTags).map((t) => (
+            <span
+              key={t}
+              className={`text-[11px] rounded-full px-2 py-0.5 border ${
+                quickTagIsGood(t)
+                  ? "bg-brand-50 border-brand-100 text-brand-800"
+                  : "bg-amber-50 border-amber-200 text-amber-800"
+              }`}
+            >
+              {quickTagLabel(t)}
+            </span>
+          ))}
+        </div>
+      )}
 
       <p className="mt-2 text-sm whitespace-pre-wrap">{review.text}</p>
 
@@ -93,7 +137,10 @@ export function ReviewCard({
       </div>
 
       {viewerIsOwner && (
-        <OwnerReplyForm reviewId={review.id} existingText={review.ownerReply?.text} />
+        <>
+          <OwnerReplyForm reviewId={review.id} existingText={review.ownerReply?.text} />
+          <DisputeForm reviewId={review.id} alreadyDisputed={review.disputed} />
+        </>
       )}
       {viewerIsLoggedIn && <ReportForm reviewId={review.id} slug={slug} />}
     </article>

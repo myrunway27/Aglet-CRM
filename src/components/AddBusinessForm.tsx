@@ -4,6 +4,8 @@ import { useActionState, useRef, useState } from "react";
 import { addBusiness, type FormState } from "@/actions/business";
 import { CATEGORIES } from "@/lib/categories";
 import { TAGS } from "@/lib/tags";
+import { DIET_STANDARDS, CERTIFIERS } from "@/lib/diet";
+import { DAY_SHORT } from "@/lib/hours";
 
 type Candidate = {
   address: string;
@@ -12,6 +14,8 @@ type Candidate = {
   phone: string;
   website: string;
   label: string;
+  lat?: number;
+  lng?: number;
 };
 
 export function AddBusinessForm() {
@@ -53,6 +57,8 @@ export function AddBusinessForm() {
     set("phone", c.phone);
     set("website", c.website);
     set("hours", c.hours);
+    if (c.lat) set("lat", String(c.lat));
+    if (c.lng) set("lng", String(c.lng));
     setCandidates(null);
   };
 
@@ -178,6 +184,56 @@ export function AddBusinessForm() {
           />
         </label>
       </div>
+      <input type="hidden" name="lat" />
+      <input type="hidden" name="lng" />
+
+      <label className="block">
+        <span className="text-sm font-medium">
+          Price level <span className="text-stone-400 font-normal">(optional)</span>
+        </span>
+        <select
+          name="priceLevel"
+          defaultValue="0"
+          className="mt-1 w-full rounded-lg border border-stone-300 px-3 py-2 bg-white text-sm focus:outline-none focus:ring-2 focus:ring-brand-600"
+        >
+          <option value="0">Not sure</option>
+          <option value="1">$ — cheap eats</option>
+          <option value="2">$$ — moderate</option>
+          <option value="3">$$$ — pricey</option>
+          <option value="4">$$$$ — splurge</option>
+        </select>
+      </label>
+
+      <details className="rounded-lg border border-stone-200 bg-stone-50/60 p-3">
+        <summary className="text-sm font-medium cursor-pointer">
+          Opening hours <span className="text-stone-400 font-normal">(optional)</span>
+        </summary>
+        <p className="mt-1 text-xs text-stone-500">
+          Leave a day blank if it&apos;s closed. Times as 24-hour, e.g. 09:00 and 22:30. A closing
+          time earlier than the opening time means it runs past midnight.
+        </p>
+        <div className="mt-2 space-y-1.5">
+          {DAY_SHORT.map((d, i) => (
+            <div key={d} className="flex items-center gap-2">
+              <span className="w-10 text-xs text-stone-600">{d}</span>
+              <input
+                name={`open_${i}`}
+                placeholder="09:00"
+                pattern="[0-9]{1,2}:[0-9]{2}"
+                className="w-20 rounded-lg border border-stone-300 px-2 py-1 text-sm focus:outline-none focus:ring-2 focus:ring-brand-600"
+              />
+              <span className="text-xs text-stone-400">to</span>
+              <input
+                name={`close_${i}`}
+                placeholder="22:00"
+                pattern="[0-9]{1,2}:[0-9]{2}"
+                className="w-20 rounded-lg border border-stone-300 px-2 py-1 text-sm focus:outline-none focus:ring-2 focus:ring-brand-600"
+              />
+            </div>
+          ))}
+        </div>
+      </details>
+
       <fieldset>
         <legend className="text-sm font-medium">
           Features <span className="text-stone-400 font-normal">(optional — helps people find it)</span>
@@ -194,6 +250,44 @@ export function AddBusinessForm() {
           ))}
         </div>
       </fieldset>
+      <details className="rounded-lg border border-stone-200 bg-stone-50/60 p-3">
+        <summary className="text-sm font-medium cursor-pointer">
+          Dietary details{" "}
+          <span className="text-stone-400 font-normal">(kosher, halal, coeliac, vegan)</span>
+        </summary>
+        <p className="mt-1 text-xs text-stone-500">
+          The specifics people actually need — a generic &ldquo;kosher&rdquo; tag doesn&apos;t help
+          someone who keeps cholov yisroel.
+        </p>
+        <div className="mt-2 flex flex-wrap gap-1.5">
+          {DIET_STANDARDS.map((s) => (
+            <label
+              key={s.slug}
+              title={s.hint}
+              className="cursor-pointer text-xs border border-stone-300 rounded-full px-2.5 py-1.5 has-checked:bg-brand-700 has-checked:text-white has-checked:border-brand-700 hover:border-brand-600 select-none bg-white"
+            >
+              <input type="checkbox" name="standards" value={s.slug} className="sr-only" />
+              {s.label}
+            </label>
+          ))}
+        </div>
+        <label className="block mt-2">
+          <span className="text-xs text-stone-600">Certifying agency</span>
+          <input
+            name="certifier"
+            list="certifier-options"
+            maxLength={40}
+            placeholder="e.g. OU, Star-K, local vaad"
+            className="mt-1 w-full rounded-lg border border-stone-300 px-2.5 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-brand-600"
+          />
+          <datalist id="certifier-options">
+            {CERTIFIERS.map((c) => (
+              <option key={c} value={c} />
+            ))}
+          </datalist>
+        </label>
+      </details>
+
       <label className="block">
         <span className="text-sm font-medium">
           Description <span className="text-stone-400 font-normal">(optional)</span>

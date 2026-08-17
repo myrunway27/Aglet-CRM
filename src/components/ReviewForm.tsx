@@ -3,6 +3,7 @@
 import { useActionState } from "react";
 import { postReview, type FormState } from "@/actions/review";
 import { StarInput } from "./StarInput";
+import { QUICK_TAGS } from "@/lib/quicktags";
 
 export function ReviewForm({ businessId, slug }: { businessId: string; slug: string }) {
   const [state, formAction, pending] = useActionState<FormState, FormData>(postReview, undefined);
@@ -17,6 +18,29 @@ export function ReviewForm({ businessId, slug }: { businessId: string; slug: str
           <StarInput name="rating" />
         </div>
       </div>
+      <label className="flex items-center gap-2 cursor-pointer select-none">
+        <input type="checkbox" name="loved" className="peer sr-only" />
+        <span className="rounded-lg border border-stone-300 px-3 py-1.5 text-sm peer-checked:bg-rose-50 peer-checked:border-rose-400 peer-checked:text-rose-700">
+          ♥ I love this place
+        </span>
+        <span className="text-xs text-stone-500">regardless of the score</span>
+      </label>
+      <fieldset>
+        <legend className="text-sm font-medium">
+          Quick tags <span className="text-stone-400 font-normal">(optional, up to 5)</span>
+        </legend>
+        <div className="mt-1.5 flex flex-wrap gap-1.5">
+          {QUICK_TAGS.map((t) => (
+            <label
+              key={t.slug}
+              className="cursor-pointer text-xs border border-stone-300 rounded-full px-2.5 py-1.5 has-checked:border-brand-700 has-checked:bg-brand-700 has-checked:text-white hover:border-brand-600 select-none"
+            >
+              <input type="checkbox" name="quickTags" value={t.slug} className="sr-only" />
+              {t.label}
+            </label>
+          ))}
+        </div>
+      </fieldset>
       <label className="block">
         <span className="text-sm font-medium">Your review</span>
         <textarea

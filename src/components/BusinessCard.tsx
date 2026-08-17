@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { Stars } from "./Stars";
 import { tagLabel } from "@/lib/tags";
+import { PRICE_LABELS } from "@/lib/hours";
 
 export function BusinessCard(props: {
   slug: string;
@@ -11,8 +12,15 @@ export function BusinessCard(props: {
   reviewCount: number;
   verifiedOwner: boolean;
   tags?: string[];
+  priceLevel?: number;
+  isOpen?: boolean | null;
+  cityRank?: number;
+  cityRankSize?: number;
 }) {
-  const { slug, name, category, city, avgRating, reviewCount, verifiedOwner, tags = [] } = props;
+  const {
+    slug, name, category, city, avgRating, reviewCount, verifiedOwner,
+    tags = [], priceLevel = 0, isOpen = null, cityRank = 0, cityRankSize = 0,
+  } = props;
   return (
     <Link
       href={`/business/${slug}`}
@@ -28,7 +36,18 @@ export function BusinessCard(props: {
       </div>
       <p className="text-sm text-stone-500 mt-0.5">
         {category} · {city}
+        {priceLevel > 0 && ` · ${PRICE_LABELS[priceLevel]}`}
+        {isOpen !== null && (
+          <span className={isOpen ? "text-brand-700 font-medium" : "text-stone-400"}>
+            {" "}· {isOpen ? "Open now" : "Closed"}
+          </span>
+        )}
       </p>
+      {cityRank > 0 && (
+        <p className="text-xs text-brand-700 font-medium mt-0.5">
+          #{cityRank} of {cityRankSize} in {city}
+        </p>
+      )}
       {tags.length > 0 && (
         <div className="mt-1.5 flex flex-wrap gap-1">
           {tags.slice(0, 4).map((t) => (

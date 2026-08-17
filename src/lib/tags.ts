@@ -24,7 +24,7 @@ export const TAGS = [
 
 export type TagSlug = (typeof TAGS)[number]["slug"];
 
-const LABELS = new Map(TAGS.map((t) => [t.slug, t.label] as const));
+const LABELS = new Map<string, string>(TAGS.map((t) => [t.slug, t.label]));
 const VALID = new Set<string>(TAGS.map((t) => t.slug));
 
 export function isTagSlug(value: string): value is TagSlug {
@@ -32,7 +32,7 @@ export function isTagSlug(value: string): value is TagSlug {
 }
 
 export function tagLabel(slug: string): string {
-  return LABELS.get(slug as TagSlug) ?? slug;
+  return LABELS.get(slug) ?? slug;
 }
 
 // ",kosher,vegan," -> ["kosher", "vegan"]
