@@ -1,17 +1,20 @@
 @import "tailwindcss";
 
-/* Warm, inviting palette: terracotta brand on cream, amber stars. */
+/* Ink & Ember.
+   Near-black carries the interface; amber is the only chroma, reserved for
+   ratings so a score reads as earned rather than as brand decoration. The
+   page is a warm off-white with a channel spread of 1 — paper, not cream. */
 @theme {
-  --color-brand-50: #fdf3ec;
-  --color-brand-100: #fadfcc;
-  --color-brand-600: #d2622a;
-  --color-brand-700: #b34e1e;
-  --color-brand-800: #8f3d18;
-  --color-brand-900: #6e2f13;
-  --color-star: #f59e0b;
+  --color-brand-50: #fdf6ea;
+  --color-brand-100: #f0dfbe;
+  --color-brand-600: #c2701a;
+  --color-brand-700: #a8560b;
+  --color-brand-800: #1a1917;
+  --color-brand-900: #12110f;
+  --color-star: #f5a524;
 }
 
 body {
   @apply text-stone-900 antialiased;
-  background-color: #faf6f0;
+  background-color: #fafaf9;
 }

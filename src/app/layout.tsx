@@ -4,6 +4,7 @@ import "./globals.css";
 import { getCurrentUser } from "@/lib/auth";
 import { prisma } from "@/lib/db";
 import { logout } from "@/actions/auth";
+import { Logo } from "@/components/Logo";
 
 export const metadata: Metadata = {
   title: "True Review — reviewed by the people, for the people",
@@ -23,34 +24,23 @@ export default async function RootLayout({ children }: { children: React.ReactNo
   return (
     <html lang="en">
       <body className="min-h-screen flex flex-col">
-        <header className="bg-gradient-to-r from-brand-800 to-brand-700 text-white sticky top-0 z-20 shadow">
+        <header className="bg-brand-800 text-white sticky top-0 z-20 shadow">
           <div className="mx-auto max-w-4xl px-4 py-3 flex items-center gap-3 flex-wrap">
-            <Link href="/" className="flex items-center gap-2 shrink-0">
-              <span className="bg-white rounded-lg p-1 flex items-center justify-center shadow-sm">
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src="/logo.svg" alt="" className="h-6 w-6" />
-              </span>
-              <span className="leading-tight">
-                <span className="font-bold text-lg tracking-tight block">
-                  True<span className="text-star"> Review</span>
-                </span>
-                <span className="hidden sm:block text-[10px] text-white/70 tracking-wide">
-                  reviewed by the people, for the people
-                </span>
-              </span>
+            <Link href="/" className="shrink-0 text-white [--logo-counter:#1A1917]">
+              <Logo />
             </Link>
             <nav className="ml-auto flex items-center gap-1 text-sm">
-              <Link href="/map" className="px-2.5 py-1.5 rounded hover:bg-brand-800">
+              <Link href="/map" className="px-2.5 py-1.5 rounded hover:bg-white/10">
                 Map
               </Link>
-              <Link href="/add-business" className="px-2.5 py-1.5 rounded hover:bg-brand-800">
+              <Link href="/add-business" className="px-2.5 py-1.5 rounded hover:bg-white/10">
                 Add business
               </Link>
               {user ? (
                 <>
                   <Link
                     href="/notifications"
-                    className="relative px-2.5 py-1.5 rounded hover:bg-brand-800"
+                    className="relative px-2.5 py-1.5 rounded hover:bg-white/10"
                     aria-label="Notifications"
                   >
                     🔔
@@ -61,27 +51,27 @@ export default async function RootLayout({ children }: { children: React.ReactNo
                     )}
                   </Link>
                   {ownsBusinesses && (
-                    <Link href="/owner" className="px-2.5 py-1.5 rounded hover:bg-brand-800">
+                    <Link href="/owner" className="px-2.5 py-1.5 rounded hover:bg-white/10">
                       My businesses
                     </Link>
                   )}
                   {user.isAdmin && (
-                    <Link href="/admin" className="px-2.5 py-1.5 rounded hover:bg-brand-800">
+                    <Link href="/admin" className="px-2.5 py-1.5 rounded hover:bg-white/10">
                       Admin
                     </Link>
                   )}
-                  <Link href="/account" className="px-2.5 py-1.5 rounded hover:bg-brand-800">
+                  <Link href="/account" className="px-2.5 py-1.5 rounded hover:bg-white/10">
                     Account
                   </Link>
                   <form action={logout}>
-                    <button className="px-2.5 py-1.5 rounded hover:bg-brand-800 cursor-pointer">
+                    <button className="px-2.5 py-1.5 rounded hover:bg-white/10 cursor-pointer">
                       Log out
                     </button>
                   </form>
                 </>
               ) : (
                 <>
-                  <Link href="/login" className="px-2.5 py-1.5 rounded hover:bg-brand-800">
+                  <Link href="/login" className="px-2.5 py-1.5 rounded hover:bg-white/10">
                     Log in
                   </Link>
                   <Link
