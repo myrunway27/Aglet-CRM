@@ -1,15 +1,17 @@
 @import "tailwindcss";
 
+/* Warm, inviting palette: terracotta brand on cream, amber stars. */
 @theme {
-  --color-brand-50: #f0fdfa;
-  --color-brand-100: #ccfbf1;
-  --color-brand-600: #0d9488;
-  --color-brand-700: #0f766e;
-  --color-brand-800: #115e59;
-  --color-brand-900: #134e4a;
+  --color-brand-50: #fdf3ec;
+  --color-brand-100: #fadfcc;
+  --color-brand-600: #d2622a;
+  --color-brand-700: #b34e1e;
+  --color-brand-800: #8f3d18;
+  --color-brand-900: #6e2f13;
   --color-star: #f59e0b;
 }
 
 body {
-  @apply bg-stone-50 text-stone-900 antialiased;
+  @apply text-stone-900 antialiased;
+  background-color: #faf6f0;
 }

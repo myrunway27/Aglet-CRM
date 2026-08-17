@@ -5,6 +5,9 @@ import { getCurrentUser } from "@/lib/auth";
 import { Stars } from "@/components/Stars";
 import { ReviewCard } from "@/components/ReviewCard";
 import { ReviewForm } from "@/components/ReviewForm";
+import { ReviewSnapshot } from "@/components/ReviewSnapshot";
+import { buildSnapshot } from "@/lib/snapshot";
+import { parseTags, tagLabel } from "@/lib/tags";
 
 export const dynamic = "force-dynamic";
 
@@ -51,6 +54,8 @@ export default async function BusinessPage({
 
   const avg =
     reviews.length > 0 ? reviews.reduce((s, r) => s + r.rating, 0) / reviews.length : null;
+  const snapshot = buildSnapshot(reviews);
+  const tags = parseTags(business.tags);
   const viewerIsOwner = !!user && business.ownerId === user.id;
   const alreadyReviewed = !!user && business.reviews.some((r) => r.userId === user.id);
 
@@ -88,6 +93,18 @@ export default async function BusinessPage({
             </Link>
           )}
         </div>
+        {tags.length > 0 && (
+          <div className="mt-3 flex flex-wrap gap-1.5">
+            {tags.map((t) => (
+              <span
+                key={t}
+                className="text-xs bg-brand-50 border border-brand-100 text-brand-800 px-2.5 py-1 rounded-full"
+              >
+                {tagLabel(t)}
+              </span>
+            ))}
+          </div>
+        )}
         {business.description && <p className="mt-3 text-sm text-stone-700">{business.description}</p>}
         <div className="mt-3 flex items-center gap-2">
           {avg !== null ? (
@@ -103,6 +120,12 @@ export default async function BusinessPage({
           )}
         </div>
       </div>
+
+      {snapshot && (
+        <section className="mt-4">
+          <ReviewSnapshot data={snapshot} />
+        </section>
+      )}
 
       <section className="mt-6">
         <h2 className="font-semibold text-lg">Write a review</h2>

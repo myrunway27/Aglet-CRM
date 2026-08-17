@@ -7,7 +7,12 @@ import { OwnerReplyForm } from "@/components/OwnerReplyForm";
 
 export const dynamic = "force-dynamic";
 
-export default async function OwnerDashboard() {
+export default async function OwnerDashboard({
+  searchParams,
+}: {
+  searchParams: Promise<{ claimed?: string }>;
+}) {
+  const { claimed } = await searchParams;
   const user = await getCurrentUser();
   if (!user) redirect("/login?next=/owner");
 
@@ -24,6 +29,14 @@ export default async function OwnerDashboard() {
 
   return (
     <div>
+      {claimed && (
+        <div className="mt-4 bg-brand-50 border border-brand-100 rounded-xl p-4 text-sm">
+          <p className="font-medium text-brand-800">✓ You are now the verified owner.</p>
+          <p className="mt-1 text-stone-600">
+            Your business is listed below — you can reply publicly to any of its reviews.
+          </p>
+        </div>
+      )}
       <h1 className="text-2xl font-bold mt-4">My businesses</h1>
       <p className="text-sm text-stone-600 mt-1">
         Reply publicly to reviews. Reviewers are anonymous — pen names are all anyone sees. If a

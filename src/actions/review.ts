@@ -84,13 +84,21 @@ export async function postReview(_prev: FormState, formData: FormData): Promise<
     }
   }
 
+  // Reviews carry the author's persistent pen name; older accounts
+  // that predate pen names get one on their first review.
+  let pseudonym = user.pseudonym;
+  if (!pseudonym) {
+    pseudonym = generatePseudonym();
+    await prisma.user.update({ where: { id: user.id }, data: { pseudonym } });
+  }
+
   await prisma.review.create({
     data: {
       businessId,
       userId: user.id,
       rating,
       text,
-      pseudonym: generatePseudonym(),
+      pseudonym,
       status: flagReason ? "FLAGGED" : "PUBLISHED",
       flagReason,
       photos: { create: savedPaths.map((p) => ({ path: p })) },

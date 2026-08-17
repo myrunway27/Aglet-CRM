@@ -27,6 +27,15 @@ export default async function VerifyPage({
       <div className="mt-4">
         <VerifyForm next={safeNext} />
       </div>
+      {user.pseudonym && (
+        <div className="mt-4 bg-brand-50 border border-brand-100 rounded-lg p-3 text-sm">
+          <p className="font-medium text-brand-800">Your pen name: 🕶️ {user.pseudonym}</p>
+          <p className="mt-1 text-stone-600">
+            Every review you write appears under this name — never your email. You can spin a new
+            one or pick your own any time from your account page.
+          </p>
+        </div>
+      )}
     </div>
   );
 }

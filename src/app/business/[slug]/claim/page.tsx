@@ -3,6 +3,7 @@ import { notFound, redirect } from "next/navigation";
 import { prisma } from "@/lib/db";
 import { getCurrentUser } from "@/lib/auth";
 import { ClaimForm } from "@/components/ClaimForm";
+import { expectedDomainHint } from "@/lib/claims";
 
 export default async function ClaimPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
@@ -26,7 +27,11 @@ export default async function ClaimPage({ params }: { params: Promise<{ slug: st
         {business.ownerId ? (
           <p className="text-sm text-stone-600">This business already has a verified owner.</p>
         ) : (
-          <ClaimForm businessId={business.id} />
+          <ClaimForm
+            businessId={business.id}
+            businessName={business.name}
+            domainHint={expectedDomainHint(business.name)}
+          />
         )}
       </div>
     </div>

@@ -14,7 +14,9 @@ export function AuthForm({ mode, next }: { mode: "login" | "signup"; next: strin
       {mode === "signup" && (
         <p className="mt-2 text-sm text-stone-600 bg-brand-50 border border-brand-100 rounded-lg p-3">
           🕶️ Your email is only used to sign in and stop fake reviews. It is{" "}
-          <strong>never shown</strong> on reviews — you post under a random pen name.
+          <strong>never shown</strong> on reviews. We&apos;ll give you a random pen name — like
+          &ldquo;Quiet Falcon 42&rdquo; — that belongs to you. Don&apos;t like it? Spin a new one
+          or pick your own from your account page.
         </p>
       )}
       <form action={formAction} className="mt-4 space-y-3">

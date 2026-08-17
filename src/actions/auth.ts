@@ -4,6 +4,7 @@ import { redirect } from "next/navigation";
 import { prisma } from "@/lib/db";
 import { createSession, destroySession, getCurrentUser, hashPassword, verifyPassword } from "@/lib/auth";
 import { confirmVerificationCode, issueVerificationCode } from "@/lib/verification";
+import { generatePseudonym } from "@/lib/pseudonym";
 
 export type FormState = { error?: string } | undefined;
 
@@ -20,8 +21,15 @@ export async function signup(_prev: FormState, formData: FormData): Promise<Form
   const existing = await prisma.user.findUnique({ where: { email } });
   if (existing) return { error: "An account with this email already exists. Try logging in." };
 
+  // Find an unused pen name (collisions are rare; a few tries suffice)
+  let pseudonym = generatePseudonym();
+  for (let i = 0; i < 5; i++) {
+    if (!(await prisma.user.findFirst({ where: { pseudonym } }))) break;
+    pseudonym = generatePseudonym();
+  }
+
   const user = await prisma.user.create({
-    data: { email, passwordHash: hashPassword(password) },
+    data: { email, passwordHash: hashPassword(password), pseudonym },
   });
   await createSession(user.id);
   await issueVerificationCode(user.id);

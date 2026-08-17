@@ -15,6 +15,10 @@ model User {
   isBanned     Boolean  @default(false)
   createdAt    DateTime @default(now())
 
+  // The user's persistent pen name, shown on all their reviews instead of
+  // any real identity. Assigned at signup; the user can re-roll or pick one.
+  pseudonym String?
+
   emailVerifiedAt     DateTime?
   verifyCode          String?
   verifyCodeExpiresAt DateTime?
@@ -71,6 +75,8 @@ model Business {
   category    String
   city        String
   description String   @default("")
+  // Comma-wrapped attribute slugs, e.g. ",kosher,vegan," — see src/lib/tags.ts
+  tags        String   @default("")
   createdAt   DateTime @default(now())
 
   addedById String?
@@ -148,13 +154,23 @@ model OwnerReply {
 }
 
 // Claim status: PENDING | APPROVED | REJECTED
+// Claim method:
+//   EMAIL  - claimant proves control of an email at the business's own
+//            domain via a one-time code; approved automatically
+//   MANUAL - claimant submits free-text evidence; an admin decides
 model OwnerClaim {
   id         String   @id @default(cuid())
   businessId String
   userId     String
   evidence   String
+  method     String   @default("MANUAL")
   status     String   @default("PENDING")
   createdAt  DateTime @default(now())
+
+  claimEmail          String?
+  verifyCode          String?
+  verifyCodeExpiresAt DateTime?
+  verifyCodeIssuedAt  DateTime?
 
   business Business @relation(fields: [businessId], references: [id], onDelete: Cascade)
   user     User     @relation(fields: [userId], references: [id], onDelete: Cascade)

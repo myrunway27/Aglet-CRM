@@ -13,12 +13,23 @@ const ANIMALS = [
 ];
 
 /**
- * A review is displayed under a random pen name generated at posting time.
- * It is stored on the review itself and has no derivable link to the author.
+ * Reviews are displayed under the author's pen name — a random, friendly
+ * identity ("Quiet Falcon 42") that belongs to the account but has no
+ * derivable link to the real person. Users can re-roll it or pick their own.
  */
 export function generatePseudonym(): string {
   const adjective = ADJECTIVES[randomInt(ADJECTIVES.length)];
   const animal = ANIMALS[randomInt(ANIMALS.length)];
   const num = randomInt(10, 100);
   return `${adjective} ${animal} ${num}`;
+}
+
+export const PEN_NAME_MIN = 3;
+export const PEN_NAME_MAX = 30;
+
+// Letters (any language), digits and single spaces; no leading/trailing space.
+export function isValidPenName(name: string): boolean {
+  if (name.length < PEN_NAME_MIN || name.length > PEN_NAME_MAX) return false;
+  if (name !== name.trim() || /\s{2,}/.test(name)) return false;
+  return /^[\p{L}\p{N} ]+$/u.test(name);
 }

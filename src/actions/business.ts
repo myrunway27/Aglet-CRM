@@ -5,6 +5,7 @@ import { prisma } from "@/lib/db";
 import { getCurrentUser, VERIFY_REQUIRED_ERROR } from "@/lib/auth";
 import { slugify } from "@/lib/slug";
 import { CATEGORIES } from "@/lib/categories";
+import { storeTags } from "@/lib/tags";
 
 export type FormState = { error?: string } | undefined;
 
@@ -17,6 +18,7 @@ export async function addBusiness(_prev: FormState, formData: FormData): Promise
   const category = String(formData.get("category") ?? "").trim();
   const city = String(formData.get("city") ?? "").trim();
   const description = String(formData.get("description") ?? "").trim().slice(0, 1000);
+  const tags = storeTags(formData.getAll("tags").map(String));
 
   if (name.length < 2 || name.length > 100) {
     return { error: "Business name must be 2–100 characters." };
@@ -41,6 +43,7 @@ export async function addBusiness(_prev: FormState, formData: FormData): Promise
       category,
       city,
       description,
+      tags,
       slug: slugify(`${name} ${city}`),
       addedById: user.id,
     },

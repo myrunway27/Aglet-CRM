@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { Stars } from "./Stars";
+import { tagLabel } from "@/lib/tags";
 
 export function BusinessCard(props: {
   slug: string;
@@ -9,8 +10,9 @@ export function BusinessCard(props: {
   avgRating: number | null;
   reviewCount: number;
   verifiedOwner: boolean;
+  tags?: string[];
 }) {
-  const { slug, name, category, city, avgRating, reviewCount, verifiedOwner } = props;
+  const { slug, name, category, city, avgRating, reviewCount, verifiedOwner, tags = [] } = props;
   return (
     <Link
       href={`/business/${slug}`}
@@ -27,6 +29,21 @@ export function BusinessCard(props: {
       <p className="text-sm text-stone-500 mt-0.5">
         {category} · {city}
       </p>
+      {tags.length > 0 && (
+        <div className="mt-1.5 flex flex-wrap gap-1">
+          {tags.slice(0, 4).map((t) => (
+            <span
+              key={t}
+              className="text-[11px] bg-brand-50 border border-brand-100 text-brand-800 px-2 py-0.5 rounded-full"
+            >
+              {tagLabel(t)}
+            </span>
+          ))}
+          {tags.length > 4 && (
+            <span className="text-[11px] text-stone-400 px-1 py-0.5">+{tags.length - 4}</span>
+          )}
+        </div>
+      )}
       <div className="mt-2 flex items-center gap-2 text-sm">
         {avgRating !== null ? (
           <>

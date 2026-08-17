@@ -3,6 +3,7 @@ import { redirect } from "next/navigation";
 import { prisma } from "@/lib/db";
 import { getCurrentUser } from "@/lib/auth";
 import { Stars } from "@/components/Stars";
+import { PenNameCard } from "@/components/PenNameCard";
 
 export const dynamic = "force-dynamic";
 
@@ -36,6 +37,8 @@ export default async function AccountPage() {
         Signed in as <strong>{user.email}</strong>. Only you (and no one else) can see which
         reviews are yours.
       </p>
+
+      <PenNameCard penName={user.pseudonym} />
 
       <h2 className="font-semibold mt-6">Your reviews ({reviews.length})</h2>
       <div className="mt-2 space-y-2">

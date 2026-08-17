@@ -3,6 +3,7 @@
 import { useActionState } from "react";
 import { addBusiness, type FormState } from "@/actions/business";
 import { CATEGORIES } from "@/lib/categories";
+import { TAGS } from "@/lib/tags";
 
 export function AddBusinessForm() {
   const [state, formAction, pending] = useActionState<FormState, FormData>(addBusiness, undefined);
@@ -47,6 +48,22 @@ export function AddBusinessForm() {
           className="mt-1 w-full rounded-lg border border-stone-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-brand-600"
         />
       </label>
+      <fieldset>
+        <legend className="text-sm font-medium">
+          Features <span className="text-stone-400 font-normal">(optional — helps people find it)</span>
+        </legend>
+        <div className="mt-2 flex flex-wrap gap-1.5">
+          {TAGS.map((t) => (
+            <label
+              key={t.slug}
+              className="cursor-pointer text-xs border border-stone-300 rounded-full px-2.5 py-1.5 has-checked:bg-brand-700 has-checked:text-white has-checked:border-brand-700 hover:border-brand-600 select-none"
+            >
+              <input type="checkbox" name="tags" value={t.slug} className="sr-only" />
+              {t.label}
+            </label>
+          ))}
+        </div>
+      </fieldset>
       <label className="block">
         <span className="text-sm font-medium">
           Description <span className="text-stone-400 font-normal">(optional)</span>

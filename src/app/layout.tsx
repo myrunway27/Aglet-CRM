@@ -22,7 +22,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
   return (
     <html lang="en">
       <body className="min-h-screen flex flex-col">
-        <header className="bg-brand-900 text-white sticky top-0 z-20 shadow">
+        <header className="bg-gradient-to-r from-brand-800 to-brand-700 text-white sticky top-0 z-20 shadow">
           <div className="mx-auto max-w-4xl px-4 py-3 flex items-center gap-3 flex-wrap">
             <Link href="/" className="font-bold text-lg tracking-tight shrink-0">
               <span className="text-star">★</span> The True Review
