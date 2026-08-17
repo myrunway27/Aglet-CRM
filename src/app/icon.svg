@@ -1,17 +1,10 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
   <defs>
     <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0" stop-color="#e8813d"/>
-      <stop offset="1" stop-color="#c2571f"/>
+      <stop offset="0" stop-color="#d2622a"/>
+      <stop offset="1" stop-color="#8f3d18"/>
     </linearGradient>
   </defs>
-  <!-- happy speech bubble: star-eyed reviewer -->
-  <path fill="url(#g)" d="M32 3C17 3 5 12.8 5 25.4c0 7.3 4 13.7 10.2 17.8-.4 3.6-1.8 7.2-4.8 10.3-.5.6-.1 1.5.7 1.5 6.2 0 11.3-2.6 14.7-5.2 2 .4 4.1.6 6.2.6 15 0 27-9.8 27-22.4S47 3 32 3z"/>
-  <path fill="#fff" d="M22.50,18.30 L24.03,22.40 L28.40,22.58 L24.97,25.30 L26.14,29.52 L22.50,27.10 L18.86,29.52 L20.03,25.30 L16.60,22.58 L20.97,22.40 Z"/>
-  <path fill="#fff" d="M41.50,18.30 L43.03,22.40 L47.40,22.58 L43.97,25.30 L45.14,29.52 L41.50,27.10 L37.86,29.52 L39.03,25.30 L35.60,22.58 L39.97,22.40 Z"/>
-  <!-- rosy cheeks -->
-  <circle cx="13.5" cy="32.5" r="3.4" fill="#ffc98f" opacity="0.85"/>
-  <circle cx="50.5" cy="32.5" r="3.4" fill="#ffc98f" opacity="0.85"/>
-  <!-- big smile -->
-  <path d="M21 33.5 Q32 44.5 43 33.5" fill="none" stroke="#fff" stroke-width="4.6" stroke-linecap="round"/>
+  <path fill="url(#g)" d="M32 4C17.6 4 6 13.9 6 26.1c0 7 3.8 13.2 9.8 17.2-.4 3.4-1.7 6.9-4.6 9.9-.5.5-.1 1.4.6 1.4 6 0 10.9-2.5 14.2-5 2 .4 4 .6 6 .6 14.4 0 26-9.9 26-22.1S46.4 4 32 4z"/>
+  <path fill="#fff" d="M32.00,14.00 L35.17,23.13 L44.84,23.33 L37.14,29.17 L39.94,38.42 L32.00,32.90 L24.06,38.42 L26.86,29.17 L19.16,23.33 L28.83,23.13 Z"/>
 </svg>
