@@ -86,11 +86,25 @@ function nameCandidates(businessName: string): string[] {
 // True when `email` is at a domain that carries the business's name —
 // e.g. anyone@bluefigcafe.com for "The Blue Fig Cafe". Free providers
 // (gmail etc.) and generic labels never match.
-export function emailMatchesBusiness(email: string, businessName: string): boolean {
+export function emailMatchesBusiness(
+  email: string,
+  businessName: string,
+  businessWebsite?: string
+): boolean {
   const at = email.lastIndexOf("@");
   if (at < 1) return false;
   const domain = email.slice(at + 1).toLowerCase().trim();
   if (!domain.includes(".") || FREE_MAIL_DOMAINS.has(domain)) return false;
+
+  // An email at the business's own listed website domain always counts.
+  if (businessWebsite) {
+    try {
+      const host = new URL(businessWebsite).hostname.toLowerCase().replace(/^www\./, "");
+      if (host && (domain === host || domain.endsWith(`.${host}`))) return true;
+    } catch {
+      // ignore malformed stored URLs
+    }
+  }
 
   const labels = domain
     .split(".")

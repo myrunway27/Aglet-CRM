@@ -31,6 +31,8 @@ export default async function HomePage({
               { name: { contains: q } },
               { city: { contains: q } },
               { description: { contains: q } },
+              { address: { contains: q } },
+              { zip: { contains: q } },
               ...qTagSlugs.map((t) => ({ tags: { contains: `,${t},` } })),
             ],
           }

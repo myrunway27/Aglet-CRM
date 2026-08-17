@@ -77,6 +77,14 @@ model Business {
   description String   @default("")
   // Comma-wrapped attribute slugs, e.g. ",kosher,vegan," — see src/lib/tags.ts
   tags        String   @default("")
+
+  // Location & contact, filled manually or via the OpenStreetMap lookup
+  address String @default("")
+  zip     String @default("")
+  phone   String @default("")
+  website String @default("")
+  // Free-text opening hours, e.g. "Sun-Thu 9:00-22:00, Fri 9:00-14:00"
+  hours   String @default("")
   createdAt   DateTime @default(now())
 
   addedById String?

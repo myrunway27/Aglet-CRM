@@ -19,6 +19,12 @@ export async function addBusiness(_prev: FormState, formData: FormData): Promise
   const city = String(formData.get("city") ?? "").trim();
   const description = String(formData.get("description") ?? "").trim().slice(0, 1000);
   const tags = storeTags(formData.getAll("tags").map(String));
+  const address = String(formData.get("address") ?? "").trim().slice(0, 160);
+  const zip = String(formData.get("zip") ?? "").trim().slice(0, 12);
+  const phone = String(formData.get("phone") ?? "").trim().slice(0, 30);
+  const hours = String(formData.get("hours") ?? "").trim().slice(0, 200);
+  let website = String(formData.get("website") ?? "").trim().slice(0, 120);
+  if (website && !/^https?:\/\//i.test(website)) website = `https://${website}`;
 
   if (name.length < 2 || name.length > 100) {
     return { error: "Business name must be 2–100 characters." };
@@ -44,6 +50,11 @@ export async function addBusiness(_prev: FormState, formData: FormData): Promise
       city,
       description,
       tags,
+      address,
+      zip,
+      phone,
+      website,
+      hours,
       slug: slugify(`${name} ${city}`),
       addedById: user.id,
     },

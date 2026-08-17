@@ -1,15 +1,64 @@
 "use client";
 
-import { useActionState } from "react";
+import { useActionState, useRef, useState } from "react";
 import { addBusiness, type FormState } from "@/actions/business";
 import { CATEGORIES } from "@/lib/categories";
 import { TAGS } from "@/lib/tags";
 
+type Candidate = {
+  address: string;
+  zip: string;
+  hours: string;
+  phone: string;
+  website: string;
+  label: string;
+};
+
 export function AddBusinessForm() {
   const [state, formAction, pending] = useActionState<FormState, FormData>(addBusiness, undefined);
+  const formRef = useRef<HTMLFormElement>(null);
+  const [candidates, setCandidates] = useState<Candidate[] | null>(null);
+  const [looking, setLooking] = useState(false);
+
+  const lookUp = async () => {
+    const form = formRef.current;
+    if (!form) return;
+    const name = (form.elements.namedItem("name") as HTMLInputElement)?.value.trim();
+    const city = (form.elements.namedItem("city") as HTMLInputElement)?.value.trim();
+    if (!name || !city) {
+      setCandidates([]);
+      return;
+    }
+    setLooking(true);
+    try {
+      const res = await fetch(`/api/place-lookup?q=${encodeURIComponent(`${name}, ${city}`)}`);
+      const data = await res.json();
+      setCandidates(data.results ?? []);
+    } catch {
+      setCandidates([]);
+    } finally {
+      setLooking(false);
+    }
+  };
+
+  const applyCandidate = (c: Candidate) => {
+    const form = formRef.current;
+    if (!form) return;
+    const set = (field: string, value: string) => {
+      const el = form.elements.namedItem(field) as HTMLInputElement | null;
+      if (el && value) el.value = value;
+    };
+    set("address", c.address);
+    set("zip", c.zip);
+    set("phone", c.phone);
+    set("website", c.website);
+    set("hours", c.hours);
+    setCandidates(null);
+  };
 
   return (
     <form
+      ref={formRef}
       action={formAction}
       className="max-w-lg mx-auto bg-white rounded-xl border border-stone-200 p-6 mt-4 space-y-4"
     >
@@ -48,6 +97,87 @@ export function AddBusinessForm() {
           className="mt-1 w-full rounded-lg border border-stone-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-brand-600"
         />
       </label>
+      <div className="space-y-3 rounded-lg border border-stone-200 bg-stone-50/60 p-3">
+        <div className="flex items-center justify-between gap-2 flex-wrap">
+          <span className="text-sm font-medium">
+            Location &amp; contact <span className="text-stone-400 font-normal">(optional)</span>
+          </span>
+          <button
+            type="button"
+            onClick={lookUp}
+            disabled={looking}
+            className="text-xs rounded-lg border border-brand-600 text-brand-700 px-2.5 py-1.5 hover:bg-brand-50 disabled:opacity-50 cursor-pointer"
+          >
+            {looking ? "Searching…" : "🔍 Auto-fill from name + city"}
+          </button>
+        </div>
+        {candidates !== null && candidates.length === 0 && (
+          <p className="text-xs text-stone-500">
+            Nothing found — fill in the name and city above first, or type the details by hand.
+          </p>
+        )}
+        {candidates && candidates.length > 0 && (
+          <div className="space-y-1">
+            <p className="text-xs text-stone-500">Pick the right one:</p>
+            {candidates.map((c, i) => (
+              <button
+                key={i}
+                type="button"
+                onClick={() => applyCandidate(c)}
+                className="block w-full text-left text-xs bg-white border border-stone-200 rounded-lg px-2.5 py-2 hover:border-brand-600 cursor-pointer"
+              >
+                📍 {c.label}
+              </button>
+            ))}
+          </div>
+        )}
+        <div className="grid grid-cols-3 gap-2">
+          <label className="block col-span-2">
+            <span className="text-xs text-stone-600">Street address</span>
+            <input
+              name="address"
+              maxLength={160}
+              className="mt-1 w-full rounded-lg border border-stone-300 px-2.5 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-brand-600"
+            />
+          </label>
+          <label className="block">
+            <span className="text-xs text-stone-600">Zip code</span>
+            <input
+              name="zip"
+              maxLength={12}
+              className="mt-1 w-full rounded-lg border border-stone-300 px-2.5 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-brand-600"
+            />
+          </label>
+        </div>
+        <div className="grid grid-cols-2 gap-2">
+          <label className="block">
+            <span className="text-xs text-stone-600">Phone</span>
+            <input
+              name="phone"
+              maxLength={30}
+              className="mt-1 w-full rounded-lg border border-stone-300 px-2.5 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-brand-600"
+            />
+          </label>
+          <label className="block">
+            <span className="text-xs text-stone-600">Website</span>
+            <input
+              name="website"
+              maxLength={120}
+              placeholder="example.com"
+              className="mt-1 w-full rounded-lg border border-stone-300 px-2.5 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-brand-600"
+            />
+          </label>
+        </div>
+        <label className="block">
+          <span className="text-xs text-stone-600">Opening hours</span>
+          <input
+            name="hours"
+            maxLength={200}
+            placeholder="e.g. Sun–Thu 9:00–22:00, Fri 9:00–14:00"
+            className="mt-1 w-full rounded-lg border border-stone-300 px-2.5 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-brand-600"
+          />
+        </label>
+      </div>
       <fieldset>
         <legend className="text-sm font-medium">
           Features <span className="text-stone-400 font-normal">(optional — helps people find it)</span>

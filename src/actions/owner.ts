@@ -50,7 +50,7 @@ export async function startEmailClaim(
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
     return { error: "That doesn't look like an email address." };
   }
-  if (!emailMatchesBusiness(email, business.name)) {
+  if (!emailMatchesBusiness(email, business.name, business.website)) {
     return { mismatch: true };
   }
   if (

@@ -105,6 +105,31 @@ export default async function BusinessPage({
             ))}
           </div>
         )}
+        {(business.address || business.hours || business.phone || business.website) && (
+          <div className="mt-3 space-y-1 text-sm text-stone-600">
+            {business.address && (
+              <p>
+                📍 {business.address}
+                {business.zip ? `, ${business.zip}` : ""}
+              </p>
+            )}
+            {business.hours && <p>🕒 {business.hours}</p>}
+            {business.phone && <p>📞 {business.phone}</p>}
+            {business.website && (
+              <p>
+                🌐{" "}
+                <a
+                  href={business.website}
+                  target="_blank"
+                  rel="noopener noreferrer nofollow"
+                  className="text-brand-700 hover:underline break-all"
+                >
+                  {business.website.replace(/^https?:\/\//, "")}
+                </a>
+              </p>
+            )}
+          </div>
+        )}
         {business.description && <p className="mt-3 text-sm text-stone-700">{business.description}</p>}
         <div className="mt-3 flex items-center gap-2">
           {avg !== null ? (
