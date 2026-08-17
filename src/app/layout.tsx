@@ -24,8 +24,14 @@ export default async function RootLayout({ children }: { children: React.ReactNo
       <body className="min-h-screen flex flex-col">
         <header className="bg-gradient-to-r from-brand-800 to-brand-700 text-white sticky top-0 z-20 shadow">
           <div className="mx-auto max-w-4xl px-4 py-3 flex items-center gap-3 flex-wrap">
-            <Link href="/" className="font-bold text-lg tracking-tight shrink-0">
-              <span className="text-star">★</span> The True Review
+            <Link href="/" className="flex items-center gap-2 shrink-0">
+              <span className="bg-white rounded-lg p-1 flex items-center justify-center shadow-sm">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src="/logo.svg" alt="" className="h-6 w-6" />
+              </span>
+              <span className="font-bold text-lg tracking-tight leading-none">
+                The True<span className="text-star"> Review</span>
+              </span>
             </Link>
             <nav className="ml-auto flex items-center gap-1 text-sm">
               <Link href="/add-business" className="px-2.5 py-1.5 rounded hover:bg-brand-800">

@@ -1,8 +1,8 @@
 import Link from "next/link";
 import { prisma } from "@/lib/db";
-import { CATEGORIES } from "@/lib/categories";
 import { TAGS, isTagSlug, parseTags } from "@/lib/tags";
 import { BusinessCard } from "@/components/BusinessCard";
+import { FilterBar } from "@/components/FilterBar";
 
 export const dynamic = "force-dynamic";
 
@@ -78,61 +78,7 @@ export default async function HomePage({
         </form>
       </section>
 
-      <div className="flex gap-2 overflow-x-auto pb-2 -mx-4 px-4">
-        <Link
-          href={activeTags.length ? `/?tags=${activeTags.join(",")}` : "/"}
-          className={`shrink-0 text-sm px-3 py-1.5 rounded-full border ${
-            !category
-              ? "bg-brand-700 text-white border-brand-700"
-              : "bg-white border-stone-300 hover:border-brand-600"
-          }`}
-        >
-          All
-        </Link>
-        {CATEGORIES.map((c) => (
-          <Link
-            key={c}
-            href={`/?category=${encodeURIComponent(c)}${
-              activeTags.length ? `&tags=${activeTags.join(",")}` : ""
-            }`}
-            className={`shrink-0 text-sm px-3 py-1.5 rounded-full border ${
-              category === c
-                ? "bg-brand-700 text-white border-brand-700"
-                : "bg-white border-stone-300 hover:border-brand-600"
-            }`}
-          >
-            {c}
-          </Link>
-        ))}
-      </div>
-
-      <div className="mt-2 flex gap-1.5 overflow-x-auto pb-2 -mx-4 px-4">
-        {TAGS.map((t) => {
-          const active = activeTags.includes(t.slug);
-          const nextTags = active
-            ? activeTags.filter((x) => x !== t.slug)
-            : [...activeTags, t.slug];
-          const params = new URLSearchParams();
-          if (q) params.set("q", q);
-          if (category) params.set("category", category);
-          if (nextTags.length) params.set("tags", nextTags.join(","));
-          const qs = params.toString();
-          return (
-            <Link
-              key={t.slug}
-              href={qs ? `/?${qs}` : "/"}
-              className={`shrink-0 text-xs px-2.5 py-1.5 rounded-full border ${
-                active
-                  ? "bg-brand-600 text-white border-brand-600"
-                  : "bg-white border-stone-300 text-stone-600 hover:border-brand-600"
-              }`}
-            >
-              {active ? "✓ " : ""}
-              {t.label}
-            </Link>
-          );
-        })}
-      </div>
+      <FilterBar q={q} category={category} activeTags={activeTags} />
 
       <section className="mt-4 grid gap-3 sm:grid-cols-2">
         {withStats.map((b) => (
