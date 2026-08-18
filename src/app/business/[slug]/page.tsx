@@ -43,6 +43,21 @@ export default async function BusinessPage({
   });
   if (!business) notFound();
 
+  // One grouped query for every author on this page, so the trust cue beside
+  // each pen name doesn't cost a query per review.
+  const authorCounts = new Map(
+    (
+      await prisma.review.groupBy({
+        by: ["userId"],
+        where: {
+          userId: { in: [...new Set(business.reviews.map((r) => r.userId))] },
+          status: { not: "HIDDEN" },
+        },
+        _count: { _all: true },
+      })
+    ).map((g) => [g.userId, g._count._all])
+  );
+
   const reviews = business.reviews.map((r) => ({
     id: r.id,
     rating: r.rating,
@@ -58,6 +73,7 @@ export default async function BusinessPage({
     includedInScore: r.includedInScore,
     excludeReason: r.excludeReason,
     disputed: r.flags.length > 0,
+    authorReviews: authorCounts.get(r.userId) ?? 1,
   }));
 
   const scored = reviews.filter((r) => r.includedInScore);

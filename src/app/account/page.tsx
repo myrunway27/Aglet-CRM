@@ -6,6 +6,8 @@ import { Stars } from "@/components/Stars";
 import { PenNameCard } from "@/components/PenNameCard";
 import { DietStandardCard } from "@/components/DietStandardCard";
 import { parseStandards } from "@/lib/diet";
+import { reviewerStats } from "@/lib/badges";
+import { BadgeBoard } from "@/components/Badges";
 
 export const dynamic = "force-dynamic";
 
@@ -19,7 +21,7 @@ export default async function AccountPage() {
   const user = await getCurrentUser();
   if (!user) redirect("/login?next=/account");
 
-  const [reviews, claims, saves] = await Promise.all([
+  const [reviews, claims, saves, stats] = await Promise.all([
     prisma.review.findMany({
       where: { userId: user.id },
       include: { business: true },
@@ -35,6 +37,7 @@ export default async function AccountPage() {
       include: { business: true },
       orderBy: { createdAt: "desc" },
     }),
+    reviewerStats(user.id),
   ]);
   const want = saves.filter((s) => s.kind === "WANT");
   const been = saves.filter((s) => s.kind === "BEEN");
@@ -50,7 +53,28 @@ export default async function AccountPage() {
       <PenNameCard penName={user.pseudonym} />
       <DietStandardCard current={parseStandards(user.dietStandard)} />
 
-      <div className="mt-4 flex gap-2 flex-wrap text-sm">
+      {stats && (
+        <section className="mt-6">
+          <div className="flex items-baseline justify-between gap-2 flex-wrap">
+            <h2 className="font-semibold">Your badges</h2>
+            <Link
+              href={`/reviewer/${encodeURIComponent(user.pseudonym ?? "")}`}
+              className="text-sm text-brand-700 hover:underline"
+            >
+              See your public record →
+            </Link>
+          </div>
+          <p className="text-sm text-stone-600 mt-1">
+            Earned under your pen name, so readers can weigh up a review without ever knowing who
+            wrote it. They reward range and usefulness — never how often you post.
+          </p>
+          <div className="mt-3">
+            <BadgeBoard badges={stats.badges} />
+          </div>
+        </section>
+      )}
+
+      <div className="mt-6 flex gap-2 flex-wrap text-sm">
         <Link href="/lists" className="text-brand-700 hover:underline">
           Your lists →
         </Link>

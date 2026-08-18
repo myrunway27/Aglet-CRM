@@ -23,6 +23,8 @@ type ReviewData = {
   includedInScore: boolean;
   excludeReason: string | null;
   disputed: boolean;
+  /** How many reviews this pen name has written — a trust cue for readers. */
+  authorReviews?: number;
 };
 
 export function ReviewCard({
@@ -54,7 +56,19 @@ export function ReviewCard({
       )}
       <div className="flex items-center justify-between gap-2">
         <div>
-          <p className="font-medium text-sm">🕶️ {review.pseudonym}</p>
+          <p className="font-medium text-sm">
+            <a
+              href={`/reviewer/${encodeURIComponent(review.pseudonym)}`}
+              className="hover:underline"
+            >
+              🕶️ {review.pseudonym}
+            </a>
+            {typeof review.authorReviews === "number" && review.authorReviews > 1 && (
+              <span className="ml-1.5 text-xs font-normal text-stone-500">
+                · {review.authorReviews} reviews
+              </span>
+            )}
+          </p>
           <div className="flex items-center gap-2 mt-0.5">
             <Stars rating={review.rating} size="text-sm" />
             <span className="text-xs text-stone-500">{review.rating.toFixed(1)}</span>
