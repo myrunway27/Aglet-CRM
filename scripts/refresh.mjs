@@ -257,11 +257,7 @@ function toEastern(iso) {
   return `${g("year")}-${g("month")}-${g("day")}T${g("hour")}:${g("minute")}`;
 }
 
-function eventsFromNextData(html, pageUrl) {
-  const m = html.match(/id="__NEXT_DATA__"[^>]*>([\s\S]*?)<\/script>/);
-  if (!m) return [];
-  let data;
-  try { data = JSON.parse(m[1]); } catch { return []; }
+function walkEventNodes(data, pageUrl) {
   const out = [];
   (function walk(node) {
     if (!node || typeof node !== "object") return;
@@ -284,6 +280,50 @@ function eventsFromNextData(html, pageUrl) {
     Object.values(node).forEach(walk);
   })(data);
   return out;
+}
+
+function eventsFromNextData(html, pageUrl) {
+  const m = html.match(/id="__NEXT_DATA__"[^>]*>([\s\S]*?)<\/script>/);
+  if (!m) return [];
+  let data;
+  try { data = JSON.parse(m[1]); } catch { return []; }
+  return walkEventNodes(data, pageUrl);
+}
+
+// When a Next.js/TinaCMS page says its event list has more pages, replay the
+// page's own embedded GraphQL query with a larger page size — the same call
+// the visitor's browser makes while scrolling. Endpoint and public read key
+// are taken from the site's own JS bundles; if not found, give up silently.
+async function tinaPaginateAll(html, pageUrl) {
+  try {
+    const nd = html.match(/id="__NEXT_DATA__"[^>]*>([\s\S]*?)<\/script>/);
+    if (!nd) return [];
+    const data = JSON.parse(nd[1]);
+    const pp = data?.props?.pageProps;
+    const conn = pp?.data && Object.values(pp.data).find((v) => v?.pageInfo && v?.edges);
+    if (!pp?.query || !conn?.pageInfo?.hasNextPage) return [];
+    const chunks = [...html.matchAll(/src="([^"]*\/_next\/static\/[^"]+\.js)"/g)]
+      .map((m) => new URL(m[1], pageUrl).href);
+    let endpoint = null, token = null;
+    for (const c of chunks.slice(0, 15)) {
+      let js;
+      try { js = await get(c); } catch { continue; }
+      endpoint ||= js.match(/https:\/\/content\.tinajs\.io\/[^"'\s]+/)?.[0];
+      token ||= js.match(/token["':\s]+["']([\w.-]{20,})["']/i)?.[1]
+        || js.match(/["']([0-9a-f]{30,})["'][^\n]{0,120}tina/i)?.[1];
+      if (endpoint && token) break;
+    }
+    if (!endpoint || !token) return [];
+    const res = await fetch(endpoint, {
+      method: "POST",
+      headers: { "content-type": "application/json", "x-api-key": token, "user-agent": UA },
+      body: JSON.stringify({ query: pp.query, variables: { ...(pp.variables || {}), first: 100 } }),
+      signal: AbortSignal.timeout(TIMEOUT_MS),
+    });
+    if (!res.ok) return [];
+    const j = await res.json();
+    return walkEventNodes(j.data ?? j, pageUrl).map((e) => ({ ...e, method: "next-data-paged" }));
+  } catch { return []; }
 }
 
 // ——— The Events Calendar (tribe) REST API ———
@@ -457,6 +497,7 @@ async function harvestUrl(venue, pageUrl, snapTag) {
   const { html, url } = await getWithHostRetry(pageUrl);
   snapshot(venue.id, snapTag, html);
   let events = extractFromHtml(html, url);
+  if (events.length && events[0].method === "next-data") events.push(...await tinaPaginateAll(html, url));
   if (events.length === 0) events = await eventsFromTribeApi(html, url);
   if (events.length === 0) {
     const icsUrl = discoverIcsUrl(html, url);
@@ -496,7 +537,7 @@ async function harvestEventIndex(html, pageUrl) {
   }
   if (slugs.size < 5) return [];
   const out = [];
-  await Promise.all([...slugs].slice(0, 20).map(async (link) => {
+  await Promise.all([...slugs].slice(0, 40).map(async (link) => {
     try { out.push(...extractFromHtml(await get(link), link)); } catch { /* skip */ }
   }));
   return out;
@@ -509,9 +550,9 @@ async function refreshVenue(venue) {
     let events = [];
     let fetchedAny = false;
     let lastErr = null;
-    for (let u = 0; u < urls.length && events.length === 0; u++) {
+    for (let u = 0; u < urls.length; u++) {
       try {
-        events = await harvestUrl(venue, urls[u], u ? `alt${u}-` : "");
+        events.push(...await harvestUrl(venue, urls[u], u ? `alt${u}-` : ""));
         fetchedAny = true;
       } catch (err) { lastErr = err; }
     }
@@ -593,6 +634,38 @@ const out = {
   })),
   shows: results.flatMap(([, r]) => r.shows).sort((a, b) => a.date.localeCompare(b.date) || (a.time || "").localeCompare(b.time || "")),
 };
+
+// Cross-venue identification: when one venue's listing text identifies a band
+// as a tribute act (with a named artist), that identification follows the
+// band to its other shows — with the provenance recorded on each show.
+// Still zero inference: the source is always a venue's own published text.
+{
+  const known = new Map();
+  const segments = (band) => band
+    .split(/\s*(?:[-–—|:]|\bfeaturing\b|\bfeat\.?\s|\bw\/)\s*/i)
+    .map((s) => s.trim())
+    .filter((s) => s.length >= 6 && !/tribute|celebrating|free live music/i.test(s));
+  for (const s of out.shows) {
+    if (s.tributeEvidence && s.tributeTo) {
+      for (const seg of segments(s.band)) {
+        const k = seg.toLowerCase();
+        if (!known.has(k)) known.set(k, { to: s.tributeTo, from: s.venueId });
+      }
+    }
+  }
+  for (const s of out.shows) {
+    if (s.tributeEvidence) continue;
+    const hay = s.band.toLowerCase();
+    for (const [k, v] of known) {
+      if (hay.includes(k)) {
+        const venueName = VENUES.find((x) => x.id === v.from)?.name || v.from;
+        s.tributeTo = v.to;
+        s.tributeEvidence = `identified as a ${v.to} tribute by ${venueName}'s listing`;
+        break;
+      }
+    }
+  }
+}
 
 mkdirSync(dirname(OUT), { recursive: true });
 writeFileSync(OUT, JSON.stringify(out, null, 2) + "\n");
