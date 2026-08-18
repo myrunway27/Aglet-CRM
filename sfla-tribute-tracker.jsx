@@ -115,7 +115,7 @@ export default function TributeTracker() {
       {showPanel && venues.map((v) => {
         const st = STATUS[v.status] || STATUS.error;
         return (
-          <div className="vrow" key={v.id}>
+          <a className="vrow" key={v.id} href={v.calendarUrl} target="_blank" rel="noreferrer">
             <div>
               <b>{v.name}</b>
               <div className="dim">
@@ -124,8 +124,8 @@ export default function TributeTracker() {
                 {v.error && <span className="errnote"> — {v.error}</span>}
               </div>
             </div>
-            <a className="cal" href={v.calendarUrl} target="_blank" rel="noreferrer">calendar ↗</a>
-          </div>
+            <span className="cal">calendar ↗</span>
+          </a>
         );
       })}
 
@@ -158,7 +158,8 @@ const CSS = `
 .src{margin-top:4px;font-size:12px}
 .src a{color:#4ade80}
 .toggle{background:none;border:none;color:#fff;font-size:15px;font-weight:700;cursor:pointer;padding:0;margin:28px 0 10px;display:block}
-.vrow{display:flex;justify-content:space-between;align-items:center;gap:12px;background:#1a1d27;border:1px solid #2d3140;border-radius:10px;padding:10px 14px;margin-bottom:8px;font-size:14px}
+.vrow{display:flex;justify-content:space-between;align-items:center;gap:12px;background:#1a1d27;border:1px solid #2d3140;border-radius:10px;padding:10px 14px;margin-bottom:8px;font-size:14px;color:#e5e7eb;text-decoration:none;cursor:pointer}
+.vrow:hover{border-color:#9ca3af}
 .cal{font-size:12.5px;border:1px solid #3f4453;border-radius:8px;padding:6px 10px;white-space:nowrap}
 footer{margin-top:32px;font-size:12px;color:#6b7280;line-height:1.6;border-top:1px solid #2d3140;padding-top:14px}
 `;
