@@ -6,16 +6,27 @@ import { Stars } from "@/components/Stars";
 import { OwnerReplyForm } from "@/components/OwnerReplyForm";
 import { InviteForm } from "@/components/InviteForm";
 import { BadgeSnippet } from "@/components/BadgeSnippet";
-import { canReply, canInvite, tierName, MEMBERSHIP_NAME, TIERS } from "@/lib/membership";
+import {
+  canReply,
+  canInvite,
+  tierName,
+  MEMBERSHIP_NAME,
+  TIERS,
+  formatCents,
+  annualSavingCents,
+} from "@/lib/membership";
+import { billingConfigured } from "@/lib/stripe";
+import { PlanPicker } from "@/components/PlanPicker";
+import { ManageBilling } from "@/components/ManageBilling";
 
 export const dynamic = "force-dynamic";
 
 export default async function OwnerDashboard({
   searchParams,
 }: {
-  searchParams: Promise<{ claimed?: string }>;
+  searchParams: Promise<{ claimed?: string; joined?: string }>;
 }) {
-  const { claimed } = await searchParams;
+  const { claimed, joined } = await searchParams;
   const user = await getCurrentUser();
   if (!user) redirect("/login?next=/owner");
 
@@ -34,6 +45,15 @@ export default async function OwnerDashboard({
   const tier = tierName(user);
   const mayReply = canReply(user);
   const mayInvite = canInvite(user);
+  const payments = billingConfigured();
+  const plans = TIERS.map((t) => ({
+    id: t.id,
+    name: t.name,
+    monthly: formatCents(t.monthlyCents),
+    annual: formatCents(t.annualCents),
+    annualSaving: formatCents(annualSavingCents(t)),
+    features: t.features,
+  }));
 
   return (
     <div>
@@ -45,6 +65,15 @@ export default async function OwnerDashboard({
           </p>
         </div>
       )}
+      {joined && (
+        <div className="mt-4 bg-brand-50 border border-brand-100 rounded-xl p-4 text-sm">
+          <p className="font-medium text-brand-800">✓ You&apos;re a member — thank you.</p>
+          <p className="mt-1 text-stone-600">
+            Your receipt is on its way by email. If the plan below still looks unchanged, give it
+            a few seconds and refresh — Stripe confirms the payment to us in the background.
+          </p>
+        </div>
+      )}
       <h1 className="text-2xl font-bold mt-4">My businesses</h1>
       {businesses.length > 0 && (
         <div
@@ -53,38 +82,23 @@ export default async function OwnerDashboard({
           }`}
         >
           {tier ? (
+            <>
             <p>
               <span className="font-semibold text-brand-800">✓ {MEMBERSHIP_NAME} — {tier}</span>{" "}
               <span className="text-stone-600">
                 {user.proUntil && `until ${user.proUntil.toLocaleDateString()}`}
               </span>
             </p>
+            {payments && user.stripeCustomerId && <ManageBilling />}
+            </>
           ) : (
             <>
               <p className="font-semibold">{MEMBERSHIP_NAME}</p>
-              <div className="mt-2 grid gap-2 sm:grid-cols-3">
-                {TIERS.map((t) => (
-                  <div key={t.id} className="rounded-lg border border-stone-200 bg-stone-50/60 p-3">
-                    <p className="font-semibold">{t.name} <span className="text-brand-700">{t.price}</span></p>
-                    <ul className="mt-1 space-y-0.5 text-xs text-stone-600">
-                      {t.features.map((f) => (
-                        <li key={f}>· {f}</li>
-                      ))}
-                    </ul>
-                  </div>
-                ))}
-              </div>
+              <PlanPicker plans={plans} enabled={payments} />
               <p className="mt-2 text-xs text-stone-500">
                 Your listing, stats, disputes and rating badge are free forever. Membership never
                 touches your rating — scores are computed identically for everyone, sponsored
                 placement is always labelled, and money can never remove a review.
-              </p>
-              <p className="mt-2 text-stone-600">
-                To join, email{" "}
-                <a href="mailto:hello@truereview.me" className="text-brand-700 underline">
-                  hello@truereview.me
-                </a>{" "}
-                — online payment is coming.
               </p>
             </>
           )}

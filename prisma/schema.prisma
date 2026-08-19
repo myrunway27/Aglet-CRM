@@ -24,18 +24,22 @@ model User {
   verifyCodeExpiresAt DateTime?
   verifyCodeIssuedAt  DateTime?
 
-  sessions      Session[]
-  reviews       Review[]
-  helpfulVotes  HelpfulVote[]
-  ownerClaims   OwnerClaim[]
-  reports       Report[]
-  notifications Notification[]
+  sessions             Session[]
+  reviews              Review[]
+  helpfulVotes         HelpfulVote[]
+  ownerClaims          OwnerClaim[]
+  reports              Report[]
+  notifications        Notification[]
   // True Review for Business membership. Replying publicly and inviting
   // customers are member features; claiming, editing and disputing stay free.
   // Null = not a member. Set manually by an admin until payments exist.
-  proUntil      DateTime?
+  proUntil             DateTime?
   // "starter" | "growth" | "spotlight" — meaningful only while proUntil is future
-  proTier       String?
+  proTier              String?
+  // Stripe linkage. The customer is created on first checkout and reused, so
+  // one person keeps one billing identity across upgrades and cancellations.
+  stripeCustomerId     String?        @unique
+  stripeSubscriptionId String?
 
   // The user's own dietary line, e.g. ",cholov-yisroel,celiac," — every
   // search and listing is filtered/annotated against it. See src/lib/diet.ts
