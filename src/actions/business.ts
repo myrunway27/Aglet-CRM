@@ -9,6 +9,7 @@ import { storeTags } from "@/lib/tags";
 import { storeStandards } from "@/lib/diet";
 import { parseTimeToMinutes } from "@/lib/hours";
 import { refreshCityRanks } from "@/lib/rank";
+import { sendMail } from "@/lib/mailer";
 
 export type FormState = { error?: string } | undefined;
 
@@ -34,6 +35,7 @@ export async function addBusiness(_prev: FormState, formData: FormData): Promise
   const zip = String(formData.get("zip") ?? "").trim().slice(0, 12);
   const phone = String(formData.get("phone") ?? "").trim().slice(0, 30);
   const hours = String(formData.get("hours") ?? "").trim().slice(0, 200);
+  const contactEmail = String(formData.get("contactEmail") ?? "").trim().toLowerCase().slice(0, 120);
   let website = String(formData.get("website") ?? "").trim().slice(0, 120);
   if (website && !/^https?:\/\//i.test(website)) website = `https://${website}`;
 
@@ -71,6 +73,7 @@ export async function addBusiness(_prev: FormState, formData: FormData): Promise
       zip,
       phone,
       website,
+      contactEmail: /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(contactEmail) ? contactEmail : "",
       hours,
       slug: slugify(city ? `${name} ${city}` : name),
       addedById: user.id,
@@ -93,5 +96,26 @@ export async function addBusiness(_prev: FormState, formData: FormData): Promise
   }
 
   await refreshCityRanks(business.city, business.category);
+
+  // Tell the business it has been listed — once, ever. Claiming is free;
+  // membership is pitched for replies, not for control of the listing.
+  if (business.contactEmail) {
+    const base = process.env.APP_URL ?? "http://localhost:3000";
+    await sendMail(
+      business.contactEmail,
+      `${business.name} is now listed on True Review`,
+      `Hello,\n\n${business.name} has been added to True Review, a review site where ` +
+        `customers post 100% anonymously.\n\nYou can claim your listing for free — verify ` +
+        `you're the owner and you can correct your details, see your stats, and dispute ` +
+        `reviews with evidence:\n${base}/business/${business.slug}/claim\n\nMembers can ` +
+        `also reply publicly to reviews and invite their customers to write one.\n\n` +
+        `We won't email you about this again.\n\n— True Review · truereview.me`
+    );
+    await prisma.business.update({
+      where: { id: business.id },
+      data: { notifiedAt: new Date() },
+    });
+  }
+
   redirect(`/business/${business.slug}`);
 }

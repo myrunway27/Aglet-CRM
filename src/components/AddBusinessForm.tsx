@@ -13,6 +13,7 @@ type Candidate = {
   hours: string;
   phone: string;
   website: string;
+  email: string;
   label: string;
   lat?: number;
   lng?: number;
@@ -77,6 +78,7 @@ export function AddBusinessForm() {
     set("zip", c.zip);
     set("phone", c.phone);
     set("website", c.website);
+    set("contactEmail", c.email);
     set("hours", c.hours);
     if (c.lat) set("lat", String(c.lat));
     if (c.lng) set("lng", String(c.lng));
@@ -176,6 +178,14 @@ export function AddBusinessForm() {
             <label className="block">
               <span className="text-xs text-stone-600">Website</span>
               <input name="website" maxLength={120} placeholder="example.com" className={input} />
+            </label>
+          </div>
+          <div className="grid grid-cols-1 gap-2">
+            <label className="block">
+              <span className="text-xs text-stone-600">
+                Business email <span className="text-stone-400">— we&apos;ll let them know they&apos;ve been listed</span>
+              </span>
+              <input name="contactEmail" type="email" maxLength={120} className={input} />
             </label>
           </div>
         </div>

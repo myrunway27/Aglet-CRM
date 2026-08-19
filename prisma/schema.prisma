@@ -30,9 +30,16 @@ model User {
   ownerClaims   OwnerClaim[]
   reports       Report[]
   notifications Notification[]
+  // True Review for Business membership. Replying publicly and inviting
+  // customers are member features; claiming, editing and disputing stay free.
+  // Null = not a member. Set manually by an admin until payments exist.
+  proUntil      DateTime?
+  // "starter" | "growth" | "spotlight" — meaningful only while proUntil is future
+  proTier       String?
+
   // The user's own dietary line, e.g. ",cholov-yisroel,celiac," — every
   // search and listing is filtered/annotated against it. See src/lib/diet.ts
-  dietStandard  String         @default("")
+  dietStandard String @default("")
 
   addedBusinesses Business[]        @relation("AddedBy")
   ownedBusinesses Business[]        @relation("OwnedBy")
@@ -40,6 +47,7 @@ model User {
   lists           UserList[]
   confirmations   TagConfirmation[]
   reviewFlags     ReviewFlag[]
+  sentInvites     ReviewInvite[]    @relation("SentInvites")
 }
 
 model Notification {
@@ -87,18 +95,24 @@ model Business {
   tags        String @default("")
 
   // Location & contact, filled manually or via the OpenStreetMap lookup
-  address    String @default("")
-  zip        String @default("")
-  phone      String @default("")
-  website    String @default("")
+  address      String    @default("")
+  zip          String    @default("")
+  phone        String    @default("")
+  website      String    @default("")
   // Free-text opening hours, kept as a human-readable fallback/summary
-  hours      String @default("")
+  hours        String    @default("")
   // 1-4, shown as $ to $$$$; 0 = unknown
-  priceLevel Int    @default(0)
+  priceLevel   Int       @default(0)
+  // Contact email for the business itself (from the map lookup or whoever
+  // added it). Used once, to tell the business it has been listed.
+  contactEmail String    @default("")
+  // Set when the listing notification has been sent, so it never repeats.
+  notifiedAt   DateTime?
+
   // Kosher/halal certifying agency, e.g. "OU", "Star-K" — see src/lib/diet.ts
-  certifier  String @default("")
-  lat        Float?
-  lng        Float?
+  certifier String @default("")
+  lat       Float?
+  lng       Float?
 
   // Cached scores, recomputed on review write — see src/lib/rating.ts
   scoreAvg      Float     @default(0)
@@ -124,6 +138,7 @@ model Business {
   saves         Save[]
   listItems     ListItem[]
   confirmations TagConfirmation[]
+  invites       ReviewInvite[]
 
   @@index([category])
   @@index([city])
@@ -302,6 +317,27 @@ model OwnerClaim {
 
   @@unique([businessId, userId])
   @@index([status])
+}
+
+// An invitation an owner sent to a customer, asking for a review.
+//
+// Deliberately has no sentiment field and no way to target a subset: the FTC's
+// 2024 rule bans "review gating" — soliciting only customers you expect to be
+// happy — so an owner sends to a list and every recipient gets the same link.
+model ReviewInvite {
+  id         String    @id @default(cuid())
+  businessId String
+  ownerId    String
+  email      String
+  token      String    @unique
+  sentAt     DateTime  @default(now())
+  usedAt     DateTime?
+
+  business Business @relation(fields: [businessId], references: [id], onDelete: Cascade)
+  owner    User     @relation("SentInvites", fields: [ownerId], references: [id], onDelete: Cascade)
+
+  @@index([businessId, sentAt])
+  @@index([ownerId, sentAt])
 }
 
 // An owner disputing a review. Unlike Trustpilot, an unanswered dispute

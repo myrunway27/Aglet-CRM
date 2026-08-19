@@ -39,6 +39,7 @@ export async function GET(req: NextRequest) {
         zip: a.postcode ?? "",
         hours: r.extratags?.opening_hours ?? "",
         phone: r.extratags?.phone ?? r.extratags?.["contact:phone"] ?? "",
+        email: r.extratags?.email ?? r.extratags?.["contact:email"] ?? "",
         website: r.extratags?.website ?? r.extratags?.["contact:website"] ?? "",
         label: (r.display_name ?? "").split(",").slice(0, 4).join(",").trim(),
         lat: r.lat ? Number(r.lat) : undefined,

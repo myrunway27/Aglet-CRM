@@ -4,6 +4,7 @@ import { isTagSlug, parseTags, TAGS } from "@/lib/tags";
 import { isStandard, parseStandards } from "@/lib/diet";
 import { isOpenAt } from "@/lib/hours";
 import { getCurrentUser } from "@/lib/auth";
+import { canSpotlight } from "@/lib/membership";
 import { BusinessCard } from "@/components/BusinessCard";
 import { FilterBar } from "@/components/FilterBar";
 
@@ -71,6 +72,26 @@ export default async function HomePage({
     include: { openingHours: true },
     take: 200,
   });
+
+  // Spotlight members get one clearly-labelled sponsored card when someone
+  // is browsing their city. Never mixed into organic order, never unlabelled,
+  // and the score shown is the same one everyone else sees.
+  const cityBrowsed = q || businesses[0]?.city;
+  let sponsored: (typeof businesses)[number] | null = null;
+  if (businesses.length > 0) {
+    const candidates = await prisma.business.findMany({
+      where: {
+        id: { in: businesses.map((b) => b.id) },
+        owner: { isNot: null },
+      },
+      include: { owner: { select: { proUntil: true, proTier: true } }, openingHours: true },
+    });
+    const spotlit = candidates.filter((b) => canSpotlight(b.owner));
+    if (spotlit.length > 0) {
+      // rotate hourly between spotlight members rather than always the same one
+      sponsored = spotlit[new Date().getHours() % spotlit.length];
+    }
+  }
 
   const now = new Date();
   let withStats = businesses
@@ -160,6 +181,25 @@ export default async function HomePage({
       />
 
       {heading && <h2 className="mt-5 font-semibold text-lg">{heading}</h2>}
+
+      {sponsored && (
+        <div className="mt-4 relative">
+          <span className="absolute -top-2 left-3 z-10 text-[10px] font-semibold uppercase tracking-wider bg-star text-brand-900 px-2 py-0.5 rounded-full">
+            Sponsored
+          </span>
+          <BusinessCard
+            slug={sponsored.slug}
+            name={sponsored.name}
+            category={sponsored.category}
+            city={sponsored.city}
+            avgRating={sponsored.scoreCount > 0 ? sponsored.scoreAvg : null}
+            reviewCount={sponsored.scoreCount}
+            verifiedOwner={true}
+            tags={parseTags(sponsored.tags)}
+            priceLevel={sponsored.priceLevel}
+          />
+        </div>
+      )}
 
       <section className="mt-4 grid gap-3 sm:grid-cols-2">
         {withStats.map((b) => (

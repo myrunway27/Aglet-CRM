@@ -69,3 +69,22 @@ export async function moderateReview(reviewId: string, action: "hide" | "clear")
   revalidatePath("/admin");
   revalidatePath(`/business/${review.business.slug}`);
 }
+
+// Grant or revoke business membership. Manual until a payment provider is
+// connected; months <= 0 revokes.
+export async function setMembership(
+  userId: string,
+  months: number,
+  tier: "starter" | "growth" | "spotlight" = "starter"
+) {
+  await requireAdmin();
+  const active = months > 0;
+  await prisma.user.update({
+    where: { id: userId },
+    data: {
+      proUntil: active ? new Date(Date.now() + months * 30 * 24 * 60 * 60 * 1000) : null,
+      proTier: active ? tier : null,
+    },
+  });
+  revalidatePath("/admin");
+}

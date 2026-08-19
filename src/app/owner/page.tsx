@@ -4,6 +4,9 @@ import { prisma } from "@/lib/db";
 import { getCurrentUser } from "@/lib/auth";
 import { Stars } from "@/components/Stars";
 import { OwnerReplyForm } from "@/components/OwnerReplyForm";
+import { InviteForm } from "@/components/InviteForm";
+import { BadgeSnippet } from "@/components/BadgeSnippet";
+import { canReply, canInvite, tierName, MEMBERSHIP_NAME, TIERS } from "@/lib/membership";
 
 export const dynamic = "force-dynamic";
 
@@ -28,6 +31,10 @@ export default async function OwnerDashboard({
     },
   });
 
+  const tier = tierName(user);
+  const mayReply = canReply(user);
+  const mayInvite = canInvite(user);
+
   return (
     <div>
       {claimed && (
@@ -39,6 +46,50 @@ export default async function OwnerDashboard({
         </div>
       )}
       <h1 className="text-2xl font-bold mt-4">My businesses</h1>
+      {businesses.length > 0 && (
+        <div
+          className={`mt-3 rounded-xl border p-4 text-sm ${
+            tier ? "bg-brand-50 border-brand-100" : "bg-white border-stone-200"
+          }`}
+        >
+          {tier ? (
+            <p>
+              <span className="font-semibold text-brand-800">✓ {MEMBERSHIP_NAME} — {tier}</span>{" "}
+              <span className="text-stone-600">
+                {user.proUntil && `until ${user.proUntil.toLocaleDateString()}`}
+              </span>
+            </p>
+          ) : (
+            <>
+              <p className="font-semibold">{MEMBERSHIP_NAME}</p>
+              <div className="mt-2 grid gap-2 sm:grid-cols-3">
+                {TIERS.map((t) => (
+                  <div key={t.id} className="rounded-lg border border-stone-200 bg-stone-50/60 p-3">
+                    <p className="font-semibold">{t.name} <span className="text-brand-700">{t.price}</span></p>
+                    <ul className="mt-1 space-y-0.5 text-xs text-stone-600">
+                      {t.features.map((f) => (
+                        <li key={f}>· {f}</li>
+                      ))}
+                    </ul>
+                  </div>
+                ))}
+              </div>
+              <p className="mt-2 text-xs text-stone-500">
+                Your listing, stats, disputes and rating badge are free forever. Membership never
+                touches your rating — scores are computed identically for everyone, sponsored
+                placement is always labelled, and money can never remove a review.
+              </p>
+              <p className="mt-2 text-stone-600">
+                To join, email{" "}
+                <a href="mailto:hello@truereview.me" className="text-brand-700 underline">
+                  hello@truereview.me
+                </a>{" "}
+                — online payment is coming.
+              </p>
+            </>
+          )}
+        </div>
+      )}
       <p className="text-sm text-stone-600 mt-1">
         Reply publicly to reviews. Reviewers are anonymous — pen names are all anyone sees. If a
         review is genuinely wrong, use &ldquo;Dispute this review&rdquo; on the business page and
@@ -93,6 +144,24 @@ export default async function OwnerDashboard({
                 Your score is temporarily on hold after an unusual burst of reviews. A moderator is
                 looking — nothing has been deleted.
               </p>
+            )}
+            <details className="mt-3 rounded-lg border border-stone-200 bg-stone-50/60 p-3">
+              <summary className="text-sm font-medium cursor-pointer">
+                Your rating badge <span className="text-stone-400 font-normal">— for your website</span>
+              </summary>
+              <div className="mt-2">
+                <BadgeSnippet slug={b.slug} />
+              </div>
+            </details>
+            {mayInvite && (
+              <details className="mt-2 rounded-lg border border-stone-200 bg-stone-50/60 p-3">
+                <summary className="text-sm font-medium cursor-pointer">
+                  Invite customers to review
+                </summary>
+                <div className="mt-2">
+                  <InviteForm businessId={b.id} />
+                </div>
+              </details>
             )}
             <div className="mt-3 space-y-3">
               {b.reviews.map((r) => (

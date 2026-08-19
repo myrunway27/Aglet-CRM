@@ -8,6 +8,7 @@ import { getCurrentUser, VERIFY_REQUIRED_ERROR } from "@/lib/auth";
 import { emailMatchesBusiness } from "@/lib/claims";
 import { sendMail } from "@/lib/mailer";
 import { notifyUser } from "@/lib/notify";
+import { canReply, MEMBERSHIP_NAME } from "@/lib/membership";
 
 export type FormState = { error?: string; ok?: boolean } | undefined;
 export type ClaimEmailState =
@@ -189,6 +190,11 @@ export async function replyToReview(_prev: FormState, formData: FormData): Promi
   if (!review) return { error: "Review not found." };
   if (review.business.ownerId !== user.id) {
     return { error: "Only the verified owner of this business can reply." };
+  }
+  if (!canReply(user)) {
+    return {
+      error: `Public replies start with the Starter plan ($9.99/mo). Your listing, stats and disputes stay free.`,
+    };
   }
 
   await prisma.ownerReply.upsert({
