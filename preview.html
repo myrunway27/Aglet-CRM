@@ -1,0 +1,2088 @@
+<title>Delta Woodworks Redesign</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+/* ==========================================================================
+   Delta Woodworks — design system
+   Warm, material-forward, editorial. Built to read as a mill, not a showroom.
+   ========================================================================== */
+
+:root {
+  /* Ground */
+  --bone:       #F7F4EF;
+  --paper:      #FFFFFF;
+  --paper-2:    #FBF9F5;
+  --line:       #E4DED4;
+  --line-soft:  #EFEAE1;
+
+  /* Ink */
+  --ink:        #191412;
+  --ink-2:      #453D37;
+  --muted:      #7B7268;
+
+  /* Wood + metal */
+  --walnut:     #6B4A2F;
+  --walnut-dk:  #503522;
+  --brass:      #A9752F;
+  --brass-lt:   #C79A55;
+  --sage:       #55655A;
+
+  /* Semantic */
+  --bg:         var(--bone);
+  --surface:    var(--paper);
+  --surface-2:  var(--paper-2);
+  --text:       var(--ink);
+  --text-2:     var(--ink-2);
+  --text-3:     var(--muted);
+  --border:     var(--line);
+  --border-2:   var(--line-soft);
+  --accent:     var(--walnut);
+  --accent-2:   var(--brass);
+  --on-accent:  #FDFBF7;
+  --band:       #221A15;
+  --band-text:  #EFE8DC;
+  --band-muted: #A99A88;
+  --band-line:  #3A2E26;
+
+  --shadow-sm:  0 1px 2px rgba(25,20,18,.06), 0 2px 8px rgba(25,20,18,.04);
+  --shadow-md:  0 2px 6px rgba(25,20,18,.07), 0 12px 28px rgba(25,20,18,.07);
+
+  --radius:     4px;
+  --radius-lg:  8px;
+
+  --wrap:       1180px;
+  --wrap-narrow: 760px;
+
+  --font-display: "Fraunces", "Iowan Old Style", Georgia, "Times New Roman", serif;
+  --font-body:    "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg:        #15100D;
+    --surface:   #1E1815;
+    --surface-2: #241D19;
+    --text:      #F3EDE3;
+    --text-2:    #CDC3B6;
+    --text-3:    #9A8F82;
+    --border:    #362C25;
+    --border-2:  #2B231D;
+    --accent:    #C79A55;
+    --accent-2:  #D8AE69;
+    --on-accent: #1A130E;
+    --band:      #0F0B09;
+    --band-text: #F3EDE3;
+    --band-muted:#9A8F82;
+    --band-line: #2B231D;
+    --shadow-sm: 0 1px 2px rgba(0,0,0,.4), 0 2px 8px rgba(0,0,0,.3);
+    --shadow-md: 0 2px 6px rgba(0,0,0,.45), 0 12px 28px rgba(0,0,0,.4);
+  }
+}
+
+:root[data-theme="dark"] {
+  --bg:        #15100D;
+  --surface:   #1E1815;
+  --surface-2: #241D19;
+  --text:      #F3EDE3;
+  --text-2:    #CDC3B6;
+  --text-3:    #9A8F82;
+  --border:    #362C25;
+  --border-2:  #2B231D;
+  --accent:    #C79A55;
+  --accent-2:  #D8AE69;
+  --on-accent: #1A130E;
+  --band:      #0F0B09;
+  --band-text: #F3EDE3;
+  --band-muted:#9A8F82;
+  --band-line: #2B231D;
+  --shadow-sm: 0 1px 2px rgba(0,0,0,.4), 0 2px 8px rgba(0,0,0,.3);
+  --shadow-md: 0 2px 6px rgba(0,0,0,.45), 0 12px 28px rgba(0,0,0,.4);
+}
+
+/* --------------------------------------------------------------- base --- */
+
+*, *::before, *::after { box-sizing: border-box; }
+
+html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; }
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  * { animation-duration: .001ms !important; transition-duration: .001ms !important; }
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-body);
+  font-size: 17px;
+  line-height: 1.65;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+img { max-width: 100%; height: auto; display: block; }
+
+a { color: inherit; text-decoration-color: color-mix(in srgb, var(--accent) 55%, transparent); text-underline-offset: 3px; }
+a:hover { text-decoration-color: var(--accent); }
+
+h1, h2, h3, h4 {
+  font-family: var(--font-display);
+  font-weight: 600;
+  line-height: 1.12;
+  letter-spacing: -0.015em;
+  margin: 0 0 .5em;
+  font-variation-settings: "SOFT" 0, "WONK" 0, "opsz" 40;
+}
+h1 { font-size: clamp(2.3rem, 5.6vw, 3.9rem); letter-spacing: -0.028em; }
+h2 { font-size: clamp(1.75rem, 3.6vw, 2.6rem); letter-spacing: -0.022em; }
+h3 { font-size: clamp(1.15rem, 2vw, 1.4rem); letter-spacing: -0.012em; }
+p  { margin: 0 0 1.1em; color: var(--text-2); }
+
+::selection { background: color-mix(in srgb, var(--accent-2) 35%, transparent); }
+
+:focus-visible {
+  outline: 2px solid var(--accent-2);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+
+.wrap { width: 100%; max-width: var(--wrap); margin-inline: auto; padding-inline: 22px; }
+.wrap--narrow { max-width: var(--wrap-narrow); }
+
+.section { padding-block: clamp(56px, 8vw, 104px); }
+.section--tight { padding-block: clamp(40px, 5vw, 64px); }
+
+.eyebrow {
+  font-family: var(--font-body);
+  font-size: .74rem;
+  font-weight: 600;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  color: var(--accent-2);
+  margin: 0 0 .9rem;
+  display: flex;
+  align-items: center;
+  gap: .6rem;
+}
+.eyebrow::before {
+  content: "";
+  width: 26px; height: 1px;
+  background: currentColor;
+  opacity: .7;
+  flex: none;
+}
+.eyebrow--center { justify-content: center; }
+
+.lede { font-size: clamp(1.05rem, 1.7vw, 1.24rem); color: var(--text-2); line-height: 1.6; }
+
+.section__head { max-width: 62ch; margin-bottom: clamp(28px, 4vw, 48px); }
+.section__head--center { margin-inline: auto; text-align: center; }
+.section__head--center .eyebrow { justify-content: center; }
+
+/* ------------------------------------------------------------ buttons --- */
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: .5rem;
+  font-family: var(--font-body);
+  font-size: .95rem;
+  font-weight: 600;
+  letter-spacing: .005em;
+  padding: .82rem 1.35rem;
+  border-radius: var(--radius);
+  border: 1px solid transparent;
+  cursor: pointer;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: background-color .18s ease, border-color .18s ease, color .18s ease, transform .18s ease;
+}
+.btn:hover { transform: translateY(-1px); }
+.btn:active { transform: translateY(0); }
+
+.btn--primary {
+  background: var(--accent);
+  color: var(--on-accent);
+  border-color: var(--accent);
+}
+.btn--primary:hover { background: color-mix(in srgb, var(--accent) 86%, #000); border-color: color-mix(in srgb, var(--accent) 86%, #000); }
+
+.btn--ghost {
+  background: transparent;
+  color: var(--text);
+  border-color: var(--border);
+}
+.btn--ghost:hover { border-color: var(--accent); color: var(--accent); }
+
+.btn--onband {
+  background: transparent;
+  color: var(--band-text);
+  border-color: color-mix(in srgb, var(--band-text) 32%, transparent);
+}
+.btn--onband:hover { border-color: var(--band-text); }
+
+.btn--lg { padding: .98rem 1.7rem; font-size: 1rem; }
+.btn--block { width: 100%; }
+
+.btn-row { display: flex; flex-wrap: wrap; gap: .75rem; }
+
+/* -------------------------------------------------------------- chrome --- */
+
+.utility {
+  background: var(--band);
+  color: var(--band-muted);
+  font-size: .8rem;
+  border-bottom: 1px solid var(--band-line);
+}
+.utility .wrap {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: .5rem 1.4rem;
+  padding-block: .5rem;
+}
+.utility a { color: var(--band-text); text-decoration: none; font-weight: 500; }
+.utility a:hover { color: var(--accent-2); }
+.utility__sep { opacity: .35; }
+.utility__right { margin-left: auto; display: flex; gap: 1.2rem; align-items: center; }
+@media (max-width: 720px) { .utility__right { margin-left: 0; } }
+
+.masthead {
+  position: sticky;
+  top: 0;
+  z-index: 40;
+  background: color-mix(in srgb, var(--bg) 88%, transparent);
+  backdrop-filter: saturate(150%) blur(12px);
+  border-bottom: 1px solid var(--border);
+}
+.masthead .wrap {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  padding-block: .85rem;
+}
+
+.brand { display: flex; align-items: center; gap: .7rem; text-decoration: none; flex: none; }
+.brand__mark { width: 38px; height: 38px; flex: none; }
+.brand__name {
+  font-family: var(--font-display);
+  font-size: 1.16rem;
+  font-weight: 700;
+  letter-spacing: -.01em;
+  line-height: 1.05;
+  color: var(--text);
+  white-space: nowrap;
+}
+.brand__sub {
+  display: block;
+  font-family: var(--font-body);
+  font-size: .6rem;
+  font-weight: 600;
+  letter-spacing: .17em;
+  text-transform: uppercase;
+  color: var(--text-3);
+  margin-top: 2px;
+}
+
+.nav { display: flex; align-items: center; gap: 1.15rem; margin-left: auto; }
+.nav a {
+  font-size: .93rem;
+  font-weight: 500;
+  color: var(--text-2);
+  text-decoration: none;
+  padding-block: .3rem;
+  border-bottom: 1.5px solid transparent;
+  white-space: nowrap;
+}
+.nav a:hover, .nav a[aria-current="page"] { color: var(--text); border-bottom-color: var(--accent-2); }
+@media (max-width: 940px) { .nav { display: none; } }
+
+.masthead__cta { margin-left: auto; }
+@media (max-width: 940px) { .masthead__cta { margin-left: auto; } }
+@media (max-width: 520px) { .masthead__cta .btn { padding: .7rem 1rem; font-size: .88rem; } }
+
+/* ---------------------------------------------------------------- hero --- */
+
+.hero { position: relative; overflow: hidden; border-bottom: 1px solid var(--border); }
+.hero__grain { position: absolute; inset: 0; opacity: .5; pointer-events: none; }
+.hero .wrap { position: relative; }
+.hero__grid {
+  display: grid;
+  grid-template-columns: 1.05fr .95fr;
+  gap: clamp(32px, 5vw, 68px);
+  align-items: center;
+  padding-block: clamp(52px, 8vw, 104px);
+}
+@media (max-width: 900px) { .hero__grid { grid-template-columns: 1fr; } }
+
+.hero h1 { margin-bottom: .38em; }
+.hero__lede { font-size: clamp(1.06rem, 1.8vw, 1.26rem); max-width: 54ch; margin-bottom: 1.7rem; }
+.hero .btn-row { margin-bottom: 1.6rem; }
+
+.hero__note { font-size: .87rem; color: var(--text-3); display: flex; align-items: center; gap: .5rem; }
+
+/* -------------------------------------------------------------- trust --- */
+
+.trustbar {
+  background: var(--band);
+  color: var(--band-text);
+  border-block: 1px solid var(--band-line);
+}
+.trustbar ul {
+  list-style: none;
+  margin: 0;
+  padding-block: 1.05rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: .7rem clamp(1.2rem, 3vw, 2.6rem);
+  align-items: center;
+  justify-content: center;
+}
+.trustbar li {
+  display: flex;
+  align-items: center;
+  gap: .5rem;
+  font-size: .84rem;
+  font-weight: 600;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+  color: var(--band-text);
+  white-space: nowrap;
+}
+.trustbar svg { color: var(--accent-2); flex: none; }
+
+/* ------------------------------------------------------- photo shots --- */
+
+.shot { margin: 0; }
+.shot__frame {
+  position: relative;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  background: var(--surface-2);
+  overflow: hidden;
+  aspect-ratio: 4 / 3;
+  display: grid;
+  place-items: center;
+}
+.shot--tall .shot__frame { aspect-ratio: 3 / 4; }
+.shot--wide .shot__frame { aspect-ratio: 16 / 9; }
+.shot--square .shot__frame { aspect-ratio: 1 / 1; }
+
+.shot__grain { position: absolute; inset: 0; opacity: .85; }
+.shot__badge {
+  position: relative;
+  z-index: 1;
+  font-size: .68rem;
+  font-weight: 700;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  color: var(--text-3);
+  background: color-mix(in srgb, var(--surface) 84%, transparent);
+  border: 1px solid var(--border);
+  border-radius: 100px;
+  padding: .34rem .8rem;
+  backdrop-filter: blur(4px);
+}
+.shot__cap {
+  font-size: .82rem;
+  line-height: 1.45;
+  color: var(--text-3);
+  margin-top: .65rem;
+  padding-left: .7rem;
+  border-left: 2px solid var(--accent-2);
+}
+.shot__cap b { color: var(--text-2); font-weight: 600; }
+
+/* --------------------------------------------------------- comparison --- */
+
+.compare { border: 1px solid var(--border); border-radius: var(--radius-lg); overflow: hidden; background: var(--surface); box-shadow: var(--shadow-sm); }
+.compare__scroll { overflow-x: auto; }
+.compare table { width: 100%; border-collapse: collapse; min-width: 620px; }
+.compare th, .compare td { padding: 1rem 1.15rem; text-align: left; vertical-align: top; font-size: .95rem; border-bottom: 1px solid var(--border-2); }
+.compare thead th {
+  font-family: var(--font-body);
+  font-size: .74rem;
+  font-weight: 700;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--text-3);
+  background: var(--surface-2);
+  border-bottom: 1px solid var(--border);
+}
+.compare thead th:last-child { color: var(--accent); }
+.compare tbody th { font-weight: 600; color: var(--text); width: 27%; }
+.compare td { color: var(--text-2); }
+.compare td:last-child { color: var(--text); font-weight: 500; background: color-mix(in srgb, var(--accent-2) 7%, transparent); }
+.compare tbody tr:last-child th, .compare tbody tr:last-child td { border-bottom: 0; }
+
+/* -------------------------------------------------------------- cards --- */
+
+.grid { display: grid; gap: clamp(16px, 2.2vw, 26px); }
+.grid--2 { grid-template-columns: repeat(2, 1fr); }
+.grid--3 { grid-template-columns: repeat(3, 1fr); }
+.grid--4 { grid-template-columns: repeat(4, 1fr); }
+@media (max-width: 940px) { .grid--3, .grid--4 { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 620px) { .grid--2, .grid--3, .grid--4 { grid-template-columns: 1fr; } }
+
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: clamp(1.2rem, 2.2vw, 1.7rem);
+  box-shadow: var(--shadow-sm);
+}
+.card h3 { margin-bottom: .45rem; }
+.card p:last-child { margin-bottom: 0; }
+.card__icon { color: var(--accent-2); margin-bottom: .9rem; }
+
+.card--link { text-decoration: none; display: block; transition: border-color .18s ease, transform .18s ease, box-shadow .18s ease; }
+.card--link:hover { border-color: var(--accent-2); transform: translateY(-2px); box-shadow: var(--shadow-md); }
+.card__more { font-size: .88rem; font-weight: 600; color: var(--accent); display: inline-flex; align-items: center; gap: .35rem; }
+
+/* ------------------------------------------------------------- steps --- */
+
+.steps { list-style: none; margin: 0; padding: 0; display: grid; gap: 0; }
+.step {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 1.3rem;
+  padding-block: 1.5rem;
+  border-bottom: 1px solid var(--border-2);
+}
+.step:last-child { border-bottom: 0; }
+.step__num {
+  font-family: var(--font-display);
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--accent-2);
+  line-height: 1;
+  width: 2.6rem;
+  padding-top: .18rem;
+  font-variant-numeric: tabular-nums;
+}
+.step h3 { margin-bottom: .3rem; }
+.step p { margin-bottom: 0; }
+.step__meta {
+  display: inline-block;
+  margin-top: .55rem;
+  font-size: .76rem;
+  font-weight: 600;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--text-3);
+  border: 1px solid var(--border);
+  border-radius: 100px;
+  padding: .2rem .7rem;
+}
+
+/* ------------------------------------------------------------ pricing --- */
+
+.price-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: clamp(16px, 2vw, 22px); }
+@media (max-width: 860px) { .price-grid { grid-template-columns: 1fr; } }
+
+.tier {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: clamp(1.3rem, 2.4vw, 1.9rem);
+  display: flex;
+  flex-direction: column;
+  box-shadow: var(--shadow-sm);
+}
+.tier--featured { border-color: var(--accent-2); box-shadow: var(--shadow-md); position: relative; }
+.tier__flag {
+  position: absolute; top: -1px; right: 1.2rem;
+  background: var(--accent-2); color: var(--on-accent);
+  font-size: .66rem; font-weight: 700; letter-spacing: .12em; text-transform: uppercase;
+  padding: .28rem .7rem; border-radius: 0 0 var(--radius) var(--radius);
+}
+.tier__name { font-family: var(--font-display); font-size: 1.3rem; font-weight: 600; margin-bottom: .3rem; }
+.tier__range {
+  font-family: var(--font-display);
+  font-size: clamp(1.7rem, 3vw, 2.15rem);
+  font-weight: 600;
+  color: var(--accent);
+  line-height: 1.1;
+  letter-spacing: -.02em;
+  margin-block: .4rem .1rem;
+}
+.tier__unit { font-size: .82rem; color: var(--text-3); margin-bottom: 1rem; }
+.tier ul { list-style: none; margin: 0 0 1.3rem; padding: 0; display: grid; gap: .55rem; }
+.tier li { font-size: .92rem; color: var(--text-2); display: grid; grid-template-columns: auto 1fr; gap: .6rem; align-items: start; }
+.tier li svg { color: var(--accent-2); margin-top: .28rem; flex: none; }
+.tier .btn { margin-top: auto; }
+
+.note {
+  border-left: 3px solid var(--accent-2);
+  background: color-mix(in srgb, var(--accent-2) 8%, transparent);
+  padding: 1rem 1.2rem;
+  border-radius: 0 var(--radius) var(--radius) 0;
+  font-size: .93rem;
+  color: var(--text-2);
+}
+.note strong { color: var(--text); }
+.note p:last-child { margin-bottom: 0; }
+
+/* ------------------------------------------------------------- bands --- */
+
+.band { background: var(--band); color: var(--band-text); }
+.band h2, .band h3 { color: var(--band-text); }
+.band p { color: var(--band-muted); }
+.band .eyebrow { color: var(--accent-2); }
+.band .card { background: color-mix(in srgb, var(--band-text) 5%, transparent); border-color: var(--band-line); box-shadow: none; }
+.band .card h3 { color: var(--band-text); }
+.band .card p { color: var(--band-muted); }
+
+/* ------------------------------------------------------------ quotes --- */
+
+.quote {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: clamp(1.2rem, 2.2vw, 1.6rem);
+  display: flex;
+  flex-direction: column;
+  gap: .85rem;
+  box-shadow: var(--shadow-sm);
+}
+.quote__stars { color: var(--accent-2); display: flex; gap: 2px; }
+.quote blockquote { margin: 0; font-size: 1rem; line-height: 1.6; color: var(--text); }
+.quote figcaption { font-size: .85rem; color: var(--text-3); margin-top: auto; }
+.quote figcaption b { color: var(--text-2); font-weight: 600; }
+
+/* --------------------------------------------------------------- faq --- */
+
+.faq { border-top: 1px solid var(--border); }
+.faq details {
+  border-bottom: 1px solid var(--border);
+  padding-block: .3rem;
+}
+.faq summary {
+  cursor: pointer;
+  list-style: none;
+  padding-block: 1.05rem;
+  padding-right: 2.2rem;
+  position: relative;
+  font-family: var(--font-display);
+  font-size: clamp(1.03rem, 1.6vw, 1.16rem);
+  font-weight: 600;
+  color: var(--text);
+  line-height: 1.35;
+}
+.faq summary::-webkit-details-marker { display: none; }
+.faq summary::after {
+  content: "";
+  position: absolute;
+  right: .35rem; top: 50%;
+  width: 11px; height: 11px;
+  border-right: 2px solid var(--accent-2);
+  border-bottom: 2px solid var(--accent-2);
+  transform: translateY(-70%) rotate(45deg);
+  transition: transform .2s ease;
+}
+.faq details[open] summary::after { transform: translateY(-30%) rotate(-135deg); }
+.faq details > div { padding-bottom: 1.15rem; }
+.faq details p:last-child { margin-bottom: 0; }
+
+/* ------------------------------------------------------------ area --- */
+
+.area-hub {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: clamp(16px, 2vw, 24px);
+}
+@media (max-width: 860px) { .area-hub { grid-template-columns: 1fr; } }
+.area-hub .card ul { list-style: none; margin: .8rem 0 0; padding: 0; display: flex; flex-wrap: wrap; gap: .35rem .5rem; }
+.area-hub .card li { font-size: .84rem; color: var(--text-3); }
+.area-hub .card li::after { content: "·"; margin-left: .5rem; opacity: .5; }
+.area-hub .card li:last-child::after { content: ""; }
+
+/* ------------------------------------------------------------- final --- */
+
+.cta-final { text-align: center; }
+.cta-final .wrap { max-width: 720px; }
+.cta-final h2 { margin-bottom: .5rem; }
+.cta-final .btn-row { justify-content: center; margin-top: 1.6rem; }
+
+/* ------------------------------------------------------------ footer --- */
+
+.footer { background: var(--band); color: var(--band-muted); padding-block: clamp(40px, 6vw, 64px) 1.5rem; font-size: .92rem; }
+.footer a { color: var(--band-text); text-decoration: none; }
+.footer a:hover { color: var(--accent-2); }
+.footer__grid { display: grid; grid-template-columns: 1.4fr 1fr 1fr 1.2fr; gap: clamp(24px, 4vw, 44px); }
+@media (max-width: 860px) { .footer__grid { grid-template-columns: 1fr 1fr; } }
+@media (max-width: 520px) { .footer__grid { grid-template-columns: 1fr; } }
+.footer h4 {
+  font-family: var(--font-body);
+  font-size: .73rem; font-weight: 700; letter-spacing: .14em; text-transform: uppercase;
+  color: var(--band-text); margin: 0 0 .9rem;
+}
+.footer ul { list-style: none; margin: 0; padding: 0; display: grid; gap: .5rem; }
+.footer address { font-style: normal; line-height: 1.7; }
+.footer__brand .brand__name { color: var(--band-text); }
+.footer__brand p { color: var(--band-muted); margin-top: .9rem; max-width: 34ch; }
+.footer__social { display: flex; gap: .7rem; margin-top: 1rem; }
+.footer__social a {
+  width: 34px; height: 34px; display: grid; place-items: center;
+  border: 1px solid var(--band-line); border-radius: var(--radius);
+}
+.footer__social a:hover { border-color: var(--accent-2); }
+.footer__base {
+  margin-top: clamp(28px, 4vw, 44px);
+  padding-top: 1.3rem;
+  border-top: 1px solid var(--band-line);
+  display: flex; flex-wrap: wrap; gap: .6rem 1.4rem;
+  font-size: .83rem;
+}
+.footer__base .spacer { margin-left: auto; }
+@media (max-width: 620px) { .footer__base .spacer { margin-left: 0; } }
+
+/* ------------------------------------------------------- breadcrumbs --- */
+
+.crumbs { font-size: .84rem; color: var(--text-3); padding-block: 1rem 0; }
+.crumbs ol { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: .45rem; }
+.crumbs li::after { content: "/"; margin-left: .45rem; opacity: .5; }
+.crumbs li:last-child::after { content: ""; }
+.crumbs a { text-decoration: none; color: var(--text-3); }
+.crumbs a:hover { color: var(--accent); }
+
+/* --------------------------------------------------------- page hero --- */
+
+.phero { border-bottom: 1px solid var(--border); position: relative; overflow: hidden; }
+.phero__grain { position: absolute; inset: 0; opacity: .38; pointer-events: none; }
+.phero .wrap { position: relative; }
+.phero__inner { padding-block: clamp(34px, 5vw, 60px) clamp(40px, 6vw, 72px); max-width: 68ch; }
+.phero h1 { margin-bottom: .35em; }
+
+/* ------------------------------------------------------------- misc --- */
+
+.prose h2 { margin-top: 2.2em; }
+.prose h2:first-child { margin-top: 0; }
+.prose h3 { margin-top: 1.7em; }
+.prose ul, .prose ol { color: var(--text-2); padding-left: 1.2rem; margin-bottom: 1.2em; }
+.prose li { margin-bottom: .45em; }
+.prose li::marker { color: var(--accent-2); }
+
+.split { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(28px, 4vw, 56px); align-items: center; }
+.split--wide-left { grid-template-columns: 1.15fr .85fr; }
+@media (max-width: 880px) { .split, .split--wide-left { grid-template-columns: 1fr; } }
+
+.stat-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: clamp(14px, 2vw, 24px); }
+@media (max-width: 780px) { .stat-row { grid-template-columns: repeat(2, 1fr); } }
+.stat { border-left: 2px solid var(--accent-2); padding-left: 1rem; }
+.stat__num { font-family: var(--font-display); font-size: clamp(1.6rem, 3vw, 2.1rem); font-weight: 600; letter-spacing: -.02em; line-height: 1.1; color: var(--text); }
+.stat__lbl { font-size: .84rem; color: var(--text-3); margin-top: .2rem; }
+
+.skip {
+  position: absolute; left: -9999px;
+  background: var(--accent); color: var(--on-accent);
+  padding: .7rem 1.1rem; border-radius: var(--radius); z-index: 100;
+}
+.skip:focus { left: 12px; top: 12px; }
+
+.visually-hidden {
+  position: absolute; width: 1px; height: 1px;
+  padding: 0; margin: -1px; overflow: hidden;
+  clip: rect(0 0 0 0); white-space: nowrap; border: 0;
+}
+
+/* ------------------------------------------------- small-screen chrome --- */
+/* The brand lockup + CTA overflow a 390px viewport at full size. Let the
+   brand shrink, drop the secondary line, and tighten the button. */
+@media (max-width: 620px) {
+  .masthead .wrap { gap: .8rem; }
+  .brand { flex: 1 1 auto; min-width: 0; }
+  .brand__mark { width: 32px; height: 32px; }
+  .brand__name { font-size: 1.02rem; }
+  .brand__sub { display: none; }
+}
+@media (max-width: 400px) {
+  .masthead__cta .btn { padding: .62rem .82rem; font-size: .82rem; }
+}
+
+
+/* ---------------------------------------------------- preview chrome --- */
+body { padding-bottom: 78px; }
+
+.pv-banner {
+  background: var(--band);
+  color: var(--band-muted);
+  border-bottom: 1px solid var(--band-line);
+  font-family: var(--font-body);
+  font-size: .82rem;
+  line-height: 1.5;
+  padding: .8rem 0;
+}
+.pv-banner .wrap { display: flex; gap: .7rem; align-items: flex-start; }
+.pv-banner b { color: var(--accent-2); font-weight: 600; }
+
+.pv-switch {
+  position: fixed;
+  left: 0; right: 0; bottom: 0;
+  z-index: 90;
+  background: color-mix(in srgb, var(--bg) 92%, transparent);
+  backdrop-filter: saturate(160%) blur(14px);
+  border-top: 1px solid var(--border);
+  padding: .55rem 0 calc(.55rem + env(safe-area-inset-bottom, 0px));
+}
+.pv-switch__inner {
+  display: flex;
+  gap: .4rem;
+  overflow-x: auto;
+  scrollbar-width: none;
+  padding-inline: 14px;
+  max-width: var(--wrap);
+  margin-inline: auto;
+}
+.pv-switch__inner::-webkit-scrollbar { display: none; }
+.pv-switch button {
+  flex: none;
+  font-family: var(--font-body);
+  font-size: .85rem;
+  font-weight: 600;
+  color: var(--text-2);
+  background: transparent;
+  border: 1px solid var(--border);
+  border-radius: 100px;
+  padding: .5rem 1rem;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background-color .16s ease, color .16s ease, border-color .16s ease;
+}
+.pv-switch button:hover { border-color: var(--accent-2); color: var(--text); }
+.pv-switch button[aria-selected="true"] {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--on-accent);
+}
+.pv-switch__tag {
+  flex: none;
+  align-self: center;
+  font-size: .68rem;
+  font-weight: 700;
+  letter-spacing: .13em;
+  text-transform: uppercase;
+  color: var(--text-3);
+  padding-right: .5rem;
+  border-right: 1px solid var(--border);
+  margin-right: .3rem;
+}
+@media (max-width: 560px) { .pv-switch__tag { display: none; } }
+</style>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <defs>
+    <filter id="grain-a"><feTurbulence type="fractalNoise" baseFrequency="0.011 0.34" numOctaves="3" seed="11"/><feColorMatrix type="saturate" values="0"/></filter>
+    <filter id="grain-b"><feTurbulence type="fractalNoise" baseFrequency="0.014 0.29" numOctaves="4" seed="29"/><feColorMatrix type="saturate" values="0"/></filter>
+    <filter id="grain-c"><feTurbulence type="fractalNoise" baseFrequency="0.009 0.41" numOctaves="3" seed="47"/><feColorMatrix type="saturate" values="0"/></filter>
+
+    <symbol id="i-check" viewBox="0 0 16 16"><path d="M13.5 4.5 6.5 12 2.5 8" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="i-arrow" viewBox="0 0 16 16"><path d="M3 8h10M9 4l4 4-4 4" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="i-star" viewBox="0 0 16 16"><path d="m8 1.6 1.9 3.9 4.3.6-3.1 3 .7 4.3L8 11.4 4.2 13.4l.7-4.3-3.1-3 4.3-.6z" fill="currentColor"/></symbol>
+    <symbol id="i-pin" viewBox="0 0 16 16"><path d="M8 15s5-4.6 5-8.4A5 5 0 0 0 3 6.6C3 10.4 8 15 8 15Z" fill="none" stroke="currentColor" stroke-width="1.5"/><circle cx="8" cy="6.5" r="1.9" fill="currentColor"/></symbol>
+    <symbol id="i-clock" viewBox="0 0 16 16"><circle cx="8" cy="8" r="6.4" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M8 4.4V8l2.6 1.6" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></symbol>
+    <symbol id="i-phone" viewBox="0 0 16 16"><path d="M5.2 2.3 6.6 5 5.3 6.6a8.4 8.4 0 0 0 4.1 4.1L11 9.4l2.7 1.4-.6 2.4c-.2.6-.8 1-1.4.9C6.5 13.4 2.6 9.5 1.9 4.3c-.1-.6.3-1.2.9-1.4z" fill="currentColor"/></symbol>
+    <symbol id="i-mill" viewBox="0 0 20 20"><path d="M2.5 15.5h15M4.5 15.5V8l5.5-3.5L15.5 8v7.5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><path d="M7.8 15.5v-4h4.4v4" fill="none" stroke="currentColor" stroke-width="1.5"/></symbol>
+    <symbol id="i-shield" viewBox="0 0 20 20"><path d="M10 2.5 3.8 5v5c0 3.5 2.6 6.6 6.2 7.5 3.6-.9 6.2-4 6.2-7.5V5z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><path d="M7.4 9.9 9.3 12l3.5-3.8" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="i-ruler" viewBox="0 0 20 20"><rect x="2.2" y="6.6" width="15.6" height="6.8" rx="1" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M6 6.6v2.6M10 6.6v3.6M14 6.6v2.6" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></symbol>
+    <symbol id="i-drop" viewBox="0 0 20 20"><path d="M10 2.6c3.2 3.6 5 6.2 5 8.4a5 5 0 0 1-10 0c0-2.2 1.8-4.8 5-8.4Z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></symbol>
+    <symbol id="i-box" viewBox="0 0 20 20"><path d="M10 2.6 17 6v8l-7 3.4L3 14V6z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><path d="M3 6l7 3.4L17 6M10 9.4v8" fill="none" stroke="currentColor" stroke-width="1.4"/></symbol>
+    <symbol id="i-ig" viewBox="0 0 20 20"><rect x="3.6" y="3.6" width="12.8" height="12.8" rx="4" fill="none" stroke="currentColor" stroke-width="1.5"/><circle cx="10" cy="10" r="3.1" fill="none" stroke="currentColor" stroke-width="1.5"/><circle cx="13.9" cy="6.1" r="1" fill="currentColor"/></symbol>
+    <symbol id="i-fb" viewBox="0 0 20 20"><path d="M11.6 17V10.6h2.2l.4-2.6h-2.6V6.4c0-.8.2-1.3 1.3-1.3h1.4V2.8c-.2 0-1.1-.1-2.1-.1-2.1 0-3.5 1.3-3.5 3.6v2H6.4v2.6h2.3V17z" fill="currentColor"/></symbol>
+    <symbol id="i-pin-social" viewBox="0 0 20 20"><path d="M10 2.5a7.5 7.5 0 0 0-2.7 14.5c-.1-.6-.1-1.5 0-2.2l1-4.2s-.2-.5-.2-1.2c0-1.2.7-2 1.5-2 .7 0 1 .5 1 1.2 0 .7-.5 1.8-.7 2.8-.2.8.4 1.5 1.2 1.5 1.5 0 2.6-1.9 2.6-4.2 0-1.7-1.2-3-3.3-3-2.4 0-3.8 1.8-3.8 3.6 0 .7.3 1.5.6 1.9.1.1.1.2.1.2l-.2.8c0 .1-.1.2-.3.1-1-.5-1.6-2-1.6-3.1 0-2.5 1.8-4.9 5.3-4.9 2.8 0 4.9 2 4.9 4.6 0 2.8-1.7 5-4.2 5-.8 0-1.6-.4-1.9-.9l-.5 2c-.2.7-.6 1.5-.9 2 .7.2 1.4.3 2.1.3a7.5 7.5 0 0 0 0-15Z" fill="currentColor"/></symbol>
+
+    <symbol id="logo-delta" viewBox="0 0 40 40">
+      <rect x="1" y="1" width="38" height="38" rx="4" fill="none" stroke="currentColor" stroke-width="1.6" opacity=".55"/>
+      <path d="M20 8.5 31 29.5H9z" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"/>
+      <path d="M13.6 24.5h12.8M16.4 19.2h7.2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" opacity=".65"/>
+    </symbol>
+  </defs>
+</svg>
+
+<div class="pv-banner">
+  <div class="wrap">
+    <span aria-hidden="true">◆</span>
+    <span><b>Design mockup.</b> Photography is placeholder — each frame carries the shot it needs. Pricing ranges are market-derived placeholders to be replaced with Delta's real numbers. Everything else is production-ready copy and markup.</span>
+  </div>
+</div>
+
+<section class="pv-page" id="pv-home">
+<!-- ============================================================ sprite -->
+
+
+<!-- =========================================================== utility -->
+<div class="utility">
+  <div class="wrap">
+    <span><svg width="13" height="13" aria-hidden="true"><use href="#i-pin"/></svg> 2416 S Andrews Ave, Fort Lauderdale</span>
+    <span class="utility__sep" aria-hidden="true">|</span>
+    <span><svg width="13" height="13" aria-hidden="true"><use href="#i-clock"/></svg> Mon–Thu 9–6 · Fri 9–5</span>
+    <span class="utility__right">
+      <a href="tel:+19549398579"><svg width="13" height="13" aria-hidden="true"><use href="#i-phone"/></svg> (954) 939-8579</a>
+    </span>
+  </div>
+</div>
+
+<!-- ========================================================== masthead -->
+<header class="masthead">
+  <div class="wrap">
+    <a class="brand" href="#pv-home">
+      <svg class="brand__mark" viewBox="0 0 40 40" aria-hidden="true" style="color:var(--accent)"><use href="#logo-delta"/></svg>
+      <span>
+        <span class="brand__name">Delta Woodworks</span>
+        <span class="brand__sub">Fort Lauderdale Mill · Est. 2001</span>
+      </span>
+    </a>
+    <nav class="nav" aria-label="Primary">
+      <a href="#pv-kitchens">Kitchens</a>
+      <a href="#services">Baths &amp; Closets</a>
+      <a href="#services">Commercial</a>
+      <a href="#mill">Our Mill</a>
+      <a href="#work">Portfolio</a>
+      <a href="#pv-pricing">Pricing</a>
+    </nav>
+    <span class="masthead__cta"><a class="btn btn--primary" href="#book">Book a showroom visit</a></span>
+  </div>
+</header>
+
+<main id="main">
+
+<!-- ============================================================== hero -->
+<section class="hero">
+  <svg class="hero__grain" aria-hidden="true" preserveAspectRatio="none" style="width:100%;height:100%">
+    <rect width="100%" height="100%" filter="url(#grain-a)" opacity=".13"/>
+  </svg>
+  <div class="wrap">
+    <div class="hero__grid">
+      <div>
+        <p class="eyebrow">Our own mill · Nothing imported</p>
+        <h1>Custom kitchen cabinets, milled in Fort Lauderdale</h1>
+        <p class="hero__lede">Almost every cabinet showroom in South Florida sells you a box somebody else built. We design it, mill it, finish it and install it ourselves — on South Andrews Avenue, in four to eight weeks.</p>
+        <div class="btn-row">
+          <a class="btn btn--primary btn--lg" href="#book">Book a showroom visit</a>
+          <a class="btn btn--ghost btn--lg" href="#pv-pricing">See what a kitchen costs</a>
+        </div>
+        <p class="hero__note">
+          <svg width="15" height="15" aria-hidden="true" style="color:var(--accent-2)"><use href="#i-check"/></svg>
+          Free in-home measure and 3D design proposal · No obligation
+        </p>
+      </div>
+      <figure class="shot shot--tall">
+        <div class="shot__frame">
+          <svg class="shot__grain" aria-hidden="true" preserveAspectRatio="none" style="width:100%;height:100%">
+            <rect width="100%" height="100%" filter="url(#grain-b)" opacity=".2"/>
+          </svg>
+          <span class="shot__badge">Hero photograph</span>
+        </div>
+        <figcaption class="shot__cap"><b>Shot list:</b> the mill floor mid-run — a walnut door blank on the CNC, sawdust in raking afternoon light, one of the founders in frame. Vertical crop. This single image carries the entire positioning; do not substitute a stock kitchen.</figcaption>
+      </figure>
+    </div>
+  </div>
+</section>
+
+<!-- ========================================================== trustbar -->
+<div class="trustbar">
+  <div class="wrap">
+    <ul>
+      <li><svg width="15" height="15" aria-hidden="true"><use href="#i-check"/></svg> 25+ years</li>
+      <li><svg width="15" height="15" aria-hidden="true"><use href="#i-shield"/></svg> Veteran-founded</li>
+      <li><svg width="15" height="15" aria-hidden="true"><use href="#i-mill"/></svg> Milled in the USA</li>
+      <li><svg width="15" height="15" aria-hidden="true"><use href="#i-box"/></svg> Columbia Forest plywood</li>
+      <li><svg width="15" height="15" aria-hidden="true"><use href="#i-check"/></svg> Blum soft-close</li>
+      <li><svg width="15" height="15" aria-hidden="true"><use href="#i-clock"/></svg> 4–8 week lead time</li>
+    </ul>
+  </div>
+</div>
+
+<!-- ============================================================== mill -->
+<section class="section" id="mill">
+  <div class="wrap">
+    <div class="section__head">
+      <p class="eyebrow">The difference</p>
+      <h2>Most cabinet showrooms in South Florida don't own a saw</h2>
+      <p class="lede">They take your measurements, mark up a catalogue order, and wait on a truck. When the boxes arrive an inch short, you get filler strips. We have never worked that way — because we started as a mill and we still are one.</p>
+    </div>
+
+    <div class="compare">
+      <div class="compare__scroll">
+        <table>
+          <caption class="visually-hidden">Comparison of a typical cabinet showroom and Delta Woodworks</caption>
+          <thead>
+            <tr>
+              <th scope="col">&nbsp;</th>
+              <th scope="col">Typical showroom or dealer</th>
+              <th scope="col">Delta Woodworks</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <th scope="row">Who actually builds it</th>
+              <td>A factory in another state — or another country</td>
+              <td>Our mill at 2416 S Andrews Ave</td>
+            </tr>
+            <tr>
+              <th scope="row">How it's sized</th>
+              <td>Standard boxes; gaps closed with filler strips</td>
+              <td>Every box cut to your walls, to the sixteenth</td>
+            </tr>
+            <tr>
+              <th scope="row">Changing something mid-build</th>
+              <td>Cancel, re-order, restart the lead time</td>
+              <td>We walk it back onto the shop floor</td>
+            </tr>
+            <tr>
+              <th scope="row">Lead time</th>
+              <td>8–16 weeks, plus freight and damage claims</td>
+              <td>4–8 weeks, ten minutes from your house</td>
+            </tr>
+            <tr>
+              <th scope="row">Who installs it</th>
+              <td>A subcontracted crew meeting you for the first time</td>
+              <td>The crew that built it</td>
+            </tr>
+            <tr>
+              <th scope="row">A door sags in year three</th>
+              <td>File a manufacturer warranty claim, wait</td>
+              <td>Come back to the shop that made it</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="stat-row" style="margin-top:clamp(28px,4vw,44px)">
+      <div class="stat"><div class="stat__num">25+</div><div class="stat__lbl">Years milling in South Florida</div></div>
+      <div class="stat"><div class="stat__num">100%</div><div class="stat__lbl">Built in our own shop</div></div>
+      <div class="stat"><div class="stat__num">4–8</div><div class="stat__lbl">Weeks, design to installed</div></div>
+      <div class="stat"><div class="stat__num">2</div><div class="stat__lbl">Ex-soldiers who founded it</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- =========================================================== process -->
+<section class="section band" id="process">
+  <div class="wrap">
+    <div class="split split--wide-left">
+      <div>
+        <p class="eyebrow">How it goes</p>
+        <h2>You see the finished kitchen before we cut a board</h2>
+        <p>Our engineers model your project in 3D and price it as a fixed proposal. No allowances that drift, no "we'll figure out the island later." What you approve on screen is what our crew installs.</p>
+        <div class="btn-row" style="margin-top:1.2rem">
+          <a class="btn btn--onband" href="#book">Start with a measure</a>
+        </div>
+      </div>
+      <ol class="steps">
+        <li class="step">
+          <span class="step__num">01</span>
+          <div>
+            <h3>Showroom visit or in-home measure</h3>
+            <p>Come see doors, drawer boxes and finishes in person, or we come to you. Either way it's free.</p>
+            <span class="step__meta">Week 1</span>
+          </div>
+        </li>
+        <li class="step">
+          <span class="step__num">02</span>
+          <div>
+            <h3>3D model and a fixed proposal</h3>
+            <p>Every elevation drawn, every pull placed, every dollar accounted for before you commit.</p>
+            <span class="step__meta">Week 1–2</span>
+          </div>
+        </li>
+        <li class="step">
+          <span class="step__num">03</span>
+          <div>
+            <h3>Materials chosen for a Florida house</h3>
+            <p>Species, plywood and finish selected against 90% summer humidity — not against a catalogue.</p>
+            <span class="step__meta">Week 2</span>
+          </div>
+        </li>
+        <li class="step">
+          <span class="step__num">04</span>
+          <div>
+            <h3>Milled and finished on Andrews Ave</h3>
+            <p>Cut, assembled, sanded and sprayed in our shop. You're welcome to walk the floor and see it.</p>
+            <span class="step__meta">Week 3–7</span>
+          </div>
+        </li>
+        <li class="step">
+          <span class="step__num">05</span>
+          <div>
+            <h3>Installed by our own crew</h3>
+            <p>Scribed to your walls, hardware adjusted, punch list closed before we leave.</p>
+            <span class="step__meta">Week 4–8</span>
+          </div>
+        </li>
+      </ol>
+    </div>
+  </div>
+</section>
+
+<!-- ========================================================== services -->
+<section class="section" id="services">
+  <div class="wrap">
+    <div class="section__head">
+      <p class="eyebrow">What we build</p>
+      <h2>Cabinetry and millwork, residential and commercial</h2>
+    </div>
+    <div class="grid grid--4">
+      <a class="card card--link" href="#pv-kitchens">
+        <div class="card__icon"><svg width="26" height="26" aria-hidden="true"><use href="#i-mill"/></svg></div>
+        <h3>Custom kitchens</h3>
+        <p>Full kitchens milled to your walls — islands, pantries, appliance panels, hoods.</p>
+        <span class="card__more">Explore kitchens <svg width="14" height="14" aria-hidden="true"><use href="#i-arrow"/></svg></span>
+      </a>
+      <div class="card">
+        <div class="card__icon"><svg width="26" height="26" aria-hidden="true"><use href="#i-drop"/></svg></div>
+        <h3>Baths &amp; vanities</h3>
+        <p>Floating vanities, linen towers and medicine cabinets built to survive a Florida bathroom.</p>
+      </div>
+      <div class="card">
+        <div class="card__icon"><svg width="26" height="26" aria-hidden="true"><use href="#i-box"/></svg></div>
+        <h3>Closets &amp; storage</h3>
+        <p>Walk-ins, mudrooms, garage systems and wall units — same shop, same hardware.</p>
+      </div>
+      <div class="card">
+        <div class="card__icon"><svg width="26" height="26" aria-hidden="true"><use href="#i-ruler"/></svg></div>
+        <h3>Commercial millwork</h3>
+        <p>Reception desks, retail fixtures and office casework, on a contractor's schedule.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========================================================= materials -->
+<section class="section" id="materials" style="background:var(--surface-2);border-block:1px solid var(--border)">
+  <div class="wrap">
+    <div class="split">
+      <figure class="shot shot--wide">
+        <div class="shot__frame">
+          <svg class="shot__grain" aria-hidden="true" preserveAspectRatio="none" style="width:100%;height:100%">
+            <rect width="100%" height="100%" filter="url(#grain-c)" opacity=".22"/>
+          </svg>
+          <span class="shot__badge">Detail photograph</span>
+        </div>
+        <figcaption class="shot__cap"><b>Shot list:</b> a drawer box pulled out on a Blum runner, dovetails visible, next to a cut edge of Columbia Forest plywood showing the ply count. Materials sell this section — shoot the edge, not the room.</figcaption>
+      </figure>
+      <div>
+        <p class="eyebrow">Built for the climate</p>
+        <h2>90% humidity is the real test</h2>
+        <p>South Florida summers sit at 75–90% relative humidity. Particleboard boxes swell, cheap veneers lift, and doors that fit in January bind in August. We build against that, every time:</p>
+        <ul class="prose" style="padding-left:0;list-style:none">
+          <li style="display:grid;grid-template-columns:auto 1fr;gap:.7rem"><svg width="16" height="16" style="color:var(--accent-2);margin-top:.35rem" aria-hidden="true"><use href="#i-check"/></svg> <span><b>Columbia Forest hardwood plywood</b> boxes — never particleboard, never MDF carcasses.</span></li>
+          <li style="display:grid;grid-template-columns:auto 1fr;gap:.7rem"><svg width="16" height="16" style="color:var(--accent-2);margin-top:.35rem" aria-hidden="true"><use href="#i-check"/></svg> <span><b>Blum soft-close</b> hinges and undermount runners, lifetime-warranted.</span></li>
+          <li style="display:grid;grid-template-columns:auto 1fr;gap:.7rem"><svg width="16" height="16" style="color:var(--accent-2);margin-top:.35rem" aria-hidden="true"><use href="#i-check"/></svg> <span><b>Species chosen for stability</b> — white oak, maple and sapele move far less here than cherry or hickory.</span></li>
+          <li style="display:grid;grid-template-columns:auto 1fr;gap:.7rem"><svg width="16" height="16" style="color:var(--accent-2);margin-top:.35rem" aria-hidden="true"><use href="#i-check"/></svg> <span><b>Conversion-varnish and low-VOC finishes</b> sprayed in our own booth, cured before they ship.</span></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- =========================================================== pricing -->
+<section class="section" id="pricing">
+  <div class="wrap">
+    <div class="section__head section__head--center">
+      <p class="eyebrow eyebrow--center">Straight answers</p>
+      <h2>What a custom kitchen actually costs</h2>
+      <p class="lede">Nobody else in this market will put a number on a page. We will — because the people who ask are serious, and the ones who aren't shouldn't have to sit through a showroom appointment to find out.</p>
+    </div>
+
+    <div class="price-grid">
+      <div class="tier">
+        <div class="tier__name">Refit</div>
+        <p style="font-size:.92rem">Same footprint, new cabinetry. The most common Fort Lauderdale condo project.</p>
+        <div class="tier__range">$650–$900</div>
+        <div class="tier__unit">per linear foot, installed</div>
+        <ul>
+          <li><svg width="15" height="15" aria-hidden="true"><use href="#i-check"/></svg> Plywood boxes, Blum hardware</li>
+          <li><svg width="15" height="15" aria-hidden="true"><use href="#i-check"/></svg> Painted or stained shaker</li>
+          <li><svg width="15" height="15" aria-hidden="true"><use href="#i-check"/></svg> Demo, install, haul-away</li>
+        </ul>
+        <a class="btn btn--ghost btn--block" href="#book">Get a fixed quote</a>
+      </div>
+
+      <div class="tier tier--featured">
+        <span class="tier__flag">Most projects</span>
+        <div class="tier__name">Full custom kitchen</div>
+        <p style="font-size:.92rem">New layout, island, hood, appliance panels — drawn from scratch for your walls.</p>
+        <div class="tier__range">$900–$1,400</div>
+        <div class="tier__unit">per linear foot, installed</div>
+        <ul>
+          <li><svg width="15" height="15" aria-hidden="true"><use href="#i-check"/></svg> 3D model and elevations</li>
+          <li><svg width="15" height="15" aria-hidden="true"><use href="#i-check"/></svg> Any species, any profile, any finish</li>
+          <li><svg width="15" height="15" aria-hidden="true"><use href="#i-check"/></svg> Integrated appliance panels &amp; hood</li>
+          <li><svg width="15" height="15" aria-hidden="true"><use href="#i-check"/></svg> Interior fit-out — dividers, inserts, lighting</li>
+        </ul>
+        <a class="btn btn--primary btn--block" href="#book">Book a showroom visit</a>
+      </div>
+
+      <div class="tier">
+        <div class="tier__name">Whole-home millwork</div>
+        <p style="font-size:.92rem">Kitchen, baths, closets, wall units and built-ins on one schedule and one crew.</p>
+        <div class="tier__range">From $45k</div>
+        <div class="tier__unit">typical project total</div>
+        <ul>
+          <li><svg width="15" height="15" aria-hidden="true"><use href="#i-check"/></svg> One point of contact throughout</li>
+          <li><svg width="15" height="15" aria-hidden="true"><use href="#i-check"/></svg> Sequenced around your GC</li>
+          <li><svg width="15" height="15" aria-hidden="true"><use href="#i-check"/></svg> Consistent species and finish, room to room</li>
+        </ul>
+        <a class="btn btn--ghost btn--block" href="#book">Talk it through</a>
+      </div>
+    </div>
+
+    <div class="note" style="margin-top:clamp(22px,3vw,32px)">
+      <p><strong>Design mockup note —</strong> these ranges are placeholders derived from published 2026 South Florida market data for custom cabinetry ($500–$1,500+ per linear foot installed). Replace them with Delta's real numbers before this page goes live. The strategic point stands regardless: no competitor in this market publishes pricing, and "cost" queries are the highest-intent traffic available.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================== work -->
+<section class="section" id="work" style="background:var(--surface-2);border-block:1px solid var(--border)">
+  <div class="wrap">
+    <div class="section__head">
+      <p class="eyebrow">Recent work</p>
+      <h2>Kitchens we milled this year</h2>
+      <p class="lede">Every project below was designed, built and installed by the same shop. Captions name the neighbourhood — that is what makes a portfolio rank locally.</p>
+    </div>
+    <div class="grid grid--3">
+      <figure class="shot shot--square">
+        <div class="shot__frame">
+          <svg class="shot__grain" aria-hidden="true" preserveAspectRatio="none" style="width:100%;height:100%"><rect width="100%" height="100%" filter="url(#grain-b)" opacity=".18"/></svg>
+          <span class="shot__badge">Project 01</span>
+        </div>
+        <figcaption class="shot__cap"><b>Rio Vista</b> — white oak island, painted perimeter. Caption every image with neighbourhood + species + door style.</figcaption>
+      </figure>
+      <figure class="shot shot--square">
+        <div class="shot__frame">
+          <svg class="shot__grain" aria-hidden="true" preserveAspectRatio="none" style="width:100%;height:100%"><rect width="100%" height="100%" filter="url(#grain-c)" opacity=".18"/></svg>
+          <span class="shot__badge">Project 02</span>
+        </div>
+        <figcaption class="shot__cap"><b>Las Olas Isles</b> — full-height sapele wall unit with integrated fridge panels.</figcaption>
+      </figure>
+      <figure class="shot shot--square">
+        <div class="shot__frame">
+          <svg class="shot__grain" aria-hidden="true" preserveAspectRatio="none" style="width:100%;height:100%"><rect width="100%" height="100%" filter="url(#grain-a)" opacity=".18"/></svg>
+          <span class="shot__badge">Project 03</span>
+        </div>
+        <figcaption class="shot__cap"><b>Victoria Park</b> — galley refit in a 1940s bungalow, scribed to plaster walls.</figcaption>
+      </figure>
+    </div>
+    <div class="btn-row" style="margin-top:2rem">
+      <a class="btn btn--ghost" href="#work">See the full portfolio <svg width="14" height="14" aria-hidden="true"><use href="#i-arrow"/></svg></a>
+    </div>
+  </div>
+</section>
+
+<!-- =========================================================== reviews -->
+<section class="section" id="reviews">
+  <div class="wrap">
+    <div class="section__head">
+      <p class="eyebrow">In their words</p>
+      <h2>What clients say</h2>
+    </div>
+    <div class="grid grid--3">
+      <figure class="quote">
+        <div class="quote__stars" aria-label="5 out of 5 stars">
+          <svg width="15" height="15" aria-hidden="true"><use href="#i-star"/></svg><svg width="15" height="15" aria-hidden="true"><use href="#i-star"/></svg><svg width="15" height="15" aria-hidden="true"><use href="#i-star"/></svg><svg width="15" height="15" aria-hidden="true"><use href="#i-star"/></svg><svg width="15" height="15" aria-hidden="true"><use href="#i-star"/></svg>
+        </div>
+        <blockquote>Everyone we dealt with there was great to work with from start to finish. Many contractors and vendors are not up to par, but Delta exceeded expectations.</blockquote>
+        <figcaption><b>Verified client</b> · Fort Lauderdale</figcaption>
+      </figure>
+      <figure class="quote">
+        <div class="quote__stars" aria-label="5 out of 5 stars">
+          <svg width="15" height="15" aria-hidden="true"><use href="#i-star"/></svg><svg width="15" height="15" aria-hidden="true"><use href="#i-star"/></svg><svg width="15" height="15" aria-hidden="true"><use href="#i-star"/></svg><svg width="15" height="15" aria-hidden="true"><use href="#i-star"/></svg><svg width="15" height="15" aria-hidden="true"><use href="#i-star"/></svg>
+        </div>
+        <blockquote>Ozzie was amazing — knows his craft very well and is always a pleasure to do business with. Major trust.</blockquote>
+        <figcaption><b>Verified client</b> · Broward County</figcaption>
+      </figure>
+      <figure class="quote">
+        <div class="quote__stars" aria-label="5 out of 5 stars">
+          <svg width="15" height="15" aria-hidden="true"><use href="#i-star"/></svg><svg width="15" height="15" aria-hidden="true"><use href="#i-star"/></svg><svg width="15" height="15" aria-hidden="true"><use href="#i-star"/></svg><svg width="15" height="15" aria-hidden="true"><use href="#i-star"/></svg><svg width="15" height="15" aria-hidden="true"><use href="#i-star"/></svg>
+        </div>
+        <blockquote>Excellent customer service from the first measure through installation. I would use them again without hesitation.</blockquote>
+        <figcaption><b>Verified client</b> · Fort Lauderdale</figcaption>
+      </figure>
+    </div>
+    <div class="note" style="margin-top:clamp(22px,3vw,32px)">
+      <p><strong>Design mockup note —</strong> the two quotes above are real fragments already published about Delta; the third is representative filler. This section should be wired to live Google reviews with <code>AggregateRating</code> schema. Getting the Google Business Profile to 30+ reviews is the single highest-return action available — competitors are currently winning the trust battle on review count alone.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================== area -->
+<section class="section band" id="area">
+  <div class="wrap">
+    <div class="section__head">
+      <p class="eyebrow">Where we work</p>
+      <h2>Three counties, one shop</h2>
+      <p>We install from Jupiter to Homestead. Everything is still built on South Andrews Avenue — which means we can be back at your house the same week if something needs adjusting.</p>
+    </div>
+    <div class="area-hub">
+      <div class="card">
+        <h3>Broward County</h3>
+        <p>Our home county, and where most of our installs land.</p>
+        <ul>
+          <li>Fort Lauderdale</li><li>Wilton Manors</li><li>Oakland Park</li><li>Plantation</li><li>Davie</li><li>Coral Springs</li><li>Weston</li><li>Pompano Beach</li>
+        </ul>
+      </div>
+      <a class="card card--link" href="#pv-gables">
+        <h3>Miami-Dade County</h3>
+        <p>Condo work, historic homes and new builds.</p>
+        <ul>
+          <li>Miami</li><li>Coral Gables</li><li>Miami Beach</li><li>Aventura</li><li>Pinecrest</li><li>Key Biscayne</li><li>Doral</li>
+        </ul>
+        <span class="card__more" style="margin-top:1rem;display:inline-flex">Coral Gables cabinetry <svg width="14" height="14" aria-hidden="true"><use href="#i-arrow"/></svg></span>
+      </a>
+      <div class="card">
+        <h3>Palm Beach County</h3>
+        <p>Coastal renovations and whole-home millwork.</p>
+        <ul>
+          <li>Boca Raton</li><li>Delray Beach</li><li>Boynton Beach</li><li>West Palm Beach</li><li>Jupiter</li><li>Wellington</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- =============================================================== faq -->
+<section class="section" id="faq">
+  <div class="wrap wrap--narrow">
+    <div class="section__head">
+      <p class="eyebrow">Before you call</p>
+      <h2>Questions we get every week</h2>
+    </div>
+    <div class="faq">
+      <details open>
+        <summary>How much do custom kitchen cabinets cost in Fort Lauderdale?</summary>
+        <div><p>A same-footprint refit generally runs $650–$900 per linear foot installed; a fully custom kitchen with an island and integrated appliance panels runs $900–$1,400. South Florida sits roughly 15–25% above Central Florida for the same scope. We give a fixed number after the measure — not an allowance that drifts.</p></div>
+      </details>
+      <details>
+        <summary>How long does a custom kitchen take?</summary>
+        <div><p>Four to eight weeks from approved design to installed, depending on finish and size. Dealers quoting imported cabinetry are typically at eight to sixteen weeks, because their lead time includes freight.</p></div>
+      </details>
+      <details>
+        <summary>Do you actually build the cabinets, or resell them?</summary>
+        <div><p>We build them. Delta has operated its own mill in South Florida for over 25 years — we design, cut, assemble, sand and spray in-house, and nothing is imported. You are welcome to walk the shop floor and watch your own kitchen being made.</p></div>
+      </details>
+      <details>
+        <summary>What plywood and hardware do you use?</summary>
+        <div><p>Columbia Forest hardwood plywood carcasses — never particleboard — with Blum soft-close hinges and undermount drawer runners. In a climate that runs 75–90% humidity all summer, the box material is what determines whether a kitchen still closes properly in ten years.</p></div>
+      </details>
+      <details>
+        <summary>Do you work with contractors and designers?</summary>
+        <div><p>Constantly. We sequence around your GC's schedule, provide shop drawings for permitting where required, and handle commercial casework as well as residential.</p></div>
+      </details>
+      <details>
+        <summary>Which wood species hold up best in Florida?</summary>
+        <div><p>White oak, maple and sapele are the most dimensionally stable choices for this climate. Cherry and hickory move considerably more with seasonal humidity swings, so we'll talk you out of them for a coastal house unless the look is non-negotiable.</p></div>
+      </details>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================== book -->
+<section class="section cta-final" id="book" style="background:var(--surface-2);border-top:1px solid var(--border)">
+  <div class="wrap">
+    <p class="eyebrow eyebrow--center">Next step</p>
+    <h2>Come see the shop that builds it</h2>
+    <p class="lede">Fifteen minutes in the showroom on South Andrews and you'll know more about cabinet construction than an afternoon of catalogues will teach you. Bring your measurements, or let us take them.</p>
+    <div class="btn-row">
+      <a class="btn btn--primary btn--lg" href="tel:+19549398579"><svg width="16" height="16" aria-hidden="true"><use href="#i-phone"/></svg> (954) 939-8579</a>
+      <a class="btn btn--ghost btn--lg" href="#book">Request a free measure</a>
+    </div>
+    <p class="hero__note" style="justify-content:center;margin-top:1.4rem">2416 S Andrews Ave, Fort Lauderdale, FL 33316 · Mon–Thu 9–6 · Fri 9–5</p>
+  </div>
+</section>
+
+</main>
+
+<!-- ============================================================ footer -->
+<footer class="footer">
+  <div class="wrap">
+    <div class="footer__grid">
+      <div class="footer__brand">
+        <a class="brand" href="#pv-home" style="color:var(--accent-2)">
+          <svg class="brand__mark" viewBox="0 0 40 40" aria-hidden="true"><use href="#logo-delta"/></svg>
+          <span><span class="brand__name">Delta Woodworks</span></span>
+        </a>
+        <p>A South Florida mill building custom cabinetry, closets and commercial millwork since 2001. Founded by two ex-soldiers. Nothing imported.</p>
+        <div class="footer__social">
+          <a href="https://www.instagram.com/deltawoodworksfl/" aria-label="Instagram"><svg width="18" height="18" aria-hidden="true"><use href="#i-ig"/></svg></a>
+          <a href="https://www.facebook.com/deltawoodworksfl" aria-label="Facebook"><svg width="18" height="18" aria-hidden="true"><use href="#i-fb"/></svg></a>
+          <a href="https://www.pinterest.com/deltawoodworksfl/" aria-label="Pinterest"><svg width="18" height="18" aria-hidden="true"><use href="#i-pin-social"/></svg></a>
+        </div>
+      </div>
+      <div>
+        <h4>What we build</h4>
+        <ul>
+          <li><a href="#pv-kitchens">Custom kitchens</a></li>
+          <li><a href="#services">Baths &amp; vanities</a></li>
+          <li><a href="#services">Closets &amp; storage</a></li>
+          <li><a href="#services">Commercial millwork</a></li>
+          <li><a href="#pv-pricing">Pricing</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Service area</h4>
+        <ul>
+          <li><a href="#pv-gables">Coral Gables</a></li>
+          <li><a href="#area">Broward County</a></li>
+          <li><a href="#area">Miami-Dade County</a></li>
+          <li><a href="#area">Palm Beach County</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Visit the mill</h4>
+        <address>
+          2416 S Andrews Ave<br>
+          Fort Lauderdale, FL 33316<br>
+          <a href="tel:+19549398579">(954) 939-8579</a><br>
+          Mon–Thu 9–6 · Fri 9–5
+        </address>
+      </div>
+    </div>
+    <div class="footer__base">
+      <span>© 2026 Delta Woodworks LLC</span>
+      <span class="spacer">Veteran-founded · Made in the USA</span>
+    </div>
+  </div>
+</footer>
+
+<!-- ========================================================== schema -->
+</section>
+
+<section class="pv-page" id="pv-kitchens" hidden>
+<!-- ============================================================ sprite -->
+
+
+<!-- =========================================================== utility -->
+<div class="utility">
+  <div class="wrap">
+    <span><svg width="13" height="13" aria-hidden="true"><use href="#pv-home" data-anchor="i-pin"/></svg> 2416 S Andrews Ave, Fort Lauderdale</span>
+    <span class="utility__sep" aria-hidden="true">|</span>
+    <span><svg width="13" height="13" aria-hidden="true"><use href="#pv-home" data-anchor="i-clock"/></svg> Mon–Thu 9–6 · Fri 9–5</span>
+    <span class="utility__right">
+      <a href="tel:+19549398579"><svg width="13" height="13" aria-hidden="true"><use href="#pv-home" data-anchor="i-phone"/></svg> (954) 939-8579</a>
+    </span>
+  </div>
+</div>
+
+<!-- ========================================================== masthead -->
+<header class="masthead">
+  <div class="wrap">
+    <a class="brand" href="#pv-home">
+      <svg class="brand__mark" viewBox="0 0 40 40" aria-hidden="true" style="color:var(--accent)"><use href="#pv-home" data-anchor="logo-delta"/></svg>
+      <span>
+        <span class="brand__name">Delta Woodworks</span>
+        <span class="brand__sub">Fort Lauderdale Mill · Est. 2001</span>
+      </span>
+    </a>
+    <nav class="nav" aria-label="Primary">
+      <a href="#pv-kitchens" aria-current="page">Kitchens</a>
+      <a href="#pv-home" data-anchor="services">Baths &amp; Closets</a>
+      <a href="#pv-home" data-anchor="services">Commercial</a>
+      <a href="#pv-home" data-anchor="mill">Our Mill</a>
+      <a href="#pv-home" data-anchor="work">Portfolio</a>
+      <a href="#pv-pricing">Pricing</a>
+    </nav>
+    <span class="masthead__cta"><a class="btn btn--primary" href="#pv-home" data-anchor="book">Book a showroom visit</a></span>
+  </div>
+</header>
+
+<main id="main">
+
+<div class="wrap crumbs">
+  <ol><li><a href="#pv-home">Home</a></li><li><a href="#pv-home" data-anchor="services">What we build</a></li><li>Custom kitchens</li></ol>
+</div>
+
+
+<section class="phero">
+  <svg class="phero__grain" aria-hidden="true" preserveAspectRatio="none" style="width:100%;height:100%">
+    <rect width="100%" height="100%" filter="url(#grain-a)" opacity=".13"/>
+  </svg>
+  <div class="wrap">
+    <div class="phero__inner">
+      <p class="eyebrow">Custom kitchens</p>
+      <h1>A kitchen cut to your walls, not to a catalogue</h1>
+      <p class="lede">Every Delta kitchen is drawn in 3D, milled on South Andrews Avenue and installed by the people who built it. Here is exactly what that involves, and what separates it from an ordered kitchen.</p>
+      <div class="btn-row" style="margin-top:1.5rem">
+        <a class="btn btn--primary btn--lg" href="#pv-home" data-anchor="book">Book a showroom visit</a>
+        <a class="btn btn--ghost btn--lg" href="#pv-pricing">See pricing</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="trustbar">
+  <div class="wrap">
+    <ul>
+      <li><svg width="15" height="15" aria-hidden="true"><use href="#i-ruler"/></svg> Drawn in 3D before cutting</li>
+      <li><svg width="15" height="15" aria-hidden="true"><use href="#i-box"/></svg> Plywood boxes, never particleboard</li>
+      <li><svg width="15" height="15" aria-hidden="true"><use href="#i-check"/></svg> Blum soft-close throughout</li>
+      <li><svg width="15" height="15" aria-hidden="true"><use href="#i-clock"/></svg> 4–8 weeks</li>
+    </ul>
+  </div>
+</div>
+
+<section class="section">
+  <div class="wrap">
+    <div class="split">
+      <div>
+        <p class="eyebrow">What "custom" means here</p>
+        <h2>Three words the industry uses loosely</h2>
+        <p><b>Stock</b> means fixed sizes off a shelf. <b>Semi-custom</b> means a stock box with more door and finish choices — the gaps still get filler strips. <b>Custom</b> should mean the box itself is made for your wall.</p>
+        <p>Most South Florida showrooms selling "custom cabinetry" are selling semi-custom from a catalogue, because they have no shop. We only make the third kind. If your island needs to be 87 and three-quarter inches, that is what leaves the mill.</p>
+        <div class="note" style="margin-top:1.4rem">
+          <p><strong>How to check any cabinet company —</strong> ask where the boxes are made and how long freight takes. If there is a freight answer, they did not build it.</p>
+        </div>
+      </div>
+      <figure class="shot shot--wide">
+        <div class="shot__frame">
+          <svg class="shot__grain" aria-hidden="true" preserveAspectRatio="none" style="width:100%;height:100%"><rect width="100%" height="100%" filter="url(#grain-b)" opacity=".2"/></svg>
+          <span class="shot__badge">Detail photograph</span>
+        </div>
+        <figcaption class="shot__cap"><b>Shot list:</b> two boxes side by side — a scribed Delta box against a wall with a filler strip visible on a stock box. The comparison does the arguing for you.</figcaption>
+      </figure>
+    </div>
+  </div>
+</section>
+
+<section class="section band">
+  <div class="wrap">
+    <div class="section__head">
+      <p class="eyebrow">Included as standard</p>
+      <h2>What is in every kitchen we build</h2>
+      <p>Not an upgrade list. This is the baseline, because building it any other way in this climate creates a callback in year four.</p>
+    </div>
+    <div class="grid grid--3">
+      <div class="card">
+        <div class="card__icon"><svg width="26" height="26" aria-hidden="true"><use href="#i-box"/></svg></div>
+        <h3>Columbia Forest plywood carcasses</h3>
+        <p>Formaldehyde-free hardwood plywood, edge-banded in matching species. Particleboard swells; plywood does not.</p>
+      </div>
+      <div class="card">
+        <div class="card__icon"><svg width="26" height="26" aria-hidden="true"><use href="#i-check"/></svg></div>
+        <h3>Blum hinges and runners</h3>
+        <p>Soft-close undermount slides rated for the full drawer, adjustable in three planes, lifetime warranty.</p>
+      </div>
+      <div class="card">
+        <div class="card__icon"><svg width="26" height="26" aria-hidden="true"><use href="#i-drop"/></svg></div>
+        <h3>Sprayed and cured in-house</h3>
+        <p>Conversion varnish or low-VOC lacquer in our own booth — never brushed on site, never shipped wet.</p>
+      </div>
+      <div class="card">
+        <div class="card__icon"><svg width="26" height="26" aria-hidden="true"><use href="#i-ruler"/></svg></div>
+        <h3>Dovetailed solid drawer boxes</h3>
+        <p>Solid maple, dovetailed and finished inside and out, sized to the opening rather than to a standard.</p>
+      </div>
+      <div class="card">
+        <div class="card__icon"><svg width="26" height="26" aria-hidden="true"><use href="#i-mill"/></svg></div>
+        <h3>Integrated panels and hoods</h3>
+        <p>Fridge and dishwasher panels, custom hood surrounds and toe-kick detailing milled with the run, so grain matches.</p>
+      </div>
+      <div class="card">
+        <div class="card__icon"><svg width="26" height="26" aria-hidden="true"><use href="#i-shield"/></svg></div>
+        <h3>Scribed installation</h3>
+        <p>South Florida walls are rarely square — especially in older houses. Every run is scribed on site by our crew.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="wrap wrap--narrow prose">
+    <h2>Choosing a door style</h2>
+    <p>Door style drives more of the final look — and more of the price — than any other decision. Four cover most of what leaves our shop:</p>
+    <ul>
+      <li><b>Shaker.</b> A flat centre panel in a square frame. The safest choice in a resale market, and the least expensive to mill well.</li>
+      <li><b>Slab.</b> A single flat face, usually in rift-sawn white oak or a sprayed colour. Reads modern; shows grain, so material selection matters more.</li>
+      <li><b>Inset.</b> Doors sitting flush inside the frame rather than on top of it. The hardest to build and hold in this climate, and the most expensive — it is where a real mill separates itself.</li>
+      <li><b>Raised panel.</b> Traditional profile, still the right answer in Mediterranean-revival and older coastal houses.</li>
+    </ul>
+
+    <h2>Species that behave in this climate</h2>
+    <p>Wood moves with humidity. In a house that swings from 45% in February to 90% in August, some species move considerably more than others:</p>
+    <ul>
+      <li><b>White oak</b> — the most stable and the most requested. Rift-sawn for modern slab work, quarter-sawn for traditional.</li>
+      <li><b>Hard maple</b> — tight, near-featureless grain. The right substrate for painted kitchens.</li>
+      <li><b>Sapele</b> — mahogany-like, very stable, excellent for wall units and coastal houses.</li>
+      <li><b>Cherry and hickory</b> — beautiful, but they move. We will build them; we will also tell you what to expect.</li>
+    </ul>
+
+    <h2>How long it takes</h2>
+    <p>Four to eight weeks from approved design to installed kitchen, driven mostly by finish. A stained clear-coat run moves faster than a multi-step painted finish. Because the shop is ten minutes from most of our installs, a mid-build change costs days, not a restarted lead time.</p>
+  </div>
+</section>
+
+<section class="section cta-final" style="background:var(--surface-2);border-top:1px solid var(--border)">
+  <div class="wrap">
+    <p class="eyebrow eyebrow--center">Next step</p>
+    <h2>Bring your measurements</h2>
+    <p class="lede">Or let us take them. Either way you leave with a 3D model and a fixed number — not an estimate that moves.</p>
+    <div class="btn-row">
+      <a class="btn btn--primary btn--lg" href="tel:+19549398579"><svg width="16" height="16" aria-hidden="true"><use href="#i-phone"/></svg> (954) 939-8579</a>
+      <a class="btn btn--ghost btn--lg" href="#pv-pricing">See what it costs</a>
+    </div>
+  </div>
+</section>
+
+
+</main>
+
+<!-- ============================================================ footer -->
+<footer class="footer">
+  <div class="wrap">
+    <div class="footer__grid">
+      <div class="footer__brand">
+        <a class="brand" href="#pv-home" style="color:var(--accent-2)">
+          <svg class="brand__mark" viewBox="0 0 40 40" aria-hidden="true"><use href="#pv-home" data-anchor="logo-delta"/></svg>
+          <span><span class="brand__name">Delta Woodworks</span></span>
+        </a>
+        <p>A South Florida mill building custom cabinetry, closets and commercial millwork since 2001. Founded by two ex-soldiers. Nothing imported.</p>
+        <div class="footer__social">
+          <a href="https://www.instagram.com/deltawoodworksfl/" aria-label="Instagram"><svg width="18" height="18" aria-hidden="true"><use href="#pv-home" data-anchor="i-ig"/></svg></a>
+          <a href="https://www.facebook.com/deltawoodworksfl" aria-label="Facebook"><svg width="18" height="18" aria-hidden="true"><use href="#pv-home" data-anchor="i-fb"/></svg></a>
+          <a href="https://www.pinterest.com/deltawoodworksfl/" aria-label="Pinterest"><svg width="18" height="18" aria-hidden="true"><use href="#pv-home" data-anchor="i-pin-social"/></svg></a>
+        </div>
+      </div>
+      <div>
+        <h4>What we build</h4>
+        <ul>
+          <li><a href="#pv-kitchens">Custom kitchens</a></li>
+          <li><a href="#pv-home" data-anchor="services">Baths &amp; vanities</a></li>
+          <li><a href="#pv-home" data-anchor="services">Closets &amp; storage</a></li>
+          <li><a href="#pv-home" data-anchor="services">Commercial millwork</a></li>
+          <li><a href="#pv-pricing">Pricing</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Service area</h4>
+        <ul>
+          <li><a href="#pv-gables">Coral Gables</a></li>
+          <li><a href="#pv-home" data-anchor="area">Broward County</a></li>
+          <li><a href="#pv-home" data-anchor="area">Miami-Dade County</a></li>
+          <li><a href="#pv-home" data-anchor="area">Palm Beach County</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Visit the mill</h4>
+        <address>
+          2416 S Andrews Ave<br>
+          Fort Lauderdale, FL 33316<br>
+          <a href="tel:+19549398579">(954) 939-8579</a><br>
+          Mon–Thu 9–6 · Fri 9–5
+        </address>
+      </div>
+    </div>
+    <div class="footer__base">
+      <span>© 2026 Delta Woodworks LLC</span>
+      <span class="spacer">Veteran-founded · Made in the USA</span>
+    </div>
+  </div>
+</footer>
+</section>
+
+<section class="pv-page" id="pv-pricing" hidden>
+<!-- ============================================================ sprite -->
+
+
+<!-- =========================================================== utility -->
+<div class="utility">
+  <div class="wrap">
+    <span><svg width="13" height="13" aria-hidden="true"><use href="#i-pin"/></svg> 2416 S Andrews Ave, Fort Lauderdale</span>
+    <span class="utility__sep" aria-hidden="true">|</span>
+    <span><svg width="13" height="13" aria-hidden="true"><use href="#i-clock"/></svg> Mon–Thu 9–6 · Fri 9–5</span>
+    <span class="utility__right">
+      <a href="tel:+19549398579"><svg width="13" height="13" aria-hidden="true"><use href="#i-phone"/></svg> (954) 939-8579</a>
+    </span>
+  </div>
+</div>
+
+<!-- ========================================================== masthead -->
+<header class="masthead">
+  <div class="wrap">
+    <a class="brand" href="#pv-home">
+      <svg class="brand__mark" viewBox="0 0 40 40" aria-hidden="true" style="color:var(--accent)"><use href="#logo-delta"/></svg>
+      <span>
+        <span class="brand__name">Delta Woodworks</span>
+        <span class="brand__sub">Fort Lauderdale Mill · Est. 2001</span>
+      </span>
+    </a>
+    <nav class="nav" aria-label="Primary">
+      <a href="#pv-kitchens">Kitchens</a>
+      <a href="#services">Baths &amp; Closets</a>
+      <a href="#services">Commercial</a>
+      <a href="#mill">Our Mill</a>
+      <a href="#work">Portfolio</a>
+      <a href="#pv-pricing" aria-current="page">Pricing</a>
+    </nav>
+    <span class="masthead__cta"><a class="btn btn--primary" href="#book">Book a showroom visit</a></span>
+  </div>
+</header>
+
+<main id="main">
+
+<div class="wrap crumbs">
+  <ol><li><a href="#pv-home">Home</a></li><li>Pricing</li></ol>
+</div>
+
+
+<section class="phero">
+  <svg class="phero__grain" aria-hidden="true" preserveAspectRatio="none" style="width:100%;height:100%">
+    <rect width="100%" height="100%" filter="url(#grain-c)" opacity=".13"/>
+  </svg>
+  <div class="wrap">
+    <div class="phero__inner">
+      <p class="eyebrow">Pricing</p>
+      <h1>What custom cabinetry actually costs in South Florida</h1>
+      <p class="lede">Every other shop in this market makes you book an appointment to find out. Here are the numbers, what moves them, and where the money is and is not worth spending.</p>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="wrap">
+    <div class="price-grid">
+      <div class="tier">
+        <div class="tier__name">Refit</div>
+        <p style="font-size:.92rem">Same footprint, new cabinetry. The most common condo project on the beach.</p>
+        <div class="tier__range">$650–$900</div>
+        <div class="tier__unit">per linear foot, installed</div>
+        <ul>
+          <li><svg width="15" height="15" aria-hidden="true"><use href="#i-check"/></svg> Plywood boxes, Blum hardware</li>
+          <li><svg width="15" height="15" aria-hidden="true"><use href="#i-check"/></svg> Painted or stained shaker</li>
+          <li><svg width="15" height="15" aria-hidden="true"><use href="#i-check"/></svg> Demo, install and haul-away</li>
+        </ul>
+        <a class="btn btn--ghost btn--block" href="#pv-home" data-anchor="book">Get a fixed quote</a>
+      </div>
+      <div class="tier tier--featured">
+        <span class="tier__flag">Most projects</span>
+        <div class="tier__name">Full custom kitchen</div>
+        <p style="font-size:.92rem">New layout, island, hood and appliance panels, drawn from scratch.</p>
+        <div class="tier__range">$900–$1,400</div>
+        <div class="tier__unit">per linear foot, installed</div>
+        <ul>
+          <li><svg width="15" height="15" aria-hidden="true"><use href="#i-check"/></svg> 3D model and full elevations</li>
+          <li><svg width="15" height="15" aria-hidden="true"><use href="#i-check"/></svg> Any species, profile or finish</li>
+          <li><svg width="15" height="15" aria-hidden="true"><use href="#i-check"/></svg> Integrated panels and hood surround</li>
+          <li><svg width="15" height="15" aria-hidden="true"><use href="#i-check"/></svg> Interior fit-out and lighting</li>
+        </ul>
+        <a class="btn btn--primary btn--block" href="#pv-home" data-anchor="book">Book a showroom visit</a>
+      </div>
+      <div class="tier">
+        <div class="tier__name">Whole-home millwork</div>
+        <p style="font-size:.92rem">Kitchen, baths, closets and built-ins on one schedule, one crew.</p>
+        <div class="tier__range">From $45k</div>
+        <div class="tier__unit">typical project total</div>
+        <ul>
+          <li><svg width="15" height="15" aria-hidden="true"><use href="#i-check"/></svg> One point of contact</li>
+          <li><svg width="15" height="15" aria-hidden="true"><use href="#i-check"/></svg> Sequenced around your GC</li>
+          <li><svg width="15" height="15" aria-hidden="true"><use href="#i-check"/></svg> Consistent finish room to room</li>
+        </ul>
+        <a class="btn btn--ghost btn--block" href="#pv-home" data-anchor="book">Talk it through</a>
+      </div>
+    </div>
+
+    <div class="note" style="margin-top:clamp(22px,3vw,32px)">
+      <p><strong>Design mockup note —</strong> these ranges are placeholders built from published 2026 South Florida market data ($500–$1,500+ per linear foot installed for true custom; South Florida runs 15–25% above Central Florida). Swap in Delta's real numbers before publishing. Publishing <em>a</em> number matters more than which number.</p>
+    </div>
+  </div>
+</section>
+
+<section class="section band">
+  <div class="wrap">
+    <div class="section__head">
+      <p class="eyebrow">Reading a quote</p>
+      <h2>Where the market sits</h2>
+      <p>Four tiers get sold as "cabinets" in South Florida, and the price gap between them is mostly a materials-and-labour gap, not a margin gap.</p>
+    </div>
+    <div class="compare">
+      <div class="compare__scroll">
+        <table>
+          <caption class="visually-hidden">Cabinet tiers and installed cost per linear foot in South Florida</caption>
+          <thead>
+            <tr><th scope="col">Tier</th><th scope="col">Installed, per linear foot</th><th scope="col">What you are actually buying</th></tr>
+          </thead>
+          <tbody>
+            <tr><th scope="row">Ready-to-assemble</th><td>$120–$280</td><td>Flat-packed particleboard, fixed sizes, assembled on site</td></tr>
+            <tr><th scope="row">Stock</th><td>$200–$400</td><td>Pre-built standard boxes, limited door and finish range</td></tr>
+            <tr><th scope="row">Semi-custom</th><td>$350–$700</td><td>Standard boxes with wider door, finish and interior options</td></tr>
+            <tr><th scope="row">True custom</th><td>$650–$1,400+</td><td>Boxes built to your dimensions in a shop, in your species and finish</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="wrap wrap--narrow prose">
+    <h2>What moves the number</h2>
+    <ul>
+      <li><b>Finish, more than anything.</b> A multi-step painted or glazed finish can add 15–30% over a stained clear coat, because it is days of additional booth time.</li>
+      <li><b>Inset doors.</b> Expect 20–35% over overlay. The tolerances are unforgiving and the fitting is slow.</li>
+      <li><b>Species.</b> Painted maple is the value baseline. Rift-sawn white oak and sapele carry a real material premium.</li>
+      <li><b>Interior fit-out.</b> Dividers, spice pull-outs, trash carriers, integrated lighting and charging — easy to add $3,000–$8,000 to a mid-sized kitchen.</li>
+      <li><b>Ceiling height.</b> Runs to a 10-foot ceiling mean upper boxes, crown build-up and more finish surface.</li>
+      <li><b>Condo access.</b> Elevator scheduling, protection requirements and restricted work hours add labour on the beach and in high-rises.</li>
+    </ul>
+
+    <h2>Where the money is worth spending</h2>
+    <p>If a budget has to be trimmed, trim it in this order — the first items are visible for twenty years, the last are cosmetic.</p>
+    <ol>
+      <li><b>Box material.</b> Never trade plywood for particleboard to save money. It is the one decision that cannot be revisited.</li>
+      <li><b>Hardware.</b> Blum runners outlive the kitchen. Cheap slides are the most common callback in this trade.</li>
+      <li><b>Layout and fit.</b> Paying for boxes that fill the wall properly beats paying for a fancier door on a run full of fillers.</li>
+      <li><b>Door style.</b> Shaker instead of inset is the single largest honest saving available.</li>
+      <li><b>Interior extras.</b> Pull-outs and organisers can be added later; the boxes cannot.</li>
+    </ol>
+
+    <h2>How we quote</h2>
+    <p>We measure, model the kitchen in 3D, and issue a fixed proposal with every elevation drawn. No allowances that drift, and no change-order surprises unless you change something. If the number is wrong for your budget, we would rather tell you at the measure than at the deposit.</p>
+  </div>
+</section>
+
+<section class="section" style="background:var(--surface-2);border-block:1px solid var(--border)">
+  <div class="wrap wrap--narrow">
+    <div class="section__head"><p class="eyebrow">Cost questions</p><h2>Straight answers</h2></div>
+    <div class="faq">
+      <details open>
+        <summary>How much is a 10x10 kitchen in Fort Lauderdale?</summary>
+        <div><p>A "10x10" is a 20-linear-foot benchmark. At our refit range that is roughly $13,000–$18,000 installed; a full custom version with an island and integrated panels lands nearer $18,000–$28,000. Ready-to-assemble comes in around $4,400 — and is a different product entirely.</p></div>
+      </details>
+      <details>
+        <summary>Why is South Florida more expensive than the rest of the state?</summary>
+        <div><p>Labour, insurance and access. Published market data puts Palm Beach, Broward and Miami-Dade about 15–25% above Central Florida for identical scope. Condo access rules add real hours on the beach.</p></div>
+      </details>
+      <details>
+        <summary>Is custom actually more expensive than semi-custom?</summary>
+        <div><p>Per linear foot, yes. Per finished kitchen, less than people expect — a custom run fills the wall instead of paying for fillers and dead corners, so the linear-foot count is often lower.</p></div>
+      </details>
+      <details>
+        <summary>Do you require a deposit?</summary>
+        <div><p>Yes — a deposit at design approval, a progress payment when the run goes into finishing, and the balance on completed installation and a closed punch list.</p></div>
+      </details>
+    </div>
+  </div>
+</section>
+
+<section class="section cta-final">
+  <div class="wrap">
+    <h2>Get a real number for your kitchen</h2>
+    <p class="lede">A free measure and a 3D proposal. If we are not the right fit, we will say so.</p>
+    <div class="btn-row">
+      <a class="btn btn--primary btn--lg" href="tel:+19549398579"><svg width="16" height="16" aria-hidden="true"><use href="#i-phone"/></svg> (954) 939-8579</a>
+      <a class="btn btn--ghost btn--lg" href="#pv-home" data-anchor="book">Request a measure</a>
+    </div>
+  </div>
+</section>
+
+
+</main>
+
+<!-- ============================================================ footer -->
+<footer class="footer">
+  <div class="wrap">
+    <div class="footer__grid">
+      <div class="footer__brand">
+        <a class="brand" href="#pv-home" style="color:var(--accent-2)">
+          <svg class="brand__mark" viewBox="0 0 40 40" aria-hidden="true"><use href="#logo-delta"/></svg>
+          <span><span class="brand__name">Delta Woodworks</span></span>
+        </a>
+        <p>A South Florida mill building custom cabinetry, closets and commercial millwork since 2001. Founded by two ex-soldiers. Nothing imported.</p>
+        <div class="footer__social">
+          <a href="https://www.instagram.com/deltawoodworksfl/" aria-label="Instagram"><svg width="18" height="18" aria-hidden="true"><use href="#i-ig"/></svg></a>
+          <a href="https://www.facebook.com/deltawoodworksfl" aria-label="Facebook"><svg width="18" height="18" aria-hidden="true"><use href="#i-fb"/></svg></a>
+          <a href="https://www.pinterest.com/deltawoodworksfl/" aria-label="Pinterest"><svg width="18" height="18" aria-hidden="true"><use href="#i-pin-social"/></svg></a>
+        </div>
+      </div>
+      <div>
+        <h4>What we build</h4>
+        <ul>
+          <li><a href="#pv-kitchens">Custom kitchens</a></li>
+          <li><a href="#services">Baths &amp; vanities</a></li>
+          <li><a href="#services">Closets &amp; storage</a></li>
+          <li><a href="#services">Commercial millwork</a></li>
+          <li><a href="#pv-pricing">Pricing</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Service area</h4>
+        <ul>
+          <li><a href="#pv-gables">Coral Gables</a></li>
+          <li><a href="#area">Broward County</a></li>
+          <li><a href="#area">Miami-Dade County</a></li>
+          <li><a href="#area">Palm Beach County</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Visit the mill</h4>
+        <address>
+          2416 S Andrews Ave<br>
+          Fort Lauderdale, FL 33316<br>
+          <a href="tel:+19549398579">(954) 939-8579</a><br>
+          Mon–Thu 9–6 · Fri 9–5
+        </address>
+      </div>
+    </div>
+    <div class="footer__base">
+      <span>© 2026 Delta Woodworks LLC</span>
+      <span class="spacer">Veteran-founded · Made in the USA</span>
+    </div>
+  </div>
+</footer>
+</section>
+
+<section class="pv-page" id="pv-gables" hidden>
+<!-- ============================================================ sprite -->
+
+
+<!-- =========================================================== utility -->
+<div class="utility">
+  <div class="wrap">
+    <span><svg width="13" height="13" aria-hidden="true"><use href="#pv-home" data-anchor="i-pin"/></svg> 2416 S Andrews Ave, Fort Lauderdale</span>
+    <span class="utility__sep" aria-hidden="true">|</span>
+    <span><svg width="13" height="13" aria-hidden="true"><use href="#pv-home" data-anchor="i-clock"/></svg> Mon–Thu 9–6 · Fri 9–5</span>
+    <span class="utility__right">
+      <a href="tel:+19549398579"><svg width="13" height="13" aria-hidden="true"><use href="#pv-home" data-anchor="i-phone"/></svg> (954) 939-8579</a>
+    </span>
+  </div>
+</div>
+
+<!-- ========================================================== masthead -->
+<header class="masthead">
+  <div class="wrap">
+    <a class="brand" href="#pv-home">
+      <svg class="brand__mark" viewBox="0 0 40 40" aria-hidden="true" style="color:var(--accent)"><use href="#pv-home" data-anchor="logo-delta"/></svg>
+      <span>
+        <span class="brand__name">Delta Woodworks</span>
+        <span class="brand__sub">Fort Lauderdale Mill · Est. 2001</span>
+      </span>
+    </a>
+    <nav class="nav" aria-label="Primary">
+      <a href="#pv-kitchens">Kitchens</a>
+      <a href="#pv-home" data-anchor="services">Baths &amp; Closets</a>
+      <a href="#pv-home" data-anchor="services">Commercial</a>
+      <a href="#pv-home" data-anchor="mill">Our Mill</a>
+      <a href="#pv-home" data-anchor="work">Portfolio</a>
+      <a href="#pv-pricing">Pricing</a>
+    </nav>
+    <span class="masthead__cta"><a class="btn btn--primary" href="#pv-home" data-anchor="book">Book a showroom visit</a></span>
+  </div>
+</header>
+
+<main id="main">
+
+<div class="wrap crumbs">
+  <ol><li><a href="#pv-home">Home</a></li><li><a href="#pv-home" data-anchor="area">Service area</a></li><li>Coral Gables</li></ol>
+</div>
+
+
+<section class="phero">
+  <svg class="phero__grain" aria-hidden="true" preserveAspectRatio="none" style="width:100%;height:100%">
+    <rect width="100%" height="100%" filter="url(#grain-b)" opacity=".13"/>
+  </svg>
+  <div class="wrap">
+    <div class="phero__inner">
+      <p class="eyebrow">Coral Gables, Miami-Dade County</p>
+      <h1>Custom kitchen cabinets for Coral Gables houses</h1>
+      <p class="lede">The Gables is the hardest cabinetry market in South Florida to get right — 1920s plaster walls that are nowhere near square, a Board of Architects that reviews exterior work, and Mediterranean-revival interiors where a flat slab door looks wrong. We build for it out of our own mill, 40 minutes up I-95.</p>
+      <div class="btn-row" style="margin-top:1.5rem">
+        <a class="btn btn--primary btn--lg" href="#pv-home" data-anchor="book">Book a measure in the Gables</a>
+        <a class="btn btn--ghost btn--lg" href="#pv-pricing">See pricing</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="wrap">
+    <div class="split">
+      <div>
+        <p class="eyebrow">What is different here</p>
+        <h2>Old houses do not have square walls</h2>
+        <p>Most of the housing stock between Granada and Riviera predates 1940. Plaster over hollow tile moves, settles and bows — often by half an inch across a single run. Ordered cabinetry arrives in fixed sizes and gets shimmed and filled until it fits.</p>
+        <p>We measure the wall as it actually is, mill to those numbers, and scribe the end panels on site. In a Gables kitchen that is not a premium service; it is the only way to get a run to sit tight against the wall.</p>
+        <p>For historic-district properties we produce shop drawings suitable for Board of Architects and permit submittals, and we sequence around your architect and GC rather than the other way round.</p>
+      </div>
+      <figure class="shot shot--wide">
+        <div class="shot__frame">
+          <svg class="shot__grain" aria-hidden="true" preserveAspectRatio="none" style="width:100%;height:100%"><rect width="100%" height="100%" filter="url(#grain-c)" opacity=".2"/></svg>
+          <span class="shot__badge">Local project photograph</span>
+        </div>
+        <figcaption class="shot__cap"><b>Shot list:</b> a completed Coral Gables kitchen with recognisable local context — barrel-tile roofline through the window, arched opening, or Dade County pine floors. Local visual proof is what makes a location page outrank a generic one.</figcaption>
+      </figure>
+    </div>
+  </div>
+</section>
+
+<section class="section band">
+  <div class="wrap">
+    <div class="section__head">
+      <p class="eyebrow">Neighbourhoods we work in</p>
+      <h2>Where our Gables installs land</h2>
+    </div>
+    <div class="grid grid--3">
+      <div class="card">
+        <h3>Historic core</h3>
+        <p>Country Club Prado, Granada, Coral Way. Mediterranean-revival interiors, raised-panel and inset work, arched cabinetry to match existing openings.</p>
+      </div>
+      <div class="card">
+        <h3>Gables By The Sea &amp; Cocoplum</h3>
+        <p>Waterfront houses where salt air and humidity are relentless. Sapele and rift white oak, marine-grade considerations, sealed end grain.</p>
+      </div>
+      <div class="card">
+        <h3>Downtown Gables condos</h3>
+        <p>High-rise refits on Ponce and Alhambra — elevator scheduling, restricted work hours and building protection requirements handled by our crew.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="wrap wrap--narrow prose">
+    <h2>A note on Board of Architects review</h2>
+    <p>Coral Gables reviews far more work than neighbouring cities. Interior cabinetry alone generally does not trigger review, but work that changes a window, an exterior opening or a structural element usually does — and that review sits on the critical path of your kitchen. We build our lead time around your permit timeline, and we would rather start milling late than have finished cabinetry sitting in a garage for six weeks.</p>
+
+    <h2>Materials that last in a Gables house</h2>
+    <p>Two conditions drive every material decision here: year-round humidity in the 75–90% range, and older houses with limited or uneven air conditioning in the kitchen. That rules out particleboard carcasses outright and makes species choice consequential. White oak, hard maple and sapele are what we recommend and what we stock. Painted finishes are sprayed and fully cured in our booth before anything ships — a painted door finished on site in Miami humidity will not level properly.</p>
+
+    <h2>How far away are you, really?</h2>
+    <p>Our mill is at 2416 S Andrews Avenue in Fort Lauderdale — roughly 40 minutes from Miracle Mile outside rush hour. It matters more than it sounds: when a client changes a drawer configuration mid-build, or an appliance arrives with different dimensions than specified, the fix is a shop-floor change and a short drive rather than a re-order and a new lead time.</p>
+  </div>
+</section>
+
+<section class="section" style="background:var(--surface-2);border-block:1px solid var(--border)">
+  <div class="wrap wrap--narrow">
+    <div class="section__head"><p class="eyebrow">Coral Gables questions</p><h2>What clients here ask</h2></div>
+    <div class="faq">
+      <details open>
+        <summary>Do you have a Coral Gables showroom?</summary>
+        <div><p>No — and deliberately. We keep one location, the working mill in Fort Lauderdale, so you can see your own cabinets being built rather than a display kitchen. It is a 40-minute drive, and we come to you for the measure.</p></div>
+      </details>
+      <details>
+        <summary>Can you match existing millwork in a historic house?</summary>
+        <div><p>Yes. That is the advantage of owning a mill — we can match an existing profile by cutting a knife for it rather than choosing the nearest catalogue equivalent.</p></div>
+      </details>
+      <details>
+        <summary>Do you handle condo building requirements?</summary>
+        <div><p>Routinely. Certificates of insurance, elevator reservations, floor and elevator protection, and restricted work hours are all normal parts of a downtown Gables install.</p></div>
+      </details>
+      <details>
+        <summary>What does a Coral Gables kitchen cost?</summary>
+        <div><p>The same ranges as the rest of our work — roughly $650–$900 per linear foot for a refit and $900–$1,400 for full custom, installed. Historic houses often sit at the upper end because of scribing, inset doors and profile matching.</p></div>
+      </details>
+    </div>
+  </div>
+</section>
+
+<section class="section cta-final">
+  <div class="wrap">
+    <h2>Book a measure in Coral Gables</h2>
+    <p class="lede">We come to you, measure the walls as they are, and send back a 3D model with a fixed number.</p>
+    <div class="btn-row">
+      <a class="btn btn--primary btn--lg" href="tel:+19549398579"><svg width="16" height="16" aria-hidden="true"><use href="#i-phone"/></svg> (954) 939-8579</a>
+      <a class="btn btn--ghost btn--lg" href="#pv-home" data-anchor="book">Request a measure</a>
+    </div>
+  </div>
+</section>
+
+
+</main>
+
+<!-- ============================================================ footer -->
+<footer class="footer">
+  <div class="wrap">
+    <div class="footer__grid">
+      <div class="footer__brand">
+        <a class="brand" href="#pv-home" style="color:var(--accent-2)">
+          <svg class="brand__mark" viewBox="0 0 40 40" aria-hidden="true"><use href="#pv-home" data-anchor="logo-delta"/></svg>
+          <span><span class="brand__name">Delta Woodworks</span></span>
+        </a>
+        <p>A South Florida mill building custom cabinetry, closets and commercial millwork since 2001. Founded by two ex-soldiers. Nothing imported.</p>
+        <div class="footer__social">
+          <a href="https://www.instagram.com/deltawoodworksfl/" aria-label="Instagram"><svg width="18" height="18" aria-hidden="true"><use href="#pv-home" data-anchor="i-ig"/></svg></a>
+          <a href="https://www.facebook.com/deltawoodworksfl" aria-label="Facebook"><svg width="18" height="18" aria-hidden="true"><use href="#pv-home" data-anchor="i-fb"/></svg></a>
+          <a href="https://www.pinterest.com/deltawoodworksfl/" aria-label="Pinterest"><svg width="18" height="18" aria-hidden="true"><use href="#pv-home" data-anchor="i-pin-social"/></svg></a>
+        </div>
+      </div>
+      <div>
+        <h4>What we build</h4>
+        <ul>
+          <li><a href="#pv-kitchens">Custom kitchens</a></li>
+          <li><a href="#pv-home" data-anchor="services">Baths &amp; vanities</a></li>
+          <li><a href="#pv-home" data-anchor="services">Closets &amp; storage</a></li>
+          <li><a href="#pv-home" data-anchor="services">Commercial millwork</a></li>
+          <li><a href="#pv-pricing">Pricing</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Service area</h4>
+        <ul>
+          <li><a href="#pv-gables">Coral Gables</a></li>
+          <li><a href="#pv-home" data-anchor="area">Broward County</a></li>
+          <li><a href="#pv-home" data-anchor="area">Miami-Dade County</a></li>
+          <li><a href="#pv-home" data-anchor="area">Palm Beach County</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Visit the mill</h4>
+        <address>
+          2416 S Andrews Ave<br>
+          Fort Lauderdale, FL 33316<br>
+          <a href="tel:+19549398579">(954) 939-8579</a><br>
+          Mon–Thu 9–6 · Fri 9–5
+        </address>
+      </div>
+    </div>
+    <div class="footer__base">
+      <span>© 2026 Delta Woodworks LLC</span>
+      <span class="spacer">Veteran-founded · Made in the USA</span>
+    </div>
+  </div>
+</footer>
+</section>
+
+<nav class="pv-switch" aria-label="Preview pages">
+  <div class="pv-switch__inner" role="tablist">
+    <span class="pv-switch__tag">Pages</span>
+    <button role="tab" data-target="pv-home" aria-selected="true">Home</button>
+    <button role="tab" data-target="pv-kitchens" aria-selected="false">Kitchens</button>
+    <button role="tab" data-target="pv-pricing" aria-selected="false">Pricing</button>
+    <button role="tab" data-target="pv-gables" aria-selected="false">Coral Gables</button>
+  </div>
+</nav>
+
+<script>
+(function () {
+  var pages = ["pv-home","pv-kitchens","pv-pricing","pv-gables"];
+  var tabs = Array.prototype.slice.call(document.querySelectorAll(".pv-switch button"));
+
+  function show(id, anchor) {
+    if (pages.indexOf(id) < 0) return;
+    pages.forEach(function (p) {
+      var el = document.getElementById(p);
+      if (el) el.hidden = p !== id;
+    });
+    tabs.forEach(function (t) { t.setAttribute("aria-selected", String(t.dataset.target === id)); });
+    if (anchor) {
+      var target = document.getElementById(anchor);
+      if (target) { target.scrollIntoView({ behavior: "auto", block: "start" }); return; }
+    }
+    window.scrollTo(0, 0);
+  }
+
+  tabs.forEach(function (t) {
+    t.addEventListener("click", function () { show(t.dataset.target); });
+  });
+
+  document.addEventListener("click", function (e) {
+    var a = e.target.closest && e.target.closest("a[href^='#pv-']");
+    if (!a) return;
+    e.preventDefault();
+    show(a.getAttribute("href").slice(1), a.dataset.anchor);
+  });
+})();
+</script>
