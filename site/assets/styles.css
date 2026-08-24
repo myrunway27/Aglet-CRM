@@ -127,6 +127,7 @@ h1, h2, h3, h4 {
   line-height: 1.12;
   letter-spacing: -0.015em;
   margin: 0 0 .5em;
+  text-wrap: balance;
   font-variation-settings: "SOFT" 0, "WONK" 0, "opsz" 40;
 }
 h1 { font-size: clamp(2.3rem, 5.6vw, 3.9rem); letter-spacing: -0.028em; }
@@ -169,7 +170,7 @@ p  { margin: 0 0 1.1em; color: var(--text-2); }
 }
 .eyebrow--center { justify-content: center; }
 
-.lede { font-size: clamp(1.05rem, 1.7vw, 1.24rem); color: var(--text-2); line-height: 1.6; }
+.lede { font-size: clamp(1.05rem, 1.7vw, 1.24rem); color: var(--text-2); line-height: 1.6; text-wrap: pretty; }
 
 .section__head { max-width: 62ch; margin-bottom: clamp(28px, 4vw, 48px); }
 .section__head--center { margin-inline: auto; text-align: center; }
@@ -696,3 +697,10 @@ p  { margin: 0 0 1.1em; color: var(--text-2); }
 @media (max-width: 400px) {
   .masthead__cta .btn { padding: .62rem .82rem; font-size: .82rem; }
 }
+
+/* Figures that line up in columns read as measurements, not prose. */
+.stat__num,
+.tier__range,
+.tier__unit,
+.compare td,
+.step__meta { font-variant-numeric: tabular-nums; }
