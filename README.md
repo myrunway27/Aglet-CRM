@@ -49,15 +49,21 @@ Add the domain in the host's dashboard, then at your registrar:
 
 HTTPS is issued automatically by all three hosts.
 
-## Before launch: photography
+## Imagery
 
-**This design is photo-led — it is not finished until real images are in it.** Every frame currently shows a placeholder with the shot it needs written underneath, so the mockup doubles as a shoot brief. Eleven images in total:
+The site ships with **original generated abstract art** — dark-teal compositions rendered by `scripts/gen-images.mjs` (headless canvas, deterministic seeds). Nothing is sourced from stock libraries. Regenerate the whole set with:
 
-- **01 Hero** — wide shot of the team at work, dark enough to carry white type across the upper half
-- **02 Services** ×5 — keyboard/desk, data centre corridor, circuit board macro, abstract AI visual, operations desk
-- **05 Design & Marketing** ×4 — analytics desk, sticky-note workshop, colour swatches, and a wide client-meeting banner
+```bash
+node scripts/gen-images.mjs && node build.mjs
+```
 
-Commission them, or licence from a stock library — but replace them. Placeholder frames on a live site read worse than a simpler design would.
+To use real photography instead, overwrite the matching file in `assets/img/` — keep the filename — and run `node build.mjs`. The shot briefs for a future photoshoot are kept on each item's `photo` field in `content.json`:
+
+| File | Where it appears | Brief |
+|---|---|---|
+| `hero.jpg` | 01 Hero | wide team-at-work shot, dark enough to carry white type |
+| `svc-*.jpg` ×5 | 02 Services | desk/keyboard, data-centre corridor, circuit macro, AI abstract, ops desk |
+| `dz-*.jpg` ×4 | 05 Design & Marketing | analytics desk, workshop wall, colour swatches, wide client meeting |
 
 There are no invented clients, testimonials or statistics anywhere on the site.
 

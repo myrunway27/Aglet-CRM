@@ -175,24 +175,12 @@ p  { margin: 0 0 1rem; text-wrap: pretty; }
 
 .ph { position: relative; background: var(--dark-3); overflow: hidden; }
 .sect--light .ph { background: #DDE1E1; }
-.ph::before {
+.ph img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.ph::after {
   content: ""; position: absolute; inset: 0;
-  background:
-    repeating-linear-gradient(115deg, rgba(44,177,188,.09) 0 2px, transparent 2px 9px),
-    linear-gradient(150deg, rgba(44,177,188,.16), rgba(0,0,0,.14));
+  background: linear-gradient(150deg, rgba(44,177,188,.07), rgba(0,0,0,.16));
 }
-.ph__tag {
-  position: absolute; left: 10px; top: 10px; z-index: 1;
-  font-family: var(--f-body); font-size: .64rem; font-weight: 600;
-  letter-spacing: .13em; text-transform: uppercase;
-  color: var(--teal-lt); background: rgba(15,18,18,.72);
-  border: 1px solid rgba(95,203,211,.4); border-radius: 2px; padding: .2rem .5rem;
-}
-.shotnote {
-  font-size: .78rem; line-height: 1.45; color: var(--on-dark-3);
-  border-left: 2px solid var(--teal); padding-left: .6rem; margin-top: .55rem;
-}
-.sect--light .shotnote { color: #7B8383; }
+
 
 /* ------------------------------------------------------------ services --- */
 
@@ -209,8 +197,6 @@ p  { margin: 0 0 1rem; text-wrap: pretty; }
 .svc .ph { aspect-ratio: 4 / 3; margin-bottom: 1.1rem; }
 .svc h3 { margin-bottom: .5rem; }
 .svc p { font-size: .95rem; margin-bottom: .3rem; }
-.svc { display: flex; flex-direction: column; }
-.svc .shotnote { margin-top: auto; padding-top: .5rem; }
 
 /* ---------------------------------------------------------- advantages --- */
 

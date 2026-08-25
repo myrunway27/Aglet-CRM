@@ -10,7 +10,7 @@
  * All copy lives in content.json. Colours and type are the :root block at the
  * top of assets/styles.css.
  */
-import { readFileSync, writeFileSync, mkdirSync, copyFileSync } from "node:fs";
+import { readFileSync, writeFileSync, mkdirSync, copyFileSync, readdirSync } from "node:fs";
 import { resolve, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -50,8 +50,13 @@ const ICONS = {
 };
 const icon = (k) => `<svg width="42" height="42" viewBox="0 0 42 42" aria-hidden="true">${ICONS[k] || ICONS.globe}</svg>`;
 
-const photo = (tag) => `<div class="ph"><span class="ph__tag">${esc(tag)}</span></div>`;
-const shot = (note) => `<p class="shotnote">${esc(note)}</p>`;
+/* IMG resolves an image name to a src — swapped between the dist build
+   (relative path) and the single-file preview (inline data URI). */
+let IMG = (n) => "assets/img/" + n + ".jpg";
+const dataUri = (n) =>
+  "data:image/jpeg;base64," + readFileSync(resolve(ROOT, "assets/img/" + n + ".jpg")).toString("base64");
+const photo = (name, eager) =>
+  `<div class="ph"><img src="${IMG(name)}" alt=""${eager ? "" : ' loading="lazy"'}></div>`;
 
 const spine = (num) => `<div class="spine"><span class="spine__num">${esc(num)}</span><span class="spine__line"></span></div>`;
 
@@ -91,14 +96,13 @@ const MMENU = `
 
 const hero = () => `
 <section class="hero" id="top">
-  <div class="hero__photo"><div class="ph"><span class="ph__tag">Hero photograph</span></div></div>
+  <div class="hero__photo">${photo(c.hero.img, true)}</div>
   <div class="wrap">
     <div class="hero__grid">
       ${spine(c.hero.num)}
       <div>
         <h1>${esc(c.hero.headline)}</h1>
         <p class="hero__body">${esc(c.hero.body)}</p>
-        <p class="shotnote" style="max-width:62ch">${esc(c.hero.photo)}</p>
       </div>
     </div>
   </div>
@@ -120,10 +124,9 @@ const services = () => `
             .map(
               (s, i) => `<article class="svc">
             <span class="svc__num">${n2(i)}</span>
-            ${photo("Service " + n2(i))}
+            ${photo(s.img)}
             <h3>${esc(s.title)}</h3>
             <p>${esc(s.body)}</p>
-            ${shot(s.photo)}
           </article>`
             )
             .join("\n          ")}
@@ -187,10 +190,9 @@ const design = () => {
   const narrow = c.design.cards.filter((x) => !x.wide);
   const wide = c.design.cards.filter((x) => x.wide);
   const card = (d, mod = "") => `<article class="dz${mod}">
-            <div class="ph" style="aspect-ratio:${mod ? "21/8" : "4/3.4"}"><span class="ph__tag">Photograph</span></div>
+            <div class="ph" style="aspect-ratio:${mod ? "21/8" : "4/3.4"}"><img src="${IMG(d.img)}" alt="" loading="lazy"></div>
             <div class="dz__cap"><span class="dz__title">${esc(d.title)}</span><span class="dz__rule"></span></div>
-          </article>
-          ${shot(d.photo)}`;
+          </article>`;
   return `
 <section class="sect sect--light" id="design">
   <div class="wrap">
@@ -224,7 +226,6 @@ const contact = () => `
         <h2>${esc(c.contact.headline)}</h2>
         <p class="contact__body">${esc(c.contact.body)}</p>
         <a class="mailbtn" href="mailto:${esc(c.brand.email)}">${esc(c.contact.buttonLabel)}</a>
-        <div class="note"><b>Before launch —</b> ${esc(c.notes.photos)}</div>
       </div>
     </div>
   </div>
@@ -310,7 +311,7 @@ const SCRIPT = `
 })();
 </script>`;
 
-const BODY = [
+const makeBody = () => [
   header(),
   MMENU,
   '<main id="main">',
@@ -324,6 +325,10 @@ const BODY = [
   footer(),
   TOTOP,
 ].join("\n");
+
+const BODY = makeBody();            // dist: relative image paths
+IMG = dataUri;
+const BODY_PREVIEW = makeBody();    // preview: self-contained data URIs
 
 const schema = () =>
   `<script type="application/ld+json">\n${JSON.stringify(
@@ -369,9 +374,12 @@ ${SCRIPT}
 mkdirSync(resolve(ROOT, "dist/assets"), { recursive: true });
 writeFileSync(resolve(ROOT, "dist/index.html"), page);
 copyFileSync(resolve(ROOT, "assets/styles.css"), resolve(ROOT, "dist/assets/styles.css"));
+mkdirSync(resolve(ROOT, "dist/assets/img"), { recursive: true });
+for (const f of readdirSync(resolve(ROOT, "assets/img")))
+  copyFileSync(resolve(ROOT, "assets/img", f), resolve(ROOT, "dist/assets/img", f));
 writeFileSync(
   resolve(ROOT, "preview.html"),
-  `<title>${esc(c.brand.name)}</title>\n${FONTS}\n<style>\n${css}\n</style>\n${BODY}\n${SCRIPT}\n`
+  `<title>${esc(c.brand.name)}</title>\n${FONTS}\n<style>\n${css}\n</style>\n${BODY_PREVIEW}\n${SCRIPT}\n`
 );
 
 console.log("dist/index.html  " + page.length.toLocaleString() + " bytes");

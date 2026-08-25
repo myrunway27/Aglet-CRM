@@ -33,7 +33,8 @@
     "num": "01",
     "headline": "Build once. Scale without limits",
     "body": "Infinity Development is an IT company covering the complete spectrum of a modern build: server software solutions, cloud infrastructure, artificial intelligence, web development, Internet of Things and UI/UX design — delivered by one engineering team, under one contract.",
-    "photo": "Wide shot of the team at work — open-plan office, screens lit, shallow depth of field. Dark enough to carry white type across the upper half."
+    "photo": "Wide shot of the team at work — open-plan office, screens lit, shallow depth of field. Dark enough to carry white type across the upper half.",
+    "img": "hero"
   },
   "services": {
     "num": "02",
@@ -44,27 +45,32 @@
       {
         "title": "Custom Software Development",
         "body": "Bespoke systems designed around how your business actually operates — internal platforms, integrations and the APIs that hold them together.",
-        "photo": "Close crop of hands on a keyboard, warm desk light, code out of focus behind."
+        "photo": "Close crop of hands on a keyboard, warm desk light, code out of focus behind.",
+        "img": "svc-code"
       },
       {
         "title": "Cloud Solutions & Services",
         "body": "Architecture, migration and the part that comes after: scaling, cost control, backups and uptime you do not have to think about.",
-        "photo": "Data centre corridor, racks receding, cool blue-green lighting."
+        "photo": "Data centre corridor, racks receding, cool blue-green lighting.",
+        "img": "svc-cloud"
       },
       {
         "title": "Cybersecurity & Risk Management",
         "body": "Hardening, access control, monitoring and audit built into the system from the start rather than bolted on after an incident.",
-        "photo": "Macro of a circuit board, teal traces catching the light."
+        "photo": "Macro of a circuit board, teal traces catching the light.",
+        "img": "svc-sec"
       },
       {
         "title": "AI Integration & Machine Learning",
         "body": "Models and data pipelines pointed at specific work — document handling, forecasting, classification, triage. Applied where it pays.",
-        "photo": "Abstract neural or particle visual, teal on black."
+        "photo": "Abstract neural or particle visual, teal on black.",
+        "img": "svc-ai"
       },
       {
         "title": "IT Support & Managed Services",
         "body": "Proactive technical support and system care that keeps operations stable, patched and monitored around the clock.",
-        "photo": "Operations desk, multiple monitors with dashboards, engineer silhouetted."
+        "photo": "Operations desk, multiple monitors with dashboards, engineer silhouetted.",
+        "img": "svc-ops"
       }
     ]
   },
@@ -155,22 +161,26 @@
       {
         "title": "Market research",
         "photo": "Desk scene — laptop and monitor showing analytics, natural window light, muted tones.",
-        "wide": false
+        "wide": false,
+        "img": "dz-research"
       },
       {
         "title": "Strategy & positioning",
         "photo": "Hands at a wall of sticky notes, workshop in progress, backlit.",
-        "wide": false
+        "wide": false,
+        "img": "dz-strategy"
       },
       {
         "title": "Identity design",
         "photo": "Colour swatch books and printed palette sheets fanned across a dark surface.",
-        "wide": false
+        "wide": false,
+        "img": "dz-identity"
       },
       {
         "title": "Campaign launch",
         "photo": "Wide shot — team presenting to clients in a bright meeting room. Full-bleed banner crop.",
-        "wide": true
+        "wide": true,
+        "img": "dz-launch"
       }
     ]
   },
@@ -234,7 +244,7 @@
     "copyright": "© 2026 Infinity Development"
   },
   "notes": {
-    "photos": "PLACEHOLDER IMAGERY — every frame carries the shot it needs. Source or commission these before launch; the reference site is photo-led and the design depends on real images.",
+    "photos": "The imagery is original generated abstract art in the brand palette. To use real photography instead, overwrite the matching file in assets/img/ (keep the filename) and rebuild; the shot briefs for a future photoshoot are kept on each item's 'photo' field in this file.",
     "content": "No invented clients, testimonials or statistics appear anywhere on this site."
   }
 }
