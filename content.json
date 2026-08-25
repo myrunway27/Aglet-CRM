@@ -1,0 +1,127 @@
+{
+  "_readme": "All site copy lives here. Edit and run `node build.mjs`. No HTML or CSS changes needed.",
+
+  "brand": {
+    "name": "Infinity Development",
+    "short": "Infinity",
+    "abbr": "INFDEV",
+    "email": "info@infdev.dev",
+    "domain": "infdev.dev",
+    "founded": "2026"
+  },
+
+  "meta": {
+    "title": "Infinity Development — software, cloud, AI and design under one roof",
+    "description": "An IT company that designs, builds and runs software end to end: bespoke development, cloud infrastructure, AI, web, UI/UX, IoT and brand.",
+    "url": "https://infdev.dev/"
+  },
+
+  "nav": [
+    { "label": "Services", "href": "#services" },
+    { "label": "Approach", "href": "#approach" },
+    { "label": "Work", "href": "#work" },
+    { "label": "About", "href": "#about" },
+    { "label": "Contact", "href": "#contact" }
+  ],
+
+  "hero": {
+    "kicker": "IT solutions, end to end",
+    "headline": "One team for the whole build",
+    "lede": "Most companies end up stitching together an agency for the app, a contractor for the infrastructure, and a studio for the brand — then spend their time translating between them. Infinity Development covers the whole stack: software, cloud, AI, web, IoT and the identity around it.",
+    "primaryCta": { "label": "Start a project", "href": "#contact" },
+    "secondaryCta": { "label": "What we do", "href": "#services" },
+    "marks": ["Software", "Cloud", "AI", "Web", "UI/UX", "IoT", "Brand"]
+  },
+
+  "about": {
+    "kicker": "Who we are",
+    "headline": "A single engineering and design team, not a network of subcontractors",
+    "body": [
+      "Infinity Development is an IT company working across the full spectrum of a modern build — server-side software, cloud infrastructure, artificial intelligence, web, connected devices, interface design and the brand that wraps it.",
+      "The people who scope your project are the people who build it. That means architecture decisions get made with the design in view, the brand gets made with the product in view, and nothing gets lost in a handover between three companies who have never spoken."
+    ],
+    "points": [
+      { "title": "One contract, one team", "body": "No subcontracting chain, no finger-pointing when something breaks between two vendors' scopes." },
+      { "title": "Built to be handed over", "body": "Documented, tested and deployable by your own team. You own what we build outright." },
+      { "title": "We stay after launch", "body": "Monitoring, support and iteration. Shipping is the middle of the project, not the end." }
+    ]
+  },
+
+  "services": {
+    "kicker": "What we do",
+    "headline": "The whole spectrum, properly",
+    "lede": "Seven disciplines that most companies have to source separately.",
+    "items": [
+      { "icon": "code",   "title": "Software development", "body": "Bespoke systems built around how your business actually runs — internal tools, platforms, integrations and the APIs that hold them together." },
+      { "icon": "cloud",  "title": "Cloud & infrastructure", "body": "Architecture, migration and the unglamorous part afterwards: cost control, scaling, backups and uptime you do not have to think about." },
+      { "icon": "ai",     "title": "AI & automation", "body": "Models and data pipelines aimed at specific work — document handling, forecasting, classification, support triage. Applied where it pays, not everywhere." },
+      { "icon": "web",    "title": "Web development", "body": "Fast, accessible, search-visible sites and web applications. Built to load quickly on a phone on mobile data, not just on a designer's laptop." },
+      { "icon": "design", "title": "UI/UX design", "body": "Interface design grounded in how people actually use software — research, flows, prototypes and a design system your developers can build from." },
+      { "icon": "iot",    "title": "IoT & connected devices", "body": "Device firmware, telemetry, provisioning and the dashboards behind them. From a handful of sensors to a fleet." },
+      { "icon": "brand",  "title": "Branding & marketing", "body": "Positioning, identity and the campaigns that carry it. We map the competitive landscape, find the gap, and build the brand into it." }
+    ]
+  },
+
+  "approach": {
+    "kicker": "How we work",
+    "headline": "Four stages, and you see the work at every one",
+    "steps": [
+      { "name": "Map", "body": "We learn the business before the software: who uses it, what breaks today, what the real constraints are. Nothing gets scoped from a wishlist." },
+      { "name": "Define", "body": "Architecture, scope and a fixed plan with a number attached. You approve something specific, not a range that drifts." },
+      { "name": "Build", "body": "Shipped in increments you can open and use. Weekly builds, visible progress, and room to change direction before it is expensive." },
+      { "name": "Run", "body": "Monitoring, support and iteration after launch — or a clean handover to your team, documented well enough that they do not need us." }
+    ]
+  },
+
+  "capabilities": {
+    "kicker": "Under the hood",
+    "headline": "What we build with",
+    "groups": [
+      { "label": "Backend", "items": ["Node.js", "Python", "Go", "PostgreSQL", "Redis"] },
+      { "label": "Frontend", "items": ["TypeScript", "React", "Next.js", "React Native"] },
+      { "label": "Cloud", "items": ["AWS", "Azure", "Docker", "Kubernetes", "Terraform"] },
+      { "label": "AI & data", "items": ["OpenAI & Anthropic APIs", "PyTorch", "Vector search", "ETL pipelines"] },
+      { "label": "IoT", "items": ["MQTT", "ESP32", "Embedded C", "Time-series storage"] },
+      { "label": "Design", "items": ["Figma", "Design systems", "Prototyping", "Brand identity"] }
+    ],
+    "note": "PLACEHOLDER STACK — replace with the tools your team actually uses before launch."
+  },
+
+  "work": {
+    "kicker": "Selected work",
+    "headline": "Recent projects",
+    "note": "PLACEHOLDER PROJECTS — replace with real work before launch. Do not publish invented case studies or client names.",
+    "items": [
+      { "tag": "Platform", "title": "Project name", "body": "One line on the problem, one line on what was built, one line on the result. Replace with a real project." },
+      { "tag": "Mobile", "title": "Project name", "body": "One line on the problem, one line on what was built, one line on the result. Replace with a real project." },
+      { "tag": "Brand + web", "title": "Project name", "body": "One line on the problem, one line on what was built, one line on the result. Replace with a real project." }
+    ]
+  },
+
+  "cta": {
+    "kicker": "Get in touch",
+    "headline": "Tell us what you are trying to build",
+    "body": "A short email is enough to start. We will come back with questions, a rough shape and an honest view on whether we are the right fit.",
+    "buttonLabel": "info@infdev.dev"
+  },
+
+  "footer": {
+    "blurb": "An IT company building software, infrastructure, interfaces and brands end to end.",
+    "columns": [
+      { "title": "Services", "links": [
+        { "label": "Software development", "href": "#services" },
+        { "label": "Cloud & infrastructure", "href": "#services" },
+        { "label": "AI & automation", "href": "#services" },
+        { "label": "Web development", "href": "#services" },
+        { "label": "UI/UX design", "href": "#services" }
+      ]},
+      { "title": "Company", "links": [
+        { "label": "About", "href": "#about" },
+        { "label": "Approach", "href": "#approach" },
+        { "label": "Work", "href": "#work" },
+        { "label": "Contact", "href": "#contact" }
+      ]}
+    ],
+    "copyright": "© 2026 Infinity Development"
+  }
+}
