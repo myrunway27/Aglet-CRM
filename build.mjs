@@ -64,9 +64,30 @@ const header = () => `
     <nav class="nav" aria-label="Primary">
       ${c.nav.map((x) => `<a href="${esc(x.href)}">${esc(x.label)}</a>`).join("\n      ")}
     </nav>
-    <a class="corner" href="#contact">Contact us</a>
+    <a class="corner corner--desk" href="#contact">Contact us</a>
+    <button class="burger" id="burger" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="mobilemenu">
+      <span></span><span></span>
+    </button>
   </div>
 </header>`;
+
+/* Full-screen overlay menu, mirroring the reference site's mobile pattern:
+   logo kept top-left, close control top-right, links stacked right of centre
+   with the ring motif behind them. */
+const MMENU = `
+<div class="mmenu" id="mobilemenu" hidden>
+  <span class="mmenu__disc" aria-hidden="true"></span>
+  <div class="mmenu__bar">
+    <a class="brand" href="#top" data-close>${MARK}${WORDMARK}</a>
+    <button class="mmenu__close" id="mclose" type="button" aria-label="Close menu">
+      <svg width="34" height="34" viewBox="0 0 34 34" fill="none" aria-hidden="true"><path d="M7 7l20 20M27 7 7 27" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg>
+    </button>
+  </div>
+  <nav class="mmenu__nav" aria-label="Mobile">
+    ${c.nav.map((x) => `<a href="${esc(x.href)}" data-close>${esc(x.label)}</a>`).join("\n    ")}
+    <a class="corner" href="#contact" data-close>Contact us</a>
+  </nav>
+</div>`;
 
 const hero = () => `
 <section class="hero" id="top">
@@ -252,11 +273,46 @@ const SCRIPT = `
     var reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     window.scrollTo({ top: 0, behavior: reduce ? "auto" : "smooth" });
   });
+
+  var burger = document.getElementById("burger");
+  var menu = document.getElementById("mobilemenu");
+  var close = document.getElementById("mclose");
+
+  function setMenu(open) {
+    if (!menu || !burger) return;
+    menu.hidden = !open;
+    burger.setAttribute("aria-expanded", String(open));
+    document.body.style.overflow = open ? "hidden" : "";
+    document.body.classList.toggle("menu-open", open);
+    if (open) {
+      requestAnimationFrame(function () { menu.classList.add("is-open"); });
+      if (close) close.focus();
+    } else {
+      menu.classList.remove("is-open");
+      burger.focus();
+    }
+  }
+
+  if (burger) burger.addEventListener("click", function () { setMenu(menu.hidden); });
+  if (close) close.addEventListener("click", function () { setMenu(false); });
+  if (menu) {
+    menu.addEventListener("click", function (e) {
+      /* A menu link, or any backdrop area that is not itself a control. */
+      if (e.target.closest("[data-close]") || !e.target.closest("a, button")) setMenu(false);
+    });
+  }
+  document.addEventListener("keydown", function (e) {
+    if (e.key === "Escape" && menu && !menu.hidden) setMenu(false);
+  });
+  window.addEventListener("resize", function () {
+    if (menu && !menu.hidden && window.innerWidth > 1000) setMenu(false);
+  });
 })();
 </script>`;
 
 const BODY = [
   header(),
+  MMENU,
   '<main id="main">',
   hero(),
   services(),

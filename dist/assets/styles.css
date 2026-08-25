@@ -340,3 +340,77 @@ p  { margin: 0 0 1rem; text-wrap: pretty; }
   .brand__line--1 { font-size: .95rem; letter-spacing: .08em; }
   .brand__line--2 { font-size: .61rem; letter-spacing: .233em; }
 }
+
+/* =============================================================== mobile nav */
+/* Below 1000px the inline nav is hidden, so the header needs a control that
+   opens it. Mirrors the reference: logo stays top-left, close top-right,
+   links stacked right of centre over a large translucent disc. */
+
+.burger {
+  display: none; margin-left: auto; flex: none;
+  width: 44px; height: 44px; padding: 0;
+  background: transparent; border: 0; cursor: pointer;
+  align-items: center; justify-content: center; gap: 7px; flex-direction: column;
+}
+.burger span { display: block; width: 26px; height: 2px; background: var(--on-dark); }
+.burger:hover span { background: var(--teal-lt); }
+
+@media (max-width: 1000px) {
+  .corner--desk { display: none; }
+  .burger { display: flex; }
+}
+
+.mmenu {
+  position: fixed; inset: 0; z-index: 90;
+  display: flex; flex-direction: column;
+  background: rgba(20,23,23,.14);
+  opacity: 0; transition: opacity .24s ease;
+  overscroll-behavior: contain;
+}
+.mmenu[hidden] { display: none; }
+/* The header sits under the translucent overlay; its burger would otherwise
+   ghost through the close control. */
+body.menu-open .masthead { opacity: 0; pointer-events: none; }
+.mmenu.is-open { opacity: 1; }
+
+/* The disc is the readable ground — the page shows through everywhere else. */
+.mmenu__disc {
+  position: absolute; left: -14vw; top: 60px;
+  width: 115vw; height: 115vw; max-width: 620px; max-height: 620px;
+  border-radius: 50%;
+  background: rgba(17,20,20,.88);
+  pointer-events: none;
+}
+
+.mmenu__bar {
+  position: relative; z-index: 1;
+  display: flex; align-items: center; gap: 1rem;
+  padding: 1.6rem 26px 0;
+}
+.mmenu__close {
+  margin-left: auto; flex: none;
+  width: 46px; height: 46px; padding: 0;
+  display: grid; place-items: center;
+  background: transparent; border: 0; cursor: pointer; color: var(--on-dark);
+}
+.mmenu__close:hover { color: var(--teal-lt); }
+
+.mmenu__nav {
+  position: relative; z-index: 1;
+  flex: 1; min-height: 0;
+  display: flex; flex-direction: column; align-items: center; justify-content: flex-start;
+  gap: clamp(1.55rem, 3.8vh, 2.15rem);
+  padding: clamp(1.5rem, 4vh, 2.3rem) 5% 3rem 42%;
+  overflow-y: auto;
+}
+.mmenu__nav a {
+  font-family: var(--f-body); font-size: clamp(1.15rem, 4.4vw, 1.35rem);
+  font-weight: 500; color: var(--on-dark); text-decoration: none;
+  text-align: center; white-space: nowrap;
+}
+.mmenu__nav a:hover { color: var(--teal-lt); }
+.mmenu__nav .corner { margin-left: 0; margin-top: .4rem; font-family: var(--f-display); }
+
+@media (max-width: 380px) {
+  .mmenu__nav { padding-left: 22%; }
+}
