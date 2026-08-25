@@ -4,13 +4,11 @@
  *   node build.mjs
  *
  * Outputs:
- *   dist/index.html        deployable static site
- *   dist/assets/styles.css
- *   preview.html           single-file build, for publishing as an Artifact
+ *   dist/index.html, dist/assets/styles.css   deployable static site
+ *   preview.html                              single-file build for Artifact
  *
- * All copy lives in content.json. Design tokens are the :root block at the
- * top of assets/styles.css. Nothing in this file needs editing to change
- * wording, services, or branding.
+ * All copy lives in content.json. Colours and type are the :root block at the
+ * top of assets/styles.css.
  */
 import { readFileSync, writeFileSync, mkdirSync, copyFileSync } from "node:fs";
 import { resolve, dirname } from "node:path";
@@ -22,187 +20,187 @@ const css = readFileSync(resolve(ROOT, "assets/styles.css"), "utf8");
 
 const esc = (s) =>
   String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+const n2 = (i) => String(i + 1).padStart(2, "0");
 
 const FONTS =
   '<link rel="preconnect" href="https://fonts.googleapis.com">\n' +
   '<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>\n' +
-  '<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&family=Manrope:wght@400;500;600;700&family=Sora:wght@600;700&display=swap" rel="stylesheet">';
+  '<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700;800&family=Barlow:wght@400;500;600;700&display=swap" rel="stylesheet">';
 
-/* Two interlocking rings — the infinity mark. */
-const MARK = `<svg class="brand__mark" viewBox="0 0 32 32" fill="none" aria-hidden="true">
-  <circle cx="11.5" cy="16" r="6.6" stroke="currentColor" stroke-width="2.4"/>
-  <circle cx="20.5" cy="16" r="6.6" stroke="currentColor" stroke-width="2.4" opacity=".5"/>
+/* Lemniscate wordmark — deliberately distinct from the reference site's
+   two-ring logo, and on the company's own name. */
+const MARK = `<svg class="brand__mark" viewBox="0 0 68 40" fill="none" aria-hidden="true">
+  <path d="M34 20C39 11 45 6 52 6C60 6 65 12 65 20C65 28 60 34 52 34C45 34 39 29 34 20C29 11 23 6 16 6C8 6 3 12 3 20C3 28 8 34 16 34C23 34 29 29 34 20Z"
+        stroke="currentColor" stroke-width="4.4" stroke-linejoin="round"/>
 </svg>`;
 
 const ICONS = {
-  code:   '<path d="M9 7 3.5 12.5 9 18M15 7l5.5 5.5L15 18" stroke="currentColor" stroke-width="1.8" fill="none" stroke-linecap="round" stroke-linejoin="round"/>',
-  cloud:  '<path d="M7.2 18.5A4.2 4.2 0 0 1 7 10.1a5.6 5.6 0 0 1 10.8-1.3 3.9 3.9 0 0 1-.6 9.7z" stroke="currentColor" stroke-width="1.7" fill="none" stroke-linejoin="round"/>',
-  ai:     '<rect x="5" y="5" width="14" height="14" rx="3.5" stroke="currentColor" stroke-width="1.7" fill="none"/><circle cx="12" cy="12" r="2.6" fill="currentColor"/><path d="M12 2.4V5M12 19v2.6M2.4 12H5M19 12h2.6" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/>',
-  web:    '<circle cx="12" cy="12" r="8.4" stroke="currentColor" stroke-width="1.7" fill="none"/><path d="M3.6 12h16.8M12 3.6c2.4 2.5 3.6 5.4 3.6 8.4s-1.2 5.9-3.6 8.4c-2.4-2.5-3.6-5.4-3.6-8.4s1.2-5.9 3.6-8.4Z" stroke="currentColor" stroke-width="1.5" fill="none"/>',
-  design: '<path d="M12 3.2 4.4 8v8L12 20.8 19.6 16V8z" stroke="currentColor" stroke-width="1.7" fill="none" stroke-linejoin="round"/><path d="M4.4 8 12 12.6 19.6 8M12 12.6v8.2" stroke="currentColor" stroke-width="1.5" fill="none"/>',
-  iot:    '<circle cx="12" cy="12" r="2.6" fill="currentColor"/><circle cx="5" cy="5.6" r="2.1" stroke="currentColor" stroke-width="1.6" fill="none"/><circle cx="19" cy="5.6" r="2.1" stroke="currentColor" stroke-width="1.6" fill="none"/><circle cx="5" cy="18.4" r="2.1" stroke="currentColor" stroke-width="1.6" fill="none"/><circle cx="19" cy="18.4" r="2.1" stroke="currentColor" stroke-width="1.6" fill="none"/><path d="m6.6 7 3.6 3.4M17.4 7l-3.6 3.4M6.6 17l3.6-3.4M17.4 17l-3.6-3.4" stroke="currentColor" stroke-width="1.4"/>',
-  brand:  '<path d="M12 3.4 14.5 9l6.1.5-4.6 4 1.4 6-5.4-3.2L6.6 19.5l1.4-6-4.6-4L9.5 9z" stroke="currentColor" stroke-width="1.6" fill="none" stroke-linejoin="round"/>',
+  globe:  '<circle cx="21" cy="21" r="15.5" stroke="currentColor" stroke-width="2.2" fill="none"/><path d="M5.5 21h31M21 5.5c4.2 4.4 6.3 9.6 6.3 15.5S25.2 32.1 21 36.5c-4.2-4.4-6.3-9.6-6.3-15.5S16.8 9.9 21 5.5Z" stroke="currentColor" stroke-width="2" fill="none"/>',
+  puzzle: '<path d="M9 12h7a3.4 3.4 0 1 1 6.8 0H30v7.2a3.4 3.4 0 1 0 0 6.8V33h-7.2a3.4 3.4 0 1 0-6.8 0H9z" stroke="currentColor" stroke-width="2.2" fill="none" stroke-linejoin="round"/>',
+  rocket: '<path d="M18 27 8 25l4.5-7.6 5.5.9M15 24l3 3M24 24l2 10 7.6-4.5-.9-5.5" stroke="currentColor" stroke-width="2.2" fill="none" stroke-linejoin="round"/><path d="M18 27c-3-7 0-15 7.6-19.6C29.8 4.9 34 5 36 5.4c.4 2 .5 6.2-2 10.4C29.4 23.4 25 26.4 18 27Z" stroke="currentColor" stroke-width="2.2" fill="none" stroke-linejoin="round"/>',
+  shield: '<path d="M21 5 8.5 10v9.6c0 7.4 5.3 13.9 12.5 15.4 7.2-1.5 12.5-8 12.5-15.4V10z" stroke="currentColor" stroke-width="2.2" fill="none" stroke-linejoin="round"/><path d="m15.5 20.4 4 4.2 7.2-8" stroke="currentColor" stroke-width="2.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/>',
+  nodes:  '<circle cx="8.5" cy="30" r="4" stroke="currentColor" stroke-width="2.2" fill="none"/><circle cx="19" cy="21" r="4" stroke="currentColor" stroke-width="2.2" fill="none"/><circle cx="29" cy="26" r="4" stroke="currentColor" stroke-width="2.2" fill="none"/><path d="m11.8 27.4 4-3.6M22.6 22.6l3 2.2M32 23 37 12m0 0-5.2.6M37 12l.8 5.2" stroke="currentColor" stroke-width="2.2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>',
+  cloud:  '<path d="M13 31a7 7 0 0 1-.4-14 9.4 9.4 0 0 1 18-2.2A6.6 6.6 0 0 1 29.6 31z" stroke="currentColor" stroke-width="2.2" fill="none" stroke-linejoin="round"/>',
+  pen:    '<path d="M11 15c3-3.6 6.4-5.4 10-5.4S28 11.4 31 15" stroke="currentColor" stroke-width="2.2" fill="none" stroke-linecap="round"/><path d="M21 12v6M17.4 18h7.2l-3.6 15z" stroke="currentColor" stroke-width="2.2" fill="none" stroke-linejoin="round"/>',
+  support:'<path d="M9 24v-3a12 12 0 0 1 24 0v3" stroke="currentColor" stroke-width="2.2" fill="none" stroke-linecap="round"/><rect x="5.5" y="22.5" width="7" height="10" rx="3" stroke="currentColor" stroke-width="2.2" fill="none"/><rect x="29.5" y="22.5" width="7" height="10" rx="3" stroke="currentColor" stroke-width="2.2" fill="none"/>',
 };
-const icon = (n) => `<svg width="21" height="21" viewBox="0 0 24 24" aria-hidden="true">${ICONS[n] || ICONS.code}</svg>`;
-const TICK = '<svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M13.5 4.5 6.5 12 2.5 8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+const icon = (k) => `<svg width="42" height="42" viewBox="0 0 42 42" aria-hidden="true">${ICONS[k] || ICONS.globe}</svg>`;
 
-/* A true lemniscate: both lobes meet at centre with crossing tangents. */
-const LEMNISCATE =
-  "M120 60C133 41 149 30 168 30C191 30 210 43 210 60C210 77 191 90 168 90" +
-  "C149 90 133 79 120 60C107 41 91 30 72 30C49 30 30 43 30 60C30 77 49 90 72 90" +
-  "C91 90 107 79 120 60Z";
+const photo = (tag) => `<div class="ph"><span class="ph__tag">${esc(tag)}</span></div>`;
+const shot = (note) => `<p class="shotnote">${esc(note)}</p>`;
+
+const spine = (num) => `<div class="spine"><span class="spine__num">${esc(num)}</span><span class="spine__line"></span></div>`;
 
 /* ------------------------------------------------------------- sections -- */
 
 const header = () => `
-<header class="masthead">
+<header class="masthead" id="masthead">
   <div class="wrap">
-    <a class="brand" href="#top">${MARK}<span class="brand__name">Infinity <span>Development</span></span></a>
+    <a class="brand" href="#top">${MARK}<span class="brand__name">INFINITY<em> DEVELOPMENT</em></span></a>
     <nav class="nav" aria-label="Primary">
-      ${c.nav.map((n) => `<a href="${esc(n.href)}">${esc(n.label)}</a>`).join("\n      ")}
+      ${c.nav.map((x) => `<a href="${esc(x.href)}">${esc(x.label)}</a>`).join("\n      ")}
     </nav>
-    <span class="masthead__cta"><a class="btn btn--primary" href="#contact">Start a project</a></span>
+    <a class="corner" href="#contact">Contact us</a>
   </div>
 </header>`;
 
 const hero = () => `
 <section class="hero" id="top">
+  <div class="hero__photo"><div class="ph"><span class="ph__tag">Hero photograph</span></div></div>
   <div class="wrap">
     <div class="hero__grid">
+      ${spine(c.hero.num)}
       <div>
-        <p class="kicker">${esc(c.hero.kicker)}</p>
         <h1>${esc(c.hero.headline)}</h1>
-        <p class="lede hero__lede">${esc(c.hero.lede)}</p>
-        <div class="btns">
-          <a class="btn btn--primary btn--lg" href="${esc(c.hero.primaryCta.href)}">${esc(c.hero.primaryCta.label)}</a>
-          <a class="btn btn--ghost btn--lg" href="${esc(c.hero.secondaryCta.href)}">${esc(c.hero.secondaryCta.label)}</a>
-        </div>
+        <p class="hero__body">${esc(c.hero.body)}</p>
+        <p class="shotnote" style="max-width:62ch">${esc(c.hero.photo)}</p>
       </div>
-      <svg class="loop" viewBox="0 0 240 120" aria-hidden="true">
-        <path class="loop__track" d="${LEMNISCATE}"/>
-        <path class="loop__run"  d="${LEMNISCATE}" pathLength="700"/>
-        <path class="loop__run2" d="${LEMNISCATE}" pathLength="700"/>
-      </svg>
-    </div>
-    <div class="marks">
-      ${c.hero.marks.map((m) => `<span>${esc(m)}</span>`).join("\n      ")}
-    </div>
-  </div>
-</section>`;
-
-const about = () => `
-<section class="section" id="about">
-  <div class="wrap">
-    <div class="split">
-      <div>
-        <p class="kicker">${esc(c.about.kicker)}</p>
-        <h2>${esc(c.about.headline)}</h2>
-        ${c.about.body.map((p) => `<p class="lede">${esc(p)}</p>`).join("\n        ")}
-      </div>
-      <ul class="ticks">
-        ${c.about.points
-          .map((p) => `<li>${TICK}<div><h3>${esc(p.title)}</h3><p>${esc(p.body)}</p></div></li>`)
-          .join("\n        ")}
-      </ul>
     </div>
   </div>
 </section>`;
 
 const services = () => `
-<section class="section section--line" id="services">
+<section class="sect sect--dark" id="services">
   <div class="wrap">
-    <div class="s-head">
-      <p class="kicker">${esc(c.services.kicker)}</p>
-      <h2>${esc(c.services.headline)}</h2>
-      <p class="lede">${esc(c.services.lede)}</p>
-    </div>
-    <div class="grid grid--auto">
-      ${c.services.items
-        .map(
-          (s) => `<article class="card">
-        <div class="card__icon">${icon(s.icon)}</div>
-        <h3>${esc(s.title)}</h3>
-        <p>${esc(s.body)}</p>
-      </article>`
-        )
-        .join("\n      ")}
+    <div class="sect__grid">
+      ${spine(c.services.num)}
+      <div>
+        <p class="sect__label">${esc(c.services.label)}</p>
+        <div class="sect__head">
+          <h2>${esc(c.services.headline)}</h2>
+          <div class="sect__intro"><p>${esc(c.services.intro)}</p></div>
+        </div>
+        <div class="svc-grid">
+          ${c.services.items
+            .map(
+              (s, i) => `<article class="svc">
+            <span class="svc__num">${n2(i)}</span>
+            ${photo("Service " + n2(i))}
+            <h3>${esc(s.title)}</h3>
+            <p>${esc(s.body)}</p>
+            ${shot(s.photo)}
+          </article>`
+            )
+            .join("\n          ")}
+        </div>
+      </div>
     </div>
   </div>
 </section>`;
 
-const approach = () => `
-<section class="section section--line" id="approach">
+const advantages = () => `
+<section class="sect sect--light" id="advantages">
   <div class="wrap">
-    <div class="s-head">
-      <p class="kicker">${esc(c.approach.kicker)}</p>
-      <h2>${esc(c.approach.headline)}</h2>
+    <div class="sect__grid">
+      ${spine(c.advantages.num)}
+      <div>
+        <p class="sect__label">${esc(c.advantages.label)}</p>
+        <h2 style="margin-bottom:clamp(30px,4.5vw,56px)">${esc(c.advantages.headline)}</h2>
+        <div class="adv-grid">
+          ${c.advantages.items
+            .map(
+              (a) => `<article class="adv">
+            <div class="adv__icon">${icon(a.icon)}</div>
+            <h3>${esc(a.title)}</h3>
+            <p>${esc(a.body)}</p>
+          </article>`
+            )
+            .join("\n          ")}
+        </div>
+      </div>
     </div>
-    <ol class="steps">
-      ${c.approach.steps
-        .map(
-          (s, i) => `<li class="step">
-        <span class="step__n">${String(i + 1).padStart(2, "0")}</span>
-        <h3>${esc(s.name)}</h3>
-        <p>${esc(s.body)}</p>
-      </li>`
-        )
-        .join("\n      ")}
-    </ol>
   </div>
 </section>`;
 
-const capabilities = () => `
-<section class="section section--line">
+const benefitCard = (b, i) => `<article class="ben">
+            <span class="ben__num">${n2(i)}</span>
+            <span class="ben__bar">${esc(b.title)}</span>
+            <p>${esc(b.body)}</p>
+          </article>`;
+
+const benefits = () => `
+<section class="sect sect--dark" id="benefits">
+  <svg class="ring" viewBox="0 0 760 760" aria-hidden="true"><circle cx="380" cy="380" r="330"/><circle cx="380" cy="380" r="215"/></svg>
   <div class="wrap">
-    <div class="s-head">
-      <p class="kicker">${esc(c.capabilities.kicker)}</p>
-      <h2>${esc(c.capabilities.headline)}</h2>
+    <div class="sect__grid">
+      ${spine(c.benefits.num)}
+      <div>
+        <p class="sect__label">${esc(c.benefits.label)}</p>
+        <h2 style="max-width:18ch;margin-bottom:clamp(32px,4.6vw,58px)">${esc(c.benefits.headline)}</h2>
+        <div class="ben-grid">
+          ${c.benefits.items.slice(0, 3).map((b, i) => benefitCard(b, i)).join("\n          ")}
+        </div>
+        <div class="ben-grid ben-grid--split">
+          ${c.benefits.items.slice(3).map((b, i) => benefitCard(b, i + 3)).join("\n          ")}
+        </div>
+      </div>
     </div>
-    <div class="caps">
-      ${c.capabilities.groups
-        .map(
-          (g) => `<div class="cap">
-        <p class="cap__label">${esc(g.label)}</p>
-        <ul>${g.items.map((i) => `<li>${esc(i)}</li>`).join("")}</ul>
-      </div>`
-        )
-        .join("\n      ")}
-    </div>
-    <div class="note" style="margin-top:1.6rem"><b>Note —</b> ${esc(c.capabilities.note)}</div>
   </div>
 </section>`;
 
-const work = () => `
-<section class="section section--line work" id="work">
+const design = () => {
+  const narrow = c.design.cards.filter((x) => !x.wide);
+  const wide = c.design.cards.filter((x) => x.wide);
+  const card = (d, mod = "") => `<article class="dz${mod}">
+            <div class="ph" style="aspect-ratio:${mod ? "21/8" : "4/3.4"}"><span class="ph__tag">Photograph</span></div>
+            <div class="dz__cap"><span class="dz__title">${esc(d.title)}</span><span class="dz__rule"></span></div>
+          </article>
+          ${shot(d.photo)}`;
+  return `
+<section class="sect sect--light" id="design">
   <div class="wrap">
-    <div class="s-head">
-      <p class="kicker">${esc(c.work.kicker)}</p>
-      <h2>${esc(c.work.headline)}</h2>
+    <div class="sect__grid">
+      ${spine(c.design.num)}
+      <div>
+        <p class="sect__label">${esc(c.design.label)}</p>
+        <div class="sect__head">
+          <h2>${esc(c.design.headline)}</h2>
+          <div class="sect__intro"><p>${esc(c.design.intro)}</p></div>
+        </div>
+        <div class="dz-grid">
+          ${narrow.map((d) => `<div>${card(d)}</div>`).join("\n          ")}
+        </div>
+        <div class="dz-grid dz-grid--wide">
+          ${wide.map((d) => `<div>${card(d, " dz--wide")}</div>`).join("\n          ")}
+        </div>
+      </div>
     </div>
-    <div class="grid grid--3">
-      ${c.work.items
-        .map(
-          (w) => `<article class="card">
-        <div class="work__thumb"></div>
-        <span class="work__tag">${esc(w.tag)}</span>
-        <h3>${esc(w.title)}</h3>
-        <p>${esc(w.body)}</p>
-      </article>`
-        )
-        .join("\n      ")}
-    </div>
-    <div class="note" style="margin-top:1.6rem"><b>Note —</b> ${esc(c.work.note)}</div>
   </div>
 </section>`;
+};
 
-const cta = () => `
-<section class="section cta" id="contact">
+const contact = () => `
+<section class="sect sect--dark contact" id="contact">
   <div class="wrap">
-    <p class="kicker">${esc(c.cta.kicker)}</p>
-    <h2>${esc(c.cta.headline)}</h2>
-    <p class="lede">${esc(c.cta.body)}</p>
-    <div class="btns">
-      <a class="btn btn--primary btn--lg mail" href="mailto:${esc(c.brand.email)}">${esc(c.cta.buttonLabel)}</a>
+    <div class="sect__grid">
+      ${spine(c.contact.num)}
+      <div>
+        <p class="sect__label">${esc(c.contact.label)}</p>
+        <h2>${esc(c.contact.headline)}</h2>
+        <p class="contact__body">${esc(c.contact.body)}</p>
+        <a class="mailbtn" href="mailto:${esc(c.brand.email)}">${esc(c.contact.buttonLabel)}</a>
+        <div class="note"><b>Before launch —</b> ${esc(c.notes.photos)}</div>
+      </div>
     </div>
   </div>
 </section>`;
@@ -212,7 +210,7 @@ const footer = () => `
   <div class="wrap">
     <div class="footer__grid">
       <div class="footer__brand">
-        <a class="brand" href="#top">${MARK}<span class="brand__name">Infinity <span>Development</span></span></a>
+        <a class="brand" href="#top">${MARK}<span class="brand__name">INFINITY<em> DEVELOPMENT</em></span></a>
         <p>${esc(c.footer.blurb)}</p>
         <a class="footer__mail" href="mailto:${esc(c.brand.email)}">${esc(c.brand.email)}</a>
       </div>
@@ -225,12 +223,47 @@ const footer = () => `
         )
         .join("\n      ")}
     </div>
-    <div class="footer__base">
-      <span>${esc(c.footer.copyright)}</span>
-      <span class="sp">${esc(c.brand.domain)}</span>
-    </div>
+    <div class="footer__base"><span>${esc(c.footer.copyright)}</span><span class="sp">${esc(c.brand.domain)}</span></div>
   </div>
 </footer>`;
+
+const TOTOP = `
+<button class="totop" id="totop" type="button" aria-label="Back to top">
+  <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M10 16V5M4.8 10.2 10 5l5.2 5.2" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+</button>`;
+
+const SCRIPT = `
+<script>
+(function () {
+  var head = document.getElementById("masthead");
+  var top = document.getElementById("totop");
+  function onScroll() {
+    var y = window.scrollY || 0;
+    if (head) head.classList.toggle("is-stuck", y > window.innerHeight * 0.85);
+    if (top) top.classList.toggle("is-on", y > 600);
+  }
+  window.addEventListener("scroll", onScroll, { passive: true });
+  onScroll();
+  if (top) top.addEventListener("click", function () {
+    var reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    window.scrollTo({ top: 0, behavior: reduce ? "auto" : "smooth" });
+  });
+})();
+</script>`;
+
+const BODY = [
+  header(),
+  '<main id="main">',
+  hero(),
+  services(),
+  advantages(),
+  benefits(),
+  design(),
+  contact(),
+  "</main>",
+  footer(),
+  TOTOP,
+].join("\n");
 
 const schema = () =>
   `<script type="application/ld+json">\n${JSON.stringify(
@@ -238,30 +271,15 @@ const schema = () =>
       "@context": "https://schema.org",
       "@type": "Organization",
       name: c.brand.name,
-      alternateName: c.brand.abbr,
       description: c.meta.description,
       url: c.meta.url,
       email: c.brand.email,
       foundingDate: c.brand.founded,
-      knowsAbout: c.services.items.map((s) => s.title),
+      knowsAbout: c.benefits.items.map((b) => b.title),
     },
     null,
     2
   )}\n</script>`;
-
-const BODY = [
-  header(),
-  '<main id="main">',
-  hero(),
-  about(),
-  services(),
-  approach(),
-  capabilities(),
-  work(),
-  cta(),
-  "</main>",
-  footer(),
-].join("\n");
 
 const page = `<!DOCTYPE html>
 <html lang="en">
@@ -275,7 +293,7 @@ const page = `<!DOCTYPE html>
 <meta property="og:title" content="${esc(c.meta.title)}">
 <meta property="og:description" content="${esc(c.meta.description)}">
 <meta property="og:url" content="${esc(c.meta.url)}">
-<meta name="theme-color" content="#0A0E17">
+<meta name="theme-color" content="#1F2222">
 ${FONTS}
 <link rel="stylesheet" href="assets/styles.css">
 </head>
@@ -283,6 +301,7 @@ ${FONTS}
 <a class="skip" href="#main">Skip to content</a>
 ${BODY}
 ${schema()}
+${SCRIPT}
 </body>
 </html>
 `;
@@ -290,7 +309,10 @@ ${schema()}
 mkdirSync(resolve(ROOT, "dist/assets"), { recursive: true });
 writeFileSync(resolve(ROOT, "dist/index.html"), page);
 copyFileSync(resolve(ROOT, "assets/styles.css"), resolve(ROOT, "dist/assets/styles.css"));
-writeFileSync(resolve(ROOT, "preview.html"), `<title>${esc(c.brand.name)}</title>\n${FONTS}\n<style>\n${css}\n</style>\n${BODY}\n`);
+writeFileSync(
+  resolve(ROOT, "preview.html"),
+  `<title>${esc(c.brand.name)}</title>\n${FONTS}\n<style>\n${css}\n</style>\n${BODY}\n${SCRIPT}\n`
+);
 
 console.log("dist/index.html  " + page.length.toLocaleString() + " bytes");
 console.log("preview.html     built");

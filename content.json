@@ -1,127 +1,237 @@
 {
-  "_readme": "All site copy lives here. Edit and run `node build.mjs`. No HTML or CSS changes needed.",
-
+  "_readme": "All site copy lives here. Edit and run `node build.mjs`. Structure mirrors the reference site: numbered sections 01-06 down a left spine, alternating dark and light.",
   "brand": {
     "name": "Infinity Development",
-    "short": "Infinity",
-    "abbr": "INFDEV",
+    "wordmark": "INFINITY",
     "email": "info@infdev.dev",
     "domain": "infdev.dev",
     "founded": "2026"
   },
-
   "meta": {
-    "title": "Infinity Development — software, cloud, AI and design under one roof",
-    "description": "An IT company that designs, builds and runs software end to end: bespoke development, cloud infrastructure, AI, web, UI/UX, IoT and brand.",
+    "title": "Infinity Development — IT solutions, software, cloud and AI",
+    "description": "An IT company covering the full spectrum: server software, cloud infrastructure, artificial intelligence, web development, IoT and UI/UX design. One team, one contract.",
     "url": "https://infdev.dev/"
   },
-
   "nav": [
-    { "label": "Services", "href": "#services" },
-    { "label": "Approach", "href": "#approach" },
-    { "label": "Work", "href": "#work" },
-    { "label": "About", "href": "#about" },
-    { "label": "Contact", "href": "#contact" }
+    {
+      "label": "Our services",
+      "href": "#services"
+    },
+    {
+      "label": "Advantages",
+      "href": "#advantages"
+    },
+    {
+      "label": "Design & Marketing",
+      "href": "#design"
+    }
   ],
-
   "hero": {
-    "kicker": "IT solutions, end to end",
-    "headline": "One team for the whole build",
-    "lede": "Most companies end up stitching together an agency for the app, a contractor for the infrastructure, and a studio for the brand — then spend their time translating between them. Infinity Development covers the whole stack: software, cloud, AI, web, IoT and the identity around it.",
-    "primaryCta": { "label": "Start a project", "href": "#contact" },
-    "secondaryCta": { "label": "What we do", "href": "#services" },
-    "marks": ["Software", "Cloud", "AI", "Web", "UI/UX", "IoT", "Brand"]
+    "num": "01",
+    "headline": "Build once. Scale without limits",
+    "body": "Infinity Development is an IT company covering the complete spectrum of a modern build: server software solutions, cloud infrastructure, artificial intelligence, web development, Internet of Things and UI/UX design — delivered by one engineering team, under one contract.",
+    "photo": "Wide shot of the team at work — open-plan office, screens lit, shallow depth of field. Dark enough to carry white type across the upper half."
   },
-
-  "about": {
-    "kicker": "Who we are",
-    "headline": "A single engineering and design team, not a network of subcontractors",
-    "body": [
-      "Infinity Development is an IT company working across the full spectrum of a modern build — server-side software, cloud infrastructure, artificial intelligence, web, connected devices, interface design and the brand that wraps it.",
-      "The people who scope your project are the people who build it. That means architecture decisions get made with the design in view, the brand gets made with the product in view, and nothing gets lost in a handover between three companies who have never spoken."
-    ],
-    "points": [
-      { "title": "One contract, one team", "body": "No subcontracting chain, no finger-pointing when something breaks between two vendors' scopes." },
-      { "title": "Built to be handed over", "body": "Documented, tested and deployable by your own team. You own what we build outright." },
-      { "title": "We stay after launch", "body": "Monitoring, support and iteration. Shipping is the middle of the project, not the end." }
-    ]
-  },
-
   "services": {
-    "kicker": "What we do",
-    "headline": "The whole spectrum, properly",
-    "lede": "Seven disciplines that most companies have to source separately.",
+    "num": "02",
+    "label": "Our services",
+    "headline": "Turning requirements into working systems",
+    "intro": "We build and run the software businesses depend on. One team across the whole stack — from the database schema to the brand that sits on top of it.",
     "items": [
-      { "icon": "code",   "title": "Software development", "body": "Bespoke systems built around how your business actually runs — internal tools, platforms, integrations and the APIs that hold them together." },
-      { "icon": "cloud",  "title": "Cloud & infrastructure", "body": "Architecture, migration and the unglamorous part afterwards: cost control, scaling, backups and uptime you do not have to think about." },
-      { "icon": "ai",     "title": "AI & automation", "body": "Models and data pipelines aimed at specific work — document handling, forecasting, classification, support triage. Applied where it pays, not everywhere." },
-      { "icon": "web",    "title": "Web development", "body": "Fast, accessible, search-visible sites and web applications. Built to load quickly on a phone on mobile data, not just on a designer's laptop." },
-      { "icon": "design", "title": "UI/UX design", "body": "Interface design grounded in how people actually use software — research, flows, prototypes and a design system your developers can build from." },
-      { "icon": "iot",    "title": "IoT & connected devices", "body": "Device firmware, telemetry, provisioning and the dashboards behind them. From a handful of sensors to a fleet." },
-      { "icon": "brand",  "title": "Branding & marketing", "body": "Positioning, identity and the campaigns that carry it. We map the competitive landscape, find the gap, and build the brand into it." }
+      {
+        "title": "Custom Software Development",
+        "body": "Bespoke systems designed around how your business actually operates — internal platforms, integrations and the APIs that hold them together.",
+        "photo": "Close crop of hands on a keyboard, warm desk light, code out of focus behind."
+      },
+      {
+        "title": "Cloud Solutions & Services",
+        "body": "Architecture, migration and the part that comes after: scaling, cost control, backups and uptime you do not have to think about.",
+        "photo": "Data centre corridor, racks receding, cool blue-green lighting."
+      },
+      {
+        "title": "Cybersecurity & Risk Management",
+        "body": "Hardening, access control, monitoring and audit built into the system from the start rather than bolted on after an incident.",
+        "photo": "Macro of a circuit board, teal traces catching the light."
+      },
+      {
+        "title": "AI Integration & Machine Learning",
+        "body": "Models and data pipelines pointed at specific work — document handling, forecasting, classification, triage. Applied where it pays.",
+        "photo": "Abstract neural or particle visual, teal on black."
+      },
+      {
+        "title": "IT Support & Managed Services",
+        "body": "Proactive technical support and system care that keeps operations stable, patched and monitored around the clock.",
+        "photo": "Operations desk, multiple monitors with dashboards, engineer silhouetted."
+      }
     ]
   },
-
-  "approach": {
-    "kicker": "How we work",
-    "headline": "Four stages, and you see the work at every one",
-    "steps": [
-      { "name": "Map", "body": "We learn the business before the software: who uses it, what breaks today, what the real constraints are. Nothing gets scoped from a wishlist." },
-      { "name": "Define", "body": "Architecture, scope and a fixed plan with a number attached. You approve something specific, not a range that drifts." },
-      { "name": "Build", "body": "Shipped in increments you can open and use. Weekly builds, visible progress, and room to change direction before it is expensive." },
-      { "name": "Run", "body": "Monitoring, support and iteration after launch — or a clean handover to your team, documented well enough that they do not need us." }
-    ]
-  },
-
-  "capabilities": {
-    "kicker": "Under the hood",
-    "headline": "What we build with",
-    "groups": [
-      { "label": "Backend", "items": ["Node.js", "Python", "Go", "PostgreSQL", "Redis"] },
-      { "label": "Frontend", "items": ["TypeScript", "React", "Next.js", "React Native"] },
-      { "label": "Cloud", "items": ["AWS", "Azure", "Docker", "Kubernetes", "Terraform"] },
-      { "label": "AI & data", "items": ["OpenAI & Anthropic APIs", "PyTorch", "Vector search", "ETL pipelines"] },
-      { "label": "IoT", "items": ["MQTT", "ESP32", "Embedded C", "Time-series storage"] },
-      { "label": "Design", "items": ["Figma", "Design systems", "Prototyping", "Brand identity"] }
-    ],
-    "note": "PLACEHOLDER STACK — replace with the tools your team actually uses before launch."
-  },
-
-  "work": {
-    "kicker": "Selected work",
-    "headline": "Recent projects",
-    "note": "PLACEHOLDER PROJECTS — replace with real work before launch. Do not publish invented case studies or client names.",
+  "advantages": {
+    "num": "03",
+    "label": "Advantages",
+    "headline": "Delivering work that holds up",
     "items": [
-      { "tag": "Platform", "title": "Project name", "body": "One line on the problem, one line on what was built, one line on the result. Replace with a real project." },
-      { "tag": "Mobile", "title": "Project name", "body": "One line on the problem, one line on what was built, one line on the result. Replace with a real project." },
-      { "tag": "Brand + web", "title": "Project name", "body": "One line on the problem, one line on what was built, one line on the result. Replace with a real project." }
+      {
+        "icon": "globe",
+        "title": "Built Around You",
+        "body": "Every system is designed against how your business runs today and where it is going, not against a template."
+      },
+      {
+        "icon": "puzzle",
+        "title": "Current by Design",
+        "body": "Modern tooling chosen for longevity and support, never for novelty. What we build stays maintainable."
+      },
+      {
+        "icon": "rocket",
+        "title": "One Accountable Team",
+        "body": "The people who scope the work are the people who build it. No subcontracting chain, no handover gaps."
+      },
+      {
+        "icon": "shield",
+        "title": "Security You Can Trust",
+        "body": "Access control, encryption, monitoring and audit trails designed in from the first sprint."
+      },
+      {
+        "icon": "nodes",
+        "title": "Seamless Integration",
+        "body": "New technology introduced alongside what you already run, without stopping the business to do it."
+      },
+      {
+        "icon": "cloud",
+        "title": "Cloud Optimisation",
+        "body": "Infrastructure sized deliberately — you pay for the capacity you use, not the capacity someone guessed at."
+      },
+      {
+        "icon": "pen",
+        "title": "Agile Delivery",
+        "body": "Working software every week that you can open and use, so direction changes stay cheap."
+      },
+      {
+        "icon": "support",
+        "title": "Support That Answers",
+        "body": "Monitoring, maintenance and a real response after launch. Shipping is the middle of the project."
+      }
     ]
   },
-
-  "cta": {
-    "kicker": "Get in touch",
-    "headline": "Tell us what you are trying to build",
-    "body": "A short email is enough to start. We will come back with questions, a rough shape and an honest view on whether we are the right fit.",
+  "benefits": {
+    "num": "04",
+    "label": "Benefits",
+    "headline": "The full spectrum of IT services",
+    "items": [
+      {
+        "title": "Server Software Solutions",
+        "body": "Backend systems, APIs and data layers engineered for your workload — built to scale and documented well enough to hand over."
+      },
+      {
+        "title": "Artificial Intelligence",
+        "body": "AI applied to real operational work: automating the repetitive, surfacing what matters, and supporting faster decisions."
+      },
+      {
+        "title": "Brand & Marketing",
+        "body": "Positioning, identity and campaigns grounded in the competitive landscape rather than in taste alone."
+      },
+      {
+        "title": "Web Development",
+        "body": "Fast, accessible, search-visible sites and web applications — built to perform on a phone, not just on a designer's laptop."
+      },
+      {
+        "title": "Internet of Things (IoT)",
+        "body": "Connected devices, telemetry and provisioning, with the dashboards and platform that make a fleet manageable."
+      },
+      {
+        "title": "UI/UX Design",
+        "body": "Research, flows and interfaces that people can actually use, delivered as a design system your developers can build from."
+      }
+    ]
+  },
+  "design": {
+    "num": "05",
+    "label": "Design and Marketing Services",
+    "headline": "Design & Marketing",
+    "intro": "Our team shares practical insight on building a distinctive brand, websites people trust, and campaigns that actually reach the market. Build a strong image for your business with us.",
+    "cards": [
+      {
+        "title": "Market research",
+        "photo": "Desk scene — laptop and monitor showing analytics, natural window light, muted tones.",
+        "wide": false
+      },
+      {
+        "title": "Strategy & positioning",
+        "photo": "Hands at a wall of sticky notes, workshop in progress, backlit.",
+        "wide": false
+      },
+      {
+        "title": "Identity design",
+        "photo": "Colour swatch books and printed palette sheets fanned across a dark surface.",
+        "wide": false
+      },
+      {
+        "title": "Campaign launch",
+        "photo": "Wide shot — team presenting to clients in a bright meeting room. Full-bleed banner crop.",
+        "wide": true
+      }
+    ]
+  },
+  "contact": {
+    "num": "06",
+    "label": "Contact us",
+    "headline": "Let's build something",
+    "body": "A short email is enough to start. We will come back with questions, a rough shape, and an honest view on whether we are the right fit for the work.",
     "buttonLabel": "info@infdev.dev"
   },
-
   "footer": {
-    "blurb": "An IT company building software, infrastructure, interfaces and brands end to end.",
+    "blurb": "An IT company delivering server software, cloud, artificial intelligence, web development, IoT and UI/UX design.",
     "columns": [
-      { "title": "Services", "links": [
-        { "label": "Software development", "href": "#services" },
-        { "label": "Cloud & infrastructure", "href": "#services" },
-        { "label": "AI & automation", "href": "#services" },
-        { "label": "Web development", "href": "#services" },
-        { "label": "UI/UX design", "href": "#services" }
-      ]},
-      { "title": "Company", "links": [
-        { "label": "About", "href": "#about" },
-        { "label": "Approach", "href": "#approach" },
-        { "label": "Work", "href": "#work" },
-        { "label": "Contact", "href": "#contact" }
-      ]}
+      {
+        "title": "Services",
+        "links": [
+          {
+            "label": "Custom software",
+            "href": "#services"
+          },
+          {
+            "label": "Cloud solutions",
+            "href": "#services"
+          },
+          {
+            "label": "Cybersecurity",
+            "href": "#services"
+          },
+          {
+            "label": "AI & machine learning",
+            "href": "#services"
+          },
+          {
+            "label": "IT support",
+            "href": "#services"
+          }
+        ]
+      },
+      {
+        "title": "Company",
+        "links": [
+          {
+            "label": "Advantages",
+            "href": "#advantages"
+          },
+          {
+            "label": "Benefits",
+            "href": "#benefits"
+          },
+          {
+            "label": "Design & Marketing",
+            "href": "#design"
+          },
+          {
+            "label": "Contact",
+            "href": "#contact"
+          }
+        ]
+      }
     ],
     "copyright": "© 2026 Infinity Development"
+  },
+  "notes": {
+    "photos": "PLACEHOLDER IMAGERY — every frame carries the shot it needs. Source or commission these before launch; the reference site is photo-led and the design depends on real images.",
+    "content": "No invented clients, testimonials or statistics appear anywhere on this site."
   }
 }
