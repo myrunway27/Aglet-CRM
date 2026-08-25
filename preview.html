@@ -92,10 +92,12 @@ p  { margin: 0 0 1rem; text-wrap: pretty; }
 .brand { display: flex; align-items: center; gap: .7rem; text-decoration: none; flex: none; }
 .brand__mark { width: 42px; height: 26px; color: var(--teal); flex: none; }
 .brand__name {
-  font-family: var(--f-display); font-size: 1.16rem; font-weight: 700;
-  letter-spacing: .09em; color: var(--teal); white-space: nowrap;
+  display: flex; flex-direction: column; justify-content: center;
+  font-family: var(--f-display); color: var(--teal); line-height: 1.02;
 }
-.brand__name em { font-style: normal; color: var(--on-dark); font-weight: 600; letter-spacing: .05em; }
+.brand__line { white-space: nowrap; display: block; }
+.brand__line--1 { font-size: 1.12rem; font-weight: 700; letter-spacing: .1em; }
+.brand__line--2 { font-size: .72rem; font-weight: 600; letter-spacing: .247em; }
 
 .nav { display: flex; gap: 2.6rem; margin-inline: auto; }
 .nav a {
@@ -339,9 +341,9 @@ p  { margin: 0 0 1rem; text-wrap: pretty; }
 @media (max-width: 620px) {
   .masthead .wrap { gap: .75rem; }
   .brand { min-width: 0; }
-  .brand__mark { width: 34px; height: 21px; }
-  .brand__name { font-size: 1rem; letter-spacing: .06em; }
-  .brand__name em { display: none; }
+  .brand__mark { width: 32px; height: 20px; }
+  .brand__line--1 { font-size: .95rem; letter-spacing: .08em; }
+  .brand__line--2 { font-size: .61rem; letter-spacing: .233em; }
 }
 
 </style>
@@ -351,7 +353,7 @@ p  { margin: 0 0 1rem; text-wrap: pretty; }
     <a class="brand" href="#top"><svg class="brand__mark" viewBox="0 0 68 40" fill="none" aria-hidden="true">
   <path d="M34 20C39 11 45 6 52 6C60 6 65 12 65 20C65 28 60 34 52 34C45 34 39 29 34 20C29 11 23 6 16 6C8 6 3 12 3 20C3 28 8 34 16 34C23 34 29 29 34 20Z"
         stroke="currentColor" stroke-width="4.4" stroke-linejoin="round"/>
-</svg><span class="brand__name">INFINITY<em> DEVELOPMENT</em></span></a>
+</svg><span class="brand__name"><span class="brand__line brand__line--1">INFINITY</span><span class="brand__line brand__line--2">DEVELOPMENT</span></span></a>
     <nav class="nav" aria-label="Primary">
       <a href="#services">Our services</a>
       <a href="#advantages">Advantages</a>
@@ -591,7 +593,7 @@ p  { margin: 0 0 1rem; text-wrap: pretty; }
         <a class="brand" href="#top"><svg class="brand__mark" viewBox="0 0 68 40" fill="none" aria-hidden="true">
   <path d="M34 20C39 11 45 6 52 6C60 6 65 12 65 20C65 28 60 34 52 34C45 34 39 29 34 20C29 11 23 6 16 6C8 6 3 12 3 20C3 28 8 34 16 34C23 34 29 29 34 20Z"
         stroke="currentColor" stroke-width="4.4" stroke-linejoin="round"/>
-</svg><span class="brand__name">INFINITY<em> DEVELOPMENT</em></span></a>
+</svg><span class="brand__name"><span class="brand__line brand__line--1">INFINITY</span><span class="brand__line brand__line--2">DEVELOPMENT</span></span></a>
         <p>An IT company delivering server software, cloud, artificial intelligence, web development, IoT and UI/UX design.</p>
         <a class="footer__mail" href="mailto:info@infdev.dev">info@infdev.dev</a>
       </div>

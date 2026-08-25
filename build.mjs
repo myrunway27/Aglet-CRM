@@ -34,6 +34,10 @@ const MARK = `<svg class="brand__mark" viewBox="0 0 68 40" fill="none" aria-hidd
         stroke="currentColor" stroke-width="4.4" stroke-linejoin="round"/>
 </svg>`;
 
+const WORDMARK = `<span class="brand__name">${c.brand.wordmarkLines
+  .map((l, i) => `<span class="brand__line brand__line--${i + 1}">${esc(l)}</span>`)
+  .join("")}</span>`;
+
 const ICONS = {
   globe:  '<circle cx="21" cy="21" r="15.5" stroke="currentColor" stroke-width="2.2" fill="none"/><path d="M5.5 21h31M21 5.5c4.2 4.4 6.3 9.6 6.3 15.5S25.2 32.1 21 36.5c-4.2-4.4-6.3-9.6-6.3-15.5S16.8 9.9 21 5.5Z" stroke="currentColor" stroke-width="2" fill="none"/>',
   puzzle: '<path d="M9 12h7a3.4 3.4 0 1 1 6.8 0H30v7.2a3.4 3.4 0 1 0 0 6.8V33h-7.2a3.4 3.4 0 1 0-6.8 0H9z" stroke="currentColor" stroke-width="2.2" fill="none" stroke-linejoin="round"/>',
@@ -56,7 +60,7 @@ const spine = (num) => `<div class="spine"><span class="spine__num">${esc(num)}<
 const header = () => `
 <header class="masthead" id="masthead">
   <div class="wrap">
-    <a class="brand" href="#top">${MARK}<span class="brand__name">INFINITY<em> DEVELOPMENT</em></span></a>
+    <a class="brand" href="#top">${MARK}${WORDMARK}</a>
     <nav class="nav" aria-label="Primary">
       ${c.nav.map((x) => `<a href="${esc(x.href)}">${esc(x.label)}</a>`).join("\n      ")}
     </nav>
@@ -210,7 +214,7 @@ const footer = () => `
   <div class="wrap">
     <div class="footer__grid">
       <div class="footer__brand">
-        <a class="brand" href="#top">${MARK}<span class="brand__name">INFINITY<em> DEVELOPMENT</em></span></a>
+        <a class="brand" href="#top">${MARK}${WORDMARK}</a>
         <p>${esc(c.footer.blurb)}</p>
         <a class="footer__mail" href="mailto:${esc(c.brand.email)}">${esc(c.brand.email)}</a>
       </div>
