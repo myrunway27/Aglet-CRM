@@ -1,0 +1,1041 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Advantage Corp | Fast Business Funding &amp; Merchant Cash Advances</title>
+  <meta name="description" content="Advantage Corp provides fast, flexible business funding. Get $10K–$2M in as little as 24 hours. All credit profiles considered. No collateral required. Apply in minutes.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --navy-900: #081226;
+      --navy-800: #0c1b38;
+      --navy-700: #13264a;
+      --navy-600: #1d3560;
+      --green-500: #16c784;
+      --green-600: #10a86e;
+      --green-100: #e2f9ef;
+      --gold-500: #f5b73d;
+      --ink-900: #101828;
+      --ink-600: #475467;
+      --ink-400: #98a2b3;
+      --line: #e6e9f0;
+      --bg-soft: #f5f7fb;
+      --white: #ffffff;
+      --radius-lg: 18px;
+      --radius-md: 12px;
+      --shadow-card: 0 6px 24px rgba(8, 18, 38, 0.08);
+      --shadow-pop: 0 18px 48px rgba(8, 18, 38, 0.22);
+      --font-head: "Sora", "Trebuchet MS", sans-serif;
+      --font-body: "Inter", "Segoe UI", Arial, sans-serif;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: var(--font-body);
+      color: var(--ink-900);
+      background: var(--white);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+    img { max-width: 100%; display: block; }
+    a { color: inherit; text-decoration: none; }
+    ul { list-style: none; }
+    .container { width: min(1160px, 92%); margin-inline: auto; }
+
+    h1, h2, h3 { font-family: var(--font-head); line-height: 1.15; letter-spacing: -0.01em; }
+    h1 { font-size: clamp(2.1rem, 4.4vw, 3.4rem); font-weight: 800; }
+    h2 { font-size: clamp(1.7rem, 3vw, 2.4rem); font-weight: 700; }
+    h3 { font-size: 1.15rem; font-weight: 700; }
+
+    .section { padding: 88px 0; }
+    .section-head { max-width: 640px; margin: 0 auto 52px; text-align: center; }
+    .eyebrow {
+      display: inline-block;
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--green-600);
+      background: var(--green-100);
+      padding: 6px 14px;
+      border-radius: 999px;
+      margin-bottom: 16px;
+    }
+    .section-head p { color: var(--ink-600); margin-top: 14px; font-size: 1.05rem; }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      font-family: var(--font-body);
+      font-weight: 700;
+      font-size: 1rem;
+      padding: 14px 28px;
+      border-radius: 999px;
+      border: 0;
+      cursor: pointer;
+      transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
+      white-space: nowrap;
+    }
+    .btn-primary {
+      background: var(--green-500);
+      color: var(--navy-900);
+      box-shadow: 0 8px 20px rgba(22, 199, 132, 0.35);
+    }
+    .btn-primary:hover { background: var(--green-600); color: #fff; transform: translateY(-2px); }
+    .btn-ghost {
+      background: transparent;
+      color: #fff;
+      border: 2px solid rgba(255, 255, 255, 0.35);
+    }
+    .btn-ghost:hover { border-color: #fff; transform: translateY(-2px); }
+    .btn-block { width: 100%; }
+
+    /* ── Header ─────────────────────────────────────── */
+    .topbar {
+      background: var(--navy-900);
+      color: #cbd5e6;
+      font-size: 0.85rem;
+      padding: 8px 0;
+    }
+    .topbar .container { display: flex; justify-content: space-between; align-items: center; gap: 16px; }
+    .topbar strong { color: var(--green-500); }
+    .topbar a { color: #fff; font-weight: 600; }
+    .topbar a:hover { color: var(--green-500); }
+
+    header.site {
+      position: sticky;
+      top: 0;
+      z-index: 60;
+      background: rgba(255, 255, 255, 0.96);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--line);
+      transition: box-shadow 0.2s ease;
+    }
+    header.site.scrolled { box-shadow: 0 6px 24px rgba(8, 18, 38, 0.1); }
+    .nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+      padding: 16px 0;
+    }
+    .logo { display: flex; align-items: center; gap: 10px; font-family: var(--font-head); font-weight: 800; font-size: 1.3rem; color: var(--navy-900); }
+    .logo-mark {
+      width: 38px; height: 38px;
+      border-radius: 10px;
+      background: linear-gradient(135deg, var(--green-500), #0e8f60);
+      display: grid; place-items: center;
+      color: #fff; font-size: 1.1rem; font-weight: 800;
+      font-family: var(--font-head);
+    }
+    .logo span em { color: var(--green-600); font-style: normal; }
+    .nav-links { display: flex; gap: 28px; font-weight: 600; font-size: 0.95rem; color: var(--ink-600); }
+    .nav-links a:hover { color: var(--navy-900); }
+    .nav-cta { display: flex; align-items: center; gap: 18px; }
+    .nav-phone { font-weight: 700; color: var(--navy-900); display: flex; align-items: center; gap: 8px; font-size: 0.95rem; }
+    .nav-phone svg { color: var(--green-600); }
+    .nav .btn { padding: 11px 22px; font-size: 0.92rem; }
+    .menu-toggle {
+      display: none;
+      background: none; border: 0; cursor: pointer;
+      width: 42px; height: 42px;
+      align-items: center; justify-content: center;
+      color: var(--navy-900);
+    }
+
+    /* ── Hero ───────────────────────────────────────── */
+    .hero {
+      background:
+        radial-gradient(900px 500px at 85% -10%, rgba(22, 199, 132, 0.18), transparent 60%),
+        radial-gradient(700px 420px at -10% 110%, rgba(245, 183, 61, 0.12), transparent 60%),
+        linear-gradient(160deg, var(--navy-900) 0%, var(--navy-800) 55%, var(--navy-700) 100%);
+      color: #fff;
+      padding: 84px 0 96px;
+      overflow: hidden;
+    }
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1.08fr 0.92fr;
+      gap: 56px;
+      align-items: center;
+    }
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(22, 199, 132, 0.14);
+      border: 1px solid rgba(22, 199, 132, 0.4);
+      color: var(--green-500);
+      font-size: 0.82rem;
+      font-weight: 700;
+      padding: 7px 14px;
+      border-radius: 999px;
+      margin-bottom: 22px;
+    }
+    .hero h1 { margin-bottom: 20px; }
+    .hero h1 .accent { color: var(--green-500); }
+    .hero-sub { color: #b9c4d8; font-size: 1.12rem; max-width: 520px; margin-bottom: 28px; }
+    .hero-ticks { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px 24px; margin-bottom: 34px; max-width: 520px; }
+    .hero-ticks li { display: flex; align-items: center; gap: 10px; font-weight: 600; font-size: 0.97rem; color: #e6ebf4; }
+    .tick {
+      flex: none;
+      width: 22px; height: 22px;
+      border-radius: 50%;
+      background: rgba(22, 199, 132, 0.18);
+      display: grid; place-items: center;
+      color: var(--green-500);
+    }
+    .hero-actions { display: flex; gap: 16px; flex-wrap: wrap; }
+
+    /* Quote form card */
+    .quote-card {
+      background: var(--white);
+      color: var(--ink-900);
+      border-radius: var(--radius-lg);
+      padding: 34px 32px 30px;
+      box-shadow: var(--shadow-pop);
+      position: relative;
+    }
+    .quote-card::before {
+      content: "";
+      position: absolute;
+      inset: -2px;
+      border-radius: 20px;
+      background: linear-gradient(135deg, rgba(22,199,132,.7), rgba(245,183,61,.5));
+      z-index: -1;
+      filter: blur(14px);
+      opacity: 0.5;
+    }
+    .quote-card h3 { font-size: 1.35rem; margin-bottom: 4px; }
+    .quote-card .sub { color: var(--ink-600); font-size: 0.92rem; margin-bottom: 22px; }
+    .field { margin-bottom: 14px; }
+    .field label { display: block; font-size: 0.82rem; font-weight: 600; color: var(--ink-600); margin-bottom: 6px; }
+    .field input, .field select {
+      width: 100%;
+      font-family: var(--font-body);
+      font-size: 0.98rem;
+      padding: 13px 14px;
+      border: 1.5px solid var(--line);
+      border-radius: var(--radius-md);
+      background: var(--bg-soft);
+      color: var(--ink-900);
+      transition: border-color 0.15s ease, background 0.15s ease;
+      appearance: none;
+    }
+    .field select {
+      background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'><path d='M1 1l5 5 5-5' fill='none' stroke='%23475467' stroke-width='2' stroke-linecap='round'/></svg>");
+      background-repeat: no-repeat;
+      background-position: right 14px center;
+    }
+    .field input:focus, .field select:focus {
+      outline: none;
+      border-color: var(--green-500);
+      background: #fff;
+    }
+    .field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+    .quote-card .btn { margin-top: 8px; }
+    .form-note {
+      display: flex;
+      justify-content: center;
+      gap: 14px;
+      flex-wrap: wrap;
+      margin-top: 14px;
+      font-size: 0.78rem;
+      color: var(--ink-400);
+      text-align: center;
+    }
+    .form-note span { display: inline-flex; align-items: center; gap: 5px; }
+    .form-success {
+      display: none;
+      text-align: center;
+      padding: 40px 10px;
+    }
+    .form-success .big-tick {
+      width: 64px; height: 64px;
+      margin: 0 auto 18px;
+      border-radius: 50%;
+      background: var(--green-100);
+      display: grid; place-items: center;
+      color: var(--green-600);
+    }
+    .form-success h3 { margin-bottom: 8px; }
+    .form-success p { color: var(--ink-600); font-size: 0.95rem; }
+
+    /* ── Stats strip ────────────────────────────────── */
+    .stats {
+      background: var(--navy-900);
+      border-top: 1px solid rgba(255, 255, 255, 0.06);
+      padding: 34px 0;
+      color: #fff;
+    }
+    .stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; text-align: center; }
+    .stat-num { font-family: var(--font-head); font-size: clamp(1.6rem, 2.6vw, 2.2rem); font-weight: 800; color: var(--green-500); }
+    .stat-label { color: #9fb0ca; font-size: 0.9rem; font-weight: 500; margin-top: 4px; }
+
+    /* ── How it works ───────────────────────────────── */
+    .steps-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 28px; }
+    .step-card {
+      background: var(--white);
+      border: 1px solid var(--line);
+      border-radius: var(--radius-lg);
+      padding: 36px 30px;
+      position: relative;
+      box-shadow: var(--shadow-card);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+    .step-card:hover { transform: translateY(-5px); box-shadow: var(--shadow-pop); }
+    .step-num {
+      position: absolute;
+      top: 26px; right: 26px;
+      font-family: var(--font-head);
+      font-size: 2.6rem;
+      font-weight: 800;
+      color: var(--bg-soft);
+      -webkit-text-stroke: 1.5px var(--line);
+      line-height: 1;
+    }
+    .step-icon {
+      width: 54px; height: 54px;
+      border-radius: 14px;
+      background: var(--green-100);
+      color: var(--green-600);
+      display: grid; place-items: center;
+      margin-bottom: 20px;
+    }
+    .step-card h3 { margin-bottom: 10px; }
+    .step-card p { color: var(--ink-600); font-size: 0.96rem; }
+
+    /* ── Benefits ───────────────────────────────────── */
+    .band-soft { background: var(--bg-soft); }
+    .benefits-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+    .benefit-card {
+      background: var(--white);
+      border: 1px solid var(--line);
+      border-radius: var(--radius-lg);
+      padding: 30px 28px;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+    .benefit-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-card); }
+    .benefit-icon {
+      width: 46px; height: 46px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, var(--navy-800), var(--navy-600));
+      color: var(--green-500);
+      display: grid; place-items: center;
+      margin-bottom: 18px;
+    }
+    .benefit-card h3 { font-size: 1.05rem; margin-bottom: 8px; }
+    .benefit-card p { color: var(--ink-600); font-size: 0.93rem; }
+
+    /* ── Program / qualify split ────────────────────── */
+    .split { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: center; }
+    .split .eyebrow { margin-bottom: 14px; }
+    .split h2 { margin-bottom: 18px; }
+    .split > div > p { color: var(--ink-600); margin-bottom: 26px; }
+    .qualify-list li {
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+      padding: 14px 0;
+      border-bottom: 1px dashed var(--line);
+      font-weight: 600;
+    }
+    .qualify-list li:last-child { border-bottom: 0; }
+    .qualify-list .tick { background: var(--green-100); color: var(--green-600); margin-top: 2px; }
+    .qualify-list small { display: block; font-weight: 400; color: var(--ink-600); }
+
+    .program-card {
+      background: linear-gradient(160deg, var(--navy-900), var(--navy-700));
+      color: #fff;
+      border-radius: var(--radius-lg);
+      padding: 38px 36px;
+      box-shadow: var(--shadow-pop);
+    }
+    .program-card h3 { font-size: 1.3rem; margin-bottom: 6px; }
+    .program-card .sub { color: #9fb0ca; font-size: 0.92rem; margin-bottom: 24px; }
+    .program-rows { border-top: 1px solid rgba(255, 255, 255, 0.12); }
+    .program-rows li {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+      padding: 15px 0;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+      font-size: 0.95rem;
+    }
+    .program-rows .k { color: #9fb0ca; }
+    .program-rows .v { font-weight: 700; text-align: right; }
+    .program-card .btn { margin-top: 26px; }
+
+    /* ── Industries ─────────────────────────────────── */
+    .industries-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 18px; }
+    .industry-chip {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      background: var(--white);
+      border: 1px solid var(--line);
+      border-radius: var(--radius-md);
+      padding: 16px 18px;
+      font-weight: 600;
+      font-size: 0.95rem;
+      transition: border-color 0.15s ease, transform 0.15s ease;
+    }
+    .industry-chip:hover { border-color: var(--green-500); transform: translateY(-3px); }
+    .industry-chip .emoji { font-size: 1.4rem; }
+
+    /* ── Testimonials ───────────────────────────────── */
+    .testi-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+    .testi-card {
+      background: var(--white);
+      border: 1px solid var(--line);
+      border-radius: var(--radius-lg);
+      padding: 30px 28px;
+      box-shadow: var(--shadow-card);
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+    .stars { color: var(--gold-500); letter-spacing: 3px; font-size: 1rem; }
+    .testi-card blockquote { color: var(--ink-600); font-size: 0.97rem; flex: 1; }
+    .testi-person { display: flex; align-items: center; gap: 12px; }
+    .avatar {
+      width: 44px; height: 44px;
+      border-radius: 50%;
+      display: grid; place-items: center;
+      font-weight: 700;
+      font-family: var(--font-head);
+      color: #fff;
+      font-size: 0.95rem;
+    }
+    .testi-person strong { display: block; font-size: 0.95rem; }
+    .testi-person span { color: var(--ink-400); font-size: 0.83rem; }
+
+    /* ── FAQ ────────────────────────────────────────── */
+    .faq-wrap { max-width: 760px; margin: 0 auto; }
+    .faq-item {
+      background: var(--white);
+      border: 1px solid var(--line);
+      border-radius: var(--radius-md);
+      margin-bottom: 14px;
+      overflow: hidden;
+    }
+    .faq-q {
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+      background: none;
+      border: 0;
+      cursor: pointer;
+      text-align: left;
+      font-family: var(--font-body);
+      font-size: 1.02rem;
+      font-weight: 700;
+      color: var(--ink-900);
+      padding: 20px 22px;
+    }
+    .faq-q .chev { flex: none; transition: transform 0.25s ease; color: var(--green-600); }
+    .faq-item.open .faq-q .chev { transform: rotate(180deg); }
+    .faq-a {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.3s ease;
+    }
+    .faq-a p { padding: 0 22px 20px; color: var(--ink-600); font-size: 0.96rem; }
+
+    /* ── Final CTA ──────────────────────────────────── */
+    .cta-band {
+      background:
+        radial-gradient(700px 400px at 90% 0%, rgba(22, 199, 132, 0.22), transparent 60%),
+        linear-gradient(150deg, var(--navy-900), var(--navy-700));
+      color: #fff;
+      border-radius: 24px;
+      padding: 64px 56px;
+      display: grid;
+      grid-template-columns: 1.2fr 0.8fr;
+      gap: 40px;
+      align-items: center;
+    }
+    .cta-band h2 { margin-bottom: 12px; }
+    .cta-band p { color: #b9c4d8; max-width: 520px; }
+    .cta-actions { display: flex; flex-direction: column; gap: 14px; align-items: stretch; }
+    .cta-actions .phone-big {
+      text-align: center;
+      font-weight: 700;
+      font-size: 1.05rem;
+      color: #fff;
+    }
+    .cta-actions .phone-big span { display: block; font-size: 0.8rem; font-weight: 500; color: #9fb0ca; }
+
+    /* ── Footer ─────────────────────────────────────── */
+    footer {
+      background: var(--navy-900);
+      color: #9fb0ca;
+      padding: 64px 0 32px;
+      margin-top: 88px;
+      font-size: 0.92rem;
+    }
+    .footer-grid {
+      display: grid;
+      grid-template-columns: 1.4fr 1fr 1fr 1.2fr;
+      gap: 40px;
+      padding-bottom: 40px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    footer .logo { color: #fff; margin-bottom: 16px; }
+    .footer-col h4 { color: #fff; font-size: 0.95rem; margin-bottom: 16px; font-family: var(--font-head); }
+    .footer-col li { margin-bottom: 10px; }
+    .footer-col a:hover { color: var(--green-500); }
+    .footer-contact li { display: flex; gap: 10px; align-items: flex-start; margin-bottom: 12px; }
+    .footer-contact svg { flex: none; margin-top: 3px; color: var(--green-500); }
+    .footer-legal { padding-top: 28px; font-size: 0.8rem; color: #6b7d9c; }
+    .footer-legal p { margin-bottom: 12px; }
+    .footer-bottom {
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+      flex-wrap: wrap;
+      margin-top: 20px;
+      font-size: 0.82rem;
+    }
+    .footer-bottom a:hover { color: var(--green-500); }
+
+    /* ── Responsive ─────────────────────────────────── */
+    @media (max-width: 1020px) {
+      .hero-grid { grid-template-columns: 1fr; gap: 44px; }
+      .hero-sub, .hero-ticks { max-width: none; }
+      .quote-card { max-width: 560px; }
+      .steps-grid, .benefits-grid, .testi-grid { grid-template-columns: 1fr 1fr; }
+      .industries-grid { grid-template-columns: repeat(3, 1fr); }
+      .split { grid-template-columns: 1fr; gap: 40px; }
+      .footer-grid { grid-template-columns: 1fr 1fr; }
+      .cta-band { grid-template-columns: 1fr; padding: 48px 36px; }
+    }
+    @media (max-width: 860px) {
+      .nav-links, .nav-phone { display: none; }
+      .menu-toggle { display: flex; }
+      .nav-links.open {
+        display: flex;
+        position: absolute;
+        top: 100%;
+        left: 0; right: 0;
+        flex-direction: column;
+        gap: 0;
+        background: #fff;
+        border-bottom: 1px solid var(--line);
+        box-shadow: 0 16px 32px rgba(8, 18, 38, 0.12);
+      }
+      .nav-links.open a { padding: 16px 6vw; border-top: 1px solid var(--line); }
+    }
+    @media (max-width: 640px) {
+      .section { padding: 64px 0; }
+      .hero { padding: 56px 0 72px; }
+      .topbar .container { justify-content: center; text-align: center; }
+      .topbar .tb-right { display: none; }
+      .steps-grid, .benefits-grid, .testi-grid { grid-template-columns: 1fr; }
+      .industries-grid { grid-template-columns: 1fr 1fr; }
+      .stats-grid { grid-template-columns: 1fr 1fr; gap: 28px 12px; }
+      .field-row { grid-template-columns: 1fr; }
+      .quote-card { padding: 28px 22px; }
+      .footer-grid { grid-template-columns: 1fr; gap: 32px; }
+      .hero-ticks { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top bar -->
+  <div class="topbar">
+    <div class="container">
+      <div>⚡ <strong>Same-day decisions</strong> — funding in as little as 24 hours</div>
+      <div class="tb-right">Speak with a funding advisor: <a href="tel:+18885550147">(888) 555-0147</a></div>
+    </div>
+  </div>
+
+  <!-- Header -->
+  <header class="site" id="siteHeader">
+    <div class="container nav">
+      <a href="#top" class="logo">
+        <span class="logo-mark">A</span>
+        <span>Advantage<em>Corp</em></span>
+      </a>
+      <nav class="nav-links" id="navLinks">
+        <a href="#how-it-works">How It Works</a>
+        <a href="#why-us">Why Us</a>
+        <a href="#qualify">Do I Qualify?</a>
+        <a href="#industries">Industries</a>
+        <a href="#faq">FAQ</a>
+      </nav>
+      <div class="nav-cta">
+        <a class="nav-phone" href="tel:+18885550147">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+          (888) 555-0147
+        </a>
+        <a href="#apply" class="btn btn-primary">Apply Now</a>
+        <button class="menu-toggle" id="menuToggle" aria-label="Toggle menu" aria-expanded="false">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero -->
+  <section class="hero" id="top">
+    <div class="container hero-grid">
+      <div>
+        <span class="hero-badge">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M13 2 3 14h7l-1 8 10-12h-7l1-8z"/></svg>
+          Trusted by 12,000+ U.S. businesses
+        </span>
+        <h1>Fast Business Funding <span class="accent">When Your Bank Says No</span></h1>
+        <p class="hero-sub">Get $10,000 to $2,000,000 in working capital in as little as 24 hours. Simple application, same-day decisions, and repayment that flexes with your revenue — not against it.</p>
+        <ul class="hero-ticks">
+          <li><span class="tick"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>Approvals in hours, not weeks</li>
+          <li><span class="tick"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>All credit profiles considered</li>
+          <li><span class="tick"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>No collateral required</li>
+          <li><span class="tick"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>No obligation, no hidden fees</li>
+        </ul>
+        <div class="hero-actions">
+          <a href="#apply" class="btn btn-primary">Get Funded Fast</a>
+          <a href="#how-it-works" class="btn btn-ghost">See How It Works</a>
+        </div>
+      </div>
+
+      <!-- Quote form -->
+      <div class="quote-card" id="apply">
+        <form id="quoteForm" novalidate>
+          <h3>See How Much You Qualify For</h3>
+          <p class="sub">Takes under 2 minutes. Checking your options won't affect your credit score.</p>
+          <div class="field">
+            <label for="fundingAmount">How much funding do you need?</label>
+            <select id="fundingAmount" name="fundingAmount" required>
+              <option value="">Select an amount</option>
+              <option>$10,000 – $50,000</option>
+              <option>$50,000 – $150,000</option>
+              <option>$150,000 – $500,000</option>
+              <option>$500,000 – $2,000,000</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="monthlyRevenue">Average monthly revenue</label>
+            <select id="monthlyRevenue" name="monthlyRevenue" required>
+              <option value="">Select revenue range</option>
+              <option>Under $15,000</option>
+              <option>$15,000 – $50,000</option>
+              <option>$50,000 – $150,000</option>
+              <option>$150,000+</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="businessName">Business name</label>
+            <input type="text" id="businessName" name="businessName" placeholder="e.g. Main Street Auto Repair" required>
+          </div>
+          <div class="field-row">
+            <div class="field">
+              <label for="fullName">Your name</label>
+              <input type="text" id="fullName" name="fullName" placeholder="First &amp; last name" required>
+            </div>
+            <div class="field">
+              <label for="phone">Phone</label>
+              <input type="tel" id="phone" name="phone" placeholder="(555) 000-0000" required>
+            </div>
+          </div>
+          <div class="field">
+            <label for="email">Email</label>
+            <input type="email" id="email" name="email" placeholder="you@business.com" required>
+          </div>
+          <button type="submit" class="btn btn-primary btn-block">Get My Free Quote →</button>
+          <div class="form-note">
+            <span>🔒 256-bit encryption</span>
+            <span>✓ No credit impact</span>
+            <span>✓ No obligation</span>
+          </div>
+        </form>
+        <div class="form-success" id="formSuccess">
+          <div class="big-tick">
+            <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+          </div>
+          <h3>Application Received!</h3>
+          <p>One of our funding advisors will reach out within the hour during business hours. Want to talk sooner? Call us at <strong>(888) 555-0147</strong>.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Stats -->
+  <section class="stats">
+    <div class="container stats-grid">
+      <div><div class="stat-num">$750M+</div><div class="stat-label">In Funding Delivered</div></div>
+      <div><div class="stat-num">12,000+</div><div class="stat-label">Businesses Funded</div></div>
+      <div><div class="stat-num">24 hrs</div><div class="stat-label">Average Time to Fund</div></div>
+      <div><div class="stat-num">4.9/5</div><div class="stat-label">Average Client Rating</div></div>
+    </div>
+  </section>
+
+  <!-- How it works -->
+  <section class="section" id="how-it-works">
+    <div class="container">
+      <div class="section-head">
+        <span class="eyebrow">How It Works</span>
+        <h2>From Application to Funding in 3 Simple Steps</h2>
+        <p>No mountains of paperwork. No waiting weeks for an answer. Just a fast, transparent process built for busy business owners.</p>
+      </div>
+      <div class="steps-grid">
+        <div class="step-card">
+          <span class="step-num">01</span>
+          <div class="step-icon">
+            <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+          </div>
+          <h3>Apply in Minutes</h3>
+          <p>Complete our short online application and submit your last 3–4 months of business bank statements. That's it — no tax returns or collateral needed to get started.</p>
+        </div>
+        <div class="step-card">
+          <span class="step-num">02</span>
+          <div class="step-icon">
+            <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+          </div>
+          <h3>Get Approved Same Day</h3>
+          <p>We look at the health of your business — your real revenue — not just a credit score. Most applicants receive a decision and a custom offer within hours.</p>
+        </div>
+        <div class="step-card">
+          <span class="step-num">03</span>
+          <div class="step-icon">
+            <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+          </div>
+          <h3>Receive Your Funds</h3>
+          <p>Accept your offer and the capital is wired directly to your business bank account — often within 24 hours. Put it to work immediately, however your business needs it.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Benefits -->
+  <section class="section band-soft" id="why-us">
+    <div class="container">
+      <div class="section-head">
+        <span class="eyebrow">Why Advantage Corp</span>
+        <h2>Funding That Works the Way Your Business Does</h2>
+        <p>Banks move slowly and say no too often. We built Advantage Corp to be everything they're not.</p>
+      </div>
+      <div class="benefits-grid">
+        <div class="benefit-card">
+          <div class="benefit-icon">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          </div>
+          <h3>Funding in 24 Hours</h3>
+          <p>Same-day approvals with funds wired as fast as the next business day — because opportunities don't wait for bank underwriting.</p>
+        </div>
+        <div class="benefit-card">
+          <div class="benefit-icon">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          </div>
+          <h3>No Collateral Required</h3>
+          <p>Your funding is based on your business's revenue performance. Your home, equipment, and personal assets stay out of it.</p>
+        </div>
+        <div class="benefit-card">
+          <div class="benefit-icon">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+          </div>
+          <h3>All Credit Considered</h3>
+          <p>Past credit challenges don't define your business. If your revenue is healthy, we can usually find a program that fits.</p>
+        </div>
+        <div class="benefit-card">
+          <div class="benefit-icon">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"/></svg>
+          </div>
+          <h3>Flexible Remittance</h3>
+          <p>Daily or weekly options sized to your cash flow. When revenue dips, many programs adjust with you instead of squeezing you.</p>
+        </div>
+        <div class="benefit-card">
+          <div class="benefit-icon">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+          </div>
+          <h3>A Dedicated Advisor</h3>
+          <p>One point of contact from application to funding — a real person who knows your file, answers the phone, and fights for your best offer.</p>
+        </div>
+        <div class="benefit-card">
+          <div class="benefit-icon">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+          </div>
+          <h3>Transparent Terms</h3>
+          <p>Your total cost, remittance schedule, and payoff terms in plain English before you sign. No hidden fees, no surprises, ever.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Qualify / program -->
+  <section class="section" id="qualify">
+    <div class="container split">
+      <div>
+        <span class="eyebrow">Do I Qualify?</span>
+        <h2>If Your Business Has Revenue, You're Already Halfway There</h2>
+        <p>We keep qualification simple. Banks want years of financials, perfect credit, and collateral. We want to see a real business with real sales.</p>
+        <ul class="qualify-list">
+          <li>
+            <span class="tick"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>
+            <div>6+ months in business<small>Startups with strong early revenue are welcome to apply.</small></div>
+          </li>
+          <li>
+            <span class="tick"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>
+            <div>$15,000+ in monthly revenue<small>Based on deposits into your business bank account.</small></div>
+          </li>
+          <li>
+            <span class="tick"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>
+            <div>U.S.-based business &amp; bank account<small>All 50 states. Most industries and entity types accepted.</small></div>
+          </li>
+          <li>
+            <span class="tick"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>
+            <div>No minimum credit score<small>We underwrite your business performance, not just your FICO.</small></div>
+          </li>
+        </ul>
+      </div>
+      <div class="program-card">
+        <h3>Merchant Cash Advance</h3>
+        <p class="sub">Our flagship program — working capital purchased against your future receivables.</p>
+        <ul class="program-rows">
+          <li><span class="k">Funding amount</span><span class="v">$10K – $2M</span></li>
+          <li><span class="k">Time to fund</span><span class="v">As fast as 24 hours</span></li>
+          <li><span class="k">Factor rates</span><span class="v">Starting at 1.15</span></li>
+          <li><span class="k">Est. terms</span><span class="v">3 – 18 months</span></li>
+          <li><span class="k">Remittance</span><span class="v">Daily or weekly</span></li>
+          <li><span class="k">Collateral</span><span class="v">None required</span></li>
+          <li><span class="k">Use of funds</span><span class="v">Any business purpose</span></li>
+        </ul>
+        <a href="#apply" class="btn btn-primary btn-block">Check My Options</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Industries -->
+  <section class="section band-soft" id="industries">
+    <div class="container">
+      <div class="section-head">
+        <span class="eyebrow">Industries We Fund</span>
+        <h2>Built for Main Street, Not Wall Street</h2>
+        <p>From the corner restaurant to the regional trucking fleet — if your business earns revenue, we speak your language.</p>
+      </div>
+      <div class="industries-grid">
+        <div class="industry-chip"><span class="emoji">🍽️</span>Restaurants &amp; Bars</div>
+        <div class="industry-chip"><span class="emoji">🛒</span>Retail &amp; E-Commerce</div>
+        <div class="industry-chip"><span class="emoji">🏗️</span>Construction</div>
+        <div class="industry-chip"><span class="emoji">🚚</span>Trucking &amp; Logistics</div>
+        <div class="industry-chip"><span class="emoji">🩺</span>Medical &amp; Dental</div>
+        <div class="industry-chip"><span class="emoji">🔧</span>Auto Repair</div>
+        <div class="industry-chip"><span class="emoji">💇</span>Salons &amp; Spas</div>
+        <div class="industry-chip"><span class="emoji">🏨</span>Hotels &amp; Hospitality</div>
+        <div class="industry-chip"><span class="emoji">🧹</span>Cleaning Services</div>
+        <div class="industry-chip"><span class="emoji">🌡️</span>HVAC &amp; Plumbing</div>
+        <div class="industry-chip"><span class="emoji">🏋️</span>Gyms &amp; Fitness</div>
+        <div class="industry-chip"><span class="emoji">💼</span>Professional Services</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Testimonials -->
+  <section class="section" id="testimonials">
+    <div class="container">
+      <div class="section-head">
+        <span class="eyebrow">Success Stories</span>
+        <h2>Business Owners Who Took the Advantage</h2>
+      </div>
+      <div class="testi-grid">
+        <div class="testi-card">
+          <div class="stars">★★★★★</div>
+          <blockquote>"Our walk-in freezer died on a Friday. Advantage Corp had $45,000 in our account by Tuesday morning. Our bank was still asking for paperwork two weeks later. These guys get how restaurants actually work."</blockquote>
+          <div class="testi-person">
+            <div class="avatar" style="background:linear-gradient(135deg,#16c784,#0e8f60)">MR</div>
+            <div><strong>Maria R.</strong><span>Restaurant Owner · Tampa, FL</span></div>
+          </div>
+        </div>
+        <div class="testi-card">
+          <div class="stars">★★★★★</div>
+          <blockquote>"I needed two more trucks to take on a new contract, but my credit took a hit during COVID. They looked at my revenue, not my past, and funded $180K in 48 hours. That contract doubled my business."</blockquote>
+          <div class="testi-person">
+            <div class="avatar" style="background:linear-gradient(135deg,#3d6ff5,#1d3560)">DW</div>
+            <div><strong>Darnell W.</strong><span>Trucking Company Owner · Atlanta, GA</span></div>
+          </div>
+        </div>
+        <div class="testi-card">
+          <div class="stars">★★★★★</div>
+          <blockquote>"What stood out was the honesty. My advisor walked me through the total cost line by line before I signed anything. No games, no pressure. I've gone back twice for inventory ahead of the holidays."</blockquote>
+          <div class="testi-person">
+            <div class="avatar" style="background:linear-gradient(135deg,#f5b73d,#d99a1b)">SK</div>
+            <div><strong>Sandra K.</strong><span>Boutique Retailer · Phoenix, AZ</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section class="section band-soft" id="faq">
+    <div class="container">
+      <div class="section-head">
+        <span class="eyebrow">FAQ</span>
+        <h2>Questions? We've Got Answers.</h2>
+      </div>
+      <div class="faq-wrap">
+        <div class="faq-item open">
+          <button class="faq-q" aria-expanded="true">What is a merchant cash advance?<span class="chev"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span></button>
+          <div class="faq-a"><p>A merchant cash advance (MCA) is not a loan — it's a purchase of a portion of your business's future receivables at a discount. You receive a lump sum of working capital today, and we collect an agreed-upon amount from your future revenue through fixed daily or weekly remittances until the purchased amount is satisfied.</p></div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-q" aria-expanded="false">How fast can I actually get funded?<span class="chev"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span></button>
+          <div class="faq-a"><p>Most complete applications receive a decision the same business day. Once you accept your offer and final verification is complete, funds are typically wired within 24 hours — many clients see money in their account the next business morning.</p></div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-q" aria-expanded="false">Can I qualify with bad credit?<span class="chev"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span></button>
+          <div class="faq-a"><p>Yes. Approval is based primarily on your business's revenue and bank activity, not your personal credit score. Business owners with past bankruptcies, tax liens, or low FICO scores are approved regularly — as long as the business itself is generating consistent revenue.</p></div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-q" aria-expanded="false">What documents do I need to apply?<span class="chev"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span></button>
+          <div class="faq-a"><p>Just our one-page application and your business's last 3–4 months of bank statements. For larger funding amounts we may request a few additional items, but there are no tax returns, business plans, or financial projections required to get an offer.</p></div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-q" aria-expanded="false">How does repayment work?<span class="chev"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span></button>
+          <div class="faq-a"><p>Remittances are collected automatically via small, fixed daily or weekly ACH debits from your business bank account — no checks to write and no due dates to remember. The schedule is sized to your cash flow before you sign, and many programs offer early payoff discounts.</p></div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-q" aria-expanded="false">Will applying affect my credit score?<span class="chev"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span></button>
+          <div class="faq-a"><p>No. Checking your funding options uses a soft credit inquiry only, which does not impact your credit score. You can see exactly what you qualify for with zero risk and zero obligation.</p></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Final CTA -->
+  <section class="section">
+    <div class="container">
+      <div class="cta-band">
+        <div>
+          <h2>Your Business Can't Afford to Wait. Neither Should Your Funding.</h2>
+          <p>Join 12,000+ business owners who got the capital they needed, when they needed it. Apply in under 2 minutes — with no impact to your credit.</p>
+        </div>
+        <div class="cta-actions">
+          <a href="#apply" class="btn btn-primary">Apply Now — It's Free</a>
+          <div class="phone-big"><span>Or call a funding advisor</span>(888) 555-0147</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-col">
+          <a href="#top" class="logo">
+            <span class="logo-mark">A</span>
+            <span>Advantage<em>Corp</em></span>
+          </a>
+          <p>Fast, flexible working capital for America's small and mid-sized businesses. When your bank says no, we find the yes.</p>
+        </div>
+        <div class="footer-col">
+          <h4>Company</h4>
+          <ul>
+            <li><a href="#how-it-works">How It Works</a></li>
+            <li><a href="#why-us">Why Us</a></li>
+            <li><a href="#industries">Industries</a></li>
+            <li><a href="#testimonials">Success Stories</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>Resources</h4>
+          <ul>
+            <li><a href="#faq">FAQ</a></li>
+            <li><a href="#qualify">Do I Qualify?</a></li>
+            <li><a href="#apply">Apply Now</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>Contact</h4>
+          <ul class="footer-contact">
+            <li>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+              <a href="tel:+18885550147">(888) 555-0147</a>
+            </li>
+            <li>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22 6 12 13 2 6"/></svg>
+              <a href="mailto:funding@advantagecorp.com">funding@advantagecorp.com</a>
+            </li>
+            <li>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+              <span>Mon–Fri, 9am–7pm ET</span>
+            </li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-legal">
+        <p><strong>Disclosure:</strong> Advantage Corp provides merchant cash advances, which are purchases of future receivables and are not loans. A merchant cash advance is a commercial transaction and is not subject to consumer lending regulations. Funding amounts, factor rates, and remittance terms vary based on business performance and underwriting review. Approval and funding times are estimates and not guaranteed. Checking your options involves a soft credit inquiry that does not affect your credit score.</p>
+        <div class="footer-bottom">
+          <span>© 2026 Advantage Corp. All rights reserved.</span>
+          <span><a href="#">Privacy Policy</a> &nbsp;·&nbsp; <a href="#">Terms of Service</a></span>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // Sticky header shadow
+    const header = document.getElementById('siteHeader');
+    window.addEventListener('scroll', () => {
+      header.classList.toggle('scrolled', window.scrollY > 8);
+    });
+
+    // Mobile menu
+    const menuToggle = document.getElementById('menuToggle');
+    const navLinks = document.getElementById('navLinks');
+    menuToggle.addEventListener('click', () => {
+      const open = navLinks.classList.toggle('open');
+      menuToggle.setAttribute('aria-expanded', open);
+    });
+    navLinks.querySelectorAll('a').forEach(a =>
+      a.addEventListener('click', () => {
+        navLinks.classList.remove('open');
+        menuToggle.setAttribute('aria-expanded', 'false');
+      })
+    );
+
+    // FAQ accordion
+    document.querySelectorAll('.faq-item').forEach(item => {
+      const btn = item.querySelector('.faq-q');
+      const panel = item.querySelector('.faq-a');
+      if (item.classList.contains('open')) panel.style.maxHeight = panel.scrollHeight + 'px';
+      btn.addEventListener('click', () => {
+        const isOpen = item.classList.contains('open');
+        document.querySelectorAll('.faq-item.open').forEach(o => {
+          o.classList.remove('open');
+          o.querySelector('.faq-a').style.maxHeight = null;
+          o.querySelector('.faq-q').setAttribute('aria-expanded', 'false');
+        });
+        if (!isOpen) {
+          item.classList.add('open');
+          panel.style.maxHeight = panel.scrollHeight + 'px';
+          btn.setAttribute('aria-expanded', 'true');
+        }
+      });
+    });
+
+    // Quote form — front-end only: wire the submit handler to your CRM or form endpoint
+    const quoteForm = document.getElementById('quoteForm');
+    quoteForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      if (!quoteForm.checkValidity()) {
+        quoteForm.reportValidity();
+        return;
+      }
+      quoteForm.style.display = 'none';
+      document.getElementById('formSuccess').style.display = 'block';
+    });
+  </script>
+</body>
+</html>
