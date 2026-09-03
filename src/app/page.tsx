@@ -3,6 +3,7 @@ import { prisma } from "@/lib/db";
 import { isTagSlug, parseTags, TAGS } from "@/lib/tags";
 import { isStandard, parseStandards } from "@/lib/diet";
 import { isOpenAt } from "@/lib/hours";
+import { distanceMiles, isRadius, parseLatLng } from "@/lib/geo";
 import { getCurrentUser } from "@/lib/auth";
 import { canSpotlight } from "@/lib/membership";
 import { BusinessCard } from "@/components/BusinessCard";
@@ -10,7 +11,7 @@ import { FilterBar } from "@/components/FilterBar";
 
 export const dynamic = "force-dynamic";
 
-const SORTS = ["recommended", "rating", "reviews", "newest"] as const;
+const SORTS = ["recommended", "rating", "reviews", "newest", "recent", "distance"] as const;
 type Sort = (typeof SORTS)[number];
 
 export default async function HomePage({
@@ -24,6 +25,10 @@ export default async function HomePage({
     open?: string;
     sort?: string;
     view?: string;
+    minRating?: string;
+    photos?: string;
+    near?: string;
+    radius?: string;
   }>;
 }) {
   const sp = await searchParams;
@@ -36,7 +41,13 @@ export default async function HomePage({
     .map(Number)
     .filter((n) => n >= 1 && n <= 4);
   const openNow = sp.open === "1";
-  const sort: Sort = SORTS.includes(sp.sort as Sort) ? (sp.sort as Sort) : "recommended";
+  const withPhotos = sp.photos === "1";
+  const minRating = [2, 3, 3.5, 4, 4.5].includes(Number(sp.minRating)) ? Number(sp.minRating) : 0;
+  const origin = parseLatLng(sp.near);
+  const radius = isRadius(Number(sp.radius)) ? Number(sp.radius) : 5;
+  let sort: Sort = SORTS.includes(sp.sort as Sort) ? (sp.sort as Sort) : "recommended";
+  // Sorting by distance only means anything once we know where "here" is.
+  if (sort === "distance" && !origin) sort = "recommended";
 
   // A search phrase naming a tag ("kosher", "gluten free") matches tagged
   // businesses too, not just name/city/description.
@@ -52,6 +63,10 @@ export default async function HomePage({
     where: {
       ...(category ? { category } : {}),
       ...(prices.length ? { priceLevel: { in: prices } } : {}),
+      // A rating floor only makes sense against businesses that have a rating
+      // at all — an unreviewed place is not "under 4 stars", it is unknown.
+      ...(minRating ? { scoreAvg: { gte: minRating }, scoreCount: { gt: 0 } } : {}),
+      ...(withPhotos ? { reviews: { some: { photos: { some: {} } } } } : {}),
       AND: [
         ...activeTags.map((t) => ({ tags: { contains: `,${t},` } })),
         ...myStandards.map((t) => ({ tags: { contains: `,${t},` } })),
@@ -99,12 +114,22 @@ export default async function HomePage({
     .map((b) => ({
       ...b,
       isOpen: b.openingHours.length > 0 ? isOpenAt(b.openingHours, now) : null,
-    }));
+      miles:
+        origin && b.lat != null && b.lng != null
+          ? distanceMiles(origin.lat, origin.lng, b.lat, b.lng)
+          : null,
+    }))
+    // "Near me" hides places we cannot locate rather than guessing at them.
+    .filter((b) => !origin || (b.miles !== null && b.miles <= radius));
 
   withStats.sort((a, b) => {
     if (sort === "rating") return b.scoreAvg - a.scoreAvg || b.scoreCount - a.scoreCount;
     if (sort === "reviews") return b.scoreCount - a.scoreCount;
     if (sort === "newest") return +b.createdAt - +a.createdAt;
+    if (sort === "recent") {
+      return (+(b.lastReviewedAt ?? 0)) - (+(a.lastReviewedAt ?? 0));
+    }
+    if (sort === "distance") return (a.miles ?? Infinity) - (b.miles ?? Infinity);
     // "Recommended" blends score and how much evidence backs it.
     const rank = (x: typeof a) => x.scoreAvg * Math.log10(x.scoreCount + 2);
     return rank(b) - rank(a);
@@ -178,6 +203,10 @@ export default async function HomePage({
         prices={prices}
         openNow={openNow}
         sort={sort}
+        minRating={minRating}
+        withPhotos={withPhotos}
+        near={origin ? `${origin.lat},${origin.lng}` : ""}
+        radius={radius}
       />
 
       {heading && <h2 className="mt-5 font-semibold text-lg">{heading}</h2>}
@@ -217,6 +246,8 @@ export default async function HomePage({
             isOpen={b.isOpen}
             cityRank={b.cityRank}
             cityRankSize={b.cityRankSize}
+            lastReviewedAt={b.lastReviewedAt}
+            miles={b.miles}
           />
         ))}
         {withStats.length === 0 && (

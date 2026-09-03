@@ -5,13 +5,22 @@ import { postReview, type FormState } from "@/actions/review";
 import { StarInput } from "./StarInput";
 import { QUICK_TAGS } from "@/lib/quicktags";
 
-export function ReviewForm({ businessId, slug }: { businessId: string; slug: string }) {
+export function ReviewForm({
+  businessId,
+  slug,
+  invite,
+}: {
+  businessId: string;
+  slug: string;
+  invite?: string;
+}) {
   const [state, formAction, pending] = useActionState<FormState, FormData>(postReview, undefined);
 
   return (
     <form action={formAction} className="space-y-3">
       <input type="hidden" name="businessId" value={businessId} />
       <input type="hidden" name="slug" value={slug} />
+      {invite && <input type="hidden" name="invite" value={invite} />}
       <div>
         <span className="text-sm font-medium">Your rating</span>
         <div className="mt-1">

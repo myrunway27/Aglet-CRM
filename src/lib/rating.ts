@@ -61,8 +61,21 @@ export async function refreshBusinessScore(businessId: string) {
     select: { rating: true, createdAt: true },
   });
   const { score } = bayesianScore(reviews);
+
+  // Cache the newest review's date alongside the score. Search sorts and
+  // filters on freshness, and doing it here keeps the two in step: a review
+  // that stops counting also stops making the business look recently visited.
+  let lastReviewedAt: Date | null = null;
+  for (const r of reviews) {
+    if (!lastReviewedAt || r.createdAt > lastReviewedAt) lastReviewedAt = r.createdAt;
+  }
+
   await prisma.business.update({
     where: { id: businessId },
-    data: { scoreAvg: reviews.length ? score : 0, scoreCount: reviews.length },
+    data: {
+      scoreAvg: reviews.length ? score : 0,
+      scoreCount: reviews.length,
+      lastReviewedAt,
+    },
   });
 }

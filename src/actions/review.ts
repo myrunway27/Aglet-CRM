@@ -41,6 +41,7 @@ export async function postReview(_prev: FormState, formData: FormData): Promise<
   const loved = formData.get("loved") === "on";
   const quickTags = storeQuickTags(formData.getAll("quickTags").map(String));
   const text = String(formData.get("text") ?? "").trim();
+  const inviteToken = String(formData.get("invite") ?? "").trim();
 
   const business = await prisma.business.findUnique({ where: { id: businessId } });
   if (!business) return { error: "Business not found." };
@@ -95,6 +96,14 @@ export async function postReview(_prev: FormState, formData: FormData): Promise<
     }
   }
 
+  // An invitation token is only honoured for the business it was issued for,
+  // and only once. It changes nothing about the review except the label
+  // readers see — never the rating, never the score.
+  const invite = inviteToken
+    ? await prisma.reviewInvite.findUnique({ where: { token: inviteToken } })
+    : null;
+  const viaInvite = !!invite && invite.businessId === businessId && !invite.usedAt;
+
   // Reviews carry the author's persistent pen name; older accounts
   // that predate pen names get one on their first review.
   let pseudonym = user.pseudonym;
@@ -114,9 +123,17 @@ export async function postReview(_prev: FormState, formData: FormData): Promise<
       pseudonym,
       status: flagReason ? "FLAGGED" : "PUBLISHED",
       flagReason,
+      viaInvite,
       photos: { create: savedPaths.map((p) => ({ path: p })) },
     },
   });
+
+  if (viaInvite && invite) {
+    await prisma.reviewInvite.update({
+      where: { id: invite.id },
+      data: { usedAt: new Date() },
+    });
+  }
 
   const burst = await checkReviewBurst(businessId);
   await refreshBusinessScore(businessId);

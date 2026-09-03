@@ -2,28 +2,58 @@
 // Stored on Business.tags as a comma-wrapped slug list (",kosher,vegan,")
 // so a single LIKE on ",slug," matches exactly one tag.
 export const TAGS = [
-  { slug: "kosher", label: "Kosher", food: true },
-  { slug: "halal", label: "Halal", food: true },
-  { slug: "vegan", label: "Vegan", food: true },
-  { slug: "vegetarian", label: "Vegetarian", food: true },
-  { slug: "gluten-free", label: "Gluten-free", food: true },
-  { slug: "dairy-free", label: "Dairy-free", food: true },
-  { slug: "organic", label: "Organic", food: true },
-  { slug: "outdoor-seating", label: "Outdoor seating", food: true },
-  { slug: "delivery", label: "Delivery", food: true },
-  { slug: "takeout", label: "Takeout", food: true },
-  { slug: "fine-dining", label: "Fine dining", food: true },
-  { slug: "kid-friendly", label: "Kid-friendly", food: false },
-  { slug: "pet-friendly", label: "Pet-friendly", food: false },
-  { slug: "wheelchair-accessible", label: "Wheelchair accessible", food: false },
-  { slug: "open-late", label: "Open late", food: false },
-  { slug: "budget-friendly", label: "Budget-friendly", food: false },
-  { slug: "free-wifi", label: "Free wifi", food: false },
-  { slug: "parking", label: "Parking", food: false },
+  // Food and dietary — only offered once a food category is chosen.
+  { slug: "kosher", label: "Kosher", food: true, group: "diet" },
+  { slug: "halal", label: "Halal", food: true, group: "diet" },
+  { slug: "vegan", label: "Vegan", food: true, group: "diet" },
+  { slug: "vegetarian", label: "Vegetarian", food: true, group: "diet" },
+  { slug: "gluten-free", label: "Gluten-free", food: true, group: "diet" },
+  { slug: "dairy-free", label: "Dairy-free", food: true, group: "diet" },
+  { slug: "organic", label: "Organic", food: true, group: "diet" },
+  { slug: "outdoor-seating", label: "Outdoor seating", food: true, group: "amenity" },
+  { slug: "delivery", label: "Delivery", food: true, group: "amenity" },
+  { slug: "takeout", label: "Takeout", food: true, group: "amenity" },
+  { slug: "reservations", label: "Takes reservations", food: true, group: "amenity" },
+  { slug: "fine-dining", label: "Fine dining", food: true, group: "amenity" },
+
+  // Amenities — useful for any kind of business.
+  { slug: "kid-friendly", label: "Kid-friendly", food: false, group: "amenity" },
+  { slug: "pet-friendly", label: "Pet-friendly", food: false, group: "amenity" },
+  { slug: "open-late", label: "Open late", food: false, group: "amenity" },
+  { slug: "budget-friendly", label: "Budget-friendly", food: false, group: "amenity" },
+  { slug: "free-wifi", label: "Free wifi", food: false, group: "amenity" },
+  { slug: "parking", label: "Parking", food: false, group: "amenity" },
+  { slug: "appointment-only", label: "Appointment only", food: false, group: "amenity" },
+  { slug: "walk-ins", label: "Walk-ins welcome", food: false, group: "amenity" },
+
+  // Accessibility. Badly served across the whole category, and the thing a
+  // wheelchair user most needs to know before setting out — so these get
+  // their own group rather than being buried among the amenities.
+  { slug: "wheelchair-accessible", label: "Wheelchair accessible", food: false, group: "access" },
+  { slug: "step-free-entry", label: "Step-free entry", food: false, group: "access" },
+  { slug: "accessible-bathroom", label: "Accessible bathroom", food: false, group: "access" },
+  { slug: "accessible-parking", label: "Accessible parking", food: false, group: "access" },
+  { slug: "hearing-loop", label: "Hearing loop", food: false, group: "access" },
+  { slug: "braille-menu", label: "Braille / large print", food: false, group: "access" },
+  { slug: "service-animals", label: "Service animals welcome", food: false, group: "access" },
+  { slug: "quiet-space", label: "Quiet / low-sensory space", food: false, group: "access" },
 ] as const;
 
 export const FOOD_TAGS = TAGS.filter((t) => t.food);
 export const GENERAL_TAGS = TAGS.filter((t) => !t.food);
+export const ACCESS_TAGS = TAGS.filter((t) => t.group === "access");
+export const AMENITY_TAGS = TAGS.filter((t) => t.group === "amenity");
+export const DIET_TAGS = TAGS.filter((t) => t.group === "diet");
+
+export type TagGroup = (typeof TAGS)[number]["group"];
+
+export function tagGroup(slug: string): TagGroup | null {
+  return TAGS.find((t) => t.slug === slug)?.group ?? null;
+}
+
+export function isAccessTag(slug: string): boolean {
+  return tagGroup(slug) === "access";
+}
 
 export type TagSlug = (typeof TAGS)[number]["slug"];
 

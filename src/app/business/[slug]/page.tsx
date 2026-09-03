@@ -23,10 +23,10 @@ export default async function BusinessPage({
   searchParams,
 }: {
   params: Promise<{ slug: string }>;
-  searchParams: Promise<{ posted?: string; flagged?: string }>;
+  searchParams: Promise<{ posted?: string; flagged?: string; invite?: string }>;
 }) {
   const { slug } = await params;
-  const { posted, flagged } = await searchParams;
+  const { posted, flagged, invite } = await searchParams;
   const user = await getCurrentUser();
 
   const business = await prisma.business.findUnique({
@@ -63,6 +63,7 @@ export default async function BusinessPage({
     rating: r.rating,
     loved: r.loved,
     quickTags: r.quickTags,
+    viaInvite: r.viaInvite,
     text: r.text,
     pseudonym: r.pseudonym,
     createdAt: r.createdAt,
@@ -319,7 +320,7 @@ export default async function BusinessPage({
               You&apos;ve reviewed this business. One review per person keeps ratings honest.
             </p>
           ) : (
-            <ReviewForm businessId={business.id} slug={business.slug} />
+            <ReviewForm businessId={business.id} slug={business.slug} invite={invite} />
           )}
         </div>
       </section>

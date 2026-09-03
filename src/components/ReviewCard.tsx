@@ -13,6 +13,7 @@ type ReviewData = {
   rating: number;
   loved: boolean;
   quickTags: string;
+  viaInvite?: boolean;
   text: string;
   pseudonym: string;
   createdAt: Date;
@@ -88,6 +89,16 @@ export function ReviewCard({
         </div>
       </div>
 
+      {review.viaInvite && (
+        <p className="mt-1 text-[11px] text-stone-500">
+          <span
+            className="bg-stone-100 border border-stone-200 px-2 py-0.5 rounded-full"
+            title="The business invited this customer to leave a review. It is counted exactly like any other review."
+          >
+            Invited by the business
+          </span>
+        </p>
+      )}
       {parseQuickTags(review.quickTags).length > 0 && (
         <div className="mt-2 flex flex-wrap gap-1">
           {parseQuickTags(review.quickTags).map((t) => (

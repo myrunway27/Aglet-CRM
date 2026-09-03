@@ -2,6 +2,8 @@ import Link from "next/link";
 import { Stars } from "./Stars";
 import { tagLabel } from "@/lib/tags";
 import { PRICE_LABELS } from "@/lib/hours";
+import { isStale, timeAgo } from "@/lib/freshness";
+import { formatMiles } from "@/lib/geo";
 
 export function BusinessCard(props: {
   slug: string;
@@ -16,11 +18,15 @@ export function BusinessCard(props: {
   isOpen?: boolean | null;
   cityRank?: number;
   cityRankSize?: number;
+  lastReviewedAt?: Date | null;
+  miles?: number | null;
 }) {
   const {
     slug, name, category, city, avgRating, reviewCount, verifiedOwner,
     tags = [], priceLevel = 0, isOpen = null, cityRank = 0, cityRankSize = 0,
+    lastReviewedAt = null, miles = null,
   } = props;
+  const stale = isStale(lastReviewedAt);
   return (
     <Link
       href={`/business/${slug}`}
@@ -42,6 +48,7 @@ export function BusinessCard(props: {
             {" "}· {isOpen ? "Open now" : "Closed"}
           </span>
         )}
+        {miles !== null && <span className="text-stone-500"> · {formatMiles(miles)}</span>}
       </p>
       {cityRank > 0 && (
         <p className="text-xs text-brand-700 font-medium mt-0.5">
@@ -63,7 +70,7 @@ export function BusinessCard(props: {
           )}
         </div>
       )}
-      <div className="mt-2 flex items-center gap-2 text-sm">
+      <div className="mt-2 flex items-center gap-2 text-sm flex-wrap">
         {avgRating !== null ? (
           <>
             <Stars rating={avgRating} />
@@ -76,6 +83,13 @@ export function BusinessCard(props: {
           <span className="text-stone-400">No reviews yet — be the first</span>
         )}
       </div>
+      {lastReviewedAt && (
+        <p className={`mt-1 text-xs ${stale ? "text-amber-700" : "text-stone-500"}`}>
+          {stale ? "⚠ Last reviewed " : "Last reviewed "}
+          {timeAgo(new Date(lastReviewedAt))}
+          {stale && " — this rating may be out of date"}
+        </p>
+      )}
     </Link>
   );
 }

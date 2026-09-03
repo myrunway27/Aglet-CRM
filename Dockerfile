@@ -18,6 +18,7 @@ COPY --from=builder /app/prisma ./prisma
 COPY --from=builder /app/package.json ./
 COPY --from=builder /app/scripts/bootstrap-admin.mjs ./scripts/bootstrap-admin.mjs
 COPY --from=builder /app/scripts/backfill-pseudonyms.mjs ./scripts/backfill-pseudonyms.mjs
+COPY --from=builder /app/scripts/backfill-last-reviewed.mjs ./scripts/backfill-last-reviewed.mjs
 
 # /data holds the SQLite database AND review photos (UPLOAD_DIR).
 # Mount it as a persistent volume or all data is lost on redeploy.
@@ -25,4 +26,4 @@ COPY --from=builder /app/scripts/backfill-pseudonyms.mjs ./scripts/backfill-pseu
 # on the platform side there, and fly.toml's [mounts] covers Fly.)
 
 EXPOSE 3000
-CMD ["sh", "-c", "mkdir -p \"$UPLOAD_DIR\" && npx prisma db push --skip-generate --accept-data-loss && node scripts/bootstrap-admin.mjs && node scripts/backfill-pseudonyms.mjs && npx next start -p ${PORT:-3000}"]
+CMD ["sh", "-c", "mkdir -p \"$UPLOAD_DIR\" && npx prisma db push --skip-generate --accept-data-loss && node scripts/bootstrap-admin.mjs && node scripts/backfill-pseudonyms.mjs && node scripts/backfill-last-reviewed.mjs && npx next start -p ${PORT:-3000}"]

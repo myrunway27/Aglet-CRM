@@ -119,15 +119,18 @@ model Business {
   lng       Float?
 
   // Cached scores, recomputed on review write — see src/lib/rating.ts
-  scoreAvg      Float     @default(0)
-  scoreCount    Int       @default(0)
+  scoreAvg       Float     @default(0)
+  scoreCount     Int       @default(0)
   // Rank within (city, category) by score; 0 = not yet ranked
-  cityRank      Int       @default(0)
-  cityRankSize  Int       @default(0)
+  cityRank       Int       @default(0)
+  cityRankSize   Int       @default(0)
   // Frozen while a suspicious burst is under review
-  scoreFrozen   Boolean   @default(false)
-  scoreFrozenAt DateTime?
-  createdAt     DateTime  @default(now())
+  // Denormalised from the newest counted review so search can sort and filter
+  // on freshness without touching the reviews table.
+  lastReviewedAt DateTime?
+  scoreFrozen    Boolean   @default(false)
+  scoreFrozenAt  DateTime?
+  createdAt      DateTime  @default(now())
 
   addedById String?
   addedBy   User?   @relation("AddedBy", fields: [addedById], references: [id], onDelete: SetNull)
@@ -248,6 +251,10 @@ model Review {
   flagReason      String?
   // Suspicious reviews stay visible but stop counting toward the score,
   // rather than being deleted (see /trust for the public explanation).
+  // True when written after following an owner's invitation link. Shown to
+  // readers as "Invited by the business" — context, never a trust badge, and
+  // it has no effect on the score.
+  viaInvite       Boolean  @default(false)
   includedInScore Boolean  @default(true)
   excludeReason   String?
   createdAt       DateTime @default(now())
