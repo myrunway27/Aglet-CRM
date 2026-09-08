@@ -74,11 +74,13 @@ export default async function HomePage({
       ...(q
         ? {
             OR: [
-              { name: { contains: q } },
-              { city: { contains: q } },
-              { description: { contains: q } },
-              { address: { contains: q } },
-              { zip: { contains: q } },
+              // Postgres LIKE is case-sensitive; SQLite's was not. Keep search
+              // behaving the way it always has.
+              { name: { contains: q, mode: "insensitive" } },
+              { city: { contains: q, mode: "insensitive" } },
+              { description: { contains: q, mode: "insensitive" } },
+              { address: { contains: q, mode: "insensitive" } },
+              { zip: { contains: q, mode: "insensitive" } },
               ...qTagSlugs.map((t) => ({ tags: { contains: `,${t},` } })),
             ],
           }

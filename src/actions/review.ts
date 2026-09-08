@@ -1,8 +1,6 @@
 "use server";
 
-import { mkdir, writeFile } from "node:fs/promises";
 import { randomBytes } from "node:crypto";
-import path from "node:path";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { prisma } from "@/lib/db";
@@ -18,7 +16,7 @@ import { refreshBusinessScore } from "@/lib/rating";
 import { refreshCityRanks } from "@/lib/rank";
 import { storeQuickTags } from "@/lib/quicktags";
 import { notifyUser } from "@/lib/notify";
-import { UPLOAD_DIR } from "@/lib/uploads";
+import { savePhoto } from "@/lib/storage";
 
 export type FormState = { error?: string } | undefined;
 
@@ -87,13 +85,15 @@ export async function postReview(_prev: FormState, formData: FormData): Promise<
   });
 
   const savedPaths: string[] = [];
-  if (photos.length > 0) {
-    await mkdir(UPLOAD_DIR, { recursive: true });
-    for (const photo of photos) {
-      const filename = `${randomBytes(12).toString("hex")}${PHOTO_TYPES[photo.type]}`;
-      await writeFile(path.join(UPLOAD_DIR, filename), Buffer.from(await photo.arrayBuffer()));
-      savedPaths.push(`/photos/${filename}`);
+  for (const photo of photos) {
+    const filename = `${randomBytes(12).toString("hex")}${PHOTO_TYPES[photo.type]}`;
+    try {
+      await savePhoto(filename, new Uint8Array(await photo.arrayBuffer()), photo.type);
+    } catch (err) {
+      console.error("photo upload failed", err);
+      return { error: "One of your photos couldn't be saved. Please try again." };
     }
+    savedPaths.push(`/photos/${filename}`);
   }
 
   // An invitation token is only honoured for the business it was issued for,
