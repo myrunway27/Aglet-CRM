@@ -58,6 +58,7 @@ export function FilterBar({
 }) {
   const router = useRouter();
   const [expanded, setExpanded] = useState(false);
+  const [panelOpen, setPanelOpen] = useState(false);
   const [locating, setLocating] = useState(false);
   const [locationError, setLocationError] = useState("");
 
@@ -137,154 +138,180 @@ export function FilterBar({
     (withPhotos ? 1 : 0) + (near ? 1 : 0);
 
   const chip = (on: boolean) =>
-    `text-xs px-2.5 py-1.5 rounded-full border cursor-pointer ${
+    `shrink-0 whitespace-nowrap text-xs px-2.5 py-1.5 rounded-full border cursor-pointer ${
       on
         ? "bg-brand-600 text-white border-brand-600"
         : "bg-white border-stone-300 text-stone-600 hover:border-brand-600"
     }`;
 
   return (
-    <div data-testid="filter-bar" className="bg-white rounded-xl border border-stone-200 p-3 space-y-2.5">
-      <div className="flex items-center gap-2 flex-wrap">
-        <select
-          aria-label="Category"
-          value={category ?? ""}
-          onChange={(e) => go({ category: e.target.value })}
-          className="text-sm rounded-lg border border-stone-300 bg-white px-2.5 py-1.5 focus:outline-none focus:ring-2 focus:ring-brand-600"
+    <div data-testid="filter-bar" className="space-y-2.5">
+      {/* Always-visible row: the handful people reach for constantly. */}
+      <div className="scroll-row flex items-center gap-2 -mx-4 px-4 sm:mx-0 sm:px-0 sm:flex-wrap">
+        <button
+          onClick={() => setPanelOpen((v) => !v)}
+          aria-expanded={panelOpen}
+          className={`shrink-0 inline-flex items-center gap-1.5 rounded-full px-3.5 py-2 text-sm font-semibold cursor-pointer ${
+            panelOpen || activeCount > 0
+              ? "bg-brand-800 text-white"
+              : "bg-white border border-stone-300 text-stone-800 hover:border-brand-600"
+          }`}
         >
-          <option value="">All categories</option>
-          {CATEGORIES.map((c) => (
-            <option key={c} value={c}>
-              {c}
-            </option>
-          ))}
-        </select>
-
-        <select
-          aria-label="Sort by"
-          value={sort}
-          onChange={(e) => go({ sort: e.target.value })}
-          className="text-sm rounded-lg border border-stone-300 bg-white px-2.5 py-1.5 focus:outline-none focus:ring-2 focus:ring-brand-600"
-        >
-          <option value="recommended">Recommended</option>
-          <option value="rating">Highest rated</option>
-          <option value="reviews">Most reviewed</option>
-          <option value="recent">Recently reviewed</option>
-          <option value="newest">Newest</option>
-          {near && <option value="distance">Nearest</option>}
-        </select>
-
-        <select
-          aria-label="Minimum rating"
-          value={minRating}
-          onChange={(e) => go({ minRating: Number(e.target.value) })}
-          className="text-sm rounded-lg border border-stone-300 bg-white px-2.5 py-1.5 focus:outline-none focus:ring-2 focus:ring-brand-600"
-        >
-          {RATING_FLOORS.map((r) => (
-            <option key={r.value} value={r.value}>
-              {r.label}
-            </option>
-          ))}
-        </select>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2"><path d="M3 5h18M6 12h12M10 19h4" /></svg>
+          Filters{activeCount > 0 ? ` · ${activeCount}` : ""}
+        </button>
 
         <button onClick={() => go({ openNow: !openNow })} className={chip(openNow)}>
           {openNow ? "✓ " : ""}Open now
         </button>
-
         <button onClick={useMyLocation} disabled={locating} className={chip(!!near)}>
           {locating ? "Locating…" : near ? "✓ Near me" : "📍 Near me"}
         </button>
-
-        {near && (
-          <select
-            aria-label="Search radius"
-            value={radius}
-            onChange={(e) => go({ radius: Number(e.target.value) })}
-            className="text-sm rounded-lg border border-stone-300 bg-white px-2.5 py-1.5 focus:outline-none focus:ring-2 focus:ring-brand-600"
-          >
-            {RADII.map((r) => (
-              <option key={r} value={r}>
-                within {r} mi
-              </option>
-            ))}
-          </select>
-        )}
-
+        <button onClick={() => go({ minRating: minRating === 4 ? 0 : 4 })} className={chip(minRating === 4)}>
+          {minRating === 4 ? "✓ " : ""}4★ &amp; up
+        </button>
         <button onClick={() => go({ withPhotos: !withPhotos })} className={chip(withPhotos)}>
           {withPhotos ? "✓ " : ""}📷 With photos
         </button>
 
-        <span className="flex gap-1">
-          {[1, 2, 3, 4].map((n) => (
-            <button
-              key={n}
-              onClick={() => togglePrice(n)}
-              className={chip(prices.includes(n))}
-              aria-label={`Price level ${n}`}
-            >
-              {"$".repeat(n)}
-            </button>
-          ))}
-        </span>
+        <span className="hidden sm:block flex-1" />
 
-        {activeCount > 0 && (
-          <button
-            onClick={() =>
-              go({
-                tags: [], prices: [], openNow: false, minRating: 0,
-                withPhotos: false, near: "", sort: sort === "distance" ? "recommended" : sort,
-              })
-            }
-            className="text-xs text-stone-500 hover:text-brand-700 underline cursor-pointer"
+        <label className="shrink-0 flex items-center gap-1.5 text-sm text-stone-500">
+          <span className="hidden sm:inline">Sort</span>
+          <select
+            aria-label="Sort by"
+            value={sort}
+            onChange={(e) => go({ sort: e.target.value })}
+            className="text-sm font-semibold text-stone-800 rounded-lg border border-stone-300 bg-white px-2.5 py-1.5 focus:outline-none focus:ring-2 focus:ring-brand-600"
           >
-            Clear ({activeCount})
-          </button>
-        )}
+            <option value="recommended">Recommended</option>
+            <option value="rating">Highest rated</option>
+            <option value="reviews">Most reviewed</option>
+            <option value="recent">Recently reviewed</option>
+            <option value="newest">Newest</option>
+            {near && <option value="distance">Nearest</option>}
+          </select>
+        </label>
       </div>
 
       {locationError && <p className="text-xs text-red-600">{locationError}</p>}
 
-      {groups.map((g) => {
-        const visible = g.tags.filter((t) => show(t.slug));
-        if (visible.length === 0) return null;
-        return (
-          <div key={g.heading} className="flex items-center gap-1.5 flex-wrap">
-            {expanded && (
-              <span className="text-[11px] uppercase tracking-wide text-stone-400 font-medium w-full">
-                {g.heading}
-              </span>
-            )}
-            {visible.map((t) => (
-              <button key={t.slug} onClick={() => toggleTag(t.slug)} className={chip(activeTags.includes(t.slug))}>
-                {activeTags.includes(t.slug) ? "✓ " : ""}
-                {t.label}
-              </button>
-            ))}
-          </div>
-        );
-      })}
-
-      <div className="flex items-center gap-1.5 flex-wrap">
-        {expanded &&
-          foodMode &&
-          DIET_STANDARDS.map((s) => (
-            <button
-              key={s.slug}
-              onClick={() => toggleTag(s.slug)}
-              title={s.hint}
-              className={chip(activeTags.includes(s.slug))}
+      {panelOpen && (
+        <div className="bg-white rounded-card border border-line p-4 space-y-4">
+          <div className="flex items-center gap-2 flex-wrap">
+            <select
+              aria-label="Category"
+              value={category ?? ""}
+              onChange={(e) => go({ category: e.target.value })}
+              className="text-sm rounded-lg border border-stone-300 bg-white px-2.5 py-1.5 focus:outline-none focus:ring-2 focus:ring-brand-600"
             >
-              {activeTags.includes(s.slug) ? "✓ " : ""}
-              {s.label}
+              <option value="">All categories</option>
+              {CATEGORIES.map((c) => (
+                <option key={c} value={c}>
+                  {c}
+                </option>
+              ))}
+            </select>
+
+            <select
+              aria-label="Minimum rating"
+              value={minRating}
+              onChange={(e) => go({ minRating: Number(e.target.value) })}
+              className="text-sm rounded-lg border border-stone-300 bg-white px-2.5 py-1.5 focus:outline-none focus:ring-2 focus:ring-brand-600"
+            >
+              {RATING_FLOORS.map((r) => (
+                <option key={r.value} value={r.value}>
+                  {r.label}
+                </option>
+              ))}
+            </select>
+
+            {near && (
+              <select
+                aria-label="Search radius"
+                value={radius}
+                onChange={(e) => go({ radius: Number(e.target.value) })}
+                className="text-sm rounded-lg border border-stone-300 bg-white px-2.5 py-1.5 focus:outline-none focus:ring-2 focus:ring-brand-600"
+              >
+                {RADII.map((r) => (
+                  <option key={r} value={r}>
+                    within {r} mi
+                  </option>
+                ))}
+              </select>
+            )}
+
+            <span className="flex gap-1">
+              {[1, 2, 3, 4].map((n) => (
+                <button
+                  key={n}
+                  onClick={() => togglePrice(n)}
+                  className={chip(prices.includes(n))}
+                  aria-label={`Price level ${n}`}
+                >
+                  {"$".repeat(n)}
+                </button>
+              ))}
+            </span>
+
+            {activeCount > 0 && (
+              <button
+                onClick={() =>
+                  go({
+                    tags: [], prices: [], openNow: false, minRating: 0,
+                    withPhotos: false, near: "", sort: sort === "distance" ? "recommended" : sort,
+                  })
+                }
+                className="text-xs text-stone-500 hover:text-brand-700 underline cursor-pointer"
+              >
+                Clear ({activeCount})
+              </button>
+            )}
+          </div>
+
+          {groups.map((g) => {
+            const visible = g.tags.filter((t) => show(t.slug));
+            if (visible.length === 0) return null;
+            return (
+              <div key={g.heading}>
+                <p className="text-[11px] uppercase tracking-wide text-stone-400 font-semibold mb-1.5">
+                  {g.heading}
+                </p>
+                <div className="flex items-center gap-1.5 flex-wrap">
+                  {visible.map((t) => (
+                    <button key={t.slug} onClick={() => toggleTag(t.slug)} className={chip(activeTags.includes(t.slug))}>
+                      {activeTags.includes(t.slug) ? "✓ " : ""}
+                      {t.label}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            );
+          })}
+
+          <div className="flex items-center gap-1.5 flex-wrap">
+            {expanded &&
+              foodMode &&
+              DIET_STANDARDS.map((s) => (
+                <button
+                  key={s.slug}
+                  onClick={() => toggleTag(s.slug)}
+                  title={s.hint}
+                  className={chip(activeTags.includes(s.slug))}
+                >
+                  {activeTags.includes(s.slug) ? "✓ " : ""}
+                  {s.label}
+                </button>
+              ))}
+            <button
+              onClick={() => setExpanded((v) => !v)}
+              className="text-xs px-2.5 py-1.5 rounded-full text-brand-700 hover:bg-brand-50 cursor-pointer font-medium"
+            >
+              {expanded ? "Less ▴" : "More filters ▾"}
             </button>
-          ))}
-        <button
-          onClick={() => setExpanded((v) => !v)}
-          className="text-xs px-2.5 py-1.5 rounded-full text-brand-700 hover:bg-brand-50 cursor-pointer font-medium"
-        >
-          {expanded ? "Less ▴" : "More filters ▾"}
-        </button>
-      </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

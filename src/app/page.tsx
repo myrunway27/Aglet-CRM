@@ -8,6 +8,7 @@ import { getCurrentUser } from "@/lib/auth";
 import { canSpotlight } from "@/lib/membership";
 import { BusinessCard } from "@/components/BusinessCard";
 import { FilterBar } from "@/components/FilterBar";
+import { CategoryTiles } from "@/components/CategoryTiles";
 
 export const dynamic = "force-dynamic";
 
@@ -86,7 +87,16 @@ export default async function HomePage({
           }
         : {}),
     },
-    include: { openingHours: true },
+    include: {
+      openingHours: true,
+      // One cover photo per card: the newest review that has any.
+      reviews: {
+        where: { status: { not: "HIDDEN" }, photos: { some: {} } },
+        orderBy: { createdAt: "desc" },
+        take: 1,
+        select: { photos: { take: 1, select: { path: true } } },
+      },
+    },
     take: 200,
   });
 
@@ -101,7 +111,16 @@ export default async function HomePage({
         id: { in: businesses.map((b) => b.id) },
         owner: { isNot: null },
       },
-      include: { owner: { select: { proUntil: true, proTier: true } }, openingHours: true },
+      include: {
+        owner: { select: { proUntil: true, proTier: true } },
+        openingHours: true,
+        reviews: {
+          where: { status: { not: "HIDDEN" }, photos: { some: {} } },
+          orderBy: { createdAt: "desc" },
+          take: 1,
+          select: { photos: { take: 1, select: { path: true } } },
+        },
+      },
     });
     const spotlit = candidates.filter((b) => canSpotlight(b.owner));
     if (spotlit.length > 0) {
@@ -149,45 +168,40 @@ export default async function HomePage({
 
   return (
     <div>
-      <section className="text-center py-8">
-        <h1 className="text-3xl sm:text-4xl font-bold tracking-tight">
-          Find great places. <span className="text-brand-600">Review them freely.</span>
+      <section className="text-center pt-8 pb-6 sm:pt-12 sm:pb-8">
+        <h1 className="font-display font-semibold text-[38px] sm:text-[56px] leading-[1.05] tracking-tight">
+          Find places worth your time.
         </h1>
-        <p className="mt-2 text-brand-700 font-medium">Reviewed by the people, for the people.</p>
-        <p className="mt-1 text-stone-600 max-w-xl mx-auto">
-          Honest, 100% anonymous reviews of restaurants, cafes and every kind of business. Owners
-          can reply — but they never see who you are.
+        <p className="font-display italic text-brand-700 text-lg sm:text-[22px] mt-3">
+          Reviewed by the people, for the people.
         </p>
-        <form action="/" className="mt-6 flex max-w-xl mx-auto gap-2">
-          <input
-            type="search"
-            name="q"
-            defaultValue={q ?? ""}
-            placeholder="Try “kosher pizza”, “vegan cafe”, a name or a city…"
-            className="flex-1 rounded-lg border border-stone-300 bg-white px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-brand-600"
-          />
-          <button className="rounded-lg bg-brand-700 text-white px-5 py-2.5 font-medium hover:bg-brand-800 cursor-pointer">
+        <form action="/" className="mt-7 flex max-w-2xl mx-auto gap-2">
+          <label className="flex-1 min-w-0 flex items-center gap-2.5 rounded-xl border border-stone-300 bg-white pl-4 pr-2 h-13 shadow-sm focus-within:ring-2 focus-within:ring-brand-600">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#a8a29e" strokeWidth="2"><circle cx="11" cy="11" r="7" /><path d="M21 21l-4-4" /></svg>
+            <input
+              type="search"
+              name="q"
+              defaultValue={q ?? ""}
+              placeholder="Try “kosher pizza”, a name, or a city…"
+              className="flex-1 min-w-0 h-full bg-transparent text-base focus:outline-none"
+            />
+          </label>
+          <button className="shrink-0 rounded-xl bg-brand-700 text-white px-4 sm:px-6 h-13 font-semibold hover:bg-brand-800 cursor-pointer">
             Search
           </button>
         </form>
-        <div className="mt-3 flex justify-center gap-2 flex-wrap text-sm">
-          <Link href="/collections/trending" className="text-brand-700 hover:underline">
-            🔥 Trending
-          </Link>
+        <div className="mt-3 flex justify-center gap-3 flex-wrap text-sm text-stone-500">
+          <Link href="/collections/trending" className="hover:text-brand-700">Trending</Link>
           <span className="text-stone-300">·</span>
-          <Link href="/collections/top" className="text-brand-700 hover:underline">
-            🏆 Top rated
-          </Link>
+          <Link href="/collections/top" className="hover:text-brand-700">Top rated</Link>
           <span className="text-stone-300">·</span>
-          <Link href="/collections/gems" className="text-brand-700 hover:underline">
-            💎 Hidden gems
-          </Link>
+          <Link href="/collections/gems" className="hover:text-brand-700">Hidden gems</Link>
           <span className="text-stone-300">·</span>
-          <Link href="/surprise" className="text-brand-700 font-medium hover:underline">
-            🎲 Surprise me
-          </Link>
+          <Link href="/surprise" className="hover:text-brand-700">Surprise me</Link>
         </div>
       </section>
+
+      <CategoryTiles active={category} q={q} />
 
       {myStandards.length > 0 && (
         <p className="mb-2 text-xs text-brand-800 bg-brand-50 border border-brand-100 rounded-lg px-3 py-2">
@@ -211,7 +225,12 @@ export default async function HomePage({
         radius={radius}
       />
 
-      {heading && <h2 className="mt-5 font-semibold text-lg">{heading}</h2>}
+      <div className="mt-6 flex items-baseline justify-between">
+        <h2 className="font-display font-semibold text-2xl">
+          {heading ?? (q ? `Results for “${q}”` : category ? category : "Popular right now")}
+        </h2>
+        <span className="text-sm text-stone-500">{withStats.length} place{withStats.length === 1 ? "" : "s"}</span>
+      </div>
 
       {sponsored && (
         <div className="mt-4 relative">
@@ -228,11 +247,12 @@ export default async function HomePage({
             verifiedOwner={true}
             tags={parseTags(sponsored.tags)}
             priceLevel={sponsored.priceLevel}
+            photo={sponsored.reviews[0]?.photos[0]?.path ?? null}
           />
         </div>
       )}
 
-      <section className="mt-4 grid gap-3 sm:grid-cols-2">
+      <section className="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {withStats.map((b) => (
           <BusinessCard
             key={b.id}
@@ -250,10 +270,11 @@ export default async function HomePage({
             cityRankSize={b.cityRankSize}
             lastReviewedAt={b.lastReviewedAt}
             miles={b.miles}
+            photo={b.reviews[0]?.photos[0]?.path ?? null}
           />
         ))}
         {withStats.length === 0 && (
-          <div className="sm:col-span-2 text-center py-12 text-stone-500">
+          <div className="sm:col-span-2 lg:col-span-3 text-center py-12 text-stone-500">
             <p>No businesses found{q ? ` for “${q}”` : ""}.</p>
             <Link href="/add-business" className="text-brand-700 font-medium hover:underline">
               Add it to True Review →

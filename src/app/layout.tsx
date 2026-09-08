@@ -23,17 +23,25 @@ export default async function RootLayout({ children }: { children: React.ReactNo
 
   return (
     <html lang="en">
+      <head>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <link
+          href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,500;0,6..72,600;1,6..72,500&family=Hanken+Grotesk:wght@400;500;600;700&display=swap"
+          rel="stylesheet"
+        />
+      </head>
       <body className="min-h-screen flex flex-col">
-        <header className="bg-brand-800 text-white sticky top-0 z-20 shadow">
-          <div className="mx-auto max-w-4xl px-4 py-3 flex items-center gap-3 flex-wrap">
+        <header className="bg-brand-800 text-white sticky top-0 z-20">
+          <div className="mx-auto max-w-6xl px-4 sm:px-6 h-14 flex items-center gap-3">
             <Link href="/" className="shrink-0 text-white [--logo-counter:#1A1917]">
               <Logo />
             </Link>
             <nav className="ml-auto flex items-center gap-1 text-sm">
-              <Link href="/map" className="px-2.5 py-1.5 rounded hover:bg-white/10">
+              <Link href="/map" className="hidden sm:inline px-2.5 py-1.5 rounded hover:bg-white/10">
                 Map
               </Link>
-              <Link href="/add-business" className="px-2.5 py-1.5 rounded hover:bg-white/10">
+              <Link href="/add-business" className="hidden sm:inline px-2.5 py-1.5 rounded hover:bg-white/10">
                 Add business
               </Link>
               {user ? (
@@ -51,19 +59,19 @@ export default async function RootLayout({ children }: { children: React.ReactNo
                     )}
                   </Link>
                   {ownsBusinesses && (
-                    <Link href="/owner" className="px-2.5 py-1.5 rounded hover:bg-white/10">
+                    <Link href="/owner" className="hidden sm:inline px-2.5 py-1.5 rounded hover:bg-white/10">
                       My businesses
                     </Link>
                   )}
                   {user.isAdmin && (
-                    <Link href="/admin" className="px-2.5 py-1.5 rounded hover:bg-white/10">
+                    <Link href="/admin" className="hidden sm:inline px-2.5 py-1.5 rounded hover:bg-white/10">
                       Admin
                     </Link>
                   )}
                   <Link href="/account" className="px-2.5 py-1.5 rounded hover:bg-white/10">
                     Account
                   </Link>
-                  <form action={logout}>
+                  <form action={logout} className="hidden sm:block">
                     <button className="px-2.5 py-1.5 rounded hover:bg-white/10 cursor-pointer">
                       Log out
                     </button>
@@ -76,7 +84,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
                   </Link>
                   <Link
                     href="/signup"
-                    className="px-2.5 py-1.5 rounded bg-star text-brand-900 font-semibold hover:brightness-110"
+                    className="px-3 py-1.5 rounded-lg bg-star text-brand-900 font-semibold hover:brightness-110"
                   >
                     Sign up
                   </Link>
@@ -93,8 +101,8 @@ export default async function RootLayout({ children }: { children: React.ReactNo
             </Link>
           </div>
         )}
-        <main className="flex-1 mx-auto w-full max-w-4xl px-4 py-6">{children}</main>
-        <footer className="text-center text-xs text-stone-500 py-6 px-4">
+        <main className="flex-1 mx-auto w-full max-w-6xl px-4 sm:px-6 py-6">{children}</main>
+        <footer className="border-t border-line mt-10 text-center text-xs text-stone-500 py-8 px-4">
           <p>
             True Review — reviewed by the people, for the people. Reviews are anonymous; your
             identity is never shown to businesses or other users.

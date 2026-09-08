@@ -4,6 +4,7 @@ import { prisma } from "@/lib/db";
 import { getCurrentUser } from "@/lib/auth";
 import { Stars } from "@/components/Stars";
 import { ReviewForm } from "@/components/ReviewForm";
+import { categoryArt } from "@/lib/categoryArt";
 import { ReviewList } from "@/components/ReviewList";
 import { ReviewSnapshot } from "@/components/ReviewSnapshot";
 import { SaveButtons } from "@/components/SaveButtons";
@@ -134,11 +135,45 @@ export default async function BusinessPage({
         </div>
       )}
 
-      <div className="bg-white rounded-xl border border-stone-200 p-5">
+      {/* Gallery hero: review photos when there are any, a category-tinted
+          band when there are none. Photos are what make a listing feel real. */}
+      {(() => {
+        const photos = reviews.flatMap((r) => r.photos.map((p) => p.path)).slice(0, 5);
+        const art = categoryArt(business.category);
+        if (photos.length === 0) {
+          return (
+            <div
+              className="h-40 sm:h-56 rounded-card flex items-center justify-center"
+              style={{ background: art.tint, color: art.ink }}
+            >
+              <svg width="72" height="72" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round" className="opacity-60">
+                <path d={art.icon} />
+              </svg>
+            </div>
+          );
+        }
+        return (
+          <div className="grid grid-cols-4 grid-rows-2 gap-2 h-56 sm:h-80 rounded-card overflow-hidden">
+            {photos.map((src, i) => (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img
+                key={src}
+                src={src}
+                alt=""
+                className={`w-full h-full object-cover ${i === 0 ? "col-span-2 row-span-2" : ""} ${
+                  photos.length === 1 ? "col-span-4 row-span-2" : ""
+                }`}
+              />
+            ))}
+          </div>
+        );
+      })()}
+
+      <div className="bg-white rounded-card border border-line p-5 sm:p-6 mt-4">
         <div className="flex items-start justify-between gap-3 flex-wrap">
           <div>
-            <h1 className="text-2xl font-bold">{business.name}</h1>
-            <p className="text-sm text-stone-500 mt-0.5">
+            <h1 className="font-display font-semibold text-3xl sm:text-[40px] leading-tight">{business.name}</h1>
+            <p className="text-sm text-stone-500 mt-1">
               {[business.category, business.city].filter(Boolean).join(" · ")}
               {business.priceLevel > 0 && ` · ${PRICE_LABELS[business.priceLevel]}`}
             </p>
