@@ -179,8 +179,15 @@ export default async function HomePage({
   // browsed). Shown beside the search so nobody has to infer it from cards.
   const cityCounts = new Map<string, number>();
   for (const b of withStats) cityCounts.set(b.city, (cityCounts.get(b.city) ?? 0) + 1);
+  // Name a city only when one clearly dominates the results; a spread across
+  // many cities is the region, not whichever town happens to have the most rows.
+  const topCity = [...cityCounts.entries()].sort((a, b) => b[1] - a[1])[0];
   const placeName =
-    [...cityCounts.entries()].sort((a, b) => b[1] - a[1])[0]?.[0] ?? (q || "Anywhere");
+    category || q
+      ? (topCity?.[0] ?? q ?? "South Florida")
+      : topCity && topCity[1] / Math.max(1, withStats.length) >= 0.6
+        ? topCity[0]
+        : "South Florida";
   const anyRated = withStats.some((b) => b.scoreCount > 0);
   // A discovery row that rotates across categories, rated places first, so
   // the top of the page shows the breadth of the city rather than whichever
