@@ -48,7 +48,7 @@ export function ResultRow(props: {
       <Link
         href={`/business/${slug}`}
         className="relative shrink-0 w-[96px] h-[96px] sm:w-[168px] sm:h-[168px] rounded-xl overflow-hidden"
-        style={{ background: "#f3efe8", color: art.ink }}
+        style={{ background: "#f3efe8", color: "#a8a29e" }}
         aria-label={name}
       >
         {photo ? (

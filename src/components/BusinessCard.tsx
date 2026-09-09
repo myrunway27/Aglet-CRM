@@ -49,7 +49,7 @@ export function BusinessCard(props: {
           className={`relative shrink-0 w-[68px] h-[68px] rounded-xl overflow-hidden flex items-center justify-center ${
             auto ? "sm:w-full sm:h-44 sm:rounded-none" : ""
           }`}
-          style={{ background: photo ? undefined : "#f3efe8", color: art.ink }}
+          style={{ background: photo ? undefined : "#f3efe8", color: "#a8a29e" }}
         >
           {photo ? (
             // eslint-disable-next-line @next/next/no-img-element
@@ -122,7 +122,7 @@ export function BusinessCard(props: {
           />
         ) : (
           <div className="absolute inset-0 flex items-center justify-center">
-            <span className="w-12 h-12 rounded-xl flex items-center justify-center bg-white shadow-sm" style={{ color: art.ink }}>
+            <span className="w-12 h-12 rounded-xl flex items-center justify-center bg-white shadow-sm" style={{ color: "#a8a29e" }}>
               <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                 <path d={art.icon} />
               </svg>

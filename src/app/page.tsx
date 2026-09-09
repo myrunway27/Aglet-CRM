@@ -219,9 +219,8 @@ export default async function HomePage({
   return (
     <div>
       {/* Hero: a dark band gives the top of the page weight and contrast.
-          One headline, the search, where you are, and the category chips —
-          nothing else before results. */}
-      <section className="relative left-1/2 -ml-[50vw] w-screen -mt-6 px-4 sm:px-6 pt-8 pb-7 sm:pt-14 sm:pb-10 bg-brand-900 text-white overflow-hidden">
+          One headline, the search and where you are — nothing else. */}
+      <section className="relative left-1/2 -ml-[50vw] w-screen -mt-6 px-4 sm:px-6 pt-8 pb-8 sm:pt-14 sm:pb-12 bg-brand-900 text-white overflow-hidden">
         {/* Warm evening light rather than a cold gradient; replaced by a
             photograph once image credentials are configured. */}
         <div
@@ -263,10 +262,15 @@ export default async function HomePage({
             {placeName}
           </p>
         </div>
-        <div className="relative mt-6 sm:mt-8 max-w-5xl mx-auto">
-          <CategoryTiles active={category} q={q} onDark />
-        </div>
       </section>
+
+      {/* Category row on its own white band, the way Yelp and TripAdvisor
+          put browse tabs under the search rather than inside the hero. */}
+      <div className="relative left-1/2 -ml-[50vw] w-screen bg-white border-b border-line mb-6">
+        <div className="mx-auto max-w-6xl px-4 sm:px-6">
+          <CategoryTiles active={category} q={q} />
+        </div>
+      </div>
 
       {myStandards.length > 0 && (
         <p className="mb-2 text-xs text-brand-800 bg-brand-50 border border-brand-100 rounded-lg px-3 py-2">

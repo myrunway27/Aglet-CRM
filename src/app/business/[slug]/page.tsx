@@ -145,7 +145,7 @@ export default async function BusinessPage({
           return (
             <div
               className="relative h-28 sm:h-36 rounded-card overflow-hidden border border-line"
-              style={{ background: "#f3efe8", color: art.ink }}
+              style={{ background: "#f3efe8", color: "#a8a29e" }}
             >
               <div className="absolute left-5 bottom-5 flex items-center gap-3">
                 <span className="w-12 h-12 rounded-xl bg-white/85 shadow-sm flex items-center justify-center">
