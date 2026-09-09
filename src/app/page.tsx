@@ -284,15 +284,15 @@ export default async function HomePage({
       {/* Why this site is different, right under the search — before any
           filtering or results, where a first-time visitor actually reads. */}
       {!filtering && !heading && (
-        <section className="mb-6 grid gap-3 sm:grid-cols-3">
+        <section className="mb-6 grid gap-2 sm:gap-3 sm:grid-cols-3">
           {[
             ["100% anonymous", "Your pen name is all anyone sees — businesses included."],
             ["Owners can reply, not retaliate", "They answer in public and never learn who you are."],
             ["Money never moves a rating", "Paying businesses get tools, not better scores. Ever."],
           ].map(([t, d]) => (
-            <div key={t} className="rounded-2xl bg-brand-50 border border-brand-100 px-4 py-3.5">
-              <p className="font-semibold text-[14.5px] text-brand-800">{t}</p>
-              <p className="text-[13px] text-stone-600 mt-0.5">{d}</p>
+            <div key={t} className="rounded-xl sm:rounded-2xl bg-brand-50 border border-brand-100 px-3.5 py-2.5 sm:px-4 sm:py-3.5">
+              <p className="font-semibold text-[14px] sm:text-[14.5px] text-brand-800">{t}</p>
+              <p className="hidden sm:block text-[13px] text-stone-600 mt-0.5">{d}</p>
             </div>
           ))}
         </section>

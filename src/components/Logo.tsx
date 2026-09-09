@@ -29,8 +29,8 @@ export function LogoMark({ className = "h-9 w-9" }: { className?: string }) {
 export function Logo({ className = "" }: { className?: string }) {
   return (
     <span className={`inline-flex items-center gap-2.5 ${className}`}>
-      <LogoMark className="h-9 w-9 shrink-0" />
-      <span className="font-wordmark text-[26px] leading-none tracking-[-0.03em]">truereview</span>
+      <LogoMark className="h-8 w-8 sm:h-9 sm:w-9 shrink-0" />
+      <span className="font-wordmark text-[22px] sm:text-[26px] leading-none tracking-[-0.03em]">truereview</span>
     </span>
   );
 }

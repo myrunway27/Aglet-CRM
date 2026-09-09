@@ -49,7 +49,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
             <Link href="/" className="shrink-0">
               <Logo />
             </Link>
-            <nav className="ml-auto flex items-center gap-1 text-sm">
+            <nav className="ml-auto flex items-center gap-1 text-sm whitespace-nowrap">
               <Link href="/map" className="hidden sm:inline px-2.5 py-1.5 rounded hover:bg-white/10">
                 Map
               </Link>
@@ -91,7 +91,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
                 </>
               ) : (
                 <>
-                  <Link href="/login" className="px-2.5 py-1.5 rounded hover:bg-white/10">
+                  <Link href="/login" className="px-2 sm:px-2.5 py-1.5 rounded hover:bg-white/10">
                     Log in
                   </Link>
                   <Link
