@@ -237,7 +237,7 @@ export default async function HomePage({
             Find places <span className="text-star">worth</span> your time.
           </h1>
           <p className="hidden sm:block text-white/75 text-lg mt-3">
-            Real people. Honest reviews. {placeName} and beyond.
+            Real people. Honest reviews. Every kind of business, all across America.
           </p>
           <form action="/" className="mt-5 sm:mt-7 flex gap-2">
             <label className="flex-1 min-w-0 flex items-center gap-2.5 rounded-xl bg-white pl-3.5 pr-2 h-12 sm:h-13 shadow-lg shadow-black/20 focus-within:ring-2 focus-within:ring-star">
@@ -316,15 +316,15 @@ export default async function HomePage({
       )}
 
       <div className="mt-8 flex items-baseline justify-between">
-        <h2 className="font-display text-2xl">
+        <h2 className="text-xl sm:text-[22px] font-bold tracking-tight">
           {heading ??
             (q
               ? `Results for “${q}”`
               : category
-                ? `${category} in ${placeName}`
+                ? category
                 : anyRated
-                  ? `Popular in ${placeName}`
-                  : `Places in ${placeName}`)}
+                  ? "Popular places"
+                  : "Places to explore")}
         </h2>
         <span className="text-sm text-stone-500">{withStats.length} place{withStats.length === 1 ? "" : "s"}</span>
       </div>
@@ -426,7 +426,7 @@ function ResponsiveCard(props: React.ComponentProps<typeof BusinessCard>) {
 function Row({ title, items }: { title: string; items: CardBusiness[] }) {
   return (
     <section className="mt-8">
-      <h2 className="font-display text-xl sm:text-2xl mb-3">{title}</h2>
+      <h2 className="text-xl sm:text-[22px] font-bold tracking-tight mb-3">{title}</h2>
       <div className="scroll-row -mx-4 px-4 sm:mx-0 sm:px-0">
         <div className="flex gap-3 sm:gap-4 min-w-max">
           {items.map((b) => (

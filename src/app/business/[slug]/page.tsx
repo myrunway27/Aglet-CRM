@@ -144,12 +144,9 @@ export default async function BusinessPage({
         if (photos.length === 0) {
           return (
             <div
-              className="relative h-40 sm:h-52 rounded-card overflow-hidden"
-              style={{ background: `linear-gradient(120deg, ${art.tint} 0%, ${art.pop} 150%)`, color: art.ink }}
+              className="relative h-28 sm:h-36 rounded-card overflow-hidden border border-line"
+              style={{ background: "#f3efe8", color: art.ink }}
             >
-              <span className="absolute -right-4 -bottom-16 font-display text-[240px] sm:text-[300px] leading-none select-none" style={{ opacity: 0.14 }} aria-hidden="true">
-                {business.name.trim().charAt(0).toUpperCase()}
-              </span>
               <div className="absolute left-5 bottom-5 flex items-center gap-3">
                 <span className="w-12 h-12 rounded-xl bg-white/85 shadow-sm flex items-center justify-center">
                   <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d={art.icon} /></svg>

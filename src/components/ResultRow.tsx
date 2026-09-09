@@ -48,21 +48,18 @@ export function ResultRow(props: {
       <Link
         href={`/business/${slug}`}
         className="relative shrink-0 w-[96px] h-[96px] sm:w-[168px] sm:h-[168px] rounded-xl overflow-hidden"
-        style={{ background: `linear-gradient(135deg, ${art.tint} 0%, ${art.pop} 140%)`, color: art.ink }}
+        style={{ background: "#f3efe8", color: art.ink }}
         aria-label={name}
       >
         {photo ? (
           // eslint-disable-next-line @next/next/no-img-element
           <img src={photo} alt="" className="absolute inset-0 w-full h-full object-cover" />
         ) : (
-          <>
-            <span className="absolute -right-2 -bottom-6 font-display text-[96px] sm:text-[150px] leading-none select-none" style={{ opacity: 0.16 }} aria-hidden="true">
-              {name.trim().charAt(0).toUpperCase()}
+          <span className="absolute inset-0 flex items-center justify-center">
+            <span className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl flex items-center justify-center bg-white shadow-sm">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d={art.icon} /></svg>
             </span>
-            <span className="absolute left-2.5 bottom-2.5 sm:left-3.5 sm:bottom-3.5 w-8 h-8 sm:w-10 sm:h-10 rounded-lg flex items-center justify-center bg-white/85">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d={art.icon} /></svg>
-            </span>
-          </>
+          </span>
         )}
       </Link>
 
@@ -108,7 +105,7 @@ export function ResultRow(props: {
           </p>
         ) : (
           <p className="mt-2 text-[13.5px] text-stone-500">
-            Been here? <Link href={`/business/${slug}`} className="text-brand-700 font-medium hover:underline">Be the first to say what it's like →</Link>
+            No reviews yet. <Link href={`/business/${slug}`} className="text-brand-700 font-medium hover:underline">Know this place? Write the first.</Link>
           </p>
         )}
 

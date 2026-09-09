@@ -162,16 +162,18 @@ export function FilterBar({
         </button>
 
         <button onClick={() => go({ openNow: !openNow })} className={chip(openNow)}>
-          {openNow ? "✓ " : ""}Open now
+          Open now
         </button>
         <button onClick={useMyLocation} disabled={locating} className={chip(!!near)}>
-          {locating ? "Locating…" : near ? "✓ Near me" : "📍 Near me"}
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" className="inline -mt-0.5 mr-1"><path d="M12 21s-6-5.3-6-11a6 6 0 0 1 12 0c0 5.7-6 11-6 11Z" /><circle cx="12" cy="10" r="2" /></svg>
+          {locating ? "Locating…" : "Near me"}
         </button>
         <button onClick={() => go({ minRating: minRating === 4 ? 0 : 4 })} className={chip(minRating === 4)}>
-          {minRating === 4 ? "✓ " : ""}4★ &amp; up
+          4★ &amp; up
         </button>
         <button onClick={() => go({ withPhotos: !withPhotos })} className={chip(withPhotos)}>
-          {withPhotos ? "✓ " : ""}📷 With photos
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" className="inline -mt-0.5 mr-1"><path d="M4 8h3l2-3h6l2 3h3v11H4z" /><circle cx="12" cy="13" r="3" /></svg>
+          With photos
         </button>
 
         <span className="hidden sm:block flex-1" />

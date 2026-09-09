@@ -7,7 +7,7 @@ import { categoryArt } from "@/lib/categoryArt";
 
 // Photo-first card. The image carries the card; the rating sits on it as the
 // loudest element, because the rating is what people came for. A business
-// with no photos yet gets a category-tinted cover rather than a grey box.
+// with no photos yet gets a quiet neutral cover with a category icon.
 export function BusinessCard(props: {
   slug: string;
   name: string;
@@ -49,22 +49,13 @@ export function BusinessCard(props: {
           className={`relative shrink-0 w-[68px] h-[68px] rounded-xl overflow-hidden flex items-center justify-center ${
             auto ? "sm:w-full sm:h-44 sm:rounded-none" : ""
           }`}
-          style={{ background: photo ? undefined : `linear-gradient(135deg, ${art.tint} 0%, ${art.pop} 140%)`, color: art.ink }}
+          style={{ background: photo ? undefined : "#f3efe8", color: art.ink }}
         >
           {photo ? (
             // eslint-disable-next-line @next/next/no-img-element
             <img src={photo} alt="" className="absolute inset-0 w-full h-full object-cover" />
           ) : (
             <>
-              {auto && (
-                <span
-                  className="hidden sm:block absolute -right-3 -bottom-8 font-display text-[132px] leading-none select-none"
-                  style={{ color: art.ink, opacity: 0.16 }}
-                  aria-hidden="true"
-                >
-                  {name.trim().charAt(0).toUpperCase()}
-                </span>
-              )}
               <span className={auto ? "sm:absolute sm:left-4 sm:bottom-4 sm:w-11 sm:h-11 sm:rounded-xl sm:flex sm:items-center sm:justify-center sm:bg-white/85 sm:shadow-sm" : ""}>
                 <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" className={auto ? "sm:w-[22px] sm:h-[22px]" : ""}>
                   <path d={art.icon} />
@@ -76,11 +67,6 @@ export function BusinessCard(props: {
             <span className="hidden sm:flex absolute top-3 left-3 items-center gap-1 bg-brand-800/90 text-white rounded-full pl-2 pr-2.5 py-1 text-[13px] font-bold tabular-nums">
               <svg width="12" height="12" viewBox="0 0 24 24" fill="#f5a524"><path d="M12 2l2.9 6.3 6.9.7-5.2 4.6 1.5 6.8L12 17.8 5.9 21l1.5-6.8L2.2 9.6l6.9-.7z" /></svg>
               {avgRating.toFixed(1)}
-            </span>
-          )}
-          {auto && avgRating === null && (
-            <span className="hidden sm:block absolute top-3 left-3 bg-white/90 text-stone-600 rounded-full px-2.5 py-1 text-[12px] font-medium">
-              New — no reviews yet
             </span>
           )}
         </span>
@@ -97,7 +83,7 @@ export function BusinessCard(props: {
             )}
           </span>
           <span className="block text-[12px] text-stone-400 truncate mt-0.5">
-            {tags.length > 0 ? tags.slice(0, 2).map(tagLabel).join(" · ") : reviewCount > 0 ? `${reviewCount} review${reviewCount !== 1 ? "s" : ""}` : "Be the first to review"}
+            {tags.length > 0 ? tags.slice(0, 2).map(tagLabel).join(" · ") : reviewCount > 0 ? `${reviewCount} review${reviewCount !== 1 ? "s" : ""}` : "No reviews yet"}
           </span>
           {lastReviewedAt && (
             <span className={`block text-[12px] mt-0.5 ${stale ? "text-amber-700 font-medium" : "text-stone-400"}`}>
@@ -113,7 +99,7 @@ export function BusinessCard(props: {
               {avgRating.toFixed(1)}
             </span>
           ) : (
-            <span className="text-[11px] font-semibold text-stone-400 bg-stone-100 rounded-full px-2 py-1">New</span>
+            <span className="text-[11px] text-stone-400">No reviews</span>
           )}
           {miles !== null && <span className="text-[11px] text-stone-500">{formatMiles(miles)}</span>}
         </span>
@@ -126,7 +112,7 @@ export function BusinessCard(props: {
       href={`/business/${slug}`}
       className="group block bg-white rounded-card border border-line overflow-hidden hover:shadow-md hover:border-brand-600/40 transition"
     >
-      <div className="relative h-40 sm:h-44 overflow-hidden" style={{ background: art.tint }}>
+      <div className={`relative overflow-hidden ${photo ? "h-40 sm:h-44" : "h-24"}`} style={{ background: photo ? undefined : "#f3efe8" }}>
         {photo ? (
           // eslint-disable-next-line @next/next/no-img-element
           <img
@@ -135,15 +121,8 @@ export function BusinessCard(props: {
             className="absolute inset-0 w-full h-full object-cover group-hover:scale-[1.02] transition-transform duration-300"
           />
         ) : (
-          <div className="absolute inset-0" style={{ background: `linear-gradient(135deg, ${art.tint} 0%, ${art.pop} 140%)` }}>
-            <span
-              className="absolute -right-3 -bottom-8 font-display text-[132px] leading-none select-none"
-              style={{ color: art.ink, opacity: 0.16 }}
-              aria-hidden="true"
-            >
-              {name.trim().charAt(0).toUpperCase()}
-            </span>
-            <span className="absolute left-4 bottom-4 w-11 h-11 rounded-xl flex items-center justify-center bg-white/85 shadow-sm" style={{ color: art.ink }}>
+          <div className="absolute inset-0 flex items-center justify-center">
+            <span className="w-12 h-12 rounded-xl flex items-center justify-center bg-white shadow-sm" style={{ color: art.ink }}>
               <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                 <path d={art.icon} />
               </svg>
@@ -156,11 +135,7 @@ export function BusinessCard(props: {
             <svg width="12" height="12" viewBox="0 0 24 24" fill="#f5a524"><path d="M12 2l2.9 6.3 6.9.7-5.2 4.6 1.5 6.8L12 17.8 5.9 21l1.5-6.8L2.2 9.6l6.9-.7z" /></svg>
             {avgRating.toFixed(1)}
           </span>
-        ) : (
-          <span className="absolute top-3 left-3 bg-white/90 text-stone-600 rounded-full px-2.5 py-1 text-[12px] font-medium">
-            New — no reviews yet
-          </span>
-        )}
+        ) : null}
         {verifiedOwner && (
           <span className="absolute bottom-3 right-3 bg-white/90 text-brand-700 rounded-full px-2 py-0.5 text-[11px] font-bold">
             ✓ Owner
@@ -210,7 +185,7 @@ export function BusinessCard(props: {
         )}
         <div className="mt-3 flex flex-wrap items-center gap-x-3 gap-y-0.5 text-xs text-stone-500">
           <span className="whitespace-nowrap">
-            {reviewCount > 0 ? `${reviewCount} review${reviewCount !== 1 ? "s" : ""}` : "Be the first to review"}
+            {reviewCount > 0 ? `${reviewCount} review${reviewCount !== 1 ? "s" : ""}` : "No reviews yet"}
           </span>
           {lastReviewedAt && (
             <span className={`whitespace-nowrap ${stale ? "text-amber-700 font-medium" : ""}`}>
