@@ -157,6 +157,28 @@ export default async function HomePage({
   });
   withStats = withStats.slice(0, 60);
 
+  // Where "here" is: the city most of the results are in (or the one being
+  // browsed). Shown beside the search so nobody has to infer it from cards.
+  const cityCounts = new Map<string, number>();
+  for (const b of withStats) cityCounts.set(b.city, (cityCounts.get(b.city) ?? 0) + 1);
+  const placeName =
+    [...cityCounts.entries()].sort((a, b) => b[1] - a[1])[0]?.[0] ?? (q || "Anywhere");
+  const anyRated = withStats.some((b) => b.scoreCount > 0);
+  // A discovery row that rotates across categories, rated places first, so
+  // the top of the page shows the breadth of the city rather than whichever
+  // category happened to import last.
+  const byCategory = new Map<string, typeof withStats>();
+  for (const b of [...withStats].sort((a, b) => b.scoreCount - a.scoreCount || a.name.localeCompare(b.name))) {
+    byCategory.set(b.category, [...(byCategory.get(b.category) ?? []), b]);
+  }
+  const worthALook: typeof withStats = [];
+  const buckets = [...byCategory.values()];
+  for (let i = 0; worthALook.length < 8 && buckets.some((x) => x.length > i); i++) {
+    for (const bucket of buckets) if (bucket[i] && worthALook.length < 8) worthALook.push(bucket[i]);
+  }
+  const openNowList = withStats.filter((b) => b.isOpen).slice(0, 8);
+  const filtering = Boolean(q || category || activeTags.length || prices.length || openNow || minRating || withPhotos || origin);
+
   const heading =
     view === "trending"
       ? "Trending this month"
@@ -168,40 +190,53 @@ export default async function HomePage({
 
   return (
     <div>
-      <section className="text-center pt-8 pb-6 sm:pt-12 sm:pb-8">
-        <h1 className="font-display font-semibold text-[38px] sm:text-[56px] leading-[1.05] tracking-tight">
-          Find places worth your time.
-        </h1>
-        <p className="text-stone-500 text-lg sm:text-xl mt-3">
-          Reviewed by the people, for the people.
-        </p>
-        <form action="/" className="mt-7 flex max-w-2xl mx-auto gap-2">
-          <label className="flex-1 min-w-0 flex items-center gap-2.5 rounded-xl border border-stone-300 bg-white pl-4 pr-2 h-13 shadow-sm focus-within:ring-2 focus-within:ring-brand-600">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#a8a29e" strokeWidth="2"><circle cx="11" cy="11" r="7" /><path d="M21 21l-4-4" /></svg>
-            <input
-              type="search"
-              name="q"
-              defaultValue={q ?? ""}
-              placeholder="Try “kosher pizza”, a name, or a city…"
-              className="flex-1 min-w-0 h-full bg-transparent text-base focus:outline-none"
-            />
-          </label>
-          <button className="shrink-0 rounded-xl bg-brand-600 text-white px-4 sm:px-6 h-13 font-semibold hover:bg-brand-700 cursor-pointer">
-            Search
-          </button>
-        </form>
-        <div className="mt-3 flex justify-center gap-3 flex-wrap text-sm text-stone-500">
-          <Link href="/collections/trending" className="hover:text-brand-700">Trending</Link>
-          <span className="text-stone-300">·</span>
-          <Link href="/collections/top" className="hover:text-brand-700">Top rated</Link>
-          <span className="text-stone-300">·</span>
-          <Link href="/collections/gems" className="hover:text-brand-700">Hidden gems</Link>
-          <span className="text-stone-300">·</span>
-          <Link href="/surprise" className="hover:text-brand-700">Surprise me</Link>
+      {/* Hero: a dark band gives the top of the page weight and contrast.
+          One headline, the search, where you are, and the category chips —
+          nothing else before results. */}
+      <section className="relative left-1/2 -ml-[50vw] w-screen -mt-6 px-4 sm:px-6 pt-8 pb-7 sm:pt-14 sm:pb-10 bg-brand-900 text-white overflow-hidden">
+        <div
+          aria-hidden="true"
+          className="absolute inset-0 pointer-events-none"
+          style={{
+            background:
+              "radial-gradient(900px 380px at 85% -10%, rgba(37,99,235,0.55), transparent 60%), radial-gradient(600px 300px at 0% 110%, rgba(245,165,36,0.18), transparent 60%)",
+          }}
+        />
+        <div className="relative max-w-3xl mx-auto text-center">
+          <h1 className="font-display text-[34px] sm:text-[58px] leading-[1.02]">
+            Find places <span className="text-star">worth</span> your time.
+          </h1>
+          <p className="hidden sm:block text-white/70 text-lg mt-3">
+            Honest, anonymous reviews of every kind of business.
+          </p>
+          <form action="/" className="mt-5 sm:mt-7 flex gap-2">
+            <label className="flex-1 min-w-0 flex items-center gap-2.5 rounded-xl bg-white pl-3.5 pr-2 h-12 sm:h-13 shadow-lg shadow-black/20 focus-within:ring-2 focus-within:ring-star">
+              <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="#9ca3af" strokeWidth="2"><circle cx="11" cy="11" r="7" /><path d="M21 21l-4-4" /></svg>
+              <input
+                type="search"
+                name="q"
+                defaultValue={q ?? ""}
+                placeholder="Search places or food"
+                className="flex-1 min-w-0 h-full bg-transparent text-[15px] sm:text-base text-stone-900 focus:outline-none"
+              />
+              <span className="hidden sm:inline-flex items-center gap-1 text-[12.5px] font-semibold text-stone-600 bg-stone-100 rounded-lg px-2.5 py-1.5 whitespace-nowrap">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2"><path d="M12 21s-6-5.3-6-11a6 6 0 0 1 12 0c0 5.7-6 11-6 11Z" /><circle cx="12" cy="10" r="2" /></svg>
+                {placeName}
+              </span>
+            </label>
+            <button className="shrink-0 rounded-xl bg-brand-600 text-white px-4 sm:px-6 h-12 sm:h-13 font-semibold hover:bg-brand-700 cursor-pointer">
+              Search
+            </button>
+          </form>
+          <p className="sm:hidden mt-2 text-[12.5px] text-white/60 inline-flex items-center gap-1">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2"><path d="M12 21s-6-5.3-6-11a6 6 0 0 1 12 0c0 5.7-6 11-6 11Z" /><circle cx="12" cy="10" r="2" /></svg>
+            {placeName}
+          </p>
+        </div>
+        <div className="relative mt-6 sm:mt-8 max-w-5xl mx-auto">
+          <CategoryTiles active={category} q={q} onDark />
         </div>
       </section>
-
-      <CategoryTiles active={category} q={q} />
 
       {myStandards.length > 0 && (
         <p className="mb-2 text-xs text-brand-800 bg-brand-50 border border-brand-100 rounded-lg px-3 py-2">
@@ -225,13 +260,44 @@ export default async function HomePage({
         radius={radius}
       />
 
-      <div className="mt-6 flex items-baseline justify-between">
-        <h2 className="font-display font-semibold text-2xl">
-          {heading ?? (q ? `Results for “${q}”` : category ? category : "Popular right now")}
+      {/* Discovery rows only when nobody is filtering; a filtered search goes
+          straight to its results. */}
+      {!filtering && !heading && (
+        <>
+          {openNowList.length >= 3 && (
+            <Row title="Open right now" items={openNowList} />
+          )}
+          {worthALook.length >= 3 && (
+            <Row title="Worth a look" items={worthALook} />
+          )}
+          <section className="mt-8 grid gap-3 sm:grid-cols-3">
+            {[
+              ["100% anonymous", "Your pen name is all anyone sees — businesses included."],
+              ["Owners can reply, not retaliate", "They answer in public and never learn who you are."],
+              ["Money never moves a rating", "Paying businesses get tools, not better scores. Ever."],
+            ].map(([t, d]) => (
+              <div key={t} className="rounded-2xl bg-brand-50 border border-brand-100 px-4 py-3.5">
+                <p className="font-semibold text-[14.5px] text-brand-800">{t}</p>
+                <p className="text-[13px] text-stone-600 mt-0.5">{d}</p>
+              </div>
+            ))}
+          </section>
+        </>
+      )}
+
+      <div className="mt-8 flex items-baseline justify-between">
+        <h2 className="font-display text-2xl">
+          {heading ??
+            (q
+              ? `Results for “${q}”`
+              : category
+                ? `${category} in ${placeName}`
+                : anyRated
+                  ? `Popular in ${placeName}`
+                  : `Places in ${placeName}`)}
         </h2>
         <span className="text-sm text-stone-500">{withStats.length} place{withStats.length === 1 ? "" : "s"}</span>
       </div>
-
       {sponsored && (
         <div className="mt-4 relative">
           <span className="absolute -top-2 left-3 z-10 text-[10px] font-semibold uppercase tracking-wider bg-star text-brand-900 px-2 py-0.5 rounded-full">
@@ -252,9 +318,9 @@ export default async function HomePage({
         </div>
       )}
 
-      <section className="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+      <section className="mt-4 grid gap-3 sm:gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {withStats.map((b) => (
-          <BusinessCard
+          <ResponsiveCard
             key={b.id}
             slug={b.slug}
             name={b.name}
@@ -283,5 +349,54 @@ export default async function HomePage({
         )}
       </section>
     </div>
+  );
+}
+
+
+type CardBusiness = {
+  id: string; slug: string; name: string; category: string; city: string;
+  scoreAvg: number; scoreCount: number; ownerId: string | null; tags: string;
+  priceLevel: number; isOpen: boolean | null; cityRank: number; cityRankSize: number;
+  lastReviewedAt: Date | null; miles: number | null;
+  reviews: { photos: { path: string }[] }[];
+};
+
+function cardProps(b: CardBusiness) {
+  return {
+    slug: b.slug, name: b.name, category: b.category, city: b.city,
+    avgRating: b.scoreCount > 0 ? b.scoreAvg : null, reviewCount: b.scoreCount,
+    verifiedOwner: !!b.ownerId, tags: parseTags(b.tags), priceLevel: b.priceLevel,
+    isOpen: b.isOpen, cityRank: b.cityRank, cityRankSize: b.cityRankSize,
+    lastReviewedAt: b.lastReviewedAt, miles: b.miles,
+    photo: b.reviews[0]?.photos[0]?.path ?? null,
+  };
+}
+
+/** Compact row on phones when there is no photo; full card otherwise. */
+function ResponsiveCard(props: React.ComponentProps<typeof BusinessCard>) {
+  if (props.photo) return <BusinessCard {...props} />;
+  return (
+    <>
+      <div className="sm:hidden"><BusinessCard {...props} variant="row" /></div>
+      <div className="hidden sm:block"><BusinessCard {...props} /></div>
+    </>
+  );
+}
+
+/** A horizontally scrolling discovery row. */
+function Row({ title, items }: { title: string; items: CardBusiness[] }) {
+  return (
+    <section className="mt-8">
+      <h2 className="font-display text-xl sm:text-2xl mb-3">{title}</h2>
+      <div className="scroll-row -mx-4 px-4 sm:mx-0 sm:px-0">
+        <div className="flex gap-3 sm:gap-4 min-w-max">
+          {items.map((b) => (
+            <div key={b.id} className="w-[240px] sm:w-[280px] shrink-0">
+              <BusinessCard {...cardProps(b)} />
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
   );
 }

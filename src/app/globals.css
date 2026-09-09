@@ -24,6 +24,7 @@ body {
   @apply text-stone-900 antialiased;
   background-color: var(--color-paper);
   font-family: var(--font-sans);
+  overflow-x: clip;
 }
 
 .font-display {

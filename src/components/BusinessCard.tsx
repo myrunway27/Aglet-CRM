@@ -24,15 +24,68 @@ export function BusinessCard(props: {
   lastReviewedAt?: Date | null;
   miles?: number | null;
   photo?: string | null;
+  /** "row": compact list row for phones when there is no photo to show. */
+  variant?: "card" | "row";
 }) {
   const {
     slug, name, category, city, avgRating, reviewCount, verifiedOwner,
     tags = [], priceLevel = 0, isOpen = null, cityRank = 0, cityRankSize = 0,
-    lastReviewedAt = null, miles = null, photo = null,
+    lastReviewedAt = null, miles = null, photo = null, variant = "card",
   } = props;
   const stale = isStale(lastReviewedAt);
   const art = categoryArt(category);
   const meta = [city, priceLevel > 0 ? PRICE_LABELS[priceLevel] : null].filter(Boolean).join(" · ");
+
+  if (variant === "row") {
+    return (
+      <Link
+        href={`/business/${slug}`}
+        className="flex items-center gap-3.5 bg-white rounded-2xl border border-line p-3 hover:border-brand-600/40 hover:shadow-sm transition"
+      >
+        <span
+          className="relative shrink-0 w-[68px] h-[68px] rounded-xl overflow-hidden flex items-center justify-center"
+          style={{ background: photo ? undefined : art.tint, color: art.ink }}
+        >
+          {photo ? (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img src={photo} alt="" className="absolute inset-0 w-full h-full object-cover" />
+          ) : (
+            <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+              <path d={art.icon} />
+            </svg>
+          )}
+        </span>
+        <span className="min-w-0 flex-1">
+          <span className="flex items-center gap-2">
+            <span className="font-semibold text-[15.5px] leading-tight truncate">{name}</span>
+            {verifiedOwner && <span className="shrink-0 text-[10px] font-bold text-brand-700 bg-brand-50 rounded-full px-1.5 py-0.5">✓</span>}
+          </span>
+          <span className="block text-[13px] text-stone-500 truncate mt-0.5">
+            {category}
+            {meta && ` · ${meta}`}
+            {isOpen !== null && (
+              <span className={isOpen ? " text-emerald-700 font-medium" : " text-stone-400"}> · {isOpen ? "Open" : "Closed"}</span>
+            )}
+          </span>
+          <span className="block text-[12px] text-stone-400 truncate mt-0.5">
+            {tags.length > 0 ? tags.slice(0, 2).map(tagLabel).join(" · ") : reviewCount > 0 ? `${reviewCount} review${reviewCount !== 1 ? "s" : ""}` : "Be the first to review"}
+            {lastReviewedAt && ` · ${stale ? "⚠ " : ""}Last reviewed ${timeAgo(new Date(lastReviewedAt))}`}
+          </span>
+        </span>
+        <span className="shrink-0 flex flex-col items-end gap-1">
+          {avgRating !== null ? (
+            <span className="inline-flex items-center gap-1 bg-brand-800 text-white rounded-full pl-2 pr-2.5 py-1 text-[13px] font-bold tabular-nums">
+              <svg width="11" height="11" viewBox="0 0 24 24" fill="#f5a524"><path d="M12 2l2.9 6.3 6.9.7-5.2 4.6 1.5 6.8L12 17.8 5.9 21l1.5-6.8L2.2 9.6l6.9-.7z" /></svg>
+              {avgRating.toFixed(1)}
+            </span>
+          ) : (
+            <span className="text-[11px] font-semibold text-stone-400 bg-stone-100 rounded-full px-2 py-1">New</span>
+          )}
+          {miles !== null && <span className="text-[11px] text-stone-500">{formatMiles(miles)}</span>}
+        </span>
+      </Link>
+    );
+  }
 
   return (
     <Link
@@ -48,10 +101,19 @@ export function BusinessCard(props: {
             className="absolute inset-0 w-full h-full object-cover group-hover:scale-[1.02] transition-transform duration-300"
           />
         ) : (
-          <div className="absolute inset-0 flex items-center justify-center" style={{ color: art.ink }}>
-            <svg width="56" height="56" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="opacity-60">
-              <path d={art.icon} />
-            </svg>
+          <div className="absolute inset-0" style={{ background: `linear-gradient(135deg, ${art.tint} 0%, ${art.pop} 140%)` }}>
+            <span
+              className="absolute -right-3 -bottom-8 font-display text-[132px] leading-none select-none"
+              style={{ color: art.ink, opacity: 0.16 }}
+              aria-hidden="true"
+            >
+              {name.trim().charAt(0).toUpperCase()}
+            </span>
+            <span className="absolute left-4 bottom-4 w-11 h-11 rounded-xl flex items-center justify-center bg-white/85 shadow-sm" style={{ color: art.ink }}>
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d={art.icon} />
+              </svg>
+            </span>
           </div>
         )}
 
@@ -66,13 +128,13 @@ export function BusinessCard(props: {
           </span>
         )}
         {verifiedOwner && (
-          <span className="absolute top-3 right-3 bg-brand-50 text-brand-700 border border-brand-100 rounded-full px-2 py-0.5 text-[11px] font-bold">
+          <span className="absolute bottom-3 right-3 bg-white/90 text-brand-700 rounded-full px-2 py-0.5 text-[11px] font-bold">
             ✓ Owner
           </span>
         )}
         {isOpen !== null && (
           <span
-            className={`absolute bottom-3 left-3 rounded-full px-2 py-0.5 text-[11px] font-semibold ${
+            className={`absolute top-3 right-3 rounded-full px-2 py-0.5 text-[11px] font-semibold ${
               isOpen ? "bg-emerald-600 text-white" : "bg-white/90 text-stone-500"
             }`}
           >
@@ -112,12 +174,12 @@ export function BusinessCard(props: {
             )}
           </div>
         )}
-        <div className="mt-3 flex items-center justify-between text-xs text-stone-500">
-          <span>
+        <div className="mt-3 flex flex-wrap items-center gap-x-3 gap-y-0.5 text-xs text-stone-500">
+          <span className="whitespace-nowrap">
             {reviewCount > 0 ? `${reviewCount} review${reviewCount !== 1 ? "s" : ""}` : "Be the first to review"}
           </span>
           {lastReviewedAt && (
-            <span className={stale ? "text-amber-700 font-medium" : ""}>
+            <span className={`whitespace-nowrap ${stale ? "text-amber-700 font-medium" : ""}`}>
               {stale ? "⚠ " : ""}Last reviewed {timeAgo(new Date(lastReviewedAt))}
               {stale && " — this rating may be out of date"}
             </span>
