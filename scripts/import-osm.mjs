@@ -13,7 +13,12 @@ import { execFileSync } from "node:child_process";
 const arg = (k, d) => { const i = process.argv.indexOf(`--${k}`); return i > -1 ? process.argv[i + 1] : d; };
 const has = (k) => process.argv.includes(`--${k}`);
 
-const MIRRORS = ["https://overpass.kumi.systems/api/interpreter", "https://overpass-api.de/api/interpreter"];
+const MIRRORS = [
+  "https://overpass.kumi.systems/api/interpreter",
+  "https://overpass.private.coffee/api/interpreter",
+  "https://lz4.overpass-api.de/api/interpreter",
+  "https://overpass-api.de/api/interpreter",
+];
 
 // OSM tag -> our category. Anything unmapped is skipped: an unnamed bench is
 // not a business, and "Other" is not a useful listing.
@@ -80,7 +85,7 @@ async function fetchOSM(bbox) {
   // curl rather than fetch: it honours HTTPS_PROXY in locked-down environments.
   for (const url of MIRRORS) for (let i = 0; i < 3; i++) {
     try {
-      const out = execFileSync("curl", ["-sS", "--max-time", "120", "-X", "POST", url, "--data-urlencode", `data=${q}`], { maxBuffer: 256 * 1024 * 1024 });
+      const out = execFileSync("curl", ["-sS", "--max-time", "240", "--retry", "2", "--retry-delay", "5", "-X", "POST", url, "--data-urlencode", `data=${q}`], { maxBuffer: 256 * 1024 * 1024 });
       const j = JSON.parse(out.toString("utf8"));
       if (j.elements) return j.elements;
     } catch (e) { console.error(`${url}: ${String(e.message).split("\n")[0].slice(0, 120)}`); }
