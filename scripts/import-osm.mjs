@@ -39,7 +39,7 @@ const MAP = [
   [["amenity", ["college", "university", "language_school", "music_school", "driving_school", "dancing_school"]], "Education"],
   [["amenity", ["cinema", "theatre", "nightclub", "arts_centre", "casino"]], "Entertainment"],
   [["leisure", ["amusement_arcade", "escape_game", "water_park", "miniature_golf"]], "Entertainment"],
-  [["tourism", ["hotel", "motel", "hostel", "guest_house", "apartment", "museum", "attraction", "gallery"]], "Travel & Hotels"],
+  [["tourism", ["hotel", "motel", "hostel", "guest_house", "museum", "attraction", "gallery"]], "Travel & Hotels"],
 ];
 
 function categorize(t) {
