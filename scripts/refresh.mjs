@@ -62,6 +62,7 @@ const QUALIFIER_RE = /^(?:an?|the|ultimate|premier|premiere|original|official|au
 function cleanTarget(s) {
   const t = s.replace(/\s+\d+(?:st|nd|rd|th)\b.*$/i, "")
     .replace(/\s+/g, " ").replace(/[.,;:!\s]+$/g, "").trim();
+  if (/^(?:great|another|more|the|live|ultimate|premier|original)$/i.test(t)) return null; // lone leftover qualifier
   return t.length >= 2 && t.length <= 45 && t.split(" ").length <= 6 && /[A-Z]/.test(t) ? t : null;
 }
 

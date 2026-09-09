@@ -399,7 +399,7 @@
       "band": "The Rumbletones Roots of Rock N Roll",
       "venueId": "arts-garage",
       "tributeEvidence": "Another Great Tribute Band",
-      "tributeTo": "Great",
+      "tributeTo": null,
       "sourceUrl": "https://artsgarage.org/event/the-rumbletones-roots-of-rock-n-roll/",
       "method": "tribe-rest",
       "fetchedAt": "2026-09-09T00:49:17.185Z"
@@ -2667,7 +2667,7 @@
       "band": "One Hit Wonders",
       "venueId": "arts-garage",
       "tributeEvidence": "Another Great Tribute Band",
-      "tributeTo": "Great",
+      "tributeTo": null,
       "sourceUrl": "https://artsgarage.org/event/one-hit-wonders-6/",
       "method": "tribe-rest",
       "fetchedAt": "2026-09-09T00:49:17.185Z"
