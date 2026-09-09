@@ -1,0 +1,85 @@
+{
+  "_comment": "Curated registry of known tribute/cover acts that play SFLA venues without the word 'tribute' in their listings. Applied only when the venue's own text doesn't already identify the act; every match is labeled 'curated' in the show's evidence so it is distinguishable from venue-published wording. Edit freely — matches are case-insensitive substrings of the listing name.",
+  "acts": [
+    {
+      "match": "led zep live",
+      "to": "Led Zeppelin"
+    },
+    {
+      "match": "classic live zeppelin",
+      "to": "Led Zeppelin"
+    },
+    {
+      "match": "zeppelin rising",
+      "to": "Led Zeppelin"
+    },
+    {
+      "match": "dead zep",
+      "to": "Led Zeppelin & Grateful Dead"
+    },
+    {
+      "match": "rainbow full of sound",
+      "to": "Grateful Dead"
+    },
+    {
+      "match": "steely dead",
+      "to": "Steely Dan & Grateful Dead"
+    },
+    {
+      "match": "bearly dead",
+      "to": "Grateful Dead"
+    },
+    {
+      "match": "the last waltz",
+      "to": "The Band"
+    },
+    {
+      "match": "crazy fingers",
+      "to": "Grateful Dead"
+    },
+    {
+      "match": "unlimited devotion",
+      "to": "Grateful Dead"
+    },
+    {
+      "match": "grateful all star jam",
+      "to": "Grateful Dead"
+    },
+    {
+      "match": "elton dan",
+      "to": "Elton John"
+    },
+    {
+      "match": "abba revisited",
+      "to": "ABBA"
+    },
+    {
+      "match": "3 decades rewind",
+      "to": "'60s–'80s hits revue"
+    },
+    {
+      "match": "mike massé",
+      "to": "classic rock (acoustic covers)"
+    },
+    {
+      "match": "my sinatra",
+      "to": "Frank Sinatra"
+    },
+    {
+      "match": "michael lives forever",
+      "to": "Michael Jackson"
+    },
+    {
+      "match": "rodrigo teaser",
+      "to": "Michael Jackson"
+    },
+    {
+      "match": "doors alive",
+      "to": "The Doors"
+    },
+    {
+      "match": "cece teneal",
+      "to": "Aretha Franklin"
+    }
+  ]
+}

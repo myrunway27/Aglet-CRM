@@ -15,7 +15,7 @@
  * Usage: node scripts/refresh.mjs [venueId ...]   (no args = all venues)
  */
 
-import { writeFileSync, mkdirSync } from "node:fs";
+import { writeFileSync, mkdirSync, readFileSync } from "node:fs";
 import { execFile, execFileSync } from "node:child_process";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -57,11 +57,12 @@ export const VENUES = [
 // if the listing doesn't name the artist, tributeTo stays null.
 const TRIBUTE_RE = /\btribute(?:\s+to\s+[\w .&'-]+)?|celebrating the music of\s+[\w .&'-]+|\ba tribute\b/i;
 
-const QUALIFIER_RE = /^(?:an?|the|ultimate|premier|premiere|original|official|authentic|greatest|live|first|longest|running|only|&|sensational|professional|acclaimed|legendary|renowned|award[- ]winning|world['’]?s|america['’]?s|florida['’]?s|south florida['’]?s|#?\s?1|no\.?\s?1|favou?rite)\s+/i;
+const QUALIFIER_RE = /^(?:an?|the|ultimate|premier|premiere|original|official|authentic|greatest|live|first|longest|running|only|&|sensational|professional|acclaimed|legendary|renowned|another|great|more|award[- ]winning|world['’]?s|america['’]?s|florida['’]?s|south florida['’]?s|#?\s?1|no\.?\s?1|favou?rite)\s+/i;
 
 function cleanTarget(s) {
-  const t = s.replace(/\s+/g, " ").replace(/[.,;:!\s]+$/g, "").trim();
-  return t.length >= 2 && t.length <= 45 && t.split(" ").length <= 6 ? t : null;
+  const t = s.replace(/\s+\d+(?:st|nd|rd|th)\b.*$/i, "")
+    .replace(/\s+/g, " ").replace(/[.,;:!\s]+$/g, "").trim();
+  return t.length >= 2 && t.length <= 45 && t.split(" ").length <= 6 && /[A-Z]/.test(t) ? t : null;
 }
 
 function deriveTribute(text) {
@@ -625,7 +626,7 @@ const byVenue = Object.fromEntries(results);
 
 const out = {
   generatedAt: new Date().toISOString(),
-  policy: "Data is copied verbatim from venue websites by this script. Nothing is inferred or projected.",
+  policy: "Show listings are copied verbatim from venue websites by this script — no show is ever invented. Tribute labels come from the venue's own text, from a reviewable curated registry of known tribute acts (data/tribute-registry.json), or from another venue's text about the same band — each label names its source.",
   venues: VENUES.map(({ id, name, city, calendarUrl }) => ({
     id, name, city, calendarUrl,
     ...(byVenue[id]
@@ -635,21 +636,42 @@ const out = {
   shows: results.flatMap(([, r]) => r.shows).sort((a, b) => a.date.localeCompare(b.date) || (a.time || "").localeCompare(b.time || "")),
 };
 
-// Cross-venue identification: when one venue's listing text identifies a band
-// as a tribute act (with a named artist), that identification follows the
-// band to its other shows — with the provenance recorded on each show.
-// Still zero inference: the source is always a venue's own published text.
+// Tribute annotation beyond a show's own listing text, applied in order of
+// evidence strength. Every show's evidence string names its source, so the
+// three tiers stay distinguishable in the UI:
+//   1. (already set) the venue's own listing text for that show
+//   2. curated registry: well-known tribute acts (data/tribute-registry.json)
+//   3. cross-venue: another venue's listing text identified the same band
 {
+  let registry = [];
+  try {
+    registry = JSON.parse(readFileSync(join(ROOT, "data", "tribute-registry.json"), "utf8")).acts || [];
+  } catch { /* registry optional */ }
+  for (const s of out.shows) {
+    if (s.tributeEvidence) continue;
+    const hay = s.band.toLowerCase();
+    const hit = registry.find((r) => hay.includes(r.match.toLowerCase()));
+    if (hit) {
+      s.tributeTo = hit.to;
+      s.tributeEvidence = `curated: "${hit.match}" is a known ${hit.to} tribute/cover act (not from the venue's text)`;
+    }
+  }
+
+  // Generic phrases must never become band-identity keys — that is how
+  // "Friday Happy Hour" once tagged an unrelated band.
+  const GENERIC_SEG = /\b(happy hour|live music|brunch|karaoke|open mics?|nights?|evenings?|presents?|series|party|jams?|shows?|sessions?|tour|band|monday|tuesday|wednesday|thursday|friday|saturday|sunday|special guests?)\b/i;
   const known = new Map();
   const segments = (band) => band
     .split(/\s*(?:[-–—|:]|\bfeaturing\b|\bfeat\.?\s|\bw\/)\s*/i)
-    .map((s) => s.trim())
-    .filter((s) => s.length >= 6 && !/tribute|celebrating|free live music/i.test(s));
+    .map((x) => x.trim())
+    .filter((x) => x.length >= 6 && !/tribute|celebrating/i.test(x) && !GENERIC_SEG.test(x));
   for (const s of out.shows) {
-    if (s.tributeEvidence && s.tributeTo) {
+    if (s.tributeEvidence && s.tributeTo && !s.tributeEvidence.startsWith("curated:")) {
       for (const seg of segments(s.band)) {
         const k = seg.toLowerCase();
-        if (!known.has(k)) known.set(k, { to: s.tributeTo, from: s.venueId });
+        const prior = known.get(k);
+        if (prior && prior.to !== s.tributeTo) prior.conflict = true;
+        else if (!prior) known.set(k, { to: s.tributeTo, from: s.venueId });
       }
     }
   }
@@ -657,7 +679,7 @@ const out = {
     if (s.tributeEvidence) continue;
     const hay = s.band.toLowerCase();
     for (const [k, v] of known) {
-      if (hay.includes(k)) {
+      if (!v.conflict && hay.includes(k)) {
         const venueName = VENUES.find((x) => x.id === v.from)?.name || v.from;
         s.tributeTo = v.to;
         s.tributeEvidence = `identified as a ${v.to} tribute by ${venueName}'s listing`;
