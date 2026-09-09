@@ -70,7 +70,7 @@ export function ResultRow(props: {
         <div className="flex items-start justify-between gap-3">
           <h3 className="font-bold text-[17px] sm:text-[19px] leading-snug">
             <span className="text-stone-400 font-semibold mr-1.5">{index}.</span>
-            <Link href={`/business/${slug}`} className="text-brand-700 hover:underline">{name}</Link>
+            <Link href={`/business/${slug}`} className="text-brand-800 hover:text-brand-700 hover:underline">{name}</Link>
             {verifiedOwner && (
               <span className="ml-2 align-middle text-[11px] font-bold text-emerald-700 bg-emerald-50 border border-emerald-100 rounded-full px-1.5 py-0.5">✓ Claimed</span>
             )}

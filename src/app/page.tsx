@@ -222,7 +222,7 @@ export default async function HomePage({
           className="absolute inset-0 pointer-events-none"
           style={{
             background:
-              "radial-gradient(1100px 520px at 80% -20%, rgba(249,115,22,0.55), transparent 62%), radial-gradient(700px 360px at 5% 115%, rgba(251,113,133,0.35), transparent 60%), radial-gradient(500px 260px at 55% 120%, rgba(245,165,36,0.25), transparent 60%)",
+              "radial-gradient(1100px 520px at 82% -20%, rgba(255,92,71,0.5), transparent 62%), radial-gradient(700px 360px at 4% 115%, rgba(245,165,36,0.22), transparent 60%), radial-gradient(600px 300px at 55% 125%, rgba(255,92,71,0.18), transparent 60%)",
           }}
         />
         <div className="relative max-w-3xl mx-auto text-center">

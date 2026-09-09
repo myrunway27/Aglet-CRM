@@ -27,28 +27,28 @@ export default async function RootLayout({ children }: { children: React.ReactNo
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link
-          href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700;800&display=swap"
+          href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,500;0,6..72,600;1,6..72,500&family=Hanken+Grotesk:wght@400;500;600;700&display=swap"
           rel="stylesheet"
         />
       </head>
       <body className="min-h-screen flex flex-col">
-        <header className="bg-white text-brand-800 border-b border-line sticky top-0 z-20">
+        <header className="bg-navy text-white sticky top-0 z-20">
           <div className="mx-auto max-w-6xl px-4 sm:px-6 h-14 flex items-center gap-3">
-            <Link href="/" className="shrink-0 text-brand-800 [--logo-counter:#ffffff]">
+            <Link href="/" className="shrink-0">
               <Logo />
             </Link>
             <nav className="ml-auto flex items-center gap-1 text-sm">
-              <Link href="/map" className="hidden sm:inline px-2.5 py-1.5 rounded hover:bg-stone-100">
+              <Link href="/map" className="hidden sm:inline px-2.5 py-1.5 rounded hover:bg-white/10">
                 Map
               </Link>
-              <Link href="/add-business" className="hidden sm:inline px-2.5 py-1.5 rounded hover:bg-stone-100">
+              <Link href="/add-business" className="hidden sm:inline px-2.5 py-1.5 rounded hover:bg-white/10">
                 Add business
               </Link>
               {user ? (
                 <>
                   <Link
                     href="/notifications"
-                    className="relative px-2.5 py-1.5 rounded hover:bg-stone-100"
+                    className="relative px-2.5 py-1.5 rounded hover:bg-white/10"
                     aria-label="Notifications"
                   >
                     🔔
@@ -59,27 +59,27 @@ export default async function RootLayout({ children }: { children: React.ReactNo
                     )}
                   </Link>
                   {ownsBusinesses && (
-                    <Link href="/owner" className="hidden sm:inline px-2.5 py-1.5 rounded hover:bg-stone-100">
+                    <Link href="/owner" className="hidden sm:inline px-2.5 py-1.5 rounded hover:bg-white/10">
                       My businesses
                     </Link>
                   )}
                   {user.isAdmin && (
-                    <Link href="/admin" className="hidden sm:inline px-2.5 py-1.5 rounded hover:bg-stone-100">
+                    <Link href="/admin" className="hidden sm:inline px-2.5 py-1.5 rounded hover:bg-white/10">
                       Admin
                     </Link>
                   )}
-                  <Link href="/account" className="px-2.5 py-1.5 rounded hover:bg-stone-100">
+                  <Link href="/account" className="px-2.5 py-1.5 rounded hover:bg-white/10">
                     Account
                   </Link>
                   <form action={logout} className="hidden sm:block">
-                    <button className="px-2.5 py-1.5 rounded hover:bg-stone-100 cursor-pointer">
+                    <button className="px-2.5 py-1.5 rounded hover:bg-white/10 cursor-pointer">
                       Log out
                     </button>
                   </form>
                 </>
               ) : (
                 <>
-                  <Link href="/login" className="px-2.5 py-1.5 rounded hover:bg-stone-100">
+                  <Link href="/login" className="px-2.5 py-1.5 rounded hover:bg-white/10">
                     Log in
                   </Link>
                   <Link

@@ -10,11 +10,11 @@
 export function LogoMark({ className = "h-8 w-8" }: { className?: string }) {
   return (
     <svg viewBox="0 0 1000 1000" className={className} aria-hidden="true">
-      <rect width="1000" height="1000" rx="215" fill="currentColor" />
+      <rect width="1000" height="1000" rx="280" fill="var(--logo-box,#ff5c47)" />
       <path
         d="M10,0 H490 V114 H314 V700 H186 V114 H10 Z"
         transform="translate(250,144)"
-        className="fill-[var(--logo-counter,#fff)]"
+        fill="var(--logo-counter,#fff7f0)"
       />
     </svg>
   );
@@ -29,13 +29,16 @@ export function Wordmark({ className = "h-4 w-auto" }: { className?: string }) {
   );
 }
 
-/** Mark + wordmark, at the fixed size relationship they were drawn for. */
+/**
+ * The logo is the word itself: "True" in coral, "Review" in the ink of
+ * whatever it sits on. No mark — the boxed T survives only as the app icon
+ * and favicon, where a square is unavoidable.
+ */
 export function Logo({ className = "" }: { className?: string }) {
   return (
-    <span className={`inline-flex items-center gap-2.5 ${className}`}>
-      <LogoMark className="h-8 w-8 shrink-0" />
-      <Wordmark className="h-[13px] w-auto" />
-      <span className="sr-only">True Review</span>
+    <span className={`inline-flex items-baseline font-display font-semibold tracking-tight leading-none text-[26px] ${className}`}>
+      <span className="text-brand-600">True</span>
+      <span className="ml-[0.28em]">Review</span>
     </span>
   );
 }

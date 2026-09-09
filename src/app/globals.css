@@ -1,25 +1,24 @@
 @import "tailwindcss";
 
-/* Warm paper, blue for actions.
-   Surfaces are a soft cream rather than clinical white, text is a warm
-   near-black, lines are warm greys — the page should feel like somewhere
-   you would want to spend time, not a form. Blue is reserved for actions,
-   amber for ratings only, and photographs carry the rest. */
+/* Navy & Coral on warm paper.
+   Navy carries trust (header, headings), coral carries the welcome (actions),
+   surfaces stay a soft cream, and amber is reserved for ratings alone.
+   Newsreader for headlines so the page reads editorial, not clinical. */
 @theme {
-  --color-brand-50: #eaf0ff;
-  --color-brand-100: #d6e2ff;
-  --color-brand-600: #2563eb;
-  --color-brand-700: #1d4ed8;
-  --color-brand-800: #1f1b16;
-  --color-brand-900: #16130f;
+  --color-brand-50: #fff1ee;
+  --color-brand-100: #ffd9d2;
+  --color-brand-600: #ff5c47;
+  --color-brand-700: #e9432e;
+  --color-brand-800: #0f1f3d;
+  --color-brand-900: #0a1730;
+  --color-navy: #0f1f3d;
   --color-star: #f5a524;
   --color-paper: #faf6ef;
   --color-line: #eae2d6;
   --color-ember: #f97316;
   --color-coral: #fb7185;
   --font-sans: "Hanken Grotesk", ui-sans-serif, system-ui, sans-serif;
-  /* Option C uses the grotesk at heavy weight for headlines too. */
-  --font-display: "Hanken Grotesk", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Newsreader", ui-serif, Georgia, serif;
   --radius-card: 18px;
 }
 
@@ -32,8 +31,8 @@ body {
 
 .font-display {
   font-family: var(--font-display);
-  font-weight: 800;
-  letter-spacing: -0.02em;
+  font-weight: 600;
+  letter-spacing: -0.01em;
 }
 
 /* Horizontal scrollers (category tiles, chip rows) hide their scrollbar but
