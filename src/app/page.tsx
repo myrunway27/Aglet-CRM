@@ -9,6 +9,9 @@ import { canSpotlight } from "@/lib/membership";
 import { BusinessCard } from "@/components/BusinessCard";
 import { FilterBar } from "@/components/FilterBar";
 import { CategoryTiles } from "@/components/CategoryTiles";
+import { ResultRow } from "@/components/ResultRow";
+import { ResultsMap } from "@/components/ResultsMap";
+import { openStatusLabel } from "@/lib/hours";
 
 export const dynamic = "force-dynamic";
 
@@ -103,11 +106,13 @@ export default async function HomePage({
     include: {
       openingHours: true,
       // One cover photo per card: the newest review that has any.
+      // Newest counted reviews: the first with a photo supplies the cover,
+      // the first with text supplies the one-line excerpt.
       reviews: {
-        where: { status: { not: "HIDDEN" }, photos: { some: {} } },
+        where: { status: { not: "HIDDEN" }, includedInScore: true },
         orderBy: { createdAt: "desc" },
-        take: 1,
-        select: { photos: { take: 1, select: { path: true } } },
+        take: 3,
+        select: { text: true, photos: { take: 1, select: { path: true } } },
       },
     },
     take: 400,
@@ -128,10 +133,10 @@ export default async function HomePage({
         owner: { select: { proUntil: true, proTier: true } },
         openingHours: true,
         reviews: {
-          where: { status: { not: "HIDDEN" }, photos: { some: {} } },
+          where: { status: { not: "HIDDEN" }, includedInScore: true },
           orderBy: { createdAt: "desc" },
-          take: 1,
-          select: { photos: { take: 1, select: { path: true } } },
+          take: 3,
+          select: { text: true, photos: { take: 1, select: { path: true } } },
         },
       },
     });
@@ -210,20 +215,22 @@ export default async function HomePage({
           One headline, the search, where you are, and the category chips —
           nothing else before results. */}
       <section className="relative left-1/2 -ml-[50vw] w-screen -mt-6 px-4 sm:px-6 pt-8 pb-7 sm:pt-14 sm:pb-10 bg-brand-900 text-white overflow-hidden">
+        {/* Warm evening light rather than a cold gradient; replaced by a
+            photograph once image credentials are configured. */}
         <div
           aria-hidden="true"
           className="absolute inset-0 pointer-events-none"
           style={{
             background:
-              "radial-gradient(900px 380px at 85% -10%, rgba(37,99,235,0.55), transparent 60%), radial-gradient(600px 300px at 0% 110%, rgba(245,165,36,0.18), transparent 60%)",
+              "radial-gradient(1100px 520px at 80% -20%, rgba(249,115,22,0.55), transparent 62%), radial-gradient(700px 360px at 5% 115%, rgba(251,113,133,0.35), transparent 60%), radial-gradient(500px 260px at 55% 120%, rgba(245,165,36,0.25), transparent 60%)",
           }}
         />
         <div className="relative max-w-3xl mx-auto text-center">
           <h1 className="font-display text-[34px] sm:text-[58px] leading-[1.02]">
             Find places <span className="text-star">worth</span> your time.
           </h1>
-          <p className="hidden sm:block text-white/70 text-lg mt-3">
-            Honest, anonymous reviews of every kind of business.
+          <p className="hidden sm:block text-white/75 text-lg mt-3">
+            Real people. Honest reviews. {placeName} and beyond.
           </p>
           <form action="/" className="mt-5 sm:mt-7 flex gap-2">
             <label className="flex-1 min-w-0 flex items-center gap-2.5 rounded-xl bg-white pl-3.5 pr-2 h-12 sm:h-13 shadow-lg shadow-black/20 focus-within:ring-2 focus-within:ring-star">
@@ -329,41 +336,55 @@ export default async function HomePage({
             verifiedOwner={true}
             tags={parseTags(sponsored.tags)}
             priceLevel={sponsored.priceLevel}
-            photo={sponsored.reviews[0]?.photos[0]?.path ?? null}
+            photo={sponsored.reviews.find((r) => r.photos[0])?.photos[0]?.path ?? null}
           />
         </div>
       )}
 
-      <section className="mt-4 grid gap-3 sm:gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        {withStats.map((b) => (
-          <ResponsiveCard
-            key={b.id}
-            slug={b.slug}
-            name={b.name}
-            category={b.category}
-            city={b.city}
-            avgRating={b.scoreCount > 0 ? b.scoreAvg : null}
-            reviewCount={b.scoreCount}
-            verifiedOwner={!!b.ownerId}
-            tags={parseTags(b.tags)}
-            priceLevel={b.priceLevel}
-            isOpen={b.isOpen}
-            cityRank={b.cityRank}
-            cityRankSize={b.cityRankSize}
-            lastReviewedAt={b.lastReviewedAt}
-            miles={b.miles}
-            photo={b.reviews[0]?.photos[0]?.path ?? null}
+      <div className="mt-2 lg:grid lg:grid-cols-[minmax(0,1fr)_400px] lg:gap-8 lg:items-start">
+        <section>
+          {withStats.map((b, i) => (
+            <ResultRow
+              key={b.id}
+              index={i + 1}
+              slug={b.slug}
+              name={b.name}
+              category={b.category}
+              cuisine={b.cuisine}
+              city={b.city}
+              address={b.address}
+              avgRating={b.scoreCount > 0 ? b.scoreAvg : null}
+              reviewCount={b.scoreCount}
+              verifiedOwner={!!b.ownerId}
+              tags={parseTags(b.tags)}
+              priceLevel={b.priceLevel}
+              openLabel={b.openingHours.length > 0 ? openStatusLabel(b.openingHours, now) : null}
+              cityRank={b.cityRank}
+              cityRankSize={b.cityRankSize}
+              lastReviewedAt={b.lastReviewedAt}
+              miles={b.miles}
+              photo={b.reviews.find((r) => r.photos[0])?.photos[0]?.path ?? null}
+              excerpt={b.reviews.find((r) => r.text)?.text ?? null}
+            />
+          ))}
+          {withStats.length === 0 && (
+            <div className="text-center py-12 text-stone-500">
+              <p>No businesses found{q ? ` for “${q}”` : ""}.</p>
+              <Link href="/add-business" className="text-brand-700 font-medium hover:underline">
+                Add it to True Review →
+              </Link>
+            </div>
+          )}
+        </section>
+        <aside className="hidden lg:block sticky top-20">
+          <ResultsMap
+            pins={withStats
+              .filter((b) => b.lat != null && b.lng != null)
+              .slice(0, 60)
+              .map((b, i) => ({ n: i + 1, slug: b.slug, name: b.name, lat: b.lat as number, lng: b.lng as number }))}
           />
-        ))}
-        {withStats.length === 0 && (
-          <div className="sm:col-span-2 lg:col-span-3 text-center py-12 text-stone-500">
-            <p>No businesses found{q ? ` for “${q}”` : ""}.</p>
-            <Link href="/add-business" className="text-brand-700 font-medium hover:underline">
-              Add it to True Review →
-            </Link>
-          </div>
-        )}
-      </section>
+        </aside>
+      </div>
     </div>
   );
 }
@@ -374,7 +395,7 @@ type CardBusiness = {
   scoreAvg: number; scoreCount: number; ownerId: string | null; tags: string;
   priceLevel: number; isOpen: boolean | null; cityRank: number; cityRankSize: number;
   lastReviewedAt: Date | null; miles: number | null;
-  reviews: { photos: { path: string }[] }[];
+  reviews: { text: string; photos: { path: string }[] }[];
 };
 
 function cardProps(b: CardBusiness) {
@@ -384,7 +405,7 @@ function cardProps(b: CardBusiness) {
     verifiedOwner: !!b.ownerId, tags: parseTags(b.tags), priceLevel: b.priceLevel,
     isOpen: b.isOpen, cityRank: b.cityRank, cityRankSize: b.cityRankSize,
     lastReviewedAt: b.lastReviewedAt, miles: b.miles,
-    photo: b.reviews[0]?.photos[0]?.path ?? null,
+    photo: b.reviews.find((r) => r.photos[0])?.photos[0]?.path ?? null,
   };
 }
 

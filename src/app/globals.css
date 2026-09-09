@@ -1,23 +1,26 @@
 @import "tailwindcss";
 
-/* Ink & Blue.
-   White surfaces, near-black text, and one saturated blue reserved for
-   actions. Amber stays for ratings only, so a score reads as earned rather
-   than as brand decoration. Photos are meant to carry the colour. */
+/* Warm paper, blue for actions.
+   Surfaces are a soft cream rather than clinical white, text is a warm
+   near-black, lines are warm greys — the page should feel like somewhere
+   you would want to spend time, not a form. Blue is reserved for actions,
+   amber for ratings only, and photographs carry the rest. */
 @theme {
   --color-brand-50: #eaf0ff;
   --color-brand-100: #d6e2ff;
   --color-brand-600: #2563eb;
   --color-brand-700: #1d4ed8;
-  --color-brand-800: #111827;
-  --color-brand-900: #0b1020;
+  --color-brand-800: #1f1b16;
+  --color-brand-900: #16130f;
   --color-star: #f5a524;
-  --color-paper: #ffffff;
-  --color-line: #e5e7eb;
+  --color-paper: #faf6ef;
+  --color-line: #eae2d6;
+  --color-ember: #f97316;
+  --color-coral: #fb7185;
   --font-sans: "Hanken Grotesk", ui-sans-serif, system-ui, sans-serif;
   /* Option C uses the grotesk at heavy weight for headlines too. */
   --font-display: "Hanken Grotesk", ui-sans-serif, system-ui, sans-serif;
-  --radius-card: 16px;
+  --radius-card: 18px;
 }
 
 body {

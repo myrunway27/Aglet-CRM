@@ -118,6 +118,9 @@ model Business {
 
   // Kosher/halal certifying agency, e.g. "OU", "Star-K" — see src/lib/diet.ts
   certifier String @default("")
+  // "Thai", "Italian", "Bakery" — shown on cards; sourced from the owner or
+  // the listing import. Empty for non-food businesses.
+  cuisine   String @default("")
   lat       Float?
   lng       Float?
 

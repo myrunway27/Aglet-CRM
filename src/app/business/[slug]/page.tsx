@@ -5,6 +5,7 @@ import { getCurrentUser } from "@/lib/auth";
 import { Stars } from "@/components/Stars";
 import { ReviewForm } from "@/components/ReviewForm";
 import { categoryArt } from "@/lib/categoryArt";
+import { ResultsMap } from "@/components/ResultsMap";
 import { ReviewList } from "@/components/ReviewList";
 import { ReviewSnapshot } from "@/components/ReviewSnapshot";
 import { SaveButtons } from "@/components/SaveButtons";
@@ -143,12 +144,18 @@ export default async function BusinessPage({
         if (photos.length === 0) {
           return (
             <div
-              className="h-40 sm:h-56 rounded-card flex items-center justify-center"
-              style={{ background: art.tint, color: art.ink }}
+              className="relative h-40 sm:h-52 rounded-card overflow-hidden"
+              style={{ background: `linear-gradient(120deg, ${art.tint} 0%, ${art.pop} 150%)`, color: art.ink }}
             >
-              <svg width="72" height="72" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round" className="opacity-60">
-                <path d={art.icon} />
-              </svg>
+              <span className="absolute -right-4 -bottom-16 font-display text-[240px] sm:text-[300px] leading-none select-none" style={{ opacity: 0.14 }} aria-hidden="true">
+                {business.name.trim().charAt(0).toUpperCase()}
+              </span>
+              <div className="absolute left-5 bottom-5 flex items-center gap-3">
+                <span className="w-12 h-12 rounded-xl bg-white/85 shadow-sm flex items-center justify-center">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d={art.icon} /></svg>
+                </span>
+                <span className="text-[13px] font-semibold bg-white/85 rounded-full px-3 py-1.5 shadow-sm">No photos yet — add the first</span>
+              </div>
             </div>
           );
         }
@@ -173,9 +180,15 @@ export default async function BusinessPage({
         <div className="flex items-start justify-between gap-3 flex-wrap">
           <div>
             <h1 className="font-display font-semibold text-3xl sm:text-[40px] leading-tight">{business.name}</h1>
-            <p className="text-sm text-stone-500 mt-1">
-              {[business.category, business.city].filter(Boolean).join(" · ")}
-              {business.priceLevel > 0 && ` · ${PRICE_LABELS[business.priceLevel]}`}
+            <p className="text-[15px] text-stone-600 mt-1.5">
+              {[business.priceLevel > 0 ? PRICE_LABELS[business.priceLevel] : null, business.cuisine || business.category, business.city]
+                .filter(Boolean)
+                .join(" · ")}
+              {openStatus && (
+                <span className={`ml-2 font-semibold ${openStatus.startsWith("Closed") ? "text-red-600" : "text-emerald-700"}`}>
+                  {openStatus}
+                </span>
+              )}
             </p>
             {business.cityRank > 0 && (
               <p className="text-sm text-brand-700 font-medium mt-1">
@@ -198,78 +211,31 @@ export default async function BusinessPage({
           )}
         </div>
 
-        {tags.length > 0 && (
-          <div className="mt-3 flex flex-wrap gap-1.5">
-            {tags.map((t) => (
-              <span
-                key={t}
-                className="text-xs bg-brand-50 border border-brand-100 text-brand-800 px-2.5 py-1 rounded-full"
-              >
-                {tagLabel(t)}
-              </span>
-            ))}
-          </div>
-        )}
+        <div className="mt-4 flex items-center gap-2 flex-wrap">
+          <a href="#write-review" className="inline-flex items-center gap-1.5 rounded-lg bg-brand-600 text-white px-4 py-2 text-sm font-semibold hover:bg-brand-700">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="#f5a524"><path d="M12 2l2.9 6.3 6.9.7-5.2 4.6 1.5 6.8L12 17.8 5.9 21l1.5-6.8L2.2 9.6l6.9-.7z" /></svg>
+            Write a review
+          </a>
+          {business.phone && (
+            <a href={`tel:${business.phone.replace(/[^+\d]/g, "")}`} className="inline-flex items-center gap-1.5 rounded-lg border border-line bg-white px-3.5 py-2 text-sm font-medium hover:border-brand-600">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2Z" /></svg>
+              Call
+            </a>
+          )}
+          {business.website && (
+            <a href={business.website} target="_blank" rel="noopener noreferrer nofollow" className="inline-flex items-center gap-1.5 rounded-lg border border-line bg-white px-3.5 py-2 text-sm font-medium hover:border-brand-600">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="12" cy="12" r="9" /><path d="M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18" /></svg>
+              Website
+            </a>
+          )}
+          {business.lat != null && business.lng != null && (
+            <a href={`https://www.google.com/maps/dir/?api=1&destination=${business.lat},${business.lng}`} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1.5 rounded-lg border border-line bg-white px-3.5 py-2 text-sm font-medium hover:border-brand-600">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M12 21s-6-5.3-6-11a6 6 0 0 1 12 0c0 5.7-6 11-6 11Z" /><circle cx="12" cy="10" r="2" /></svg>
+              Directions
+            </a>
+          )}
+        </div>
 
-        {(business.address || openStatus || business.phone || business.website) && (
-          <div className="mt-3 space-y-1 text-sm text-stone-600">
-            {business.address && (
-              <p>
-                📍 {business.address}
-                {business.zip ? `, ${business.zip}` : ""}
-              </p>
-            )}
-            {openStatus && (
-              <p>
-                🕒{" "}
-                <span
-                  className={
-                    openStatus.startsWith("Closed") ? "text-stone-500" : "text-brand-700 font-medium"
-                  }
-                >
-                  {openStatus}
-                </span>
-              </p>
-            )}
-            {!openStatus && business.hours && <p>🕒 {business.hours}</p>}
-            {business.phone && <p>📞 {business.phone}</p>}
-            {business.website && (
-              <p>
-                🌐{" "}
-                <a
-                  href={business.website}
-                  target="_blank"
-                  rel="noopener noreferrer nofollow"
-                  className="text-brand-700 hover:underline break-all"
-                >
-                  {business.website.replace(/^https?:\/\//, "")}
-                </a>
-              </p>
-            )}
-          </div>
-        )}
-
-        {hoursSpans.length > 0 && (
-          <details className="mt-2 text-sm">
-            <summary className="cursor-pointer text-brand-700 hover:underline text-xs">
-              All opening hours
-            </summary>
-            <div className="mt-1.5 grid grid-cols-2 gap-x-4 gap-y-0.5 max-w-xs text-xs text-stone-600">
-              {grouped.map((g) => (
-                <div key={g.day} className="contents">
-                  <span className="font-medium">{DAY_SHORT[g.day]}</span>
-                  <span>
-                    {g.spans.length === 0
-                      ? "Closed"
-                      : g.spans
-                          .map((s) => `${minutesToLabel(s.openMin)}–${minutesToLabel(s.closeMin)}`)
-                          .join(", ")}
-                  </span>
-                </div>
-              ))}
-            </div>
-          </details>
-        )}
 
         <DietPanel
           businessId={business.id}
@@ -295,7 +261,7 @@ export default async function BusinessPage({
               )}
             </>
           ) : (
-            <span className="text-stone-400 text-sm">No reviews yet</span>
+            <span className="text-stone-500 text-sm">No reviews yet — been here? You&apos;d be the first.</span>
           )}
         </div>
         {business.scoreCount > 0 && isThin(business.scoreCount) && (
@@ -331,7 +297,78 @@ export default async function BusinessPage({
         </section>
       )}
 
-      <section className="mt-6">
+      {(business.address || hoursSpans.length > 0 || (business.lat != null && business.lng != null)) && (
+        <section className="mt-6 bg-white rounded-card border border-line p-5 sm:p-6">
+          <h2 className="font-display text-xl">Location &amp; Hours</h2>
+          <div className="mt-4 grid gap-6 md:grid-cols-[minmax(0,1fr)_minmax(0,1fr)]">
+            <div>
+              {business.lat != null && business.lng != null && (
+                <div className="h-56 rounded-xl overflow-hidden border border-line">
+                  <ResultsMap pins={[{ n: 1, slug: business.slug, name: business.name, lat: business.lat, lng: business.lng }]} compact />
+                </div>
+              )}
+              {business.address && (
+                <p className="mt-3 text-[15px]">
+                  <span className="font-medium">{business.address}</span>
+                  <span className="text-stone-500">, {business.city}{business.zip ? ` ${business.zip}` : ""}</span>
+                </p>
+              )}
+              {!business.address && <p className="mt-3 text-[15px] text-stone-500">{business.city}</p>}
+            </div>
+            <div>
+              {hoursSpans.length > 0 ? (
+                <table className="w-full text-[14.5px]">
+                  <tbody>
+                    {grouped.map((g) => {
+                      const today = new Date().getDay() === g.day;
+                      return (
+                        <tr key={g.day} className={today ? "font-semibold" : ""}>
+                          <td className="py-1 pr-4 w-16 text-stone-700">{DAY_SHORT[g.day]}</td>
+                          <td className="py-1 text-stone-800">
+                            {g.spans.length === 0
+                              ? "Closed"
+                              : g.spans.map((sp) => `${minutesToLabel(sp.openMin)} – ${minutesToLabel(sp.closeMin)}`).join(", ")}
+                            {today && openStatus && (
+                              <span className={`ml-2 text-[13px] ${openStatus.startsWith("Closed") ? "text-red-600" : "text-emerald-700"}`}>{openStatus}</span>
+                            )}
+                          </td>
+                        </tr>
+                      );
+                    })}
+                  </tbody>
+                </table>
+              ) : business.hours ? (
+                <p className="text-[14.5px] text-stone-700">{business.hours}</p>
+              ) : (
+                <p className="text-[14.5px] text-stone-500">
+                  Hours not listed yet.{" "}
+                  {business.ownerId ? "" : (
+                    <Link href={`/business/${business.slug}/claim`} className="text-brand-700 hover:underline">Own this place? Add them.</Link>
+                  )}
+                </p>
+              )}
+            </div>
+          </div>
+        </section>
+      )}
+
+      {tags.length > 0 && (
+        <section className="mt-6 bg-white rounded-card border border-line p-5 sm:p-6">
+          <h2 className="font-display text-xl">Amenities &amp; More</h2>
+          <ul className="mt-3 grid gap-x-8 gap-y-2 sm:grid-cols-2 text-[14.5px]">
+            {tags.map((t) => (
+              <li key={t} className="flex items-center gap-2.5">
+                <span className="w-5 h-5 rounded-full bg-emerald-50 text-emerald-700 flex items-center justify-center">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3"><path d="M5 12l5 5L20 7" /></svg>
+                </span>
+                {tagLabel(t)}
+              </li>
+            ))}
+          </ul>
+        </section>
+      )}
+
+      <section id="write-review" className="mt-6">
         <h2 className="font-semibold text-lg">Write a review</h2>
         <div className="mt-2 bg-white rounded-xl border border-stone-200 p-4">
           {!user ? (

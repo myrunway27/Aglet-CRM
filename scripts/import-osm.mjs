@@ -138,7 +138,8 @@ function normalize(elements, cityDefault, limit) {
       id: "osm" + randomBytes(10).toString("hex"),
       slug: `${slugify(name)}-${slugify(city)}-${randomBytes(3).toString("hex")}`,
       name, category: cat, city,
-      description: t.cuisine ? `${t.cuisine.split(";")[0].replace(/_/g, " ")} · listed from OpenStreetMap` : "Listed from OpenStreetMap",
+      description: "",
+      cuisine: t.cuisine ? t.cuisine.split(";")[0].replace(/_/g, " ").replace(/\b\w/g, (c) => c.toUpperCase()) : "",
       address, zip: t["addr:postcode"] ?? "", phone: t.phone ?? t["contact:phone"] ?? "", website: t.website ?? t["contact:website"] ?? "",
       hours: hours.length ? "" : (t.opening_hours ?? ""), lat, lng, tags: tags.length ? `,${tags.join(",")},` : "", openingHours: hours,
     });
@@ -151,7 +152,7 @@ const esc = (v) => "'" + String(v).replace(/'/g, "''") + "'";
 function toSQL(rows) {
   const lines = ["BEGIN;"];
   for (const r of rows) {
-    lines.push(`INSERT INTO "Business" (id, slug, name, category, city, description, address, zip, phone, website, hours, lat, lng, tags, "createdAt") VALUES (${[r.id, r.slug, r.name, r.category, r.city, r.description, r.address, r.zip, r.phone, r.website, r.hours].map(esc).join(", ")}, ${r.lat}, ${r.lng}, ${esc(r.tags)}, now()) ON CONFLICT (slug) DO NOTHING;`);
+    lines.push(`INSERT INTO "Business" (id, slug, name, category, city, description, cuisine, address, zip, phone, website, hours, lat, lng, tags, "createdAt") VALUES (${[r.id, r.slug, r.name, r.category, r.city, r.description, r.cuisine ?? "", r.address, r.zip, r.phone, r.website, r.hours].map(esc).join(", ")}, ${r.lat}, ${r.lng}, ${esc(r.tags)}, now()) ON CONFLICT (slug) DO NOTHING;`);
     for (const h of r.openingHours) lines.push(`INSERT INTO "OpeningHour" (id, "businessId", "dayOfWeek", "openMin", "closeMin") VALUES (${esc("oh" + randomBytes(10).toString("hex"))}, ${esc(r.id)}, ${h.dayOfWeek}, ${h.openMin}, ${h.closeMin});`);
   }
   lines.push("COMMIT;");
