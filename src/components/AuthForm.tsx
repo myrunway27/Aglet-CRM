@@ -49,6 +49,13 @@ export function AuthForm({ mode, next }: { mode: "login" | "signup"; next: strin
         >
           {pending ? "…" : mode === "login" ? "Log in" : "Sign up"}
         </button>
+        {mode === "signup" && (
+          <p className="text-xs text-stone-500">
+            By signing up you agree to the{" "}
+            <Link href="/terms" className="underline hover:text-brand-700">Terms of service</Link> and{" "}
+            <Link href="/privacy" className="underline hover:text-brand-700">Privacy policy</Link>.
+          </p>
+        )}
       </form>
       <p className="mt-4 text-sm text-stone-600">
         {mode === "login" ? (

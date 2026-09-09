@@ -1,8 +1,10 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
+import { redirect } from "next/navigation";
 import { prisma } from "@/lib/db";
-import { getCurrentUser } from "@/lib/auth";
+import { destroySession, getCurrentUser } from "@/lib/auth";
+import { refreshBusinessScore } from "@/lib/rating";
 import { generatePseudonym, isValidPenName, PEN_NAME_MAX, PEN_NAME_MIN } from "@/lib/pseudonym";
 import { storeStandards } from "@/lib/diet";
 
@@ -67,4 +69,35 @@ export async function saveDietStandard(
   revalidatePath("/account");
   revalidatePath("/");
   return { ok: true };
+}
+
+// Deleting a review is the reviewer's right, promised in the privacy policy.
+// The business score is recomputed so the rating never lags a deletion.
+export async function deleteReview(formData: FormData): Promise<void> {
+  const user = await getCurrentUser();
+  if (!user) return;
+  const id = String(formData.get("reviewId") ?? "");
+  const review = await prisma.review.findFirst({ where: { id, userId: user.id } });
+  if (!review) return;
+  await prisma.review.delete({ where: { id } });
+  await refreshBusinessScore(review.businessId);
+  revalidatePath("/account");
+  revalidatePath(`/business/${review.businessId}`);
+}
+
+// Account deletion removes the login and everything the person posted.
+// Reviews cascade with the user; each affected business is re-scored.
+// Claimed businesses stay listed with no owner.
+export async function deleteAccount(): Promise<void> {
+  const user = await getCurrentUser();
+  if (!user) return;
+  const touched = await prisma.review.findMany({
+    where: { userId: user.id },
+    select: { businessId: true },
+    distinct: ["businessId"],
+  });
+  await destroySession();
+  await prisma.user.delete({ where: { id: user.id } });
+  for (const { businessId } of touched) await refreshBusinessScore(businessId);
+  redirect("/?deleted=1");
 }

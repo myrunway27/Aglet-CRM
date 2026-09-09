@@ -8,6 +8,8 @@ import { DietStandardCard } from "@/components/DietStandardCard";
 import { parseStandards } from "@/lib/diet";
 import { reviewerStats } from "@/lib/badges";
 import { BadgeBoard } from "@/components/Badges";
+import { DeleteAccount } from "@/components/DeleteAccount";
+import { deleteReview } from "@/actions/account";
 
 export const dynamic = "force-dynamic";
 
@@ -147,10 +149,16 @@ export default async function AccountPage() {
             </div>
             <div className="mt-1 flex items-center gap-2 text-xs text-stone-500">
               <Stars rating={r.rating} size="text-sm" />
-              <span>as 🕶️ {r.pseudonym}</span>
+              <span>as {r.pseudonym}</span>
               <span>· {r.createdAt.toLocaleDateString()}</span>
             </div>
             <p className="mt-1 text-sm text-stone-700 line-clamp-2">{r.text}</p>
+            <form action={deleteReview} className="mt-2">
+              <input type="hidden" name="reviewId" value={r.id} />
+              <button className="text-xs text-stone-500 hover:text-red-700 underline cursor-pointer">
+                Delete this review
+              </button>
+            </form>
           </div>
         ))}
         {reviews.length === 0 && (
@@ -189,6 +197,8 @@ export default async function AccountPage() {
           </div>
         </>
       )}
+
+      <DeleteAccount />
     </div>
   );
 }

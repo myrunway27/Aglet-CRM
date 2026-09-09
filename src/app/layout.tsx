@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import Link from "next/link";
 import "./globals.css";
 import { getCurrentUser } from "@/lib/auth";
@@ -10,6 +10,18 @@ export const metadata: Metadata = {
   title: "True Review — reviewed by the people, for the people",
   description:
     "Reviewed by the people, for the people. 100% anonymous reviews for every kind of business.",
+  applicationName: "True Review",
+  icons: {
+    icon: "/icon.svg",
+    apple: "/icons/apple-touch-icon.png",
+  },
+  appleWebApp: { capable: true, title: "True Review", statusBarStyle: "black-translucent" },
+};
+
+export const viewport: Viewport = {
+  themeColor: "#0f1f3d",
+  width: "device-width",
+  initialScale: 1,
 };
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
@@ -107,10 +119,11 @@ export default async function RootLayout({ children }: { children: React.ReactNo
             True Review — reviewed by the people, for the people. Reviews are anonymous; your
             identity is never shown to businesses or other users.
           </p>
-          <p className="mt-1">
-            <Link href="/trust" className="text-brand-700 hover:underline">
-              How we keep reviews honest
-            </Link>
+          <p className="mt-2 flex flex-wrap justify-center gap-x-4 gap-y-1">
+            <Link href="/trust" className="text-brand-700 hover:underline">How we keep reviews honest</Link>
+            <Link href="/guidelines" className="text-brand-700 hover:underline">Review guidelines</Link>
+            <Link href="/terms" className="text-brand-700 hover:underline">Terms of service</Link>
+            <Link href="/privacy" className="text-brand-700 hover:underline">Privacy</Link>
           </p>
           <p className="mt-2 text-stone-400">
             Some listings sourced from{" "}

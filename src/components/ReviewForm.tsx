@@ -75,7 +75,12 @@ export function ReviewForm({
         />
       </label>
       <p className="text-xs text-stone-500">
-        🕶️ Posted anonymously under a random pen name. The business will never see who you are.
+        Posted anonymously under your pen name. The business will never see who you are. Reviews
+        follow our{" "}
+        <a href="/guidelines" target="_blank" className="underline hover:text-brand-700">
+          guidelines
+        </a>
+        : first-hand, honest, nothing paid for.
       </p>
       {state?.error && <p className="text-sm text-red-600">{state.error}</p>}
       <button
