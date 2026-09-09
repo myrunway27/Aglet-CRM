@@ -95,6 +95,8 @@ const CAPS = {
   "Entertainment": 15, "Travel & Hotels": 15, "Education": 10,
 };
 const PRIORITY = Object.keys(CAPS);
+// --capmult 3 triples every cap: use it to pull a whole neighbourhood deeply.
+const CAP_MULT = Number(arg("capmult", "1")) || 1;
 
 function normalize(elements, cityDefault, limit) {
   const seen = new Set(); const rows = []; const count = {};
@@ -107,7 +109,7 @@ function normalize(elements, cityDefault, limit) {
   });
   for (const e of sorted) {
     const t = e.tags ?? {}; const cat = categorize(t); if (!cat) continue;
-    if ((count[cat] ?? 0) >= CAPS[cat]) continue;
+    if ((count[cat] ?? 0) >= CAPS[cat] * CAP_MULT) continue;
     const name = (t.name ?? "").trim(); if (name.length < 2 || name.length > 80) continue;
     const lat = e.lat ?? e.center?.lat, lng = e.lon ?? e.center?.lon; if (lat == null || lng == null) continue;
     const city = t["addr:city"] || cityDefault;
