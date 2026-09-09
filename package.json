@@ -14,9 +14,11 @@
     "seed": "node --experimental-strip-types prisma/seed.ts"
   },
   "dependencies": {
+    "@maplibre/maplibre-gl-leaflet": "^0.1.4",
     "@prisma/client": "^6.19.3",
     "@types/leaflet": "^1.9.22",
     "leaflet": "^1.9.4",
+    "maplibre-gl": "^6.9.0",
     "next": "^15.5.23",
     "nodemailer": "^9.0.5",
     "prisma": "^6.19.3",

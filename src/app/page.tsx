@@ -281,6 +281,23 @@ export default async function HomePage({
         </p>
       )}
 
+      {/* Why this site is different, right under the search — before any
+          filtering or results, where a first-time visitor actually reads. */}
+      {!filtering && !heading && (
+        <section className="mb-6 grid gap-3 sm:grid-cols-3">
+          {[
+            ["100% anonymous", "Your pen name is all anyone sees — businesses included."],
+            ["Owners can reply, not retaliate", "They answer in public and never learn who you are."],
+            ["Money never moves a rating", "Paying businesses get tools, not better scores. Ever."],
+          ].map(([t, d]) => (
+            <div key={t} className="rounded-2xl bg-brand-50 border border-brand-100 px-4 py-3.5">
+              <p className="font-semibold text-[14.5px] text-brand-800">{t}</p>
+              <p className="text-[13px] text-stone-600 mt-0.5">{d}</p>
+            </div>
+          ))}
+        </section>
+      )}
+
       <FilterBar
         q={q}
         category={category}
@@ -304,18 +321,6 @@ export default async function HomePage({
           {worthALook.length >= 3 && (
             <Row title="Worth a look" items={worthALook} />
           )}
-          <section className="mt-8 grid gap-3 sm:grid-cols-3">
-            {[
-              ["100% anonymous", "Your pen name is all anyone sees — businesses included."],
-              ["Owners can reply, not retaliate", "They answer in public and never learn who you are."],
-              ["Money never moves a rating", "Paying businesses get tools, not better scores. Ever."],
-            ].map(([t, d]) => (
-              <div key={t} className="rounded-2xl bg-brand-50 border border-brand-100 px-4 py-3.5">
-                <p className="font-semibold text-[14.5px] text-brand-800">{t}</p>
-                <p className="text-[13px] text-stone-600 mt-0.5">{d}</p>
-              </div>
-            ))}
-          </section>
         </>
       )}
 

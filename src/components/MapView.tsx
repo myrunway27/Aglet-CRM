@@ -3,6 +3,7 @@
 import { useEffect, useRef } from "react";
 import Link from "next/link";
 import "leaflet/dist/leaflet.css";
+import { addBasemap } from "@/lib/basemap";
 
 export type MapPin = {
   slug: string;
@@ -14,7 +15,7 @@ export type MapPin = {
   count: number;
 };
 
-// OpenStreetMap tiles — free, no API key, no billing account.
+// Vector basemap from OpenFreeMap — free, no API key, no billing account.
 export function MapView({ pins }: { pins: MapPin[] }) {
   const ref = useRef<HTMLDivElement>(null);
   const mapRef = useRef<import("leaflet").Map | null>(null);
@@ -22,15 +23,12 @@ export function MapView({ pins }: { pins: MapPin[] }) {
   useEffect(() => {
     let cancelled = false;
     (async () => {
-      const L = await import("leaflet");
+      const L = (await import("leaflet")).default;
       if (cancelled || !ref.current || mapRef.current) return;
 
       const map = L.map(ref.current, { scrollWheelZoom: false });
       mapRef.current = map;
-      L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
-        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-        maxZoom: 19,
-      }).addTo(map);
+      await addBasemap(L, map);
 
       if (pins.length > 0) {
         const group = L.featureGroup(

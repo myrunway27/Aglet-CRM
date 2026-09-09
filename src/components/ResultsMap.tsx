@@ -2,6 +2,7 @@
 
 import { useEffect, useRef } from "react";
 import "leaflet/dist/leaflet.css";
+import { addBasemap } from "@/lib/basemap";
 
 export type ResultPin = { n: number; slug: string; name: string; lat: number; lng: number };
 
@@ -14,9 +15,7 @@ export function ResultsMap({ pins, compact = false }: { pins: ResultPin[]; compa
     (async () => {
       const L = (await import("leaflet")).default;
       map = L.map(ref.current!, { scrollWheelZoom: false });
-      L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
-        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
-      }).addTo(map);
+      await addBasemap(L, map);
       const group = L.featureGroup(
         pins.map((p) =>
           L.marker([p.lat, p.lng], {
