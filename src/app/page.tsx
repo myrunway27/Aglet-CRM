@@ -46,6 +46,18 @@ export default async function HomePage({
   const minRating = [2, 3, 3.5, 4, 4.5].includes(Number(sp.minRating)) ? Number(sp.minRating) : 0;
   const origin = parseLatLng(sp.near);
   const radius = isRadius(Number(sp.radius)) ? Number(sp.radius) : 5;
+  // Pre-filter in the database to a box around the point, so the row cap
+  // below can never drop a place that is actually nearby. Exact distance is
+  // still computed per result; the box is just a coarse net.
+  const box = origin
+    ? {
+        lat: { gte: origin.lat - radius / 69, lte: origin.lat + radius / 69 },
+        lng: {
+          gte: origin.lng - radius / (69 * Math.cos((origin.lat * Math.PI) / 180)),
+          lte: origin.lng + radius / (69 * Math.cos((origin.lat * Math.PI) / 180)),
+        },
+      }
+    : {};
   let sort: Sort = SORTS.includes(sp.sort as Sort) ? (sp.sort as Sort) : "recommended";
   // Sorting by distance only means anything once we know where "here" is.
   if (sort === "distance" && !origin) sort = "recommended";
@@ -68,6 +80,7 @@ export default async function HomePage({
       // at all — an unreviewed place is not "under 4 stars", it is unknown.
       ...(minRating ? { scoreAvg: { gte: minRating }, scoreCount: { gt: 0 } } : {}),
       ...(withPhotos ? { reviews: { some: { photos: { some: {} } } } } : {}),
+      ...box,
       AND: [
         ...activeTags.map((t) => ({ tags: { contains: `,${t},` } })),
         ...myStandards.map((t) => ({ tags: { contains: `,${t},` } })),
@@ -97,7 +110,7 @@ export default async function HomePage({
         select: { photos: { take: 1, select: { path: true } } },
       },
     },
-    take: 200,
+    take: 400,
   });
 
   // Spotlight members get one clearly-labelled sponsored card when someone
@@ -177,7 +190,10 @@ export default async function HomePage({
     for (const bucket of buckets) if (bucket[i] && worthALook.length < 8) worthALook.push(bucket[i]);
   }
   const openNowList = withStats.filter((b) => b.isOpen).slice(0, 8);
-  const filtering = Boolean(q || category || activeTags.length || prices.length || openNow || minRating || withPhotos || origin);
+  const filtering = Boolean(
+    q || category || activeTags.length || prices.length || openNow || minRating || withPhotos || origin ||
+    sort !== "recommended"
+  );
 
   const heading =
     view === "trending"
@@ -372,15 +388,10 @@ function cardProps(b: CardBusiness) {
   };
 }
 
-/** Compact row on phones when there is no photo; full card otherwise. */
+/** Compact row on phones when there is no photo; full card otherwise.
+ *  One element, reshaped by breakpoint — never two links for one place. */
 function ResponsiveCard(props: React.ComponentProps<typeof BusinessCard>) {
-  if (props.photo) return <BusinessCard {...props} />;
-  return (
-    <>
-      <div className="sm:hidden"><BusinessCard {...props} variant="row" /></div>
-      <div className="hidden sm:block"><BusinessCard {...props} /></div>
-    </>
-  );
+  return <BusinessCard {...props} variant={props.photo ? "card" : "auto"} />;
 }
 
 /** A horizontally scrolling discovery row. */

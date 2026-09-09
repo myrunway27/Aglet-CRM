@@ -24,8 +24,8 @@ export function BusinessCard(props: {
   lastReviewedAt?: Date | null;
   miles?: number | null;
   photo?: string | null;
-  /** "row": compact list row for phones when there is no photo to show. */
-  variant?: "card" | "row";
+  /** "row": compact list row. "auto": row on phones, card from `sm` up. */
+  variant?: "card" | "row" | "auto";
 }) {
   const {
     slug, name, category, city, avgRating, reviewCount, verifiedOwner,
@@ -36,28 +36,57 @@ export function BusinessCard(props: {
   const art = categoryArt(category);
   const meta = [city, priceLevel > 0 ? PRICE_LABELS[priceLevel] : null].filter(Boolean).join(" · ");
 
-  if (variant === "row") {
+  if (variant === "row" || variant === "auto") {
+    const auto = variant === "auto";
     return (
       <Link
         href={`/business/${slug}`}
-        className="flex items-center gap-3.5 bg-white rounded-2xl border border-line p-3 hover:border-brand-600/40 hover:shadow-sm transition"
+        className={`group flex items-center gap-3.5 bg-white rounded-2xl border border-line p-3 hover:border-brand-600/40 hover:shadow-sm transition ${
+          auto ? "sm:block sm:p-0 sm:rounded-card sm:overflow-hidden sm:hover:shadow-md" : ""
+        }`}
       >
         <span
-          className="relative shrink-0 w-[68px] h-[68px] rounded-xl overflow-hidden flex items-center justify-center"
-          style={{ background: photo ? undefined : art.tint, color: art.ink }}
+          className={`relative shrink-0 w-[68px] h-[68px] rounded-xl overflow-hidden flex items-center justify-center ${
+            auto ? "sm:w-full sm:h-44 sm:rounded-none" : ""
+          }`}
+          style={{ background: photo ? undefined : `linear-gradient(135deg, ${art.tint} 0%, ${art.pop} 140%)`, color: art.ink }}
         >
           {photo ? (
             // eslint-disable-next-line @next/next/no-img-element
             <img src={photo} alt="" className="absolute inset-0 w-full h-full object-cover" />
           ) : (
-            <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-              <path d={art.icon} />
-            </svg>
+            <>
+              {auto && (
+                <span
+                  className="hidden sm:block absolute -right-3 -bottom-8 font-display text-[132px] leading-none select-none"
+                  style={{ color: art.ink, opacity: 0.16 }}
+                  aria-hidden="true"
+                >
+                  {name.trim().charAt(0).toUpperCase()}
+                </span>
+              )}
+              <span className={auto ? "sm:absolute sm:left-4 sm:bottom-4 sm:w-11 sm:h-11 sm:rounded-xl sm:flex sm:items-center sm:justify-center sm:bg-white/85 sm:shadow-sm" : ""}>
+                <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" className={auto ? "sm:w-[22px] sm:h-[22px]" : ""}>
+                  <path d={art.icon} />
+                </svg>
+              </span>
+            </>
+          )}
+          {auto && avgRating !== null && (
+            <span className="hidden sm:flex absolute top-3 left-3 items-center gap-1 bg-brand-800/90 text-white rounded-full pl-2 pr-2.5 py-1 text-[13px] font-bold tabular-nums">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="#f5a524"><path d="M12 2l2.9 6.3 6.9.7-5.2 4.6 1.5 6.8L12 17.8 5.9 21l1.5-6.8L2.2 9.6l6.9-.7z" /></svg>
+              {avgRating.toFixed(1)}
+            </span>
+          )}
+          {auto && avgRating === null && (
+            <span className="hidden sm:block absolute top-3 left-3 bg-white/90 text-stone-600 rounded-full px-2.5 py-1 text-[12px] font-medium">
+              New — no reviews yet
+            </span>
           )}
         </span>
-        <span className="min-w-0 flex-1">
+        <span className={`min-w-0 flex-1 ${auto ? "sm:block sm:p-4" : ""}`}>
           <span className="flex items-center gap-2">
-            <span className="font-semibold text-[15.5px] leading-tight truncate">{name}</span>
+            <h3 className={`font-semibold text-[15.5px] leading-tight truncate ${auto ? "sm:text-[17px]" : ""}`}>{name}</h3>
             {verifiedOwner && <span className="shrink-0 text-[10px] font-bold text-brand-700 bg-brand-50 rounded-full px-1.5 py-0.5">✓</span>}
           </span>
           <span className="block text-[13px] text-stone-500 truncate mt-0.5">
@@ -69,10 +98,15 @@ export function BusinessCard(props: {
           </span>
           <span className="block text-[12px] text-stone-400 truncate mt-0.5">
             {tags.length > 0 ? tags.slice(0, 2).map(tagLabel).join(" · ") : reviewCount > 0 ? `${reviewCount} review${reviewCount !== 1 ? "s" : ""}` : "Be the first to review"}
-            {lastReviewedAt && ` · ${stale ? "⚠ " : ""}Last reviewed ${timeAgo(new Date(lastReviewedAt))}`}
           </span>
+          {lastReviewedAt && (
+            <span className={`block text-[12px] mt-0.5 ${stale ? "text-amber-700 font-medium" : "text-stone-400"}`}>
+              {stale ? "⚠ " : ""}Last reviewed {timeAgo(new Date(lastReviewedAt))}
+              {stale && " — this rating may be out of date"}
+            </span>
+          )}
         </span>
-        <span className="shrink-0 flex flex-col items-end gap-1">
+        <span className={`shrink-0 flex flex-col items-end gap-1 ${auto ? "sm:hidden" : ""}`}>
           {avgRating !== null ? (
             <span className="inline-flex items-center gap-1 bg-brand-800 text-white rounded-full pl-2 pr-2.5 py-1 text-[13px] font-bold tabular-nums">
               <svg width="11" height="11" viewBox="0 0 24 24" fill="#f5a524"><path d="M12 2l2.9 6.3 6.9.7-5.2 4.6 1.5 6.8L12 17.8 5.9 21l1.5-6.8L2.2 9.6l6.9-.7z" /></svg>
