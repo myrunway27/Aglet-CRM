@@ -65,7 +65,7 @@ export function BusinessCard(props: {
           )}
           {auto && avgRating !== null && (
             <span className="hidden sm:flex absolute top-3 left-3 items-center gap-1 bg-brand-800/90 text-white rounded-full pl-2 pr-2.5 py-1 text-[13px] font-bold tabular-nums">
-              <svg width="12" height="12" viewBox="0 0 24 24" fill="#f5a524"><path d="M12 2l2.9 6.3 6.9.7-5.2 4.6 1.5 6.8L12 17.8 5.9 21l1.5-6.8L2.2 9.6l6.9-.7z" /></svg>
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="#f4711c"><path d="M12 2l2.9 6.3 6.9.7-5.2 4.6 1.5 6.8L12 17.8 5.9 21l1.5-6.8L2.2 9.6l6.9-.7z" /></svg>
               {avgRating.toFixed(1)}
             </span>
           )}
@@ -95,7 +95,7 @@ export function BusinessCard(props: {
         <span className={`shrink-0 flex flex-col items-end gap-1 ${auto ? "sm:hidden" : ""}`}>
           {avgRating !== null ? (
             <span className="inline-flex items-center gap-1 bg-brand-800 text-white rounded-full pl-2 pr-2.5 py-1 text-[13px] font-bold tabular-nums">
-              <svg width="11" height="11" viewBox="0 0 24 24" fill="#f5a524"><path d="M12 2l2.9 6.3 6.9.7-5.2 4.6 1.5 6.8L12 17.8 5.9 21l1.5-6.8L2.2 9.6l6.9-.7z" /></svg>
+              <svg width="11" height="11" viewBox="0 0 24 24" fill="#f4711c"><path d="M12 2l2.9 6.3 6.9.7-5.2 4.6 1.5 6.8L12 17.8 5.9 21l1.5-6.8L2.2 9.6l6.9-.7z" /></svg>
               {avgRating.toFixed(1)}
             </span>
           ) : (
@@ -132,7 +132,7 @@ export function BusinessCard(props: {
 
         {avgRating !== null ? (
           <span className="absolute top-3 left-3 flex items-center gap-1 bg-brand-800/90 text-white rounded-full pl-2 pr-2.5 py-1 text-[13px] font-bold tabular-nums">
-            <svg width="12" height="12" viewBox="0 0 24 24" fill="#f5a524"><path d="M12 2l2.9 6.3 6.9.7-5.2 4.6 1.5 6.8L12 17.8 5.9 21l1.5-6.8L2.2 9.6l6.9-.7z" /></svg>
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="#f4711c"><path d="M12 2l2.9 6.3 6.9.7-5.2 4.6 1.5 6.8L12 17.8 5.9 21l1.5-6.8L2.2 9.6l6.9-.7z" /></svg>
             {avgRating.toFixed(1)}
           </span>
         ) : null}

@@ -229,7 +229,7 @@ export default async function HomePage({
           className="absolute inset-0 pointer-events-none"
           style={{
             background:
-              "radial-gradient(1100px 520px at 82% -20%, rgba(255,92,71,0.5), transparent 62%), radial-gradient(700px 360px at 4% 115%, rgba(245,165,36,0.22), transparent 60%), radial-gradient(600px 300px at 55% 125%, rgba(255,92,71,0.18), transparent 60%)",
+              "radial-gradient(1100px 520px at 82% -20%, rgba(244,113,28,0.45), transparent 62%), radial-gradient(700px 360px at 4% 115%, rgba(249,230,205,0.14), transparent 60%), radial-gradient(600px 300px at 55% 125%, rgba(244,113,28,0.18), transparent 60%)",
           }}
         />
         <div className="relative max-w-3xl mx-auto text-center">

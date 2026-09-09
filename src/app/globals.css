@@ -1,22 +1,22 @@
 @import "tailwindcss";
 
-/* Navy & Coral on warm paper.
-   Navy carries trust (header, headings), coral carries the welcome (actions),
-   surfaces stay a soft cream, and amber is reserved for ratings alone.
+/* Navy & Orange on cream, matched to the logo.
+   Navy carries trust (header, headings), the logo's orange carries the
+   welcome (actions, stars), and surfaces sit on the logo's cream.
    Newsreader for headlines so the page reads editorial, not clinical. */
 @theme {
-  --color-brand-50: #fff1ee;
-  --color-brand-100: #ffd9d2;
-  --color-brand-600: #ff5c47;
-  --color-brand-700: #e9432e;
+  --color-brand-50: #fff3e6;
+  --color-brand-100: #fbd9b8;
+  --color-brand-600: #f4711c;
+  --color-brand-700: #d45d0d;
   --color-brand-800: #0f1f3d;
   --color-brand-900: #0a1730;
   --color-navy: #0f1f3d;
-  --color-star: #f5a524;
-  --color-paper: #faf6ef;
-  --color-line: #eae2d6;
+  --color-star: #f4711c;
+  --color-paper: #fdf4e8;
+  --color-line: #f0dcc4;
   --color-ember: #f97316;
-  --color-coral: #fb7185;
+  --color-coral: #f4711c;
   --font-sans: "Hanken Grotesk", ui-sans-serif, system-ui, sans-serif;
   --font-display: "Newsreader", ui-serif, Georgia, serif;
   --font-wordmark: "Nunito", ui-rounded, "Hanken Grotesk", system-ui, sans-serif;

@@ -22,7 +22,7 @@ export function ResultsMap({ pins, compact = false }: { pins: ResultPin[]; compa
           L.marker([p.lat, p.lng], {
             icon: L.divIcon({
               className: "",
-              html: `<div style="width:26px;height:26px;border-radius:999px;background:#1d4ed8;color:#fff;font:700 12px/26px system-ui;text-align:center;border:2px solid #fff;box-shadow:0 1px 4px rgba(0,0,0,.35)">${p.n}</div>`,
+              html: `<div style="width:26px;height:26px;border-radius:999px;background:#f4711c;color:#fff;font:700 12px/26px system-ui;text-align:center;border:2px solid #fff;box-shadow:0 1px 4px rgba(0,0,0,.35)">${p.n}</div>`,
               iconSize: [26, 26],
               iconAnchor: [13, 13],
             }),

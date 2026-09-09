@@ -210,7 +210,7 @@ export default async function BusinessPage({
 
         <div className="mt-4 flex items-center gap-2 flex-wrap">
           <a href="#write-review" className="inline-flex items-center gap-1.5 rounded-lg bg-brand-600 text-white px-4 py-2 text-sm font-semibold hover:bg-brand-700">
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="#f5a524"><path d="M12 2l2.9 6.3 6.9.7-5.2 4.6 1.5 6.8L12 17.8 5.9 21l1.5-6.8L2.2 9.6l6.9-.7z" /></svg>
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="#f4711c"><path d="M12 2l2.9 6.3 6.9.7-5.2 4.6 1.5 6.8L12 17.8 5.9 21l1.5-6.8L2.2 9.6l6.9-.7z" /></svg>
             Write a review
           </a>
           {business.phone && (
