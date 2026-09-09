@@ -172,7 +172,7 @@ export default async function HomePage({
         <h1 className="font-display font-semibold text-[38px] sm:text-[56px] leading-[1.05] tracking-tight">
           Find places worth your time.
         </h1>
-        <p className="font-display italic text-brand-700 text-lg sm:text-[22px] mt-3">
+        <p className="text-stone-500 text-lg sm:text-xl mt-3">
           Reviewed by the people, for the people.
         </p>
         <form action="/" className="mt-7 flex max-w-2xl mx-auto gap-2">
@@ -186,7 +186,7 @@ export default async function HomePage({
               className="flex-1 min-w-0 h-full bg-transparent text-base focus:outline-none"
             />
           </label>
-          <button className="shrink-0 rounded-xl bg-brand-700 text-white px-4 sm:px-6 h-13 font-semibold hover:bg-brand-800 cursor-pointer">
+          <button className="shrink-0 rounded-xl bg-brand-600 text-white px-4 sm:px-6 h-13 font-semibold hover:bg-brand-700 cursor-pointer">
             Search
           </button>
         </form>

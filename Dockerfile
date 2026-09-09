@@ -3,14 +3,11 @@ WORKDIR /app
 COPY package.json package-lock.json ./
 RUN npm ci
 COPY . .
-ENV DATABASE_URL="file:/data/prod.db"
 RUN npm run build
 
 FROM node:22-alpine
 WORKDIR /app
 ENV NODE_ENV=production
-ENV DATABASE_URL="file:/data/prod.db"
-ENV UPLOAD_DIR="/data/uploads"
 COPY --from=builder /app/node_modules ./node_modules
 COPY --from=builder /app/.next ./.next
 COPY --from=builder /app/public ./public
@@ -20,10 +17,11 @@ COPY --from=builder /app/scripts/bootstrap-admin.mjs ./scripts/bootstrap-admin.m
 COPY --from=builder /app/scripts/backfill-pseudonyms.mjs ./scripts/backfill-pseudonyms.mjs
 COPY --from=builder /app/scripts/backfill-last-reviewed.mjs ./scripts/backfill-last-reviewed.mjs
 
-# /data holds the SQLite database AND review photos (UPLOAD_DIR).
-# Mount it as a persistent volume or all data is lost on redeploy.
-# (No VOLUME directive: Railway rejects it — the /data volume is attached
-# on the platform side there, and fly.toml's [mounts] covers Fly.)
+# The database is Postgres (DATABASE_URL / DIRECT_URL) and review photos live
+# in Supabase Storage (SUPABASE_URL / SUPABASE_SECRET_KEY). Nothing on this
+# container's disk needs to survive a redeploy.
 
 EXPOSE 3000
-CMD ["sh", "-c", "mkdir -p \"$UPLOAD_DIR\" && npx prisma db push --skip-generate --accept-data-loss && node scripts/bootstrap-admin.mjs && node scripts/backfill-pseudonyms.mjs && node scripts/backfill-last-reviewed.mjs && npx next start -p ${PORT:-3000}"]
+# Startup: apply any pending versioned migrations (never `db push` against
+# production data), make sure the admin accounts exist, then serve.
+CMD ["sh", "-c", "npx prisma migrate deploy && node scripts/bootstrap-admin.mjs && npx next start -p ${PORT:-3000}"]

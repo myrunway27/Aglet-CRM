@@ -27,64 +27,64 @@ export default async function RootLayout({ children }: { children: React.ReactNo
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link
-          href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,500;0,6..72,600;1,6..72,500&family=Hanken+Grotesk:wght@400;500;600;700&display=swap"
+          href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700;800&display=swap"
           rel="stylesheet"
         />
       </head>
       <body className="min-h-screen flex flex-col">
-        <header className="bg-brand-800 text-white sticky top-0 z-20">
+        <header className="bg-white text-brand-800 border-b border-line sticky top-0 z-20">
           <div className="mx-auto max-w-6xl px-4 sm:px-6 h-14 flex items-center gap-3">
-            <Link href="/" className="shrink-0 text-white [--logo-counter:#1A1917]">
+            <Link href="/" className="shrink-0 text-brand-800 [--logo-counter:#ffffff]">
               <Logo />
             </Link>
             <nav className="ml-auto flex items-center gap-1 text-sm">
-              <Link href="/map" className="hidden sm:inline px-2.5 py-1.5 rounded hover:bg-white/10">
+              <Link href="/map" className="hidden sm:inline px-2.5 py-1.5 rounded hover:bg-stone-100">
                 Map
               </Link>
-              <Link href="/add-business" className="hidden sm:inline px-2.5 py-1.5 rounded hover:bg-white/10">
+              <Link href="/add-business" className="hidden sm:inline px-2.5 py-1.5 rounded hover:bg-stone-100">
                 Add business
               </Link>
               {user ? (
                 <>
                   <Link
                     href="/notifications"
-                    className="relative px-2.5 py-1.5 rounded hover:bg-white/10"
+                    className="relative px-2.5 py-1.5 rounded hover:bg-stone-100"
                     aria-label="Notifications"
                   >
                     🔔
                     {unreadCount > 0 && (
-                      <span className="absolute -top-0.5 -right-0.5 bg-star text-brand-900 text-[10px] font-bold rounded-full min-w-4 h-4 px-0.5 flex items-center justify-center">
+                      <span className="absolute -top-0.5 -right-0.5 bg-brand-600 text-white text-[10px] font-bold rounded-full min-w-4 h-4 px-0.5 flex items-center justify-center">
                         {unreadCount > 9 ? "9+" : unreadCount}
                       </span>
                     )}
                   </Link>
                   {ownsBusinesses && (
-                    <Link href="/owner" className="hidden sm:inline px-2.5 py-1.5 rounded hover:bg-white/10">
+                    <Link href="/owner" className="hidden sm:inline px-2.5 py-1.5 rounded hover:bg-stone-100">
                       My businesses
                     </Link>
                   )}
                   {user.isAdmin && (
-                    <Link href="/admin" className="hidden sm:inline px-2.5 py-1.5 rounded hover:bg-white/10">
+                    <Link href="/admin" className="hidden sm:inline px-2.5 py-1.5 rounded hover:bg-stone-100">
                       Admin
                     </Link>
                   )}
-                  <Link href="/account" className="px-2.5 py-1.5 rounded hover:bg-white/10">
+                  <Link href="/account" className="px-2.5 py-1.5 rounded hover:bg-stone-100">
                     Account
                   </Link>
                   <form action={logout} className="hidden sm:block">
-                    <button className="px-2.5 py-1.5 rounded hover:bg-white/10 cursor-pointer">
+                    <button className="px-2.5 py-1.5 rounded hover:bg-stone-100 cursor-pointer">
                       Log out
                     </button>
                   </form>
                 </>
               ) : (
                 <>
-                  <Link href="/login" className="px-2.5 py-1.5 rounded hover:bg-white/10">
+                  <Link href="/login" className="px-2.5 py-1.5 rounded hover:bg-stone-100">
                     Log in
                   </Link>
                   <Link
                     href="/signup"
-                    className="px-3 py-1.5 rounded-lg bg-star text-brand-900 font-semibold hover:brightness-110"
+                    className="px-3.5 py-1.5 rounded-lg bg-brand-600 text-white font-semibold hover:bg-brand-700"
                   >
                     Sign up
                   </Link>
@@ -111,6 +111,13 @@ export default async function RootLayout({ children }: { children: React.ReactNo
             <Link href="/trust" className="text-brand-700 hover:underline">
               How we keep reviews honest
             </Link>
+          </p>
+          <p className="mt-2 text-stone-400">
+            Some listings sourced from{" "}
+            <a href="https://www.openstreetmap.org/copyright" className="underline hover:text-brand-700">
+              OpenStreetMap
+            </a>{" "}
+            contributors (ODbL).
           </p>
         </footer>
       </body>

@@ -99,6 +99,28 @@ async function main() {
     }
   }
 
+  // Give every seeded business the same derived fields the app maintains
+  // (score, count, freshness, city rank), so a seeded site looks like a
+  // real one instead of a list of unrated names.
+  const PRIOR_MEAN = 3.5, PRIOR_WEIGHT = 6;
+  const all = await prisma.business.findMany({ include: { reviews: { where: { status: { not: "HIDDEN" }, includedInScore: true } } } });
+  for (const b of all) {
+    const rs = b.reviews;
+    const avg = rs.length ? rs.reduce((t, r) => t + r.rating, 0) / rs.length : 0;
+    const score = rs.length ? (avg * rs.length + PRIOR_MEAN * PRIOR_WEIGHT) / (rs.length + PRIOR_WEIGHT) : 0;
+    const last = rs.reduce<Date | null>((m, r) => (!m || r.createdAt > m ? r.createdAt : m), null);
+    await prisma.business.update({ where: { id: b.id }, data: { scoreAvg: score, scoreCount: rs.length, lastReviewedAt: last } });
+  }
+  const groups = new Map<string, typeof all>();
+  for (const b of all) { const k = `${b.city}|${b.category}`; groups.set(k, [...(groups.get(k) ?? []), b]); }
+  for (const g of groups.values()) {
+    const ranked = (await prisma.business.findMany({ where: { id: { in: g.map((b) => b.id) } } }))
+      .sort((a, b) => (b.scoreAvg * Math.log10(b.scoreCount + 2)) - (a.scoreAvg * Math.log10(a.scoreCount + 2)));
+    for (const [i, b] of ranked.entries()) {
+      await prisma.business.update({ where: { id: b.id }, data: { cityRank: b.scoreCount > 0 ? i + 1 : 0, cityRankSize: ranked.length } });
+    }
+  }
+
   console.log("Seeded: admin@truereview.local / admin1234 (admin), demo1-4@truereview.local / demo1234");
 }
 

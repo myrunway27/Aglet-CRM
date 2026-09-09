@@ -1,24 +1,22 @@
 @import "tailwindcss";
 
-/* Ink & Ember.
-   Near-black carries the interface; amber is the only chroma, reserved for
-   ratings so a score reads as earned rather than as brand decoration. The
-   page is a warm off-white with a channel spread of 1 — paper, not cream.
-
-   Type: Newsreader (a warm editorial serif) for headlines, Hanken Grotesk
-   for everything else. Loaded via <link> in the layout, never at build time. */
+/* Ink & Blue.
+   White surfaces, near-black text, and one saturated blue reserved for
+   actions. Amber stays for ratings only, so a score reads as earned rather
+   than as brand decoration. Photos are meant to carry the colour. */
 @theme {
-  --color-brand-50: #fdf6ea;
-  --color-brand-100: #f0dfbe;
-  --color-brand-600: #c2701a;
-  --color-brand-700: #a8560b;
-  --color-brand-800: #1a1917;
-  --color-brand-900: #12110f;
+  --color-brand-50: #eaf0ff;
+  --color-brand-100: #d6e2ff;
+  --color-brand-600: #2563eb;
+  --color-brand-700: #1d4ed8;
+  --color-brand-800: #111827;
+  --color-brand-900: #0b1020;
   --color-star: #f5a524;
-  --color-paper: #fafaf9;
-  --color-line: #eee7db;
+  --color-paper: #ffffff;
+  --color-line: #e5e7eb;
   --font-sans: "Hanken Grotesk", ui-sans-serif, system-ui, sans-serif;
-  --font-display: "Newsreader", ui-serif, Georgia, serif;
+  /* Option C uses the grotesk at heavy weight for headlines too. */
+  --font-display: "Hanken Grotesk", ui-sans-serif, system-ui, sans-serif;
   --radius-card: 16px;
 }
 
@@ -30,6 +28,8 @@ body {
 
 .font-display {
   font-family: var(--font-display);
+  font-weight: 800;
+  letter-spacing: -0.02em;
 }
 
 /* Horizontal scrollers (category tiles, chip rows) hide their scrollbar but
