@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { prisma } from "@/lib/db";
@@ -16,9 +17,31 @@ import { parseTags, tagLabel } from "@/lib/tags";
 import { parseStandards, freshnessOf } from "@/lib/diet";
 import { isFoodCategory } from "@/lib/categories";
 import { isThin, plainAverage } from "@/lib/rating";
+import { siteUrl } from "@/lib/stripe";
 import { groupByDay, openStatusLabel, minutesToLabel, DAY_SHORT, PRICE_LABELS } from "@/lib/hours";
 
 export const dynamic = "force-dynamic";
+
+// Search engines see each listing as its own page: a specific title, a
+// one-line description, and LocalBusiness structured data so the rating can
+// show up beside the result the way it does for the big review sites.
+export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
+  const { slug } = await params;
+  const b = await prisma.business.findUnique({
+    where: { slug },
+    select: { name: true, city: true, category: true, description: true, scoreAvg: true, scoreCount: true, cuisine: true },
+  });
+  if (!b) return { title: "Not found — True Review" };
+  const rated = b.scoreCount > 0 ? `${b.scoreAvg.toFixed(1)}★ from ${b.scoreCount} review${b.scoreCount === 1 ? "" : "s"}` : "No reviews yet";
+  const what = [b.cuisine, b.category].filter(Boolean).join(" · ");
+  const description = `${b.name} in ${b.city}: ${rated}. ${b.description || `${what}. Anonymous, honest reviews on True Review.`}`.slice(0, 160);
+  return {
+    title: `${b.name} — ${b.city} reviews | True Review`,
+    description,
+    alternates: { canonical: `/business/${slug}` },
+    openGraph: { title: `${b.name}, ${b.city}`, description, type: "website", siteName: "True Review" },
+  };
+}
 
 export default async function BusinessPage({
   params,
@@ -122,8 +145,44 @@ export default async function BusinessPage({
   const openStatus = openStatusLabel(hoursSpans);
   const grouped = groupByDay(hoursSpans);
 
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": isFoodCategory(business.category) ? "Restaurant" : "LocalBusiness",
+    name: business.name,
+    url: `${siteUrl()}/business/${business.slug}`,
+    ...(business.description ? { description: business.description } : {}),
+    ...(business.phone ? { telephone: business.phone } : {}),
+    ...(business.priceLevel > 0 ? { priceRange: PRICE_LABELS[business.priceLevel] } : {}),
+    ...(business.cuisine && isFoodCategory(business.category) ? { servesCuisine: business.cuisine } : {}),
+    address: {
+      "@type": "PostalAddress",
+      ...(business.address ? { streetAddress: business.address } : {}),
+      addressLocality: business.city,
+      ...(business.zip ? { postalCode: business.zip } : {}),
+      addressCountry: "US",
+    },
+    ...(business.lat != null && business.lng != null
+      ? { geo: { "@type": "GeoCoordinates", latitude: business.lat, longitude: business.lng } }
+      : {}),
+    ...(business.scoreCount > 0 && !business.scoreFrozen
+      ? {
+          aggregateRating: {
+            "@type": "AggregateRating",
+            ratingValue: Number(business.scoreAvg.toFixed(1)),
+            reviewCount: business.scoreCount,
+            bestRating: 5,
+            worstRating: 1,
+          },
+        }
+      : {}),
+  };
+
   return (
     <div>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replace(/</g, "\\u003c") }}
+      />
       {posted && (
         <div className="mb-4 bg-brand-50 border border-brand-100 rounded-xl p-4 text-sm">
           <p className="font-medium text-brand-800">✓ Your anonymous review is live.</p>
