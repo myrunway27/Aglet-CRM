@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-09-11T14:08:10.768Z",
+  "generatedAt": "2026-09-12T13:26:19.350Z",
   "policy": "Show listings are copied verbatim from venue websites by this script — no show is ever invented. Tribute labels come from the venue's own text, from a reviewable curated registry of known tribute acts (data/tribute-registry.json), or from another venue's text about the same band — each label names its source.",
   "venues": [
     {
@@ -9,7 +9,7 @@
       "calendarUrl": "https://www.funkybiscuit.com/",
       "status": "ok",
       "method": "seetickets",
-      "fetchedAt": "2026-09-11T14:07:33.738Z",
+      "fetchedAt": "2026-09-12T13:25:35.795Z",
       "showCount": 63,
       "error": null
     },
@@ -20,8 +20,8 @@
       "calendarUrl": "https://www.crazyunclemikes.com/",
       "status": "ok",
       "method": "tribe-rest",
-      "fetchedAt": "2026-09-11T14:07:33.842Z",
-      "showCount": 29,
+      "fetchedAt": "2026-09-12T13:25:35.841Z",
+      "showCount": 28,
       "error": null
     },
     {
@@ -31,7 +31,7 @@
       "calendarUrl": "https://bocablackbox.com/",
       "status": "ok",
       "method": "next-data",
-      "fetchedAt": "2026-09-11T14:07:33.843Z",
+      "fetchedAt": "2026-09-12T13:25:35.842Z",
       "showCount": 23,
       "error": null
     },
@@ -42,7 +42,7 @@
       "calendarUrl": "https://barrelofmonks.com/",
       "status": "ok",
       "method": "tribe-rest",
-      "fetchedAt": "2026-09-11T14:07:33.843Z",
+      "fetchedAt": "2026-09-12T13:25:35.843Z",
       "showCount": 4,
       "error": null
     },
@@ -53,7 +53,7 @@
       "calendarUrl": "https://tinroofdelraybeach.com/calendar/",
       "status": "no-structured-data",
       "method": null,
-      "fetchedAt": "2026-09-11T14:07:33.844Z",
+      "fetchedAt": "2026-09-12T13:25:35.843Z",
       "showCount": 0,
       "error": "Page fetched but no schema.org events or ICS feed found — check the calendar manually."
     },
@@ -64,7 +64,7 @@
       "calendarUrl": "https://www.jointherevolution.net/concerts/",
       "status": "ok",
       "method": "gcal-link",
-      "fetchedAt": "2026-09-11T14:07:33.845Z",
+      "fetchedAt": "2026-09-12T13:25:35.844Z",
       "showCount": 8,
       "error": null
     },
@@ -75,7 +75,7 @@
       "calendarUrl": "https://tinroofftlauderdale.com/calendar/",
       "status": "no-structured-data",
       "method": null,
-      "fetchedAt": "2026-09-11T14:07:33.845Z",
+      "fetchedAt": "2026-09-12T13:25:35.845Z",
       "showCount": 0,
       "error": "Page fetched but no schema.org events or ICS feed found — check the calendar manually."
     },
@@ -86,8 +86,8 @@
       "calendarUrl": "https://tarponriverbrewing.com/",
       "status": "ok",
       "method": "json-ld",
-      "fetchedAt": "2026-09-11T14:07:33.846Z",
-      "showCount": 5,
+      "fetchedAt": "2026-09-12T13:25:35.845Z",
+      "showCount": 4,
       "error": null
     },
     {
@@ -97,7 +97,7 @@
       "calendarUrl": "https://funkybuddhabrewery.com/",
       "status": "no-structured-data",
       "method": null,
-      "fetchedAt": "2026-09-11T14:07:33.846Z",
+      "fetchedAt": "2026-09-12T13:25:35.846Z",
       "showCount": 0,
       "error": "Page fetched but no schema.org events or ICS feed found — check the calendar manually."
     },
@@ -108,8 +108,8 @@
       "calendarUrl": "https://ballandchainmiami.com/upcoming-events/",
       "status": "ok",
       "method": "tribe-rest",
-      "fetchedAt": "2026-09-11T14:07:33.847Z",
-      "showCount": 48,
+      "fetchedAt": "2026-09-12T13:25:35.847Z",
+      "showCount": 47,
       "error": null
     },
     {
@@ -119,7 +119,7 @@
       "calendarUrl": "https://lagniappehouse.com/",
       "status": "no-structured-data",
       "method": null,
-      "fetchedAt": "2026-09-11T14:07:33.848Z",
+      "fetchedAt": "2026-09-12T13:25:35.848Z",
       "showCount": 0,
       "error": "Page fetched but no schema.org events or ICS feed found — check the calendar manually."
     },
@@ -130,7 +130,7 @@
       "calendarUrl": "https://churchillspub.com/",
       "status": "no-structured-data",
       "method": null,
-      "fetchedAt": "2026-09-11T14:07:33.848Z",
+      "fetchedAt": "2026-09-12T13:25:35.848Z",
       "showCount": 0,
       "error": "Page fetched but no schema.org events or ICS feed found — check the calendar manually."
     },
@@ -141,7 +141,7 @@
       "calendarUrl": "https://www.cultureroom.net/",
       "status": "no-structured-data",
       "method": null,
-      "fetchedAt": "2026-09-11T14:07:33.849Z",
+      "fetchedAt": "2026-09-12T13:25:35.848Z",
       "showCount": 0,
       "error": "Page fetched but no schema.org events or ICS feed found — check the calendar manually."
     },
@@ -152,7 +152,7 @@
       "calendarUrl": "https://www.parkerplayhouse.com/",
       "status": "ok",
       "method": "event-date-markup",
-      "fetchedAt": "2026-09-11T14:07:33.849Z",
+      "fetchedAt": "2026-09-12T13:25:35.849Z",
       "showCount": 8,
       "error": null
     },
@@ -163,7 +163,7 @@
       "calendarUrl": "https://www.pompanobeacharts.org/",
       "status": "no-structured-data",
       "method": null,
-      "fetchedAt": "2026-09-11T14:07:33.849Z",
+      "fetchedAt": "2026-09-12T13:25:35.849Z",
       "showCount": 0,
       "error": "Page fetched but no schema.org events or ICS feed found — check the calendar manually."
     },
@@ -174,8 +174,8 @@
       "calendarUrl": "https://artsgarage.org/",
       "status": "ok",
       "method": "tribe-rest",
-      "fetchedAt": "2026-09-11T14:07:33.850Z",
-      "showCount": 50,
+      "fetchedAt": "2026-09-12T13:25:35.849Z",
+      "showCount": 49,
       "error": null
     },
     {
@@ -185,7 +185,7 @@
       "calendarUrl": "https://johnniebrowns.com/",
       "status": "no-structured-data",
       "method": null,
-      "fetchedAt": "2026-09-11T14:07:33.850Z",
+      "fetchedAt": "2026-09-12T13:25:35.850Z",
       "showCount": 0,
       "error": "Page fetched but no schema.org events or ICS feed found — check the calendar manually."
     },
@@ -196,7 +196,7 @@
       "calendarUrl": "https://mathewsbrewing.com/",
       "status": "no-structured-data",
       "method": null,
-      "fetchedAt": "2026-09-11T14:07:33.851Z",
+      "fetchedAt": "2026-09-12T13:25:35.850Z",
       "showCount": 0,
       "error": "Page fetched but no schema.org events or ICS feed found — check the calendar manually."
     },
@@ -205,11 +205,11 @@
       "name": "Respectable Street",
       "city": "West Palm Beach",
       "calendarUrl": "https://respectablestreet.com/",
-      "status": "no-structured-data",
-      "method": null,
-      "fetchedAt": "2026-09-11T14:07:33.851Z",
+      "status": "ok",
+      "method": "json-ld",
+      "fetchedAt": "2026-09-12T13:25:35.850Z",
       "showCount": 0,
-      "error": "Page fetched but no schema.org events or ICS feed found — check the calendar manually."
+      "error": null
     },
     {
       "id": "guanabanas",
@@ -218,120 +218,12 @@
       "calendarUrl": "https://www.guanabanas.com/",
       "status": "no-structured-data",
       "method": null,
-      "fetchedAt": "2026-09-11T14:07:33.851Z",
+      "fetchedAt": "2026-09-12T13:25:35.851Z",
       "showCount": 0,
       "error": "Page fetched but no schema.org events or ICS feed found — check the calendar manually."
     }
   ],
   "shows": [
-    {
-      "id": "the-parker-2026-09-11-the-mavericks-friends",
-      "date": "2026-09-11",
-      "time": null,
-      "band": "The Mavericks & Friends",
-      "venueId": "the-parker",
-      "tributeEvidence": null,
-      "tributeTo": null,
-      "sourceUrl": "https://www.parkerplayhouse.com/events/detail/the-mavericks-2026",
-      "method": "event-date-markup",
-      "fetchedAt": "2026-09-11T14:07:33.849Z"
-    },
-    {
-      "id": "ball-and-chain-2026-09-11-the-ball-chain-trio",
-      "date": "2026-09-11",
-      "time": "12:00",
-      "band": "The Ball & Chain Trio",
-      "venueId": "ball-and-chain",
-      "tributeEvidence": null,
-      "tributeTo": null,
-      "sourceUrl": "https://ballandchainmiami.com/event/the-ball-chain-trio-2-2-2/2026-09-11/",
-      "method": "tribe-rest",
-      "fetchedAt": "2026-09-11T14:07:33.847Z"
-    },
-    {
-      "id": "ball-and-chain-2026-09-11-pineapple-happy-hour",
-      "date": "2026-09-11",
-      "time": "16:00",
-      "band": "Pineapple Happy Hour",
-      "venueId": "ball-and-chain",
-      "tributeEvidence": null,
-      "tributeTo": null,
-      "sourceUrl": "https://ballandchainmiami.com/event/pineapple-happy-hour-09-11-26/",
-      "method": "tribe-rest",
-      "fetchedAt": "2026-09-11T14:07:33.847Z"
-    },
-    {
-      "id": "funky-biscuit-2026-09-11-friday-happy-hour-with-twocan-blue",
-      "date": "2026-09-11",
-      "time": "17:00",
-      "band": "Friday Happy Hour with Twocan Blue",
-      "venueId": "funky-biscuit",
-      "tributeEvidence": null,
-      "tributeTo": null,
-      "sourceUrl": "https://wl.seetickets.us/event/friday-happy-hour-with-twocan-blue/702604?afflky=FunkyBiscuit",
-      "method": "seetickets",
-      "fetchedAt": "2026-09-11T14:07:33.738Z"
-    },
-    {
-      "id": "tarpon-river-2026-09-11-pour-decisions-comedy",
-      "date": "2026-09-11",
-      "time": "20:00",
-      "band": "Pour Decisions Comedy",
-      "venueId": "tarpon-river",
-      "tributeEvidence": null,
-      "tributeTo": null,
-      "sourceUrl": "https://tarponriverbrewing.com/event/pour-decisions-comedy-featuring-headliner-brittany-brave-copy/",
-      "method": "json-ld",
-      "fetchedAt": "2026-09-11T14:07:33.846Z"
-    },
-    {
-      "id": "ball-and-chain-2026-09-11-miami-boheme",
-      "date": "2026-09-11",
-      "time": "20:00",
-      "band": "Miami Boheme",
-      "venueId": "ball-and-chain",
-      "tributeEvidence": null,
-      "tributeTo": null,
-      "sourceUrl": "https://ballandchainmiami.com/event/miami-boheme-09-11-26/",
-      "method": "tribe-rest",
-      "fetchedAt": "2026-09-11T14:07:33.847Z"
-    },
-    {
-      "id": "arts-garage-2026-09-11-the-rumbletones-roots-of-rock-n-roll",
-      "date": "2026-09-11",
-      "time": "20:00",
-      "band": "The Rumbletones Roots of Rock N Roll",
-      "venueId": "arts-garage",
-      "tributeEvidence": "Another Great Tribute Band",
-      "tributeTo": null,
-      "sourceUrl": "https://artsgarage.org/event/the-rumbletones-roots-of-rock-n-roll/",
-      "method": "tribe-rest",
-      "fetchedAt": "2026-09-11T14:07:33.850Z"
-    },
-    {
-      "id": "crazy-uncle-mikes-2026-09-11-hot-brass-band",
-      "date": "2026-09-11",
-      "time": "20:30",
-      "band": "Hot Brass Band",
-      "venueId": "crazy-uncle-mikes",
-      "tributeEvidence": "A Tribute",
-      "tributeTo": null,
-      "sourceUrl": "https://www.eventbrite.com/e/hot-brass-tribute-to-chicago-earth-wind-fire-tickets-1994198614739?aff=oddtdtcreator",
-      "method": "tribe-rest",
-      "fetchedAt": "2026-09-11T14:07:33.842Z"
-    },
-    {
-      "id": "funky-biscuit-2026-09-11-completely-unchained-the-ultimate-van-ha",
-      "date": "2026-09-11",
-      "time": "21:00",
-      "band": "Completely Unchained - The Ultimate Van Halen Tribute",
-      "venueId": "funky-biscuit",
-      "tributeEvidence": "The Ultimate Van Halen Tribute",
-      "tributeTo": "Van Halen",
-      "sourceUrl": "https://wl.seetickets.us/event/completely-unchained-the-ultimate-van-halen-tribute/689745?afflky=FunkyBiscuit",
-      "method": "seetickets",
-      "fetchedAt": "2026-09-11T14:07:33.738Z"
-    },
     {
       "id": "ball-and-chain-2026-09-12-the-ball-chain-trio",
       "date": "2026-09-12",
@@ -342,7 +234,7 @@
       "tributeTo": null,
       "sourceUrl": "https://ballandchainmiami.com/event/the-ball-chain-trio-2-2-2/2026-09-12/",
       "method": "tribe-rest",
-      "fetchedAt": "2026-09-11T14:07:33.847Z"
+      "fetchedAt": "2026-09-12T13:25:35.847Z"
     },
     {
       "id": "funky-biscuit-2026-09-12-led-zep-live-classic-live-zeppelin",
@@ -354,7 +246,7 @@
       "tributeTo": "Led Zeppelin",
       "sourceUrl": "https://wl.seetickets.us/event/led-zep-live-classic-live-zeppelin/702752?afflky=FunkyBiscuit",
       "method": "seetickets",
-      "fetchedAt": "2026-09-11T14:07:33.738Z"
+      "fetchedAt": "2026-09-12T13:25:35.795Z"
     },
     {
       "id": "tarpon-river-2026-09-12-free-live-music-the-18-wheelers",
@@ -366,7 +258,7 @@
       "tributeTo": null,
       "sourceUrl": "https://tarponriverbrewing.com/event/free-live-music-the-18-wheelers/",
       "method": "json-ld",
-      "fetchedAt": "2026-09-11T14:07:33.846Z"
+      "fetchedAt": "2026-09-12T13:25:35.845Z"
     },
     {
       "id": "ball-and-chain-2026-09-12-la-pachanga-",
@@ -378,7 +270,7 @@
       "tributeTo": null,
       "sourceUrl": "https://ballandchainmiami.com/event/la-pachanga-09-12-26/",
       "method": "tribe-rest",
-      "fetchedAt": "2026-09-11T14:07:33.847Z"
+      "fetchedAt": "2026-09-12T13:25:35.847Z"
     },
     {
       "id": "arts-garage-2026-09-12-umoja-mcneish-violins-reimagined-a-night",
@@ -390,7 +282,7 @@
       "tributeTo": null,
       "sourceUrl": "https://artsgarage.org/event/umoja-mcneish-violins-reimagined-a-night-of-music-that-pulls-the-soul/",
       "method": "tribe-rest",
-      "fetchedAt": "2026-09-11T14:07:33.850Z"
+      "fetchedAt": "2026-09-12T13:25:35.849Z"
     },
     {
       "id": "crazy-uncle-mikes-2026-09-12-grateful-all-star-jam",
@@ -402,7 +294,7 @@
       "tributeTo": "Grateful Dead",
       "sourceUrl": "https://www.eventbrite.com/e/grateful-all-star-jam-tickets-1998671028850?aff=oddtdtcreator",
       "method": "tribe-rest",
-      "fetchedAt": "2026-09-11T14:07:33.842Z"
+      "fetchedAt": "2026-09-12T13:25:35.841Z"
     },
     {
       "id": "the-parker-2026-09-13-seraphic-fire-pure-imagination",
@@ -414,7 +306,7 @@
       "tributeTo": null,
       "sourceUrl": "https://www.parkerplayhouse.com/events/detail/seraphic-fire-2026",
       "method": "event-date-markup",
-      "fetchedAt": "2026-09-11T14:07:33.849Z"
+      "fetchedAt": "2026-09-12T13:25:35.849Z"
     },
     {
       "id": "crazy-uncle-mikes-2026-09-13-nfl-football-sundays",
@@ -426,7 +318,7 @@
       "tributeTo": null,
       "sourceUrl": "https://crazyunclemikes.com/event/nfl-football-sundays/",
       "method": "tribe-rest",
-      "fetchedAt": "2026-09-11T14:07:33.842Z"
+      "fetchedAt": "2026-09-12T13:25:35.841Z"
     },
     {
       "id": "ball-and-chain-2026-09-13-the-ball-chain-trio",
@@ -438,7 +330,7 @@
       "tributeTo": null,
       "sourceUrl": "https://ballandchainmiami.com/event/the-ball-chain-trio-2-2-2/2026-09-13/",
       "method": "tribe-rest",
-      "fetchedAt": "2026-09-11T14:07:33.847Z"
+      "fetchedAt": "2026-09-12T13:25:35.847Z"
     },
     {
       "id": "ball-and-chain-2026-09-13-matine-cubana",
@@ -450,7 +342,7 @@
       "tributeTo": null,
       "sourceUrl": "https://ballandchainmiami.com/event/matine-cubana-09-13-26/",
       "method": "tribe-rest",
-      "fetchedAt": "2026-09-11T14:07:33.847Z"
+      "fetchedAt": "2026-09-12T13:25:35.847Z"
     },
     {
       "id": "funky-biscuit-2026-09-13-peter-white-5-30pm-show-",
@@ -462,7 +354,7 @@
       "tributeTo": null,
       "sourceUrl": "https://wl.seetickets.us/event/peter-white-530pm-show/698643?afflky=FunkyBiscuit",
       "method": "seetickets",
-      "fetchedAt": "2026-09-11T14:07:33.738Z"
+      "fetchedAt": "2026-09-12T13:25:35.795Z"
     },
     {
       "id": "crazy-uncle-mikes-2026-09-13-crazy-fingers",
@@ -474,7 +366,7 @@
       "tributeTo": "Grateful Dead",
       "sourceUrl": "https://www.eventbrite.com/e/crazy-fingers-tickets-1998658921637?aff=oddtdtcreator",
       "method": "tribe-rest",
-      "fetchedAt": "2026-09-11T14:07:33.842Z"
+      "fetchedAt": "2026-09-12T13:25:35.841Z"
     },
     {
       "id": "ball-and-chain-2026-09-13-salsero-sundays",
@@ -486,7 +378,7 @@
       "tributeTo": null,
       "sourceUrl": "https://ballandchainmiami.com/event/salsero-sundays/",
       "method": "tribe-rest",
-      "fetchedAt": "2026-09-11T14:07:33.847Z"
+      "fetchedAt": "2026-09-12T13:25:35.847Z"
     },
     {
       "id": "funky-biscuit-2026-09-13-peter-white-8-30pm-show-",
@@ -498,7 +390,7 @@
       "tributeTo": null,
       "sourceUrl": "https://wl.seetickets.us/event/peter-white-830pm-show/698646?afflky=FunkyBiscuit",
       "method": "seetickets",
-      "fetchedAt": "2026-09-11T14:07:33.738Z"
+      "fetchedAt": "2026-09-12T13:25:35.795Z"
     },
     {
       "id": "ball-and-chain-2026-09-14-the-ball-chain-trio",
@@ -510,7 +402,7 @@
       "tributeTo": null,
       "sourceUrl": "https://ballandchainmiami.com/event/the-ball-chain-trio-2-2-2/2026-09-14/",
       "method": "tribe-rest",
-      "fetchedAt": "2026-09-11T14:07:33.847Z"
+      "fetchedAt": "2026-09-12T13:25:35.847Z"
     },
     {
       "id": "ball-and-chain-2026-09-14-live-jazz-with-tal-cohen",
@@ -522,7 +414,7 @@
       "tributeTo": null,
       "sourceUrl": "https://ballandchainmiami.com/event/live-jazz-with-tal-cohen/2026-09-14/",
       "method": "tribe-rest",
-      "fetchedAt": "2026-09-11T14:07:33.847Z"
+      "fetchedAt": "2026-09-12T13:25:35.847Z"
     },
     {
       "id": "funky-biscuit-2026-09-14-biscuit-jam-featuring-the-funky-biscuit-",
@@ -534,7 +426,7 @@
       "tributeTo": null,
       "sourceUrl": "https://wl.seetickets.us/event/biscuit-jam-featuring-the-funky-biscuit-all-stars/703037?afflky=FunkyBiscuit",
       "method": "seetickets",
-      "fetchedAt": "2026-09-11T14:07:33.738Z"
+      "fetchedAt": "2026-09-12T13:25:35.795Z"
     },
     {
       "id": "crazy-uncle-mikes-2026-09-14-country-night-boot-scootin-boogie",
@@ -546,7 +438,7 @@
       "tributeTo": null,
       "sourceUrl": "https://crazyunclemikes.com/event/country-night-boot-scootin-boogie-2/2026-09-14/",
       "method": "tribe-rest",
-      "fetchedAt": "2026-09-11T14:07:33.842Z"
+      "fetchedAt": "2026-09-12T13:25:35.841Z"
     },
     {
       "id": "barrel-of-monks-2026-09-14-messin-with-movies-september-14th-",
@@ -558,7 +450,7 @@
       "tributeTo": null,
       "sourceUrl": "https://shop.barrelofmonks.com/products/messin-with-movies",
       "method": "tribe-rest",
-      "fetchedAt": "2026-09-11T14:07:33.843Z"
+      "fetchedAt": "2026-09-12T13:25:35.843Z"
     },
     {
       "id": "ball-and-chain-2026-09-14-mambo-mondays",
@@ -570,7 +462,7 @@
       "tributeTo": null,
       "sourceUrl": "https://ballandchainmiami.com/event/mambo-mondays-09-14-26/",
       "method": "tribe-rest",
-      "fetchedAt": "2026-09-11T14:07:33.847Z"
+      "fetchedAt": "2026-09-12T13:25:35.847Z"
     },
     {
       "id": "the-parker-2026-09-15-robin-trower",
@@ -582,7 +474,7 @@
       "tributeTo": null,
       "sourceUrl": "https://www.parkerplayhouse.com/events/detail/robin-trower-2026",
       "method": "event-date-markup",
-      "fetchedAt": "2026-09-11T14:07:33.849Z"
+      "fetchedAt": "2026-09-12T13:25:35.849Z"
     },
     {
       "id": "arts-garage-2026-09-15-senior-series-improv-with-micah-stinton",
@@ -592,9 +484,9 @@
       "venueId": "arts-garage",
       "tributeEvidence": null,
       "tributeTo": null,
-      "sourceUrl": "https://artsgarage.org/event/senior-series-improv-with-micah-stinton/2026-09-15/",
+      "sourceUrl": "https://artsgarage.org/event/senior-series-improv-with-micah-stinton-2/2026-09-15/",
       "method": "tribe-rest",
-      "fetchedAt": "2026-09-11T14:07:33.850Z"
+      "fetchedAt": "2026-09-12T13:25:35.849Z"
     },
     {
       "id": "ball-and-chain-2026-09-15-the-ball-chain-trio",
@@ -606,7 +498,7 @@
       "tributeTo": null,
       "sourceUrl": "https://ballandchainmiami.com/event/the-ball-chain-trio-2-2-2/2026-09-15/",
       "method": "tribe-rest",
-      "fetchedAt": "2026-09-11T14:07:33.847Z"
+      "fetchedAt": "2026-09-12T13:25:35.847Z"
     },
     {
       "id": "ball-and-chain-2026-09-15-live-jazz-with-calixto-oviedo",
@@ -618,7 +510,7 @@
       "tributeTo": null,
       "sourceUrl": "https://ballandchainmiami.com/event/live-jazz-with-calixto-oviedo/2026-09-15/",
       "method": "tribe-rest",
-      "fetchedAt": "2026-09-11T14:07:33.847Z"
+      "fetchedAt": "2026-09-12T13:25:35.847Z"
     },
     {
       "id": "funky-biscuit-2026-09-15-jammin-taco-tuesday-featuring-crazy-fing",
@@ -630,7 +522,7 @@
       "tributeTo": "Grateful Dead",
       "sourceUrl": "https://wl.seetickets.us/event/jammin-taco-tuesday-featuring-crazy-fingers/703476?afflky=FunkyBiscuit",
       "method": "seetickets",
-      "fetchedAt": "2026-09-11T14:07:33.738Z"
+      "fetchedAt": "2026-09-12T13:25:35.795Z"
     },
     {
       "id": "crazy-uncle-mikes-2026-09-15-taco-tuesday-latin-night-",
@@ -642,7 +534,7 @@
       "tributeTo": null,
       "sourceUrl": "https://crazyunclemikes.com/event/taco-tuesday-3/2026-09-15/",
       "method": "tribe-rest",
-      "fetchedAt": "2026-09-11T14:07:33.842Z"
+      "fetchedAt": "2026-09-12T13:25:35.841Z"
     },
     {
       "id": "ball-and-chain-2026-09-15-bachatuesday",
@@ -654,7 +546,7 @@
       "tributeTo": null,
       "sourceUrl": "https://ballandchainmiami.com/event/bachatuesday-09-15-26/",
       "method": "tribe-rest",
-      "fetchedAt": "2026-09-11T14:07:33.847Z"
+      "fetchedAt": "2026-09-12T13:25:35.847Z"
     },
     {
       "id": "arts-garage-2026-09-15-spoken-word-open-mic-poetry-storytelling",
@@ -666,7 +558,7 @@
       "tributeTo": null,
       "sourceUrl": "https://artsgarage.org/event/spoken-word-open-mic-poetry-storytelling-lyrics/2026-09-15/",
       "method": "tribe-rest",
-      "fetchedAt": "2026-09-11T14:07:33.850Z"
+      "fetchedAt": "2026-09-12T13:25:35.849Z"
     },
     {
       "id": "ball-and-chain-2026-09-16-the-ball-chain-trio",
@@ -678,7 +570,7 @@
       "tributeTo": null,
       "sourceUrl": "https://ballandchainmiami.com/event/the-ball-chain-trio-2-2-2/2026-09-16/",
       "method": "tribe-rest",
-      "fetchedAt": "2026-09-11T14:07:33.847Z"
+      "fetchedAt": "2026-09-12T13:25:35.847Z"
     },
     {
       "id": "crazy-uncle-mikes-2026-09-16-the-flyers",
@@ -690,7 +582,7 @@
       "tributeTo": null,
       "sourceUrl": "https://www.eventbrite.com/e/the-flyers-tickets-1998671577491?aff=oddtdtcreator",
       "method": "tribe-rest",
-      "fetchedAt": "2026-09-11T14:07:33.842Z"
+      "fetchedAt": "2026-09-12T13:25:35.841Z"
     },
     {
       "id": "funky-biscuit-2026-09-16-the-expanding-man-an-original-tribute-to",
@@ -702,7 +594,7 @@
       "tributeTo": "Steely Dan & Beyond",
       "sourceUrl": "https://wl.seetickets.us/event/the-expanding-man-an-original-tribute-to-the-music-of-st/693210?afflky=FunkyBiscuit",
       "method": "seetickets",
-      "fetchedAt": "2026-09-11T14:07:33.738Z"
+      "fetchedAt": "2026-09-12T13:25:35.795Z"
     },
     {
       "id": "ball-and-chain-2026-09-16-sabor-wednesday",
@@ -714,7 +606,7 @@
       "tributeTo": null,
       "sourceUrl": "https://ballandchainmiami.com/event/sabor-wednesday-09-16-2026/",
       "method": "tribe-rest",
-      "fetchedAt": "2026-09-11T14:07:33.847Z"
+      "fetchedAt": "2026-09-12T13:25:35.847Z"
     },
     {
       "id": "ball-and-chain-2026-09-17-the-ball-chain-trio",
@@ -726,7 +618,7 @@
       "tributeTo": null,
       "sourceUrl": "https://ballandchainmiami.com/event/the-ball-chain-trio-2-2-2/2026-09-17/",
       "method": "tribe-rest",
-      "fetchedAt": "2026-09-11T14:07:33.847Z"
+      "fetchedAt": "2026-09-12T13:25:35.847Z"
     },
     {
       "id": "funky-biscuit-2026-09-17-an-evening-with-tinsley-ellis-with-speci",
@@ -738,7 +630,7 @@
       "tributeTo": null,
       "sourceUrl": "https://wl.seetickets.us/event/an-evening-with-tinsley-ellis-with-special-guest-eliza-neals/696645?afflky=FunkyBiscuit",
       "method": "seetickets",
-      "fetchedAt": "2026-09-11T14:07:33.738Z"
+      "fetchedAt": "2026-09-12T13:25:35.795Z"
     },
     {
       "id": "crazy-uncle-mikes-2026-09-17-evolution",
@@ -750,7 +642,7 @@
       "tributeTo": null,
       "sourceUrl": "https://www.eventbrite.com/e/evolution-tickets-1980916588842?aff=oddtdtcreator",
       "method": "tribe-rest",
-      "fetchedAt": "2026-09-11T14:07:33.842Z"
+      "fetchedAt": "2026-09-12T13:25:35.841Z"
     },
     {
       "id": "boca-black-box-2026-09-17-all-arts-open-mic-night",
@@ -762,7 +654,7 @@
       "tributeTo": null,
       "sourceUrl": "http://bocablackbox.showare.com/AllArtsOpenMicNightBox20",
       "method": "next-data",
-      "fetchedAt": "2026-09-11T14:07:33.843Z"
+      "fetchedAt": "2026-09-12T13:25:35.842Z"
     },
     {
       "id": "ball-and-chain-2026-09-17-little-havana-under-the-stars",
@@ -774,7 +666,7 @@
       "tributeTo": null,
       "sourceUrl": "https://ballandchainmiami.com/event/little-havana-under-stars-09-17-2026/",
       "method": "tribe-rest",
-      "fetchedAt": "2026-09-11T14:07:33.847Z"
+      "fetchedAt": "2026-09-12T13:25:35.847Z"
     },
     {
       "id": "ball-and-chain-2026-09-18-the-ball-chain-trio",
@@ -786,7 +678,7 @@
       "tributeTo": null,
       "sourceUrl": "https://ballandchainmiami.com/event/the-ball-chain-trio-2-2-2/2026-09-18/",
       "method": "tribe-rest",
-      "fetchedAt": "2026-09-11T14:07:33.847Z"
+      "fetchedAt": "2026-09-12T13:25:35.847Z"
     },
     {
       "id": "ball-and-chain-2026-09-18-pineapple-happy-hour-",
@@ -798,7 +690,7 @@
       "tributeTo": null,
       "sourceUrl": "https://ballandchainmiami.com/event/pineapple-happy-hour-09-18-26/",
       "method": "tribe-rest",
-      "fetchedAt": "2026-09-11T14:07:33.847Z"
+      "fetchedAt": "2026-09-12T13:25:35.847Z"
     },
     {
       "id": "funky-biscuit-2026-09-18-friday-happy-hour-with-twocan-blue",
@@ -810,7 +702,7 @@
       "tributeTo": null,
       "sourceUrl": "https://wl.seetickets.us/event/friday-happy-hour-with-twocan-blue/702607?afflky=FunkyBiscuit",
       "method": "seetickets",
-      "fetchedAt": "2026-09-11T14:07:33.738Z"
+      "fetchedAt": "2026-09-12T13:25:35.795Z"
     },
     {
       "id": "tarpon-river-2026-09-18-free-live-music-julia-avery",
@@ -822,19 +714,7 @@
       "tributeTo": null,
       "sourceUrl": "https://tarponriverbrewing.com/event/free-live-music-julia-avery-4/",
       "method": "json-ld",
-      "fetchedAt": "2026-09-11T14:07:33.846Z"
-    },
-    {
-      "id": "revolution-live-2026-09-18-yg-the-gentlemen-s-club-tour",
-      "date": "2026-09-18",
-      "time": "19:00",
-      "band": "YG: The Gentlemen's Club Tour",
-      "venueId": "revolution-live",
-      "tributeEvidence": null,
-      "tributeTo": null,
-      "sourceUrl": "https://www.jointherevolution.net/concerts/yg/",
-      "method": "gcal-link",
-      "fetchedAt": "2026-09-11T14:07:33.845Z"
+      "fetchedAt": "2026-09-12T13:25:35.845Z"
     },
     {
       "id": "ball-and-chain-2026-09-18-miami-boheme",
@@ -846,7 +726,7 @@
       "tributeTo": null,
       "sourceUrl": "https://ballandchainmiami.com/event/miami-boheme-09-18-26/",
       "method": "tribe-rest",
-      "fetchedAt": "2026-09-11T14:07:33.847Z"
+      "fetchedAt": "2026-09-12T13:25:35.847Z"
     },
     {
       "id": "crazy-uncle-mikes-2026-09-18-still-standing-elton-john-tribute",
@@ -858,7 +738,7 @@
       "tributeTo": "Elton John",
       "sourceUrl": "https://www.eventbrite.com/e/still-standing-elton-john-tribute-tickets-1998930896120?aff=oddtdtcreator",
       "method": "tribe-rest",
-      "fetchedAt": "2026-09-11T14:07:33.842Z"
+      "fetchedAt": "2026-09-12T13:25:35.841Z"
     },
     {
       "id": "funky-biscuit-2026-09-18-the-boss-project-the-premier-bruce-sprin",
@@ -870,7 +750,7 @@
       "tributeTo": "Bruce Springsteen",
       "sourceUrl": "https://wl.seetickets.us/event/the-boss-project-the-premier-bruce-springsteen-tribute-band/699236?afflky=FunkyBiscuit",
       "method": "seetickets",
-      "fetchedAt": "2026-09-11T14:07:33.738Z"
+      "fetchedAt": "2026-09-12T13:25:35.795Z"
     },
     {
       "id": "ball-and-chain-2026-09-19-the-ball-chain-trio",
@@ -882,7 +762,7 @@
       "tributeTo": null,
       "sourceUrl": "https://ballandchainmiami.com/event/the-ball-chain-trio-2-2-2/2026-09-19/",
       "method": "tribe-rest",
-      "fetchedAt": "2026-09-11T14:07:33.847Z"
+      "fetchedAt": "2026-09-12T13:25:35.847Z"
     },
     {
       "id": "barrel-of-monks-2026-09-19-comedy-night-double-feature-saturday-sep",
@@ -894,7 +774,7 @@
       "tributeTo": null,
       "sourceUrl": "https://shop.barrelofmonks.com/products/comedy-night-double-feature-saturday-september-19th",
       "method": "tribe-rest",
-      "fetchedAt": "2026-09-11T14:07:33.843Z"
+      "fetchedAt": "2026-09-12T13:25:35.843Z"
     },
     {
       "id": "funky-biscuit-2026-09-19-dyer-davis",
@@ -906,7 +786,7 @@
       "tributeTo": null,
       "sourceUrl": "https://wl.seetickets.us/event/dyer-davis/702235?afflky=FunkyBiscuit",
       "method": "seetickets",
-      "fetchedAt": "2026-09-11T14:07:33.738Z"
+      "fetchedAt": "2026-09-12T13:25:35.795Z"
     },
     {
       "id": "tarpon-river-2026-09-19-free-live-music-o-om-the-grey-tones",
@@ -918,7 +798,7 @@
       "tributeTo": null,
       "sourceUrl": "https://tarponriverbrewing.com/event/free-live-music-o-om-the-grey-tones/",
       "method": "json-ld",
-      "fetchedAt": "2026-09-11T14:07:33.846Z"
+      "fetchedAt": "2026-09-12T13:25:35.845Z"
     },
     {
       "id": "ball-and-chain-2026-09-19-la-pachanga",
@@ -930,7 +810,7 @@
       "tributeTo": null,
       "sourceUrl": "https://ballandchainmiami.com/event/la-pachanga-09-19-2026/",
       "method": "tribe-rest",
-      "fetchedAt": "2026-09-11T14:07:33.847Z"
+      "fetchedAt": "2026-09-12T13:25:35.847Z"
     },
     {
       "id": "arts-garage-2026-09-19-hendrik-meurkens-samba-jazz-quartet",
@@ -942,7 +822,7 @@
       "tributeTo": null,
       "sourceUrl": "https://artsgarage.org/event/hendrik-meurkens-samba-jazz-quartet/",
       "method": "tribe-rest",
-      "fetchedAt": "2026-09-11T14:07:33.850Z"
+      "fetchedAt": "2026-09-12T13:25:35.849Z"
     },
     {
       "id": "crazy-uncle-mikes-2026-09-19-a-beer-for-my-horses-a-toby-keith-tribut",
@@ -954,7 +834,7 @@
       "tributeTo": "Toby Keith",
       "sourceUrl": "https://www.eventbrite.com/e/beer-for-my-horses-a-toby-keith-tribute-tickets-1998644143435?aff=oddtdtcreator",
       "method": "tribe-rest",
-      "fetchedAt": "2026-09-11T14:07:33.842Z"
+      "fetchedAt": "2026-09-12T13:25:35.841Z"
     },
     {
       "id": "revolution-live-2026-09-19-emo-night-brooklyn",
@@ -966,7 +846,7 @@
       "tributeTo": null,
       "sourceUrl": "https://www.jointherevolution.net/concerts/emo-night-brooklyn-10/",
       "method": "gcal-link",
-      "fetchedAt": "2026-09-11T14:07:33.845Z"
+      "fetchedAt": "2026-09-12T13:25:35.844Z"
     },
     {
       "id": "tarpon-river-2026-09-20-flamingo-flea-at-tarpon-river-brewing",
@@ -978,7 +858,7 @@
       "tributeTo": null,
       "sourceUrl": "https://tarponriverbrewing.com/event/flamingo-flea-at-tarpon-river-brewing-2/",
       "method": "json-ld",
-      "fetchedAt": "2026-09-11T14:07:33.846Z"
+      "fetchedAt": "2026-09-12T13:25:35.845Z"
     },
     {
       "id": "ball-and-chain-2026-09-20-the-ball-chain-trio",
@@ -990,7 +870,7 @@
       "tributeTo": null,
       "sourceUrl": "https://ballandchainmiami.com/event/the-ball-chain-trio-2-2-2/2026-09-20/",
       "method": "tribe-rest",
-      "fetchedAt": "2026-09-11T14:07:33.847Z"
+      "fetchedAt": "2026-09-12T13:25:35.847Z"
     },
     {
       "id": "ball-and-chain-2026-09-20-matine-cubana",
@@ -1002,7 +882,7 @@
       "tributeTo": null,
       "sourceUrl": "https://ballandchainmiami.com/event/matine-cubana-09-20-26/",
       "method": "tribe-rest",
-      "fetchedAt": "2026-09-11T14:07:33.847Z"
+      "fetchedAt": "2026-09-12T13:25:35.847Z"
     },
     {
       "id": "crazy-uncle-mikes-2026-09-20-lather-up",
@@ -1014,7 +894,7 @@
       "tributeTo": null,
       "sourceUrl": "https://crazyunclemikes.com/event/lather-up/",
       "method": "tribe-rest",
-      "fetchedAt": "2026-09-11T14:07:33.842Z"
+      "fetchedAt": "2026-09-12T13:25:35.841Z"
     },
     {
       "id": "ball-and-chain-2026-09-20-salsero-sundays",
@@ -1026,7 +906,7 @@
       "tributeTo": null,
       "sourceUrl": "https://ballandchainmiami.com/event/salsero-sundays-09-20-2026/",
       "method": "tribe-rest",
-      "fetchedAt": "2026-09-11T14:07:33.847Z"
+      "fetchedAt": "2026-09-12T13:25:35.847Z"
     },
     {
       "id": "ball-and-chain-2026-09-21-the-ball-chain-trio",
@@ -1038,7 +918,7 @@
       "tributeTo": null,
       "sourceUrl": "https://ballandchainmiami.com/event/the-ball-chain-trio-2-2-2/2026-09-21/",
       "method": "tribe-rest",
-      "fetchedAt": "2026-09-11T14:07:33.847Z"
+      "fetchedAt": "2026-09-12T13:25:35.847Z"
     },
     {
       "id": "ball-and-chain-2026-09-21-live-jazz-with-tal-cohen",
@@ -1050,7 +930,7 @@
       "tributeTo": null,
       "sourceUrl": "https://ballandchainmiami.com/event/live-jazz-with-tal-cohen/2026-09-21/",
       "method": "tribe-rest",
-      "fetchedAt": "2026-09-11T14:07:33.847Z"
+      "fetchedAt": "2026-09-12T13:25:35.847Z"
     },
     {
       "id": "funky-biscuit-2026-09-21-biscuit-jam-featuring-the-funky-biscuit-",
@@ -1062,7 +942,7 @@
       "tributeTo": null,
       "sourceUrl": "https://wl.seetickets.us/event/biscuit-jam-featuring-the-funky-biscuit-all-stars/703038?afflky=FunkyBiscuit",
       "method": "seetickets",
-      "fetchedAt": "2026-09-11T14:07:33.738Z"
+      "fetchedAt": "2026-09-12T13:25:35.795Z"
     },
     {
       "id": "crazy-uncle-mikes-2026-09-21-country-night-boot-scootin-boogie",
@@ -1074,7 +954,7 @@
       "tributeTo": null,
       "sourceUrl": "https://crazyunclemikes.com/event/country-night-boot-scootin-boogie-2/2026-09-21/",
       "method": "tribe-rest",
-      "fetchedAt": "2026-09-11T14:07:33.842Z"
+      "fetchedAt": "2026-09-12T13:25:35.841Z"
     },
     {
       "id": "ball-and-chain-2026-09-22-the-ball-chain-trio",
@@ -1086,7 +966,7 @@
       "tributeTo": null,
       "sourceUrl": "https://ballandchainmiami.com/event/the-ball-chain-trio-2-2-2/2026-09-22/",
       "method": "tribe-rest",
-      "fetchedAt": "2026-09-11T14:07:33.847Z"
+      "fetchedAt": "2026-09-12T13:25:35.847Z"
     },
     {
       "id": "ball-and-chain-2026-09-22-live-jazz-with-calixto-oviedo",
@@ -1098,7 +978,7 @@
       "tributeTo": null,
       "sourceUrl": "https://ballandchainmiami.com/event/live-jazz-with-calixto-oviedo/2026-09-22/",
       "method": "tribe-rest",
-      "fetchedAt": "2026-09-11T14:07:33.847Z"
+      "fetchedAt": "2026-09-12T13:25:35.847Z"
     },
     {
       "id": "funky-biscuit-2026-09-22-jammin-taco-tuesday-featuring-crazy-fing",
@@ -1110,7 +990,7 @@
       "tributeTo": "Grateful Dead",
       "sourceUrl": "https://wl.seetickets.us/event/jammin-taco-tuesday-featuring-crazy-fingers/703478?afflky=FunkyBiscuit",
       "method": "seetickets",
-      "fetchedAt": "2026-09-11T14:07:33.738Z"
+      "fetchedAt": "2026-09-12T13:25:35.795Z"
     },
     {
       "id": "revolution-live-2026-09-22-michael-franti-trio-heartstrings-dynamit",
@@ -1122,7 +1002,7 @@
       "tributeTo": null,
       "sourceUrl": "https://www.jointherevolution.net/concerts/michael-franti-trio-heartstrings-dynamite/",
       "method": "gcal-link",
-      "fetchedAt": "2026-09-11T14:07:33.845Z"
+      "fetchedAt": "2026-09-12T13:25:35.844Z"
     },
     {
       "id": "crazy-uncle-mikes-2026-09-22-taco-tuesday-latin-night-",
@@ -1134,7 +1014,7 @@
       "tributeTo": null,
       "sourceUrl": "https://crazyunclemikes.com/event/taco-tuesday-3/2026-09-22/",
       "method": "tribe-rest",
-      "fetchedAt": "2026-09-11T14:07:33.842Z"
+      "fetchedAt": "2026-09-12T13:25:35.841Z"
     },
     {
       "id": "ball-and-chain-2026-09-23-the-ball-chain-trio",
@@ -1146,7 +1026,7 @@
       "tributeTo": null,
       "sourceUrl": "https://ballandchainmiami.com/event/the-ball-chain-trio-2-2-2/2026-09-23/",
       "method": "tribe-rest",
-      "fetchedAt": "2026-09-11T14:07:33.847Z"
+      "fetchedAt": "2026-09-12T13:25:35.847Z"
     },
     {
       "id": "funky-biscuit-2026-09-23-mark-telesca-band",
@@ -1158,7 +1038,7 @@
       "tributeTo": null,
       "sourceUrl": "https://wl.seetickets.us/event/mark-telesca-band/699652?afflky=FunkyBiscuit",
       "method": "seetickets",
-      "fetchedAt": "2026-09-11T14:07:33.738Z"
+      "fetchedAt": "2026-09-12T13:25:35.795Z"
     },
     {
       "id": "arts-garage-2026-09-24-senior-series-groove-with-karen-king",
@@ -1168,9 +1048,9 @@
       "venueId": "arts-garage",
       "tributeEvidence": null,
       "tributeTo": null,
-      "sourceUrl": "https://artsgarage.org/event/senior-series-groove-with-karen-king/2026-09-24/",
+      "sourceUrl": "https://artsgarage.org/event/senior-series-groove-with-karen-king-2/2026-09-24/",
       "method": "tribe-rest",
-      "fetchedAt": "2026-09-11T14:07:33.850Z"
+      "fetchedAt": "2026-09-12T13:25:35.849Z"
     },
     {
       "id": "ball-and-chain-2026-09-24-the-ball-chain-trio",
@@ -1182,7 +1062,7 @@
       "tributeTo": null,
       "sourceUrl": "https://ballandchainmiami.com/event/the-ball-chain-trio-2-2-2/2026-09-24/",
       "method": "tribe-rest",
-      "fetchedAt": "2026-09-11T14:07:33.847Z"
+      "fetchedAt": "2026-09-12T13:25:35.847Z"
     },
     {
       "id": "barrel-of-monks-2026-09-24-acs-trivia-thursday-september-24th-",
@@ -1194,7 +1074,7 @@
       "tributeTo": null,
       "sourceUrl": "https://shop.barrelofmonks.com/products/acs-trivia-thursday-september-24th",
       "method": "tribe-rest",
-      "fetchedAt": "2026-09-11T14:07:33.843Z"
+      "fetchedAt": "2026-09-12T13:25:35.843Z"
     },
     {
       "id": "boca-black-box-2026-09-24-women-on-fire",
@@ -1206,7 +1086,7 @@
       "tributeTo": null,
       "sourceUrl": "https://bocablackbox.showare.com/orderticketsvenue.asp?p=5634",
       "method": "next-data",
-      "fetchedAt": "2026-09-11T14:07:33.843Z"
+      "fetchedAt": "2026-09-12T13:25:35.842Z"
     },
     {
       "id": "ball-and-chain-2026-09-25-the-ball-chain-trio",
@@ -1218,7 +1098,7 @@
       "tributeTo": null,
       "sourceUrl": "https://ballandchainmiami.com/event/the-ball-chain-trio-2-2-2/2026-09-25/",
       "method": "tribe-rest",
-      "fetchedAt": "2026-09-11T14:07:33.847Z"
+      "fetchedAt": "2026-09-12T13:25:35.847Z"
     },
     {
       "id": "funky-biscuit-2026-09-25-friday-happy-hour-with-twocan-blue",
@@ -1230,7 +1110,7 @@
       "tributeTo": null,
       "sourceUrl": "https://wl.seetickets.us/event/friday-happy-hour-with-twocan-blue/702608?afflky=FunkyBiscuit",
       "method": "seetickets",
-      "fetchedAt": "2026-09-11T14:07:33.738Z"
+      "fetchedAt": "2026-09-12T13:25:35.795Z"
     },
     {
       "id": "revolution-live-2026-09-25--overtonight-",
@@ -1242,7 +1122,7 @@
       "tributeTo": null,
       "sourceUrl": "https://www.jointherevolution.net/concerts/overtonight/",
       "method": "gcal-link",
-      "fetchedAt": "2026-09-11T14:07:33.845Z"
+      "fetchedAt": "2026-09-12T13:25:35.844Z"
     },
     {
       "id": "boca-black-box-2026-09-25-a-tribute-to-doobie-brothers-and-steve-m",
@@ -1254,7 +1134,7 @@
       "tributeTo": "Doobie Brothers and Steve Miller",
       "sourceUrl": "https://bocablackbox.showare.com/orderticketsvenue.asp?p=5201",
       "method": "next-data-paged",
-      "fetchedAt": "2026-09-11T14:07:33.843Z"
+      "fetchedAt": "2026-09-12T13:25:35.842Z"
     },
     {
       "id": "arts-garage-2026-09-25-an-evening-with-jarred-armstrong",
@@ -1266,7 +1146,7 @@
       "tributeTo": null,
       "sourceUrl": "https://artsgarage.org/event/an-evening-with-jarred-armstrong/",
       "method": "tribe-rest",
-      "fetchedAt": "2026-09-11T14:07:33.850Z"
+      "fetchedAt": "2026-09-12T13:25:35.849Z"
     },
     {
       "id": "funky-biscuit-2026-09-25-damon-fowler",
@@ -1278,7 +1158,7 @@
       "tributeTo": null,
       "sourceUrl": "https://wl.seetickets.us/event/damon-fowler-group/691366?afflky=FunkyBiscuit",
       "method": "seetickets",
-      "fetchedAt": "2026-09-11T14:07:33.738Z"
+      "fetchedAt": "2026-09-12T13:25:35.795Z"
     },
     {
       "id": "the-parker-2026-09-26-miamibloco-from-the-streets-to-the-stage",
@@ -1290,7 +1170,7 @@
       "tributeTo": null,
       "sourceUrl": "https://www.parkerplayhouse.com/events/detail/miamibloco-2026",
       "method": "event-date-markup",
-      "fetchedAt": "2026-09-11T14:07:33.849Z"
+      "fetchedAt": "2026-09-12T13:25:35.849Z"
     },
     {
       "id": "ball-and-chain-2026-09-26-the-ball-chain-trio",
@@ -1302,7 +1182,7 @@
       "tributeTo": null,
       "sourceUrl": "https://ballandchainmiami.com/event/the-ball-chain-trio-2-2-2/2026-09-26/",
       "method": "tribe-rest",
-      "fetchedAt": "2026-09-11T14:07:33.847Z"
+      "fetchedAt": "2026-09-12T13:25:35.847Z"
     },
     {
       "id": "funky-biscuit-2026-09-26-brian-simpson-6pm-show-",
@@ -1314,7 +1194,7 @@
       "tributeTo": null,
       "sourceUrl": "https://wl.seetickets.us/event/brian-simpson-6pm-show/683293?afflky=FunkyBiscuit",
       "method": "seetickets",
-      "fetchedAt": "2026-09-11T14:07:33.738Z"
+      "fetchedAt": "2026-09-12T13:25:35.795Z"
     },
     {
       "id": "barrel-of-monks-2026-09-26-the-listening-room-saturday-september-26",
@@ -1326,7 +1206,7 @@
       "tributeTo": null,
       "sourceUrl": "https://shop.barrelofmonks.com/products/the-listening-room-saturday-september-26th",
       "method": "tribe-rest",
-      "fetchedAt": "2026-09-11T14:07:33.843Z"
+      "fetchedAt": "2026-09-12T13:25:35.843Z"
     },
     {
       "id": "arts-garage-2026-09-26-lovecats-notorious-a-tribute-to-the-cure",
@@ -1338,7 +1218,7 @@
       "tributeTo": "The Cure & Duran Duran",
       "sourceUrl": "https://artsgarage.org/event/lovecats-the-cure-tribute-and-notorious-the-duran-duran-tribute/",
       "method": "tribe-rest",
-      "fetchedAt": "2026-09-11T14:07:33.850Z"
+      "fetchedAt": "2026-09-12T13:25:35.849Z"
     },
     {
       "id": "crazy-uncle-mikes-2026-09-26-unlimited-devotion-mark-d-acunto-celebra",
@@ -1350,7 +1230,7 @@
       "tributeTo": "Grateful Dead",
       "sourceUrl": "https://www.eventbrite.com/e/unlimited-devotion-mark-dacunto-celebration-of-life-tickets-1998658872490?aff=oddtdtcreator",
       "method": "tribe-rest",
-      "fetchedAt": "2026-09-11T14:07:33.842Z"
+      "fetchedAt": "2026-09-12T13:25:35.841Z"
     },
     {
       "id": "funky-biscuit-2026-09-26-brian-simpson-9pm-show-",
@@ -1362,7 +1242,7 @@
       "tributeTo": null,
       "sourceUrl": "https://wl.seetickets.us/event/brian-simpson-9pm-show/683295?afflky=FunkyBiscuit",
       "method": "seetickets",
-      "fetchedAt": "2026-09-11T14:07:33.738Z"
+      "fetchedAt": "2026-09-12T13:25:35.795Z"
     },
     {
       "id": "revolution-live-2026-09-26-club-90-s-presents-ariana-grande-night",
@@ -1374,7 +1254,7 @@
       "tributeTo": null,
       "sourceUrl": "https://www.jointherevolution.net/concerts/club-90s-presents-ariana-grande-night/",
       "method": "gcal-link",
-      "fetchedAt": "2026-09-11T14:07:33.845Z"
+      "fetchedAt": "2026-09-12T13:25:35.844Z"
     },
     {
       "id": "the-parker-2026-09-27-rodrigo-teaser-michael-lives-forever",
@@ -1386,7 +1266,7 @@
       "tributeTo": "Michael Jackson",
       "sourceUrl": "https://www.parkerplayhouse.com/events/detail/michael-lives-forever-2026",
       "method": "event-date-markup",
-      "fetchedAt": "2026-09-11T14:07:33.849Z"
+      "fetchedAt": "2026-09-12T13:25:35.849Z"
     },
     {
       "id": "ball-and-chain-2026-09-27-the-ball-chain-trio",
@@ -1398,7 +1278,7 @@
       "tributeTo": null,
       "sourceUrl": "https://ballandchainmiami.com/event/the-ball-chain-trio-2-2-2/2026-09-27/",
       "method": "tribe-rest",
-      "fetchedAt": "2026-09-11T14:07:33.847Z"
+      "fetchedAt": "2026-09-12T13:25:35.847Z"
     },
     {
       "id": "arts-garage-2026-09-27-sunflower-soul-the-mixtape-a-celebration",
@@ -1410,7 +1290,7 @@
       "tributeTo": null,
       "sourceUrl": "https://artsgarage.org/event/sunflower-soul-the-mixtape-a-celebration-of-susans-love-for-music/",
       "method": "tribe-rest",
-      "fetchedAt": "2026-09-11T14:07:33.850Z"
+      "fetchedAt": "2026-09-12T13:25:35.849Z"
     },
     {
       "id": "crazy-uncle-mikes-2026-09-27-fugitive-souls",
@@ -1422,7 +1302,7 @@
       "tributeTo": null,
       "sourceUrl": "https://www.eventbrite.com/e/fugitive-souls-tickets-1998932251173?aff=oddtdtcreator",
       "method": "tribe-rest",
-      "fetchedAt": "2026-09-11T14:07:33.842Z"
+      "fetchedAt": "2026-09-12T13:25:35.841Z"
     },
     {
       "id": "boca-black-box-2026-09-27-3-decades-rewind-the-70s-show",
@@ -1434,7 +1314,7 @@
       "tributeTo": "'60s–'80s hits revue",
       "sourceUrl": "https://bocablackbox.showare.com/orderticketsarea.asp?p=4627&a=875&src=eventperformances",
       "method": "next-data-paged",
-      "fetchedAt": "2026-09-11T14:07:33.843Z"
+      "fetchedAt": "2026-09-12T13:25:35.842Z"
     },
     {
       "id": "ball-and-chain-2026-09-28-the-ball-chain-trio",
@@ -1446,7 +1326,7 @@
       "tributeTo": null,
       "sourceUrl": "https://ballandchainmiami.com/event/the-ball-chain-trio-2-2-2/2026-09-28/",
       "method": "tribe-rest",
-      "fetchedAt": "2026-09-11T14:07:33.847Z"
+      "fetchedAt": "2026-09-12T13:25:35.847Z"
     },
     {
       "id": "ball-and-chain-2026-09-28-live-jazz-with-tal-cohen",
@@ -1458,7 +1338,7 @@
       "tributeTo": null,
       "sourceUrl": "https://ballandchainmiami.com/event/live-jazz-with-tal-cohen/2026-09-28/",
       "method": "tribe-rest",
-      "fetchedAt": "2026-09-11T14:07:33.847Z"
+      "fetchedAt": "2026-09-12T13:25:35.847Z"
     },
     {
       "id": "funky-biscuit-2026-09-28-biscuit-jam-featuring-the-funky-biscuit-",
@@ -1470,7 +1350,7 @@
       "tributeTo": null,
       "sourceUrl": "https://wl.seetickets.us/event/biscuit-jam-featuring-the-funky-biscuit-all-stars/703039?afflky=FunkyBiscuit",
       "method": "seetickets",
-      "fetchedAt": "2026-09-11T14:07:33.738Z"
+      "fetchedAt": "2026-09-12T13:25:35.795Z"
     },
     {
       "id": "crazy-uncle-mikes-2026-09-28-country-night-boot-scootin-boogie",
@@ -1482,7 +1362,7 @@
       "tributeTo": null,
       "sourceUrl": "https://crazyunclemikes.com/event/country-night-boot-scootin-boogie-2/2026-09-28/",
       "method": "tribe-rest",
-      "fetchedAt": "2026-09-11T14:07:33.842Z"
+      "fetchedAt": "2026-09-12T13:25:35.841Z"
     },
     {
       "id": "ball-and-chain-2026-09-29-the-ball-chain-trio",
@@ -1494,7 +1374,7 @@
       "tributeTo": null,
       "sourceUrl": "https://ballandchainmiami.com/event/the-ball-chain-trio-2-2-2/2026-09-29/",
       "method": "tribe-rest",
-      "fetchedAt": "2026-09-11T14:07:33.847Z"
+      "fetchedAt": "2026-09-12T13:25:35.847Z"
     },
     {
       "id": "ball-and-chain-2026-09-29-live-jazz-with-calixto-oviedo",
@@ -1506,7 +1386,7 @@
       "tributeTo": null,
       "sourceUrl": "https://ballandchainmiami.com/event/live-jazz-with-calixto-oviedo/2026-09-29/",
       "method": "tribe-rest",
-      "fetchedAt": "2026-09-11T14:07:33.847Z"
+      "fetchedAt": "2026-09-12T13:25:35.847Z"
     },
     {
       "id": "funky-biscuit-2026-09-29-jammin-taco-tuesday-featuring-crazy-fing",
@@ -1518,7 +1398,7 @@
       "tributeTo": "Grateful Dead",
       "sourceUrl": "https://wl.seetickets.us/event/jammin-taco-tuesday-featuring-crazy-fingers/703479?afflky=FunkyBiscuit",
       "method": "seetickets",
-      "fetchedAt": "2026-09-11T14:07:33.738Z"
+      "fetchedAt": "2026-09-12T13:25:35.795Z"
     },
     {
       "id": "crazy-uncle-mikes-2026-09-29-taco-tuesday-latin-night-",
@@ -1530,7 +1410,7 @@
       "tributeTo": null,
       "sourceUrl": "https://crazyunclemikes.com/event/taco-tuesday-3/2026-09-29/",
       "method": "tribe-rest",
-      "fetchedAt": "2026-09-11T14:07:33.842Z"
+      "fetchedAt": "2026-09-12T13:25:35.841Z"
     },
     {
       "id": "ball-and-chain-2026-09-30-the-ball-chain-trio",
@@ -1542,7 +1422,7 @@
       "tributeTo": null,
       "sourceUrl": "https://ballandchainmiami.com/event/the-ball-chain-trio-2-2-2/2026-09-30/",
       "method": "tribe-rest",
-      "fetchedAt": "2026-09-11T14:07:33.847Z"
+      "fetchedAt": "2026-09-12T13:25:35.847Z"
     },
     {
       "id": "the-parker-2026-10-01-great-white-slaughter",
@@ -1554,7 +1434,7 @@
       "tributeTo": null,
       "sourceUrl": "https://www.parkerplayhouse.com/events/detail/great-white-and-slaughter-2026",
       "method": "event-date-markup",
-      "fetchedAt": "2026-09-11T14:07:33.849Z"
+      "fetchedAt": "2026-09-12T13:25:35.849Z"
     },
     {
       "id": "ball-and-chain-2026-10-01-the-ball-chain-trio",
@@ -1566,7 +1446,7 @@
       "tributeTo": null,
       "sourceUrl": "https://ballandchainmiami.com/event/the-ball-chain-trio-2-2-2/2026-10-01/",
       "method": "tribe-rest",
-      "fetchedAt": "2026-09-11T14:07:33.847Z"
+      "fetchedAt": "2026-09-12T13:25:35.847Z"
     },
     {
       "id": "ball-and-chain-2026-10-02-the-ball-chain-trio",
@@ -1578,7 +1458,7 @@
       "tributeTo": null,
       "sourceUrl": "https://ballandchainmiami.com/event/the-ball-chain-trio-2-2-2/2026-10-02/",
       "method": "tribe-rest",
-      "fetchedAt": "2026-09-11T14:07:33.847Z"
+      "fetchedAt": "2026-09-12T13:25:35.847Z"
     },
     {
       "id": "arts-garage-2026-10-02-the-blues-brothers-soul-band",
@@ -1590,7 +1470,7 @@
       "tributeTo": null,
       "sourceUrl": "https://artsgarage.org/event/the-blues-brothers-soul-band-4/",
       "method": "tribe-rest",
-      "fetchedAt": "2026-09-11T14:07:33.850Z"
+      "fetchedAt": "2026-09-12T13:25:35.849Z"
     },
     {
       "id": "funky-biscuit-2026-10-02-joe-marcinek-band-brock-butler-band",
@@ -1602,7 +1482,7 @@
       "tributeTo": null,
       "sourceUrl": "https://wl.seetickets.us/event/joe-marcinek-band-and-brock-butler-band/704304?afflky=FunkyBiscuit",
       "method": "seetickets",
-      "fetchedAt": "2026-09-11T14:07:33.738Z"
+      "fetchedAt": "2026-09-12T13:25:35.795Z"
     },
     {
       "id": "revolution-live-2026-10-02-club-90-s-presents-2000-s-night",
@@ -1614,7 +1494,7 @@
       "tributeTo": null,
       "sourceUrl": "https://www.jointherevolution.net/concerts/club-90s-presents-2000s-night/",
       "method": "gcal-link",
-      "fetchedAt": "2026-09-11T14:07:33.845Z"
+      "fetchedAt": "2026-09-12T13:25:35.844Z"
     },
     {
       "id": "the-parker-2026-10-03-atsuko-okatsuka-the-big-bowl-tour",
@@ -1626,7 +1506,7 @@
       "tributeTo": null,
       "sourceUrl": "https://www.parkerplayhouse.com/events/detail/atsuko-okatsuka-2026",
       "method": "event-date-markup",
-      "fetchedAt": "2026-09-11T14:07:33.849Z"
+      "fetchedAt": "2026-09-12T13:25:35.849Z"
     },
     {
       "id": "ball-and-chain-2026-10-03-the-ball-chain-trio",
@@ -1638,7 +1518,7 @@
       "tributeTo": null,
       "sourceUrl": "https://ballandchainmiami.com/event/the-ball-chain-trio-2-2-2/2026-10-03/",
       "method": "tribe-rest",
-      "fetchedAt": "2026-09-11T14:07:33.847Z"
+      "fetchedAt": "2026-09-12T13:25:35.847Z"
     },
     {
       "id": "crazy-uncle-mikes-2026-10-03-8th-anniversary-whiskey-party",
@@ -1650,7 +1530,7 @@
       "tributeTo": null,
       "sourceUrl": "https://www.eventbrite.com/e/crazy-uncle-mikes-8th-anniversary-party-tickets-1999586959423?aff=oddtdtcreator",
       "method": "tribe-rest",
-      "fetchedAt": "2026-09-11T14:07:33.842Z"
+      "fetchedAt": "2026-09-12T13:25:35.841Z"
     },
     {
       "id": "funky-biscuit-2026-10-03-kim-waters-6pm-show-",
@@ -1662,7 +1542,7 @@
       "tributeTo": null,
       "sourceUrl": "https://wl.seetickets.us/event/kim-waters-6pm-show/679521?afflky=FunkyBiscuit",
       "method": "seetickets",
-      "fetchedAt": "2026-09-11T14:07:33.738Z"
+      "fetchedAt": "2026-09-12T13:25:35.795Z"
     },
     {
       "id": "arts-garage-2026-10-03-the-foreigner-experience-bad-inc-",
@@ -1674,7 +1554,7 @@
       "tributeTo": null,
       "sourceUrl": "https://artsgarage.org/event/the-foreigner-experience-bad-inc/",
       "method": "tribe-rest",
-      "fetchedAt": "2026-09-11T14:07:33.850Z"
+      "fetchedAt": "2026-09-12T13:25:35.849Z"
     },
     {
       "id": "funky-biscuit-2026-10-03-kim-waters-9pm-show-",
@@ -1686,7 +1566,19 @@
       "tributeTo": null,
       "sourceUrl": "https://wl.seetickets.us/event/kim-waters-9pm-show/679523?afflky=FunkyBiscuit",
       "method": "seetickets",
-      "fetchedAt": "2026-09-11T14:07:33.738Z"
+      "fetchedAt": "2026-09-12T13:25:35.795Z"
+    },
+    {
+      "id": "the-parker-2026-10-04-clifford-the-big-red-dog",
+      "date": "2026-10-04",
+      "time": null,
+      "band": "Clifford the Big Red Dog",
+      "venueId": "the-parker",
+      "tributeEvidence": null,
+      "tributeTo": null,
+      "sourceUrl": "https://www.parkerplayhouse.com/events/detail/clifford-the-big-red-dog-2026",
+      "method": "event-date-markup",
+      "fetchedAt": "2026-09-12T13:25:35.849Z"
     },
     {
       "id": "ball-and-chain-2026-10-04-the-ball-chain-trio",
@@ -1698,7 +1590,7 @@
       "tributeTo": null,
       "sourceUrl": "https://ballandchainmiami.com/event/the-ball-chain-trio-2-2-2/2026-10-04/",
       "method": "tribe-rest",
-      "fetchedAt": "2026-09-11T14:07:33.847Z"
+      "fetchedAt": "2026-09-12T13:25:35.847Z"
     },
     {
       "id": "revolution-live-2026-10-04-mariachi-el-bronx",
@@ -1710,7 +1602,7 @@
       "tributeTo": null,
       "sourceUrl": "https://www.jointherevolution.net/concerts/mariachi-el-bronx/",
       "method": "gcal-link",
-      "fetchedAt": "2026-09-11T14:07:33.845Z"
+      "fetchedAt": "2026-09-12T13:25:35.844Z"
     },
     {
       "id": "arts-garage-2026-10-04-an-unforgettable-evening-with-julius-san",
@@ -1722,7 +1614,7 @@
       "tributeTo": null,
       "sourceUrl": "https://artsgarage.org/event/an-unforgettable-evening-with-julius-sanna-the-music-of-nat-king-cole/",
       "method": "tribe-rest",
-      "fetchedAt": "2026-09-11T14:07:33.850Z"
+      "fetchedAt": "2026-09-12T13:25:35.849Z"
     },
     {
       "id": "ball-and-chain-2026-10-05-the-ball-chain-trio",
@@ -1734,7 +1626,7 @@
       "tributeTo": null,
       "sourceUrl": "https://ballandchainmiami.com/event/the-ball-chain-trio-2-2-2/2026-10-05/",
       "method": "tribe-rest",
-      "fetchedAt": "2026-09-11T14:07:33.847Z"
+      "fetchedAt": "2026-09-12T13:25:35.847Z"
     },
     {
       "id": "ball-and-chain-2026-10-05-live-jazz-with-tal-cohen",
@@ -1746,7 +1638,7 @@
       "tributeTo": null,
       "sourceUrl": "https://ballandchainmiami.com/event/live-jazz-with-tal-cohen/2026-10-05/",
       "method": "tribe-rest",
-      "fetchedAt": "2026-09-11T14:07:33.847Z"
+      "fetchedAt": "2026-09-12T13:25:35.847Z"
     },
     {
       "id": "ball-and-chain-2026-10-06-the-ball-chain-trio",
@@ -1758,7 +1650,7 @@
       "tributeTo": null,
       "sourceUrl": "https://ballandchainmiami.com/event/the-ball-chain-trio-2-2-2/2026-10-06/",
       "method": "tribe-rest",
-      "fetchedAt": "2026-09-11T14:07:33.847Z"
+      "fetchedAt": "2026-09-12T13:25:35.847Z"
     },
     {
       "id": "ball-and-chain-2026-10-06-live-jazz-with-calixto-oviedo",
@@ -1770,7 +1662,7 @@
       "tributeTo": null,
       "sourceUrl": "https://ballandchainmiami.com/event/live-jazz-with-calixto-oviedo/2026-10-06/",
       "method": "tribe-rest",
-      "fetchedAt": "2026-09-11T14:07:33.847Z"
+      "fetchedAt": "2026-09-12T13:25:35.847Z"
     },
     {
       "id": "arts-garage-2026-10-06-comedy-open-mic",
@@ -1782,7 +1674,7 @@
       "tributeTo": null,
       "sourceUrl": "https://artsgarage.org/event/comedy-night-36-2/2026-10-06/",
       "method": "tribe-rest",
-      "fetchedAt": "2026-09-11T14:07:33.850Z"
+      "fetchedAt": "2026-09-12T13:25:35.849Z"
     },
     {
       "id": "arts-garage-2026-10-07-the-kimmel-family-series-at-arts-garage-",
@@ -1794,7 +1686,19 @@
       "tributeTo": null,
       "sourceUrl": "https://artsgarage.org/event/the-kimmel-family-series-at-arts-garage-dinosaur-dimensions-expedition/",
       "method": "tribe-rest",
-      "fetchedAt": "2026-09-11T14:07:33.850Z"
+      "fetchedAt": "2026-09-12T13:25:35.849Z"
+    },
+    {
+      "id": "ball-and-chain-2026-10-07-the-ball-chain-trio",
+      "date": "2026-10-07",
+      "time": "12:00",
+      "band": "The Ball & Chain Trio",
+      "venueId": "ball-and-chain",
+      "tributeEvidence": null,
+      "tributeTo": null,
+      "sourceUrl": "https://ballandchainmiami.com/event/the-ball-chain-trio-2-2-2/2026-10-07/",
+      "method": "tribe-rest",
+      "fetchedAt": "2026-09-12T13:25:35.847Z"
     },
     {
       "id": "revolution-live-2026-10-07-infinity-song-world-tour-ii-continues-",
@@ -1806,7 +1710,7 @@
       "tributeTo": null,
       "sourceUrl": "https://www.jointherevolution.net/concerts/infinity-song-world-tour-ii-continues/",
       "method": "gcal-link",
-      "fetchedAt": "2026-09-11T14:07:33.845Z"
+      "fetchedAt": "2026-09-12T13:25:35.844Z"
     },
     {
       "id": "arts-garage-2026-10-08-the-kimmel-family-series-at-arts-garage-",
@@ -1818,7 +1722,19 @@
       "tributeTo": null,
       "sourceUrl": "https://artsgarage.org/event/the-kimmel-family-series-at-arts-garage-dinosaur-dimensions-expedition-thursday/",
       "method": "tribe-rest",
-      "fetchedAt": "2026-09-11T14:07:33.850Z"
+      "fetchedAt": "2026-09-12T13:25:35.849Z"
+    },
+    {
+      "id": "ball-and-chain-2026-10-08-the-ball-chain-trio",
+      "date": "2026-10-08",
+      "time": "12:00",
+      "band": "The Ball & Chain Trio",
+      "venueId": "ball-and-chain",
+      "tributeEvidence": null,
+      "tributeTo": null,
+      "sourceUrl": "https://ballandchainmiami.com/event/the-ball-chain-trio-2-2-2/2026-10-08/",
+      "method": "tribe-rest",
+      "fetchedAt": "2026-09-12T13:25:35.847Z"
     },
     {
       "id": "funky-biscuit-2026-10-08-all-about-carlos-a-tribute-to-santana",
@@ -1830,7 +1746,7 @@
       "tributeTo": "Santana",
       "sourceUrl": "https://wl.seetickets.us/event/all-about-carlos-a-tribute-to-santana/704898?afflky=FunkyBiscuit",
       "method": "seetickets",
-      "fetchedAt": "2026-09-11T14:07:33.738Z"
+      "fetchedAt": "2026-09-12T13:25:35.795Z"
     },
     {
       "id": "arts-garage-2026-10-09-max-hightower-band-nothin-but-the-truth-",
@@ -1842,7 +1758,7 @@
       "tributeTo": null,
       "sourceUrl": "https://artsgarage.org/event/max-hightower-band-nothin-but-the-truth-tour/",
       "method": "tribe-rest",
-      "fetchedAt": "2026-09-11T14:07:33.850Z"
+      "fetchedAt": "2026-09-12T13:25:35.849Z"
     },
     {
       "id": "funky-biscuit-2026-10-09-the-long-run-america-s-favorite-tribute-",
@@ -1854,7 +1770,19 @@
       "tributeTo": "The Eagles",
       "sourceUrl": "https://wl.seetickets.us/event/the-long-run-americas-favorite-tribute-to-the-eagles/698159?afflky=FunkyBiscuit",
       "method": "seetickets",
-      "fetchedAt": "2026-09-11T14:07:33.738Z"
+      "fetchedAt": "2026-09-12T13:25:35.795Z"
+    },
+    {
+      "id": "revolution-live-2026-10-10-fang-club-presents-hells-gate-south-flor",
+      "date": "2026-10-10",
+      "time": "18:00",
+      "band": "Fang Club Presents: Hells Gate South Florida's Dark Arts & Music Festival",
+      "venueId": "revolution-live",
+      "tributeEvidence": null,
+      "tributeTo": null,
+      "sourceUrl": "https://www.jointherevolution.net/concerts/fang-club-presents-hells-gate-south-floridas-dark-arts-music-festival/",
+      "method": "gcal-link",
+      "fetchedAt": "2026-09-12T13:25:35.844Z"
     },
     {
       "id": "funky-biscuit-2026-10-10-edwin-mccain",
@@ -1866,7 +1794,7 @@
       "tributeTo": null,
       "sourceUrl": "https://wl.seetickets.us/event/edwin-mccain/690402?afflky=FunkyBiscuit",
       "method": "seetickets",
-      "fetchedAt": "2026-09-11T14:07:33.738Z"
+      "fetchedAt": "2026-09-12T13:25:35.795Z"
     },
     {
       "id": "arts-garage-2026-10-10-fortunate-sons-creedence-clearwater-revi",
@@ -1878,7 +1806,7 @@
       "tributeTo": "Creedence Clearwater Revival",
       "sourceUrl": "https://artsgarage.org/event/fortunate-sons-creedence-clearwater-revival-tribute-3/",
       "method": "tribe-rest",
-      "fetchedAt": "2026-09-11T14:07:33.850Z"
+      "fetchedAt": "2026-09-12T13:25:35.849Z"
     },
     {
       "id": "crazy-uncle-mikes-2026-10-10-private-stock",
@@ -1890,7 +1818,7 @@
       "tributeTo": null,
       "sourceUrl": "https://www.eventbrite.com/e/private-stock-tickets-1994905966447?aff=oddtdtcreator",
       "method": "tribe-rest",
-      "fetchedAt": "2026-09-11T14:07:33.842Z"
+      "fetchedAt": "2026-09-12T13:25:35.841Z"
     },
     {
       "id": "funky-biscuit-2026-10-11-edwin-mccain-with-special-guest-kevn-kin",
@@ -1902,7 +1830,7 @@
       "tributeTo": null,
       "sourceUrl": "https://wl.seetickets.us/event/edwin-mccain-with-special-guest-kevn-kinney-drivin-n-cryin/690406?afflky=FunkyBiscuit",
       "method": "seetickets",
-      "fetchedAt": "2026-09-11T14:07:33.738Z"
+      "fetchedAt": "2026-09-12T13:25:35.795Z"
     },
     {
       "id": "arts-garage-2026-10-11-the-release-of-chardavoine-the-evolution",
@@ -1914,7 +1842,7 @@
       "tributeTo": null,
       "sourceUrl": "https://artsgarage.org/event/the-release-of-chardavoine-the-evolutions-album-haitian-standards/",
       "method": "tribe-rest",
-      "fetchedAt": "2026-09-11T14:07:33.850Z"
+      "fetchedAt": "2026-09-12T13:25:35.849Z"
     },
     {
       "id": "arts-garage-2026-10-13-all-arts-open-mic",
@@ -1926,7 +1854,7 @@
       "tributeTo": null,
       "sourceUrl": "https://artsgarage.org/event/all-arts-open-mic-night-44-2/2026-10-13/",
       "method": "tribe-rest",
-      "fetchedAt": "2026-09-11T14:07:33.850Z"
+      "fetchedAt": "2026-09-12T13:25:35.849Z"
     },
     {
       "id": "arts-garage-2026-10-15-jazz-java-the-young-lions-movements-in-t",
@@ -1938,7 +1866,7 @@
       "tributeTo": null,
       "sourceUrl": "https://artsgarage.org/event/jazz-java-the-young-lions-movements-in-the-1960s-1980s-2020s/",
       "method": "tribe-rest",
-      "fetchedAt": "2026-09-11T14:07:33.850Z"
+      "fetchedAt": "2026-09-12T13:25:35.849Z"
     },
     {
       "id": "boca-black-box-2026-10-15-all-arts-open-mic-night",
@@ -1950,7 +1878,7 @@
       "tributeTo": null,
       "sourceUrl": "http://bocablackbox.showare.com/AllArtsOpenMicNightBox20",
       "method": "next-data",
-      "fetchedAt": "2026-09-11T14:07:33.843Z"
+      "fetchedAt": "2026-09-12T13:25:35.842Z"
     },
     {
       "id": "boca-black-box-2026-10-15-an-evening-with-mike-mass-epic-acoustic-",
@@ -1962,7 +1890,7 @@
       "tributeTo": "classic rock (acoustic covers)",
       "sourceUrl": "https://bocablackbox.showare.com/orderticketsvenue.asp?p=5458",
       "method": "next-data-paged",
-      "fetchedAt": "2026-09-11T14:07:33.843Z"
+      "fetchedAt": "2026-09-12T13:25:35.842Z"
     },
     {
       "id": "funky-biscuit-2026-10-15-quinn-sullivan",
@@ -1974,7 +1902,7 @@
       "tributeTo": null,
       "sourceUrl": "https://wl.seetickets.us/event/quinn-sullivan/693300?afflky=FunkyBiscuit",
       "method": "seetickets",
-      "fetchedAt": "2026-09-11T14:07:33.738Z"
+      "fetchedAt": "2026-09-12T13:25:35.795Z"
     },
     {
       "id": "arts-garage-2026-10-16-nicole-henry-returns-friday",
@@ -1986,7 +1914,7 @@
       "tributeTo": null,
       "sourceUrl": "https://artsgarage.org/event/nicole-henry-returns-friday-2/",
       "method": "tribe-rest",
-      "fetchedAt": "2026-09-11T14:07:33.850Z"
+      "fetchedAt": "2026-09-12T13:25:35.849Z"
     },
     {
       "id": "funky-biscuit-2026-10-16-john-nemeth",
@@ -1998,7 +1926,7 @@
       "tributeTo": null,
       "sourceUrl": "https://wl.seetickets.us/event/john-nemeth/702923?afflky=FunkyBiscuit",
       "method": "seetickets",
-      "fetchedAt": "2026-09-11T14:07:33.738Z"
+      "fetchedAt": "2026-09-12T13:25:35.795Z"
     },
     {
       "id": "funky-biscuit-2026-10-17-soto-bieler-meet-greet",
@@ -2010,7 +1938,7 @@
       "tributeTo": null,
       "sourceUrl": "https://wl.seetickets.us/event/soto-and-bieler-meet-and-greet/695788?afflky=FunkyBiscuit",
       "method": "seetickets",
-      "fetchedAt": "2026-09-11T14:07:33.738Z"
+      "fetchedAt": "2026-09-12T13:25:35.795Z"
     },
     {
       "id": "funky-biscuit-2026-10-17-soto-bieler",
@@ -2022,7 +1950,7 @@
       "tributeTo": null,
       "sourceUrl": "https://wl.seetickets.us/event/soto-and-bieler/695659?afflky=FunkyBiscuit",
       "method": "seetickets",
-      "fetchedAt": "2026-09-11T14:07:33.738Z"
+      "fetchedAt": "2026-09-12T13:25:35.795Z"
     },
     {
       "id": "arts-garage-2026-10-17-nicole-henry-returns-saturday",
@@ -2034,7 +1962,7 @@
       "tributeTo": null,
       "sourceUrl": "https://artsgarage.org/event/nicole-henry-returns-saturday-2/",
       "method": "tribe-rest",
-      "fetchedAt": "2026-09-11T14:07:33.850Z"
+      "fetchedAt": "2026-09-12T13:25:35.849Z"
     },
     {
       "id": "crazy-uncle-mikes-2026-10-17-jason-ricci-the-bad-kind",
@@ -2046,7 +1974,7 @@
       "tributeTo": null,
       "sourceUrl": "https://www.eventbrite.com/e/jason-ricci-and-the-bad-kind-tickets-1991607669151?aff=oddtdtcreator",
       "method": "tribe-rest",
-      "fetchedAt": "2026-09-11T14:07:33.842Z"
+      "fetchedAt": "2026-09-12T13:25:35.841Z"
     },
     {
       "id": "arts-garage-2026-10-20-senior-series-improv-with-micah-stinton",
@@ -2056,9 +1984,9 @@
       "venueId": "arts-garage",
       "tributeEvidence": null,
       "tributeTo": null,
-      "sourceUrl": "https://artsgarage.org/event/senior-series-improv-with-micah-stinton/2026-10-20/",
+      "sourceUrl": "https://artsgarage.org/event/senior-series-improv-with-micah-stinton-2/2026-10-20/",
       "method": "tribe-rest",
-      "fetchedAt": "2026-09-11T14:07:33.850Z"
+      "fetchedAt": "2026-09-12T13:25:35.849Z"
     },
     {
       "id": "arts-garage-2026-10-20-spoken-word-open-mic-poetry-storytelling",
@@ -2070,7 +1998,7 @@
       "tributeTo": null,
       "sourceUrl": "https://artsgarage.org/event/spoken-word-open-mic-poetry-storytelling-lyrics/2026-10-20/",
       "method": "tribe-rest",
-      "fetchedAt": "2026-09-11T14:07:33.850Z"
+      "fetchedAt": "2026-09-12T13:25:35.849Z"
     },
     {
       "id": "funky-biscuit-2026-10-21-chicago-transit-canada-the-first-longest",
@@ -2082,7 +2010,7 @@
       "tributeTo": "Chicago",
       "sourceUrl": "https://wl.seetickets.us/event/chicago-transit-canada-6pm-show/692261?afflky=FunkyBiscuit",
       "method": "seetickets",
-      "fetchedAt": "2026-09-11T14:07:33.738Z"
+      "fetchedAt": "2026-09-12T13:25:35.795Z"
     },
     {
       "id": "crazy-uncle-mikes-2026-10-21-jonathon-boogie-long",
@@ -2094,7 +2022,7 @@
       "tributeTo": null,
       "sourceUrl": "https://www.eventbrite.com/e/jason-ricci-and-the-bad-kind-tickets-1991607669151?aff=oddtdtcreator",
       "method": "tribe-rest",
-      "fetchedAt": "2026-09-11T14:07:33.842Z"
+      "fetchedAt": "2026-09-12T13:25:35.841Z"
     },
     {
       "id": "arts-garage-2026-10-22-senior-series-groove-with-karen-king",
@@ -2104,9 +2032,9 @@
       "venueId": "arts-garage",
       "tributeEvidence": null,
       "tributeTo": null,
-      "sourceUrl": "https://artsgarage.org/event/senior-series-groove-with-karen-king/2026-10-22/",
+      "sourceUrl": "https://artsgarage.org/event/senior-series-groove-with-karen-king-2/2026-10-22/",
       "method": "tribe-rest",
-      "fetchedAt": "2026-09-11T14:07:33.850Z"
+      "fetchedAt": "2026-09-12T13:25:35.849Z"
     },
     {
       "id": "crazy-uncle-mikes-2026-10-22-adam-hawley",
@@ -2118,7 +2046,7 @@
       "tributeTo": null,
       "sourceUrl": "https://www.eventbrite.com/cc/adam-hawley-4851860",
       "method": "tribe-rest",
-      "fetchedAt": "2026-09-11T14:07:33.842Z"
+      "fetchedAt": "2026-09-12T13:25:35.841Z"
     },
     {
       "id": "boca-black-box-2026-10-22-noches-de-comedia-stand-up-en-espa-ol-sp",
@@ -2130,7 +2058,7 @@
       "tributeTo": null,
       "sourceUrl": "http://bocablackbox.showare.com/NochesDeComediaSTANDUPENESPAOL-SPANISHCOMEDYTheBox20",
       "method": "next-data",
-      "fetchedAt": "2026-09-11T14:07:33.843Z"
+      "fetchedAt": "2026-09-12T13:25:35.842Z"
     },
     {
       "id": "funky-biscuit-2026-10-22-dirty-work-a-tribute-to-the-music-of-ste",
@@ -2142,7 +2070,7 @@
       "tributeTo": "Steely Dan",
       "sourceUrl": "https://wl.seetickets.us/event/dirty-work-a-tribute-to-the-music-of-steely-dan/701247?afflky=FunkyBiscuit",
       "method": "seetickets",
-      "fetchedAt": "2026-09-11T14:07:33.738Z"
+      "fetchedAt": "2026-09-12T13:25:35.795Z"
     },
     {
       "id": "arts-garage-2026-10-23-what-a-night-with-n-stor-torres",
@@ -2154,7 +2082,7 @@
       "tributeTo": null,
       "sourceUrl": "https://artsgarage.org/event/what-a-night-with-nestor-torres/",
       "method": "tribe-rest",
-      "fetchedAt": "2026-09-11T14:07:33.850Z"
+      "fetchedAt": "2026-09-12T13:25:35.849Z"
     },
     {
       "id": "funky-biscuit-2026-10-23-dirty-work-a-tribute-to-the-music-of-ste",
@@ -2166,7 +2094,7 @@
       "tributeTo": "Steely Dan",
       "sourceUrl": "https://wl.seetickets.us/event/dirty-work-a-tribute-to-the-music-of-steely-dan/701244?afflky=FunkyBiscuit",
       "method": "seetickets",
-      "fetchedAt": "2026-09-11T14:07:33.738Z"
+      "fetchedAt": "2026-09-12T13:25:35.795Z"
     },
     {
       "id": "arts-garage-2026-10-24-what-a-night-with-n-stor-torres-saturday",
@@ -2178,7 +2106,7 @@
       "tributeTo": null,
       "sourceUrl": "https://artsgarage.org/event/what-a-night-with-nestor-torres-saturday/",
       "method": "tribe-rest",
-      "fetchedAt": "2026-09-11T14:07:33.850Z"
+      "fetchedAt": "2026-09-12T13:25:35.849Z"
     },
     {
       "id": "funky-biscuit-2026-10-25-paul-taylor-5-30pm-show-",
@@ -2190,7 +2118,7 @@
       "tributeTo": null,
       "sourceUrl": "https://wl.seetickets.us/event/paul-taylor-530pm-show/688188?afflky=FunkyBiscuit",
       "method": "seetickets",
-      "fetchedAt": "2026-09-11T14:07:33.738Z"
+      "fetchedAt": "2026-09-12T13:25:35.795Z"
     },
     {
       "id": "funky-biscuit-2026-10-25-paul-taylor-8-30pm-show-",
@@ -2202,7 +2130,7 @@
       "tributeTo": null,
       "sourceUrl": "https://wl.seetickets.us/event/paul-taylor-830pm-show/688189?afflky=FunkyBiscuit",
       "method": "seetickets",
-      "fetchedAt": "2026-09-11T14:07:33.738Z"
+      "fetchedAt": "2026-09-12T13:25:35.795Z"
     },
     {
       "id": "boca-black-box-2026-10-28-comedian-derek-richards-the-box-2-0",
@@ -2214,7 +2142,7 @@
       "tributeTo": null,
       "sourceUrl": "https://bocablackbox.showare.com/eventperformances.asp?evt=1948",
       "method": "next-data",
-      "fetchedAt": "2026-09-11T14:07:33.843Z"
+      "fetchedAt": "2026-09-12T13:25:35.842Z"
     },
     {
       "id": "funky-biscuit-2026-10-28-frank-bang-the-secret-stash",
@@ -2226,7 +2154,7 @@
       "tributeTo": null,
       "sourceUrl": "https://wl.seetickets.us/event/frank-bang-and-the-secret-stash/704176?afflky=FunkyBiscuit",
       "method": "seetickets",
-      "fetchedAt": "2026-09-11T14:07:33.738Z"
+      "fetchedAt": "2026-09-12T13:25:35.795Z"
     },
     {
       "id": "boca-black-box-2026-10-29-all-arts-open-mic-night",
@@ -2238,7 +2166,7 @@
       "tributeTo": null,
       "sourceUrl": "http://bocablackbox.showare.com/AllArtsOpenMicNightBox20",
       "method": "next-data",
-      "fetchedAt": "2026-09-11T14:07:33.843Z"
+      "fetchedAt": "2026-09-12T13:25:35.842Z"
     },
     {
       "id": "funky-biscuit-2026-10-29-funk-you",
@@ -2250,7 +2178,7 @@
       "tributeTo": null,
       "sourceUrl": "https://wl.seetickets.us/event/funk-you/702303?afflky=FunkyBiscuit",
       "method": "seetickets",
-      "fetchedAt": "2026-09-11T14:07:33.738Z"
+      "fetchedAt": "2026-09-12T13:25:35.795Z"
     },
     {
       "id": "crazy-uncle-mikes-2026-10-29-albert-castiglia",
@@ -2262,7 +2190,7 @@
       "tributeTo": null,
       "sourceUrl": "https://www.eventbrite.com/e/albert-castiglia-album-release-party-tickets-1991707018307?aff=oddtdtcreator",
       "method": "tribe-rest",
-      "fetchedAt": "2026-09-11T14:07:33.842Z"
+      "fetchedAt": "2026-09-12T13:25:35.841Z"
     },
     {
       "id": "arts-garage-2026-10-30-mysterion-the-man-who-sees-tomorrow",
@@ -2274,7 +2202,7 @@
       "tributeTo": null,
       "sourceUrl": "https://artsgarage.org/event/mysterion-the-man-who-sees-tomorrow/",
       "method": "tribe-rest",
-      "fetchedAt": "2026-09-11T14:07:33.850Z"
+      "fetchedAt": "2026-09-12T13:25:35.849Z"
     },
     {
       "id": "funky-biscuit-2026-10-30-a-halloween-monster-bash-featuring-rainb",
@@ -2286,7 +2214,19 @@
       "tributeTo": "Led Zeppelin & Grateful Dead",
       "sourceUrl": "https://wl.seetickets.us/event/halloween-featuring-rainbow-full-of-sound-and-dead-zep/704063?afflky=FunkyBiscuit",
       "method": "seetickets",
-      "fetchedAt": "2026-09-11T14:07:33.738Z"
+      "fetchedAt": "2026-09-12T13:25:35.795Z"
+    },
+    {
+      "id": "funky-biscuit-2026-10-31-acoustic-alchemy-6pm-show-",
+      "date": "2026-10-31",
+      "time": "18:00",
+      "band": "Acoustic Alchemy (6pm Show)",
+      "venueId": "funky-biscuit",
+      "tributeEvidence": null,
+      "tributeTo": null,
+      "sourceUrl": "https://wl.seetickets.us/event/acoustic-alchemy-6pm-show/692249?afflky=FunkyBiscuit",
+      "method": "seetickets",
+      "fetchedAt": "2026-09-12T13:25:35.795Z"
     },
     {
       "id": "arts-garage-2026-10-31-turn-it-on-again-a-phil-collins-experien",
@@ -2298,7 +2238,19 @@
       "tributeTo": null,
       "sourceUrl": "https://artsgarage.org/event/turn-it-on-again-a-phil-collins-experience/",
       "method": "tribe-rest",
-      "fetchedAt": "2026-09-11T14:07:33.850Z"
+      "fetchedAt": "2026-09-12T13:25:35.849Z"
+    },
+    {
+      "id": "funky-biscuit-2026-10-31-acoustic-alchemy-9pm-show-",
+      "date": "2026-10-31",
+      "time": "21:00",
+      "band": "Acoustic Alchemy (9pm Show)",
+      "venueId": "funky-biscuit",
+      "tributeEvidence": null,
+      "tributeTo": null,
+      "sourceUrl": "https://wl.seetickets.us/event/acoustic-alchemy-9pm-show/692250?afflky=FunkyBiscuit",
+      "method": "seetickets",
+      "fetchedAt": "2026-09-12T13:25:35.795Z"
     },
     {
       "id": "arts-garage-2026-11-03-comedy-open-mic",
@@ -2310,7 +2262,7 @@
       "tributeTo": null,
       "sourceUrl": "https://artsgarage.org/event/comedy-night-36-2/2026-11-03/",
       "method": "tribe-rest",
-      "fetchedAt": "2026-09-11T14:07:33.850Z"
+      "fetchedAt": "2026-09-12T13:25:35.849Z"
     },
     {
       "id": "crazy-uncle-mikes-2026-11-04-marcus-miller",
@@ -2322,7 +2274,7 @@
       "tributeTo": null,
       "sourceUrl": "https://www.eventbrite.com/cc/marcus-miller-4857646",
       "method": "tribe-rest",
-      "fetchedAt": "2026-09-11T14:07:33.842Z"
+      "fetchedAt": "2026-09-12T13:25:35.841Z"
     },
     {
       "id": "crazy-uncle-mikes-2026-11-06-gerald-albright",
@@ -2334,7 +2286,7 @@
       "tributeTo": null,
       "sourceUrl": "https://www.eventbrite.com/cc/gerald-albright-4852860",
       "method": "tribe-rest",
-      "fetchedAt": "2026-09-11T14:07:33.842Z"
+      "fetchedAt": "2026-09-12T13:25:35.841Z"
     },
     {
       "id": "arts-garage-2026-11-06-whitney-whitney-houston-tribute",
@@ -2346,7 +2298,7 @@
       "tributeTo": "Whitney Houston",
       "sourceUrl": "https://artsgarage.org/event/whitney-whitney-houston-tribute/",
       "method": "tribe-rest",
-      "fetchedAt": "2026-09-11T14:07:33.850Z"
+      "fetchedAt": "2026-09-12T13:25:35.849Z"
     },
     {
       "id": "funky-biscuit-2026-11-06-coco-montoya",
@@ -2358,7 +2310,7 @@
       "tributeTo": null,
       "sourceUrl": "https://wl.seetickets.us/event/coco-montoya/691367?afflky=FunkyBiscuit",
       "method": "seetickets",
-      "fetchedAt": "2026-09-11T14:07:33.738Z"
+      "fetchedAt": "2026-09-12T13:25:35.795Z"
     },
     {
       "id": "arts-garage-2026-11-07-the-ladies-of-simone",
@@ -2370,7 +2322,7 @@
       "tributeTo": null,
       "sourceUrl": "https://artsgarage.org/event/the-ladies-of-simone-3/",
       "method": "tribe-rest",
-      "fetchedAt": "2026-09-11T14:07:33.850Z"
+      "fetchedAt": "2026-09-12T13:25:35.849Z"
     },
     {
       "id": "arts-garage-2026-11-08-behind-the-lines-a-9-11-story",
@@ -2382,7 +2334,7 @@
       "tributeTo": null,
       "sourceUrl": "https://artsgarage.org/event/behind-the-lines-a-9-11-story/",
       "method": "tribe-rest",
-      "fetchedAt": "2026-09-11T14:07:33.850Z"
+      "fetchedAt": "2026-09-12T13:25:35.849Z"
     },
     {
       "id": "boca-black-box-2026-11-09-a-benefit-concert-for-rick-krive-family-",
@@ -2394,7 +2346,7 @@
       "tributeTo": null,
       "sourceUrl": "http://bocablackbox.showare.com/ABenefitConcertforRickKriveFamilyHosts-JillRichSwitzerfromLegendsRadiosTheMorningLoungeBocaBlackBox",
       "method": "next-data-paged",
-      "fetchedAt": "2026-09-11T14:07:33.843Z"
+      "fetchedAt": "2026-09-12T13:25:35.842Z"
     },
     {
       "id": "funky-biscuit-2026-11-10-sunsquabi",
@@ -2406,7 +2358,7 @@
       "tributeTo": null,
       "sourceUrl": "https://wl.seetickets.us/event/sunsquabi/703607?afflky=FunkyBiscuit",
       "method": "seetickets",
-      "fetchedAt": "2026-09-11T14:07:33.738Z"
+      "fetchedAt": "2026-09-12T13:25:35.795Z"
     },
     {
       "id": "arts-garage-2026-11-10-all-arts-open-mic",
@@ -2418,7 +2370,7 @@
       "tributeTo": null,
       "sourceUrl": "https://artsgarage.org/event/all-arts-open-mic-night-44-2/2026-11-10/",
       "method": "tribe-rest",
-      "fetchedAt": "2026-09-11T14:07:33.850Z"
+      "fetchedAt": "2026-09-12T13:25:35.849Z"
     },
     {
       "id": "boca-black-box-2026-11-11-will-johns-presents-blues-daddy-live-boc",
@@ -2430,7 +2382,7 @@
       "tributeTo": null,
       "sourceUrl": "https://bocablackbox.showare.com/orderticketsvenue.asp?p=5651&a=0&src=&backurl=",
       "method": "next-data-paged",
-      "fetchedAt": "2026-09-11T14:07:33.843Z"
+      "fetchedAt": "2026-09-12T13:25:35.842Z"
     },
     {
       "id": "funky-biscuit-2026-11-11-sam-morrow",
@@ -2442,7 +2394,7 @@
       "tributeTo": null,
       "sourceUrl": "https://wl.seetickets.us/event/sam-morrow/700507?afflky=FunkyBiscuit",
       "method": "seetickets",
-      "fetchedAt": "2026-09-11T14:07:33.738Z"
+      "fetchedAt": "2026-09-12T13:25:35.795Z"
     },
     {
       "id": "crazy-uncle-mikes-2026-11-12-here-come-the-mummies",
@@ -2454,7 +2406,7 @@
       "tributeTo": null,
       "sourceUrl": "https://www.eventbrite.com/e/here-come-the-mummies-tickets-1997717886977?aff=oddtdtcreator",
       "method": "tribe-rest",
-      "fetchedAt": "2026-09-11T14:07:33.842Z"
+      "fetchedAt": "2026-09-12T13:25:35.841Z"
     },
     {
       "id": "arts-garage-2026-11-13-beautiful-loser-the-bob-seger-tribute",
@@ -2466,7 +2418,7 @@
       "tributeTo": "Bob Seger",
       "sourceUrl": "https://artsgarage.org/event/beautiful-loser-the-bob-seger-tribute-5/",
       "method": "tribe-rest",
-      "fetchedAt": "2026-09-11T14:07:33.850Z"
+      "fetchedAt": "2026-09-12T13:25:35.849Z"
     },
     {
       "id": "crazy-uncle-mikes-2026-11-13-mike-tramp",
@@ -2478,7 +2430,7 @@
       "tributeTo": null,
       "sourceUrl": "https://www.eventbrite.com/e/mike-tramp-tickets-1999798458021?aff=oddtdtcreator",
       "method": "tribe-rest",
-      "fetchedAt": "2026-09-11T14:07:33.842Z"
+      "fetchedAt": "2026-09-12T13:25:35.841Z"
     },
     {
       "id": "funky-biscuit-2026-11-13-parker-barrow",
@@ -2490,7 +2442,7 @@
       "tributeTo": null,
       "sourceUrl": "https://wl.seetickets.us/event/parker-barrow/700883?afflky=FunkyBiscuit",
       "method": "seetickets",
-      "fetchedAt": "2026-09-11T14:07:33.738Z"
+      "fetchedAt": "2026-09-12T13:25:35.795Z"
     },
     {
       "id": "funky-biscuit-2026-11-14-the-legendary-wailers-featuring-julian-j",
@@ -2502,7 +2454,7 @@
       "tributeTo": null,
       "sourceUrl": "https://wl.seetickets.us/event/the-legendary-wailers-featuring-julian-junior-marvin/696490?afflky=FunkyBiscuit",
       "method": "seetickets",
-      "fetchedAt": "2026-09-11T14:07:33.738Z"
+      "fetchedAt": "2026-09-12T13:25:35.795Z"
     },
     {
       "id": "arts-garage-2026-11-14-dick-lowenthal-s-big-band-featuring-lisa",
@@ -2514,7 +2466,7 @@
       "tributeTo": null,
       "sourceUrl": "https://artsgarage.org/event/dick-lowenthals-big-band-featuring-lisanne-lyons/",
       "method": "tribe-rest",
-      "fetchedAt": "2026-09-11T14:07:33.850Z"
+      "fetchedAt": "2026-09-12T13:25:35.849Z"
     },
     {
       "id": "arts-garage-2026-11-15-daniela-soledade-presents-the-girl-from-",
@@ -2526,7 +2478,7 @@
       "tributeTo": null,
       "sourceUrl": "https://artsgarage.org/event/daniela-soledade-presents-the-girl-from-ipanema/",
       "method": "tribe-rest",
-      "fetchedAt": "2026-09-11T14:07:33.850Z"
+      "fetchedAt": "2026-09-12T13:25:35.849Z"
     },
     {
       "id": "arts-garage-2026-11-17-senior-series-improv-with-micah-stinton",
@@ -2536,9 +2488,9 @@
       "venueId": "arts-garage",
       "tributeEvidence": null,
       "tributeTo": null,
-      "sourceUrl": "https://artsgarage.org/event/senior-series-improv-with-micah-stinton/2026-11-17/",
+      "sourceUrl": "https://artsgarage.org/event/senior-series-improv-with-micah-stinton-2/2026-11-17/",
       "method": "tribe-rest",
-      "fetchedAt": "2026-09-11T14:07:33.850Z"
+      "fetchedAt": "2026-09-12T13:25:35.849Z"
     },
     {
       "id": "funky-biscuit-2026-11-17-bearly-dead-with-special-guests-crazy-fi",
@@ -2550,7 +2502,7 @@
       "tributeTo": "Grateful Dead",
       "sourceUrl": "https://wl.seetickets.us/event/bearly-dead-with-special-guests-crazy-fingers/702315?afflky=FunkyBiscuit",
       "method": "seetickets",
-      "fetchedAt": "2026-09-11T14:07:33.738Z"
+      "fetchedAt": "2026-09-12T13:25:35.795Z"
     },
     {
       "id": "boca-black-box-2026-11-17-a-night-of-soul-jazz-with-erin-stevenson",
@@ -2562,7 +2514,7 @@
       "tributeTo": null,
       "sourceUrl": "https://bocablackbox.showare.com/orderticketsvenue.asp?p=5493",
       "method": "next-data-paged",
-      "fetchedAt": "2026-09-11T14:07:33.843Z"
+      "fetchedAt": "2026-09-12T13:25:35.842Z"
     },
     {
       "id": "arts-garage-2026-11-17-spoken-word-open-mic-poetry-storytelling",
@@ -2574,7 +2526,7 @@
       "tributeTo": null,
       "sourceUrl": "https://artsgarage.org/event/spoken-word-open-mic-poetry-storytelling-lyrics/2026-11-17/",
       "method": "tribe-rest",
-      "fetchedAt": "2026-09-11T14:07:33.850Z"
+      "fetchedAt": "2026-09-12T13:25:35.849Z"
     },
     {
       "id": "funky-biscuit-2026-11-18-ga-20-with-special-guest-gabe-stillman",
@@ -2586,7 +2538,7 @@
       "tributeTo": null,
       "sourceUrl": "https://wl.seetickets.us/event/ga-20-with-special-guest-gabe-stillman/697439?afflky=FunkyBiscuit",
       "method": "seetickets",
-      "fetchedAt": "2026-09-11T14:07:33.738Z"
+      "fetchedAt": "2026-09-12T13:25:35.795Z"
     },
     {
       "id": "funky-biscuit-2026-11-19-an-evening-with-elton-dan-and-the-rocket",
@@ -2598,7 +2550,7 @@
       "tributeTo": "Elton John",
       "sourceUrl": "https://wl.seetickets.us/event/an-evening-with-elton-dan-and-the-rocket-band/692425?afflky=FunkyBiscuit",
       "method": "seetickets",
-      "fetchedAt": "2026-09-11T14:07:33.738Z"
+      "fetchedAt": "2026-09-12T13:25:35.795Z"
     },
     {
       "id": "arts-garage-2026-11-20-jessy-d-az-the-journey-of-cuban-music",
@@ -2610,7 +2562,7 @@
       "tributeTo": null,
       "sourceUrl": "https://artsgarage.org/event/jessy-diaz-the-journey-of-cuban-music/",
       "method": "tribe-rest",
-      "fetchedAt": "2026-09-11T14:07:33.850Z"
+      "fetchedAt": "2026-09-12T13:25:35.849Z"
     },
     {
       "id": "funky-biscuit-2026-11-20-spafford",
@@ -2622,7 +2574,7 @@
       "tributeTo": null,
       "sourceUrl": "https://wl.seetickets.us/event/spafford/699795?afflky=FunkyBiscuit",
       "method": "seetickets",
-      "fetchedAt": "2026-09-11T14:07:33.738Z"
+      "fetchedAt": "2026-09-12T13:25:35.795Z"
     },
     {
       "id": "funky-biscuit-2026-11-21-gary-s-ho-ho-hoey-rockin-holiday-tour",
@@ -2634,7 +2586,7 @@
       "tributeTo": null,
       "sourceUrl": "https://wl.seetickets.us/event/garys-ho-ho-hoey-rockin-holiday-tour/699233?afflky=FunkyBiscuit",
       "method": "seetickets",
-      "fetchedAt": "2026-09-11T14:07:33.738Z"
+      "fetchedAt": "2026-09-12T13:25:35.795Z"
     },
     {
       "id": "arts-garage-2026-11-21-cary-hoffman-my-sinatra",
@@ -2646,7 +2598,7 @@
       "tributeTo": "Frank Sinatra",
       "sourceUrl": "https://artsgarage.org/event/cary-hoffman-my-sinatra/",
       "method": "tribe-rest",
-      "fetchedAt": "2026-09-11T14:07:33.850Z"
+      "fetchedAt": "2026-09-12T13:25:35.849Z"
     },
     {
       "id": "arts-garage-2026-11-22-one-hit-wonders",
@@ -2658,7 +2610,7 @@
       "tributeTo": null,
       "sourceUrl": "https://artsgarage.org/event/one-hit-wonders-6/",
       "method": "tribe-rest",
-      "fetchedAt": "2026-09-11T14:07:33.850Z"
+      "fetchedAt": "2026-09-12T13:25:35.849Z"
     },
     {
       "id": "funky-biscuit-2026-11-24-the-last-waltz-50-year-golden-anniversar",
@@ -2670,7 +2622,7 @@
       "tributeTo": "The Band",
       "sourceUrl": "https://wl.seetickets.us/event/the-last-waltz-50-year-golden-anniversary-celebration/693993?afflky=FunkyBiscuit",
       "method": "seetickets",
-      "fetchedAt": "2026-09-11T14:07:33.738Z"
+      "fetchedAt": "2026-09-12T13:25:35.795Z"
     },
     {
       "id": "boca-black-box-2026-11-25-all-arts-open-mic-night",
@@ -2682,7 +2634,7 @@
       "tributeTo": null,
       "sourceUrl": "http://bocablackbox.showare.com/AllArtsOpenMicNightBox20",
       "method": "next-data-paged",
-      "fetchedAt": "2026-09-11T14:07:33.843Z"
+      "fetchedAt": "2026-09-12T13:25:35.842Z"
     },
     {
       "id": "funky-biscuit-2026-11-25-the-last-waltz-50-year-golden-anniversar",
@@ -2694,7 +2646,7 @@
       "tributeTo": "The Band",
       "sourceUrl": "https://wl.seetickets.us/event/the-last-waltz-50-year-golden-anniversary-celebration/692482?afflky=FunkyBiscuit",
       "method": "seetickets",
-      "fetchedAt": "2026-09-11T14:07:33.738Z"
+      "fetchedAt": "2026-09-12T13:25:35.795Z"
     },
     {
       "id": "arts-garage-2026-11-26-senior-series-groove-with-karen-king",
@@ -2704,9 +2656,9 @@
       "venueId": "arts-garage",
       "tributeEvidence": null,
       "tributeTo": null,
-      "sourceUrl": "https://artsgarage.org/event/senior-series-groove-with-karen-king/2026-11-26/",
+      "sourceUrl": "https://artsgarage.org/event/senior-series-groove-with-karen-king-2/2026-11-26/",
       "method": "tribe-rest",
-      "fetchedAt": "2026-09-11T14:07:33.850Z"
+      "fetchedAt": "2026-09-12T13:25:35.849Z"
     },
     {
       "id": "arts-garage-2026-11-27-the-art-of-laughter-with-richy-leis-ft-m",
@@ -2718,7 +2670,7 @@
       "tributeTo": null,
       "sourceUrl": "https://artsgarage.org/event/the-art-of-laughter-with-richy-leis-ft-mia-lg-mariza-brussolo/",
       "method": "tribe-rest",
-      "fetchedAt": "2026-09-11T14:07:33.850Z"
+      "fetchedAt": "2026-09-12T13:25:35.849Z"
     },
     {
       "id": "funky-biscuit-2026-11-27-steely-dead",
@@ -2730,7 +2682,7 @@
       "tributeTo": "Steely Dan & Grateful Dead",
       "sourceUrl": "https://wl.seetickets.us/event/steely-dead/695155?afflky=FunkyBiscuit",
       "method": "seetickets",
-      "fetchedAt": "2026-09-11T14:07:33.738Z"
+      "fetchedAt": "2026-09-12T13:25:35.795Z"
     },
     {
       "id": "funky-biscuit-2026-11-28-steely-dead",
@@ -2742,7 +2694,7 @@
       "tributeTo": "Steely Dan & Grateful Dead",
       "sourceUrl": "https://wl.seetickets.us/event/steely-dead/695157?afflky=FunkyBiscuit",
       "method": "seetickets",
-      "fetchedAt": "2026-09-11T14:07:33.738Z"
+      "fetchedAt": "2026-09-12T13:25:35.795Z"
     },
     {
       "id": "arts-garage-2026-11-28-greggie-the-jets-a-tribute-to-elton-john",
@@ -2754,7 +2706,7 @@
       "tributeTo": "Elton John",
       "sourceUrl": "https://artsgarage.org/event/greggie-the-jets-a-tribute-to-elton-john-4/",
       "method": "tribe-rest",
-      "fetchedAt": "2026-09-11T14:07:33.850Z"
+      "fetchedAt": "2026-09-12T13:25:35.849Z"
     },
     {
       "id": "arts-garage-2026-11-29-blake-country-blake-shelton-tribute",
@@ -2766,7 +2718,7 @@
       "tributeTo": "Blake Shelton",
       "sourceUrl": "https://artsgarage.org/event/blake-country-blake-shelton-tribute/",
       "method": "tribe-rest",
-      "fetchedAt": "2026-09-11T14:07:33.850Z"
+      "fetchedAt": "2026-09-12T13:25:35.849Z"
     },
     {
       "id": "arts-garage-2026-12-01-comedy-open-mic",
@@ -2778,7 +2730,7 @@
       "tributeTo": null,
       "sourceUrl": "https://artsgarage.org/event/comedy-night-36-2/2026-12-01/",
       "method": "tribe-rest",
-      "fetchedAt": "2026-09-11T14:07:33.850Z"
+      "fetchedAt": "2026-09-12T13:25:35.849Z"
     },
     {
       "id": "funky-biscuit-2026-12-02-johnny-sansone-band",
@@ -2790,7 +2742,7 @@
       "tributeTo": null,
       "sourceUrl": "https://wl.seetickets.us/event/johnny-sansone-band/697709?afflky=FunkyBiscuit",
       "method": "seetickets",
-      "fetchedAt": "2026-09-11T14:07:33.738Z"
+      "fetchedAt": "2026-09-12T13:25:35.795Z"
     },
     {
       "id": "funky-biscuit-2026-12-04-an-evening-with-david-nail-will-hoge",
@@ -2802,7 +2754,7 @@
       "tributeTo": null,
       "sourceUrl": "https://wl.seetickets.us/event/an-evening-with-david-nail-and-will-hoge/696444?afflky=FunkyBiscuit",
       "method": "seetickets",
-      "fetchedAt": "2026-09-11T14:07:33.738Z"
+      "fetchedAt": "2026-09-12T13:25:35.795Z"
     },
     {
       "id": "arts-garage-2026-12-04-cece-teneal-tribute-to-aretha-10th-anniv",
@@ -2814,7 +2766,7 @@
       "tributeTo": "Aretha",
       "sourceUrl": "https://artsgarage.org/event/cece-teneal-tribute-to-aretha-friday/",
       "method": "tribe-rest",
-      "fetchedAt": "2026-09-11T14:07:33.850Z"
+      "fetchedAt": "2026-09-12T13:25:35.849Z"
     },
     {
       "id": "funky-biscuit-2026-12-05-an-evening-with-david-nail-will-hoge",
@@ -2826,7 +2778,7 @@
       "tributeTo": null,
       "sourceUrl": "https://wl.seetickets.us/event/an-evening-with-david-nail-and-will-hoge/696446?afflky=FunkyBiscuit",
       "method": "seetickets",
-      "fetchedAt": "2026-09-11T14:07:33.738Z"
+      "fetchedAt": "2026-09-12T13:25:35.795Z"
     },
     {
       "id": "arts-garage-2026-12-05-cece-teneal-tribute-to-aretha-10th-anniv",
@@ -2838,7 +2790,7 @@
       "tributeTo": "Aretha",
       "sourceUrl": "https://artsgarage.org/event/cece-teneal-tribute-to-aretha-saturday/",
       "method": "tribe-rest",
-      "fetchedAt": "2026-09-11T14:07:33.850Z"
+      "fetchedAt": "2026-09-12T13:25:35.849Z"
     },
     {
       "id": "funky-biscuit-2026-12-06-big-something-with-special-guests-melody",
@@ -2850,7 +2802,7 @@
       "tributeTo": null,
       "sourceUrl": "https://wl.seetickets.us/event/big-something-with-special-guest-melody-trucks/703760?afflky=FunkyBiscuit",
       "method": "seetickets",
-      "fetchedAt": "2026-09-11T14:07:33.738Z"
+      "fetchedAt": "2026-09-12T13:25:35.795Z"
     },
     {
       "id": "arts-garage-2026-12-06-letters-aloud-thanks-but-no-thanks",
@@ -2862,7 +2814,7 @@
       "tributeTo": null,
       "sourceUrl": "https://artsgarage.org/event/letters-aloud-thanks-but-no-thanks/",
       "method": "tribe-rest",
-      "fetchedAt": "2026-09-11T14:07:33.850Z"
+      "fetchedAt": "2026-09-12T13:25:35.849Z"
     },
     {
       "id": "crazy-uncle-mikes-2026-12-06-sugaray-rayford",
@@ -2874,7 +2826,7 @@
       "tributeTo": null,
       "sourceUrl": "https://www.eventbrite.com/e/sugaray-rayford-tickets-1999119287604?aff=oddtdtcreator",
       "method": "tribe-rest",
-      "fetchedAt": "2026-09-11T14:07:33.842Z"
+      "fetchedAt": "2026-09-12T13:25:35.841Z"
     },
     {
       "id": "boca-black-box-2026-12-10-all-arts-open-mic-night",
@@ -2886,7 +2838,7 @@
       "tributeTo": null,
       "sourceUrl": "http://bocablackbox.showare.com/AllArtsOpenMicNightBox20",
       "method": "next-data-paged",
-      "fetchedAt": "2026-09-11T14:07:33.843Z"
+      "fetchedAt": "2026-09-12T13:25:35.842Z"
     },
     {
       "id": "boca-black-box-2026-12-11-cactus",
@@ -2898,7 +2850,7 @@
       "tributeTo": null,
       "sourceUrl": "https://bocablackbox.showare.com/orderticketsvenue.asp?p=5632",
       "method": "next-data-paged",
-      "fetchedAt": "2026-09-11T14:07:33.843Z"
+      "fetchedAt": "2026-09-12T13:25:35.842Z"
     },
     {
       "id": "funky-biscuit-2026-12-12-mindi-abair-pre-show-vip-wine-jazz-tasti",
@@ -2910,7 +2862,7 @@
       "tributeTo": null,
       "sourceUrl": "https://wl.seetickets.us/event/mindi-abair-pre-show-vip-wine-and-jazz-tasting/701885?afflky=FunkyBiscuit",
       "method": "seetickets",
-      "fetchedAt": "2026-09-11T14:07:33.738Z"
+      "fetchedAt": "2026-09-12T13:25:35.795Z"
     },
     {
       "id": "crazy-uncle-mikes-2026-12-12-blood-brothers",
@@ -2922,7 +2874,7 @@
       "tributeTo": null,
       "sourceUrl": "https://crazyunclemikes.com/event/blood-brothers/",
       "method": "tribe-rest",
-      "fetchedAt": "2026-09-11T14:07:33.842Z"
+      "fetchedAt": "2026-09-12T13:25:35.841Z"
     },
     {
       "id": "boca-black-box-2026-12-17-noches-de-comedia-stand-up-en-espa-ol-sp",
@@ -2934,7 +2886,7 @@
       "tributeTo": null,
       "sourceUrl": "http://bocablackbox.showare.com/NochesDeComediaSTANDUPENESPAOL-SPANISHCOMEDYTheBox20",
       "method": "next-data-paged",
-      "fetchedAt": "2026-09-11T14:07:33.843Z"
+      "fetchedAt": "2026-09-12T13:25:35.842Z"
     },
     {
       "id": "boca-black-box-2026-12-18-comedian-bear-webb",
@@ -2946,7 +2898,7 @@
       "tributeTo": null,
       "sourceUrl": "https://bocablackbox.showare.com/eventperformances.asp?evt=1060",
       "method": "next-data-paged",
-      "fetchedAt": "2026-09-11T14:07:33.843Z"
+      "fetchedAt": "2026-09-12T13:25:35.842Z"
     },
     {
       "id": "funky-biscuit-2027-01-22-john-kadlecik-solo-acousti-lectric",
@@ -2958,7 +2910,7 @@
       "tributeTo": null,
       "sourceUrl": "https://wl.seetickets.us/event/john-kadlecik-solo-acoustilectric/704989?afflky=FunkyBiscuit",
       "method": "seetickets",
-      "fetchedAt": "2026-09-11T14:07:33.738Z"
+      "fetchedAt": "2026-09-12T13:25:35.795Z"
     },
     {
       "id": "funky-biscuit-2027-01-27-corky-laing-s-mountain-birthday-bash",
@@ -2970,7 +2922,7 @@
       "tributeTo": null,
       "sourceUrl": "https://wl.seetickets.us/event/corky-laings-mountain-birthday-bash/704995?afflky=FunkyBiscuit",
       "method": "seetickets",
-      "fetchedAt": "2026-09-11T14:07:33.738Z"
+      "fetchedAt": "2026-09-12T13:25:35.795Z"
     },
     {
       "id": "the-parker-2027-01-31-chris-botti",
@@ -2982,7 +2934,7 @@
       "tributeTo": null,
       "sourceUrl": "https://www.parkerplayhouse.com/events/detail/chris-botti-2027",
       "method": "event-date-markup",
-      "fetchedAt": "2026-09-11T14:07:33.849Z"
+      "fetchedAt": "2026-09-12T13:25:35.849Z"
     },
     {
       "id": "boca-black-box-2027-02-19-adult-bingo",
@@ -2994,7 +2946,7 @@
       "tributeTo": null,
       "sourceUrl": "https://bocablackbox.showare.com/orderticketsvenue.asp?p=5578",
       "method": "next-data-paged",
-      "fetchedAt": "2026-09-11T14:07:33.843Z"
+      "fetchedAt": "2026-09-12T13:25:35.842Z"
     },
     {
       "id": "funky-biscuit-2027-02-19-deadphish-orchestra",
@@ -3006,7 +2958,7 @@
       "tributeTo": null,
       "sourceUrl": "https://wl.seetickets.us/event/deadphish-orchestra/705002?afflky=FunkyBiscuit",
       "method": "seetickets",
-      "fetchedAt": "2026-09-11T14:07:33.738Z"
+      "fetchedAt": "2026-09-12T13:25:35.795Z"
     },
     {
       "id": "boca-black-box-2027-02-20-abba-revisited",
@@ -3018,7 +2970,7 @@
       "tributeTo": "ABBA",
       "sourceUrl": "https://bocablackbox.showare.com/orderticketsvenue.asp?p=5570",
       "method": "next-data-paged",
-      "fetchedAt": "2026-09-11T14:07:33.843Z"
+      "fetchedAt": "2026-09-12T13:25:35.842Z"
     },
     {
       "id": "funky-biscuit-2027-03-21-the-paul-thorn-band",
@@ -3030,7 +2982,7 @@
       "tributeTo": null,
       "sourceUrl": "https://wl.seetickets.us/event/the-paul-thorn-band/704715?afflky=FunkyBiscuit",
       "method": "seetickets",
-      "fetchedAt": "2026-09-11T14:07:33.738Z"
+      "fetchedAt": "2026-09-12T13:25:35.795Z"
     },
     {
       "id": "boca-black-box-2027-04-03-vanilla-fudge",
@@ -3042,7 +2994,7 @@
       "tributeTo": null,
       "sourceUrl": "https://bocablackbox.showare.com/orderticketsvenue.asp?p=5633",
       "method": "next-data-paged",
-      "fetchedAt": "2026-09-11T14:07:33.843Z"
+      "fetchedAt": "2026-09-12T13:25:35.842Z"
     },
     {
       "id": "boca-black-box-2027-04-18-abbafab-the-1-abba-tribute-concert-in-th",
@@ -3054,7 +3006,7 @@
       "tributeTo": "Abba",
       "sourceUrl": "https://bocablackbox.showare.com/orderticketsvenue.asp?p=5129",
       "method": "next-data-paged",
-      "fetchedAt": "2026-09-11T14:07:33.843Z"
+      "fetchedAt": "2026-09-12T13:25:35.842Z"
     },
     {
       "id": "boca-black-box-2027-05-16-barclay-performing-arts-coming-soon-",
@@ -3066,7 +3018,7 @@
       "tributeTo": null,
       "sourceUrl": "https://bocablackbox.com/",
       "method": "next-data-paged",
-      "fetchedAt": "2026-09-11T14:07:33.843Z"
+      "fetchedAt": "2026-09-12T13:25:35.842Z"
     },
     {
       "id": "boca-black-box-2027-06-27-barclay-performing-arts-coming-soon-",
@@ -3078,7 +3030,7 @@
       "tributeTo": null,
       "sourceUrl": "https://bocablackbox.com/",
       "method": "next-data-paged",
-      "fetchedAt": "2026-09-11T14:07:33.843Z"
+      "fetchedAt": "2026-09-12T13:25:35.842Z"
     }
   ]
 }
