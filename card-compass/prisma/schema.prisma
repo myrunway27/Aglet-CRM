@@ -1,0 +1,85 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+/// Catalog card (one specific printing in one set).
+model Card {
+  id         String          @id @default(cuid())
+  /// Provider-qualified catalog id, e.g. "pokemontcg:sv3pt5-25" or "mock:demo-a-25".
+  catalogId  String          @unique
+  name       String
+  number     String
+  setId      String
+  setName    String
+  imageUrl   String?
+  rarity     String?
+  updatedAt  DateTime        @updatedAt
+  snapshots  PriceSnapshot[]
+  offers     Offer[]
+  scans      Scan[]
+
+  @@index([name])
+  @@index([number, setId])
+}
+
+/// One scan attempt. Raw photos are never stored (imageRetained stays false).
+model Scan {
+  id             String   @id @default(cuid())
+  parsedName     String?
+  parsedNumber   String?
+  selectedCardId String?
+  selectedCard   Card?    @relation(fields: [selectedCardId], references: [id], onDelete: SetNull)
+  createdAt      DateTime @default(now())
+  imageRetained  Boolean  @default(false)
+}
+
+/// Informational reference price published by a source (NOT a purchasable listing).
+model PriceSnapshot {
+  id            String   @id @default(cuid())
+  cardId        String
+  card          Card     @relation(fields: [cardId], references: [id], onDelete: Cascade)
+  /// "tcgplayer" | "cardmarket" | "mock"
+  source        String
+  sourceCardUrl String?
+  /// ISO 4217, kept in original currency. Never converted.
+  currency      String
+  amountMinor   Int
+  /// e.g. "market", "low", "trend", "avg30"
+  subtype       String
+  /// e.g. "normal", "holofoil", "reverseHolofoil"
+  finish        String
+  /// When the source says the price was last updated.
+  observedAt    DateTime
+  /// When this app fetched it.
+  fetchedAt     DateTime @default(now())
+
+  @@unique([cardId, source, finish, subtype, observedAt])
+  @@index([cardId, fetchedAt])
+}
+
+/// Reserved for future licensed live-offer adapters. Not populated in the MVP.
+model Offer {
+  id            String   @id @default(cuid())
+  cardId        String
+  card          Card     @relation(fields: [cardId], references: [id], onDelete: Cascade)
+  provider      String
+  listingId     String
+  url           String
+  currency      String
+  itemMinor     Int
+  shippingMinor Int?
+  taxMinor      Int?
+  location      String?
+  language      String?
+  finish        String?
+  condition     String?
+  observedAt    DateTime
+  available     Boolean  @default(true)
+
+  @@unique([provider, listingId, finish])
+}

@@ -1,0 +1,38 @@
+[
+  {
+    "file": "pikachu-dsa.png",
+    "sha256": "f5ff0e37db7f94cabbd35b87bd095ce905f1b7497060a80dfce81f44257a3861",
+    "text": "BASIC\nPikachu\nHP 60\nWeakness Resistance Retreat\nIllus. Demo Artist\nDSA 025/198\n©2026 Demo",
+    "locale": "en"
+  },
+  {
+    "file": "pikachu-no-setcode.png",
+    "sha256": "6ac70c14f3773148bb958338ae3731a8bd030627c86ef22c52431fe7a6b0b997",
+    "text": "BASIC\nPikachu\nHP 60\nWeakness Resistance Retreat\n025/198",
+    "locale": "en"
+  },
+  {
+    "file": "charizard-glare.png",
+    "sha256": "c2319e22fe19b6086e75d247e22083e13675452c25f8d54741c0d9be02242bce",
+    "text": "STAGE 2\nCharizrd ex\nHP 330\nWeakness Retreat\n0O6/198",
+    "locale": "en"
+  },
+  {
+    "file": "eevee-rotated.png",
+    "sha256": "7b6a0e1a539dd17d621f09adc9f58e676676289f59f0bfedd4f6e6f88b1da93b",
+    "text": "BASIC\nEevee\nHP 70\nDSA TG05/TG30",
+    "locale": "en"
+  },
+  {
+    "file": "pikachu-japanese.png",
+    "sha256": "e28ed5cb3c4fdb4fe6592adb9a6c7014a97ff2157a639258fec75897c095213c",
+    "text": "たね\nピカチュウ\nHP 60\n弱点 抵抗力 にげる\n025/198",
+    "locale": "ja"
+  },
+  {
+    "file": "blank-back.png",
+    "sha256": "572ca0e47eda94392dd0e360ab175aca102ef125029910d2e78ae17391ad9920",
+    "text": "",
+    "locale": null
+  }
+]

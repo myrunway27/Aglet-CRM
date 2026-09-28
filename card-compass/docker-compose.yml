@@ -1,0 +1,17 @@
+services:
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: cardcompass
+      POSTGRES_PASSWORD: cardcompass
+      POSTGRES_DB: cardcompass
+    ports:
+      - "5432:5432"
+    volumes:
+      - cardcompass-db:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U cardcompass"]
+      interval: 5s
+      retries: 10
+volumes:
+  cardcompass-db:
