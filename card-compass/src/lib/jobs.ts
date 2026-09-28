@@ -77,6 +77,15 @@ export async function checkAlerts(now = Date.now()) {
   return { checked: alerts.length, triggered };
 }
 
+/** Record today's references for every wishlisted card (collections and alerts already do this). */
+export async function snapshotWishlistCards(now = Date.now()) {
+  const client = db();
+  if (!client) return { cards: 0 };
+  const rows = await client.wishlistItem.findMany({ distinct: ["catalogId"], select: { catalogId: true } });
+  await mapLimit(rows.map((r) => r.catalogId), 4, (id) => referencesFor(id, now));
+  return { cards: rows.length };
+}
+
 export async function snapshotAllCollections(now = Date.now()) {
   const client = db();
   if (!client) return { users: 0 };

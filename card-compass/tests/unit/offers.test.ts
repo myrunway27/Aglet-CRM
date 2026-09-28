@@ -11,7 +11,7 @@ import type { Selection } from "@/lib/selection";
 const NOW = Date.parse("2026-09-28T12:00:00Z");
 const fx: FxRates = { base: "EUR", date: "2026-09-26", rates: { USD: 1.1, GBP: 0.85, JPY: 160, AUD: 1.6, CAD: 1.5 }, source: "demo", sourceUrl: null };
 const policy = { minFeedbackPct: 98, minFeedbackScore: 20 };
-const catalog = new MockCatalogProvider();
+const catalog = new MockCatalogProvider(undefined, () => Date.parse("2026-09-28T12:00:00Z"));
 const rawRev: Selection = { finish: "reverseHolofoil", lang: "en", grading: "raw", condition: "NM" };
 
 function listing(over: Partial<Listing>): Listing {

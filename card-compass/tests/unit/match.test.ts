@@ -5,7 +5,7 @@ import { MockCatalogProvider } from "@/lib/catalog/mock";
 import { findCandidates, MAX_CANDIDATES, rankCandidates } from "@/lib/matching/match";
 import { parseCardText } from "@/lib/matching/parse";
 
-const catalog = new MockCatalogProvider();
+const catalog = new MockCatalogProvider(undefined, () => Date.parse("2026-09-28T12:00:00Z"));
 const fixture = (n: string) => readFileSync(path.join(__dirname, "../../fixtures/ocr", `${n}.txt`), "utf8");
 
 describe("findCandidates", () => {

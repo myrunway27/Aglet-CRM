@@ -5,7 +5,7 @@ import { toReferences } from "@/lib/prices";
 import { shouldTrigger, totalCollection, valueItem } from "@/lib/valuation";
 
 const NOW = Date.parse("2026-09-28T12:00:00Z");
-const catalog = new MockCatalogProvider();
+const catalog = new MockCatalogProvider(undefined, () => Date.parse("2026-09-28T12:00:00Z"));
 const refs = async (id: string) => toReferences(await catalog.getCard(id), { now: NOW, staleAfterDays: 7 }).references;
 
 describe("valueItem / totalCollection", () => {

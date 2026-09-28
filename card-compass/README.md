@@ -6,6 +6,12 @@ An installable web app (PWA) for Pokémon TCG cards:
 2. **Confirm** the exact printing, then compare **source-attributed reference prices**: TCGplayer (USD) and Cardmarket (EUR).
 3. **Live listings from eBay**. Each listing is checked against your exact card, then ranked by **delivered cost to your country**. That cost is item + shipping + import VAT/duty, converted with dated ECB exchange rates. A listing is ranked only when every input is known; otherwise it is marked "total unknown".
 4. **Accounts**: a saved **collection** with its value over time, plus **price alerts** that arrive as in-app notifications and web-push notifications on your phone.
+5. **Collector tools**:
+   - **Bulk scan**: a stack of cards, reviewed and added in one go.
+   - **Binders**: folders for your collection.
+   - **Profit/loss**: against what you paid, converted with dated FX when currencies differ.
+   - **Wishlist**: an optional target price creates a price alert.
+   - **Set completion**, **CSV import/export** (with a preview before anything is written), **price-history charts**, and **top movers** (7- and 30-day).
 
 Out of the box everything runs in **demo mode**, with bundled, clearly labeled sample data and no credentials. Each integration switches on with an environment variable and your own API key.
 
@@ -23,6 +29,8 @@ Out of the box everything runs in **demo mode**, with bundled, clearly labeled s
 | Exchange rates | `FX_PROVIDER=mock\|ecb` | Demo rates by default. The ECB daily reference-rate adapter is unit-tested; check it live. |
 | Import charges | built in | Rules for low-value parcels to the **EU** (VAT + €3 flat duty), **UK** (≤ £135, 20% VAT) and **Australia** (≤ A$1,000, 10% GST), reviewed 28 Sep 2026. Every other case, including imports into the US, CA and JP, shows "total unknown". **Have a customs specialist verify before launch.** |
 | Accounts, collection, alerts | needs `DATABASE_URL` | Working, covered by E2E tests. |
+| Binders, profit/loss, wishlist, sets, CSV, bulk scan | needs `DATABASE_URL` | Working, covered by E2E tests. |
+| Price history + market movers | needs `DATABASE_URL` | Built from the reference-price snapshots this app stores. History starts when a card is first looked up or tracked (the cron job refreshes tracked cards daily). Demo mode seeds 90 days of **demo** history. These are reference prices, not completed sales. |
 | Web push | `NEXT_PUBLIC_VAPID_PUBLIC_KEY`, `VAPID_PRIVATE_KEY`, `VAPID_SUBJECT` | Implemented. iOS delivers push only to the installed app (iOS 16.4+). |
 | Scheduled job | `CRON_SECRET` | `POST /api/cron/run` checks alerts and snapshots collection values. |
 
@@ -38,11 +46,13 @@ Out of the box everything runs in **demo mode**, with bundled, clearly labeled s
    │                                  condition, seller, lot/proxy) → landed/ (shipping + import rules)
    │                                  + fx/ (ECB) → rank only fully-known totals
    ├─ /api/auth/*  (scrypt hashes, server-side sessions, SameSite=Lax + Origin check)
-   ├─ /api/collection, /api/alerts, /api/notifications, /api/push/subscribe, /api/account
-   └─ POST /api/cron/run ─────────── jobs.ts: checkAlerts() + snapshotAllCollections() → push.ts (web-push)
+   ├─ /api/collection (+ /export, /import with dry-run, /bulk), /api/binders, /api/wishlist
+   ├─ /api/sets, /api/sets/:id (catalog listSet), /api/cards/:id/history, /api/market/movers
+   ├─ /api/alerts, /api/notifications, /api/push/subscribe, /api/account
+   └─ POST /api/cron/run ─────────── jobs.ts: checkAlerts() + snapshotAllCollections() + snapshotWishlistCards() → push.ts
 
  PostgreSQL (Prisma): Card, Scan, PriceSnapshot, User, Session, CollectionItem,
- CollectionValueSnapshot, PriceAlert, Notification, PushSubscription, Offer (reserved)
+ CollectionValueSnapshot, PriceAlert, Notification, PushSubscription, Binder, WishlistItem, Offer (reserved)
 ```
 
 Rules the code enforces:
@@ -93,9 +103,9 @@ Try it:
 
 ```bash
 npm run lint && npm run typecheck
-npm test               # Vitest: 97 unit tests
+npm test               # Vitest: 114 unit tests
 npm run build
-npm run test:e2e       # Playwright, desktop 1280 + mobile 390 (needs Postgres; run after build)
+npm run test:e2e       # Playwright, 24 tests at desktop 1280 + mobile 390 (needs Postgres; seeds demo data; run after build)
 npm run screenshots    # app on :3100 → docs/screenshots/*.png
 ```
 
@@ -106,10 +116,17 @@ The unit tests cover:
 - Listing checks: wrong number, language, graded vs raw, lots, "Charizard" vs "Charizard ex", finish, condition, seller feedback.
 - eBay token, headers, dedupe and partial failure; ranking order per country.
 - Collection valuation and totals; alert crossing and cooldown; scrypt passwords.
+- Profit/loss, including FX conversion and unknown cases.
+- CSV: round-trip, formula-injection guard, import validation by line.
+- Daily series and movers (window, stale, penny and short-history filtering).
+- Natural collector-number sort; set listing with paging; batched catalog lookups.
 
 The E2E tests cover the scan flow and listings ranked per country. They also cover:
 - Sign-up, collection value and history.
 - An alert fired by the cron job, and the cron secret check.
+- Bulk scan (pre-selection, required finish, confirmation) and binders.
+- Profit/loss, CSV export and import with preview, set completion.
+- Wishlist target to alert (and removal); price-history chart; market movers.
 - The sign-in redirect and cross-origin write refusal.
 - The manifest, icons and service worker.
 
@@ -139,4 +156,17 @@ The E2E tests cover the scan flow and listings ranked per country. They also cov
 - Delivered cost excludes carrier handling fees and US/CA/JP domestic sales tax (flagged on each listing). Imports into the US, Canada and Japan aren't modeled.
 - Reference prices cover English, ungraded printings. Graded and non-English collection items are listed but not valued.
 - Collection history records one point per day, when you view the page or the cron job runs.
+- Price history and movers only cover cards this app has stored prices for. They are not a whole-market index, and they show reference prices, not sales. Sold-price history needs a licensed source (see the roadmap below).
+- Set completion counts a card once, whatever its finish. "Master set" (every finish) tracking isn't built.
+- Bulk scan handles raw cards only; graded slabs use the single scan. Language and condition apply to the whole batch.
+
+## Roadmap
+
+1. **Data deals (owner action):**
+   - eBay production keys, plus Marketplace Insights access for sold prices.
+   - Price out PriceCharting's API for sold/graded history.
+   - PSA's cert-lookup API for graded slabs.
+   - Catalog sources for Japanese cards and sealed product.
+2. **App store version:** Capacitor wrapper, native camera and native push. Apple may reject apps that are only a website in a wrapper, so the native features matter.
+3. **Image-based live recognition**, once licensed card images are available.
 - No password reset or email verification yet.

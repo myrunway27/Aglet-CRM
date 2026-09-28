@@ -6,8 +6,8 @@ import { formatMinor } from "@/lib/money";
 export interface Point {
   day: string;
   amountMinor: number;
-  itemsPriced: number;
-  itemsTotal: number;
+  itemsPriced?: number;
+  itemsTotal?: number;
 }
 
 const fmtDay = (d: string) =>
@@ -17,7 +17,17 @@ const fmtDay = (d: string) =>
  * Single-series value-over-time line (one chart per source/currency; never a
  * second y-axis). Hover or focus shows the value; a table view is included.
  */
-export function ValueChart({ title, currency, points }: { title: string; currency: string; points: Point[] }) {
+export function ValueChart({
+  title,
+  currency,
+  points,
+  unit = "daily values",
+}: {
+  title: string;
+  currency: string;
+  points: Point[];
+  unit?: string;
+}) {
   const id = useId();
   const [hover, setHover] = useState<number | null>(null);
   const W = 560;
@@ -40,10 +50,12 @@ export function ValueChart({ title, currency, points }: { title: string; currenc
         <span className="font-semibold">{title}</span>
         <span className="text-sm text-slate-700" aria-live="polite">
           {fmtDay(p.day)}: <strong className="font-mono">{formatMinor(p.amountMinor, currency)}</strong>{" "}
-          <span className="text-slate-600">({p.itemsPriced} of {p.itemsTotal} cards priced)</span>
+          {p.itemsTotal !== undefined && (
+            <span className="text-slate-600">({p.itemsPriced} of {p.itemsTotal} cards priced)</span>
+          )}
         </span>
       </figcaption>
-      <svg viewBox={`0 0 ${W} ${H}`} className="h-40 w-full" role="img" aria-label={`${title}, ${points.length} daily values`} onMouseLeave={() => setHover(null)}>
+      <svg viewBox={`0 0 ${W} ${H}`} className="h-40 w-full" role="img" aria-label={`${title}, ${points.length} ${unit}`} onMouseLeave={() => setHover(null)}>
         <line x1={pad.l} x2={W - pad.r} y1={y(min)} y2={y(min)} stroke="#e2e8f0" strokeWidth="1" />
         <path d={path} fill="none" stroke="#4338ca" strokeWidth="2" strokeLinejoin="round" strokeLinecap="round" />
         {hover !== null && <line x1={x(hover)} x2={x(hover)} y1={pad.t} y2={H - pad.b} stroke="#94a3b8" strokeWidth="1" />}
@@ -61,6 +73,7 @@ export function ValueChart({ title, currency, points }: { title: string; currenc
             />
           </g>
         ))}
+        <text x={pad.l} y={pad.t + 10} fontSize="11" fill="#475569">{formatMinor(max, currency)}</text>
         <text x={pad.l} y={H - 6} fontSize="11" fill="#475569">{fmtDay(points[0].day)}</text>
         <text x={W - pad.r} y={H - 6} fontSize="11" fill="#475569" textAnchor="end">{fmtDay(points[points.length - 1].day)}</text>
       </svg>
@@ -71,7 +84,7 @@ export function ValueChart({ title, currency, points }: { title: string; currenc
             <tr className="text-slate-600">
               <th scope="col" className="py-1 font-medium">Day</th>
               <th scope="col" className="py-1 text-right font-medium">Value ({currency})</th>
-              <th scope="col" className="py-1 text-right font-medium">Cards priced</th>
+              {points[0].itemsTotal !== undefined && <th scope="col" className="py-1 text-right font-medium">Cards priced</th>}
             </tr>
           </thead>
           <tbody>
@@ -79,7 +92,7 @@ export function ValueChart({ title, currency, points }: { title: string; currenc
               <tr key={pt.day} className="border-t border-slate-100">
                 <td className="py-1">{pt.day}</td>
                 <td className="py-1 text-right font-mono">{formatMinor(pt.amountMinor, currency)}</td>
-                <td className="py-1 text-right">{pt.itemsPriced}/{pt.itemsTotal}</td>
+                {pt.itemsTotal !== undefined && <td className="py-1 text-right">{pt.itemsPriced}/{pt.itemsTotal}</td>}
               </tr>
             ))}
           </tbody>

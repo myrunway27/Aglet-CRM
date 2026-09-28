@@ -9,6 +9,7 @@ import { groupByFinish, subtypeLabel, SOURCES, type PriceReference, type SourceS
 import { CONDITIONS, LANGUAGES, selectionToQuery, type Selection } from "@/lib/selection";
 import { CardActions } from "./CardActions";
 import { OffersSection } from "./OffersSection";
+import { PriceHistory } from "./PriceHistory";
 import { CardArt } from "./CardArt";
 import { DemoBanner } from "./DemoBanner";
 import { PreferenceSelector, REGIONS, useRegion } from "./PreferenceSelector";
@@ -297,6 +298,8 @@ export function PriceResults({
           (pokemontcg.io). Check source terms before relying on these figures.
         </p>
       </section>
+
+      <PriceHistory cardId={cardId} finish={selection.finish} />
 
       {offersEnabled && <OffersSection cardId={cardId} selection={selection} region={region} />}
 

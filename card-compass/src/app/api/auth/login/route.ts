@@ -4,17 +4,20 @@ import { hashPassword, verifyPassword } from "@/lib/auth/password";
 import { Credentials } from "@/lib/auth/schemas";
 import { createSession } from "@/lib/auth/session";
 import { db } from "@/lib/db";
+import { env } from "@/lib/env";
 import { ValidationError } from "@/lib/errors";
 import { KeyedLimiter } from "@/lib/rate-limit";
 
 export const runtime = "nodejs";
-const byIp = new KeyedLimiter(10);
-const byEmail = new KeyedLimiter(5);
+let byIp: KeyedLimiter | undefined;
+let byEmail: KeyedLimiter | undefined;
 let dummyHash: Promise<string> | undefined;
 
 export async function POST(req: Request) {
   try {
     assertSameOrigin(req);
+    byIp ??= new KeyedLimiter(env().AUTH_LIMIT_PER_MINUTE * 2);
+    byEmail ??= new KeyedLimiter(env().AUTH_LIMIT_PER_MINUTE);
     byIp.check(clientKey(req));
     const client = db();
     if (!client) throw new ValidationError("Accounts are unavailable: no database configured.");

@@ -64,6 +64,21 @@ export interface CatalogProvider {
   searchByClues(clues: CatalogSearchClues): Promise<CatalogCard[]>;
   searchText(query: string): Promise<CatalogCard[]>;
   getCard(catalogId: string): Promise<CatalogCardWithPrices>;
+  /** Look up many cards (missing ids are simply absent from the result). */
+  getCards(catalogIds: string[]): Promise<CatalogCard[]>;
+  /** Every card in a set, sorted by collector number. */
+  listSet(setId: string): Promise<CatalogCard[]>;
+}
+
+export const SET_ID_RE = /^[A-Za-z0-9][A-Za-z0-9.]{0,31}$/;
+
+/** Natural sort for collector numbers ("2" < "10" < "TG05"). */
+export function compareNumbers(a: string, b: string): number {
+  const na = /^\d+$/.test(a);
+  const nb = /^\d+$/.test(b);
+  if (na && nb) return Number(a) - Number(b);
+  if (na !== nb) return na ? -1 : 1;
+  return a.localeCompare(b, "en", { numeric: true });
 }
 
 /** Catalog IDs look like "sv1-25" or "swsh12pt5-GG01". Validate before use in URLs. */

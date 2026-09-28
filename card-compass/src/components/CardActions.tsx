@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useState, type FormEvent } from "react";
+import { useEffect, useState, type FormEvent } from "react";
 import { ClientApiError } from "@/lib/api-types";
 import { api } from "@/lib/client-api";
 import { CURRENCIES, formatMinor, minorExponent } from "@/lib/money";
@@ -30,6 +30,15 @@ export function CardActions({
   const [paid, setPaid] = useState("");
   const [paidCur, setPaidCur] = useState("USD");
   const [colMsg, setColMsg] = useState<{ ok: boolean; text: string } | null>(null);
+  const [binders, setBinders] = useState<Array<{ id: string; name: string }>>([]);
+  const [binderId, setBinderId] = useState("");
+  const [wishTarget, setWishTarget] = useState("");
+  const [wishSource, setWishSource] = useState<SourceId>("tcgplayer");
+  const [wishMsg, setWishMsg] = useState<{ ok: boolean; text: string } | null>(null);
+
+  useEffect(() => {
+    if (signedIn) api<{ binders: Array<{ id: string; name: string }> }>("/api/binders").then((r) => setBinders(r.binders)).catch(() => undefined);
+  }, [signedIn]);
 
   const cmFinish = selection.finish === "reverseHolofoil" ? "reverseHolofoil" : "unspecified";
   const refFor = (s: SourceId, sub: string) =>
@@ -61,6 +70,7 @@ export function CardActions({
         catalogId: cardId,
         selection,
         quantity: qty,
+        binderId: binderId || null,
         ...(paid ? { purchasePrice: paid, purchaseCurrency: paidCur } : {}),
       });
       setColMsg({ ok: true, text: "Added to your collection." });
@@ -79,6 +89,20 @@ export function CardActions({
     }
   }
 
+  async function addToWishlist(e: FormEvent) {
+    e.preventDefault();
+    try {
+      await api("/api/wishlist", "POST", {
+        catalogId: cardId,
+        finish: selection.finish,
+        ...(wishTarget ? { target: { price: wishTarget, source: wishSource } } : {}),
+      });
+      setWishMsg({ ok: true, text: wishTarget ? "On your wishlist, with a price alert." : "Added to your wishlist." });
+    } catch (err) {
+      setWishMsg({ ok: false, text: err instanceof ClientApiError ? err.message : "Network error." });
+    }
+  }
+
   const field = "mt-1 block w-full rounded-md border border-slate-300 bg-white px-2 py-2 text-base";
   const msg = (m: { ok: boolean; text: string } | null) =>
     m && (
@@ -90,7 +114,7 @@ export function CardActions({
   return (
     <section aria-labelledby="track-h" className="grid gap-3">
       <h2 id="track-h" className="text-xl font-semibold">Track this card</h2>
-      <div className="grid gap-4 md:grid-cols-2">
+      <div className="grid gap-4 md:grid-cols-3">
         <form onSubmit={addToCollection} aria-label="Add to collection" className="grid content-start gap-3 rounded-xl border border-slate-200 bg-white p-4">
           <h3 className="font-semibold">Add to collection</h3>
           <div className="grid grid-cols-3 gap-2">
@@ -109,8 +133,36 @@ export function CardActions({
               </select>
             </label>
           </div>
+          {binders.length > 0 && (
+            <label className="text-sm font-medium">
+              Binder
+              <select value={binderId} onChange={(e) => setBinderId(e.target.value)} className={field}>
+                <option value="">No binder</option>
+                {binders.map((b) => <option key={b.id} value={b.id}>{b.name}</option>)}
+              </select>
+            </label>
+          )}
           <button className="rounded-md bg-brand-700 px-3 py-2 font-semibold text-white">Add to collection</button>
           {msg(colMsg)}
+        </form>
+
+        <form onSubmit={addToWishlist} aria-label="Add to wishlist" className="grid content-start gap-3 rounded-xl border border-slate-200 bg-white p-4">
+          <h3 className="font-semibold">Want it?</h3>
+          <div className="grid grid-cols-2 gap-2">
+            <label className="text-sm font-medium">
+              Target price <span className="font-normal text-slate-600">(optional)</span>
+              <input inputMode="decimal" placeholder="0.00" value={wishTarget} onChange={(e) => setWishTarget(e.target.value.trim())} className={field} />
+            </label>
+            <label className="text-sm font-medium">
+              Watch
+              <select value={wishSource} onChange={(e) => setWishSource(e.target.value as SourceId)} className={field}>
+                <option value="tcgplayer">TCGplayer market (USD)</option>
+                <option value="cardmarket">Cardmarket trend (EUR)</option>
+              </select>
+            </label>
+          </div>
+          <button className="rounded-md border border-brand-700 px-3 py-2 font-semibold text-brand-700">Add to wishlist</button>
+          {msg(wishMsg)}
         </form>
 
         <form onSubmit={createAlert} aria-label="Create price alert" className="grid content-start gap-3 rounded-xl border border-slate-200 bg-white p-4">

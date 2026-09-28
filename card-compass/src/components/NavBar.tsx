@@ -18,9 +18,15 @@ export function NavBar({ signedIn, unread }: { signedIn: boolean; unread: number
     </Link>
   );
   return (
-    <nav aria-label="Main" className="flex flex-wrap items-center gap-1 text-sm">
+    <nav
+      aria-label="Main"
+      className="-mx-4 flex w-[calc(100%+2rem)] items-center gap-1 overflow-x-auto whitespace-nowrap px-4 pb-1 text-sm sm:mx-0 sm:w-auto sm:overflow-visible sm:px-0 sm:pb-0"
+    >
       {link("/", "Scan")}
       {link("/collection", "Collection")}
+      {link("/wishlist", "Wishlist")}
+      {link("/sets", "Sets")}
+      {link("/market", "Market")}
       {link(
         "/alerts",
         "Alerts",

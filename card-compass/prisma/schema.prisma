@@ -37,6 +37,39 @@ model User {
   alerts           PriceAlert[]
   notifications    Notification[]
   pushSubscriptions PushSubscription[]
+  binders          Binder[]
+  wishlist         WishlistItem[]
+}
+
+/// A named folder of collection items (e.g. "Trade binder", "PC").
+model Binder {
+  id        String           @id @default(cuid())
+  userId    String
+  user      User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  name      String
+  createdAt DateTime         @default(now())
+  items     CollectionItem[]
+
+  @@unique([userId, name])
+}
+
+/// A card the user wants, optionally with a target price that drives a price alert.
+model WishlistItem {
+  id             String   @id @default(cuid())
+  userId         String
+  user           User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  catalogId      String
+  setId          String
+  name           String
+  setName        String
+  number         String
+  finish         String
+  targetMinor    Int?
+  targetCurrency String?
+  alertId        String?
+  createdAt      DateTime @default(now())
+
+  @@unique([userId, catalogId, finish])
 }
 
 /// Server-side session. The cookie holds a random token; only its SHA-256 is stored.
@@ -57,11 +90,14 @@ model CollectionItem {
   userId             String
   user               User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   catalogId          String
+  setId              String   @default("")
   name               String
   setName            String
   number             String
   finish             String
   language           String
+  binderId           String?
+  binder             Binder?  @relation(fields: [binderId], references: [id], onDelete: SetNull)
   grading            String
   condition          String?
   grader             String?
@@ -72,6 +108,7 @@ model CollectionItem {
   createdAt          DateTime @default(now())
 
   @@index([userId])
+  @@index([userId, setId])
 }
 
 /// Daily collection value per reference currency. No FX mixing inside a snapshot.
@@ -164,6 +201,7 @@ model PriceSnapshot {
 
   @@unique([cardId, source, subtype, finish, observedAt])
   @@index([cardId, fetchedAt])
+  @@index([observedAt, subtype])
 }
 
 /// Reserved for future licensed live-offer adapters. Not populated in the MVP.

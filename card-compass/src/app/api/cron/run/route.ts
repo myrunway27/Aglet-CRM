@@ -1,7 +1,7 @@
 import { createHash, timingSafeEqual } from "node:crypto";
 import { errorResponse } from "@/lib/api";
 import { env } from "@/lib/env";
-import { checkAlerts, snapshotAllCollections } from "@/lib/jobs";
+import { checkAlerts, snapshotAllCollections, snapshotWishlistCards } from "@/lib/jobs";
 
 export const runtime = "nodejs";
 
@@ -19,7 +19,8 @@ export async function POST(req: Request) {
   try {
     const alerts = await checkAlerts();
     const collections = await snapshotAllCollections();
-    return Response.json({ ok: true, alerts, collections });
+    const wishlist = await snapshotWishlistCards();
+    return Response.json({ ok: true, alerts, collections, wishlist });
   } catch (err) {
     return errorResponse(err, "cron");
   }

@@ -4,7 +4,7 @@ import { formatMinor, toMinor } from "@/lib/money";
 import { groupByFinish, isStale, parseSourceDate, toReferences } from "@/lib/prices";
 import { safeImageUrl, safeSourceUrl } from "@/lib/safe-url";
 
-const catalog = new MockCatalogProvider();
+const catalog = new MockCatalogProvider(undefined, () => Date.parse("2026-09-28T12:00:00Z"));
 const NOW = Date.parse("2026-09-28T12:00:00Z");
 const opts = { now: NOW, staleAfterDays: 7 };
 

@@ -1,10 +1,23 @@
 import fixture from "../../../fixtures/catalog.json";
 import { NotFoundError } from "../errors";
 import { mapApiCard, type ApiCard } from "./pokemontcg";
-import type { CatalogCard, CatalogCardWithPrices, CatalogProvider, CatalogSearchClues } from "./types";
+import { compareNumbers, type CatalogCard, type CatalogCardWithPrices, type CatalogProvider, type CatalogSearchClues } from "./types";
 import { normalizeName, normalizeNumber } from "../matching/normalize";
 
 const CARDS = (fixture as unknown as { cards: ApiCard[] }).cards;
+
+/** The fixture dates were written as if "today" were this day. */
+const FIXTURE_TODAY = Date.UTC(2026, 8, 28);
+
+/** Shift a fixture date ("2026/09/27") so it keeps the same age relative to `now`. */
+export function shiftFixtureDate(raw: string | undefined, now: number): string | undefined {
+  if (!raw) return raw;
+  const m = /^(\d{4})\/(\d{2})\/(\d{2})$/.exec(raw);
+  if (!m) return raw;
+  const days = Math.floor((now - FIXTURE_TODAY) / 86_400_000);
+  const d = new Date(Date.UTC(Number(m[1]), Number(m[2]) - 1, Number(m[3])) + days * 86_400_000);
+  return d.toISOString().slice(0, 10).replace(/-/g, "/");
+}
 
 /**
  * Offline provider backed by bundled DEMO fixtures. Mirrors the query semantics
@@ -13,7 +26,10 @@ const CARDS = (fixture as unknown as { cards: ApiCard[] }).cards;
  */
 export class MockCatalogProvider implements CatalogProvider {
   readonly id = "mock" as const;
-  constructor(private readonly cards: ApiCard[] = CARDS) {}
+  constructor(
+    private readonly cards: ApiCard[] = CARDS,
+    private readonly now: () => number = Date.now,
+  ) {}
 
   async searchByClues(clues: CatalogSearchClues): Promise<CatalogCard[]> {
     if (!clues.name && !clues.number && !clues.setTotal) return [];
@@ -34,13 +50,27 @@ export class MockCatalogProvider implements CatalogProvider {
     return this.cards.filter((c) => normalizeName(c.name).includes(q)).map(mapApiCard);
   }
 
+  async getCards(catalogIds: string[]): Promise<CatalogCard[]> {
+    const want = new Set(catalogIds);
+    return this.cards.filter((c) => want.has(c.id)).map(mapApiCard);
+  }
+
+  async listSet(setId: string): Promise<CatalogCard[]> {
+    return this.cards
+      .filter((c) => c.set.id === setId)
+      .map(mapApiCard)
+      .sort((a, b) => compareNumbers(a.number, b.number));
+  }
+
   async getCard(catalogId: string): Promise<CatalogCardWithPrices> {
     const c = this.cards.find((x) => x.id === catalogId);
     if (!c) throw new NotFoundError("Card not found");
+    // Demo dates move with the clock so the demo never goes stale (relative ages are kept).
+    const now = this.now();
     return {
       card: mapApiCard(c),
-      tcgplayer: c.tcgplayer ?? null,
-      cardmarket: c.cardmarket ?? null,
+      tcgplayer: c.tcgplayer ? { ...c.tcgplayer, updatedAt: shiftFixtureDate(c.tcgplayer.updatedAt, now) } : null,
+      cardmarket: c.cardmarket ? { ...c.cardmarket, updatedAt: shiftFixtureDate(c.cardmarket.updatedAt, now) } : null,
       isDemo: true,
     };
   }

@@ -57,6 +57,19 @@ async function run(label: string, width: number, height: number) {
   await page.goto(`${BASE}/alerts`);
   await page.getByRole("heading", { name: "Price alerts" }).waitFor();
   await shot("5-alerts");
+  await page.goto(`${BASE}/sets/fxa`);
+  await page.getByText(/You own/).waitFor();
+  await shot("6-set");
+  await page.goto(`${BASE}/market`);
+  await page.getByRole("table").first().waitFor();
+  await shot("7-market");
+  await page.goto(`${BASE}/scan/bulk`);
+  await page.getByLabel("Choose photos").setInputFiles([
+    path.join(process.cwd(), "fixtures", "ocr", "pikachu-alpha.png"),
+    path.join(process.cwd(), "fixtures", "ocr", "charizard-glare.png"),
+  ]);
+  await page.getByText("0 still scanning").waitFor();
+  await shot("8-bulk-scan");
   await browser.close();
 }
 

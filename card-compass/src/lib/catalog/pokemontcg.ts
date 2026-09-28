@@ -5,6 +5,8 @@ import { log } from "../log";
 import { OutboundLimiter } from "../rate-limit";
 import {
   CATALOG_ID_RE,
+  compareNumbers,
+  SET_ID_RE,
   type CatalogCard,
   type CatalogCardWithPrices,
   type CatalogProvider,
@@ -165,6 +167,58 @@ export class PokemonTcgProvider implements CatalogProvider {
     }
     const term = sanitizeTerm(query);
     return term ? this.search(`name:"${term}*"`) : Promise.resolve([]);
+  }
+
+  async getCards(catalogIds: string[]): Promise<CatalogCard[]> {
+    const ids = [...new Set(catalogIds)].filter((id) => CATALOG_ID_RE.test(id));
+    const out: CatalogCard[] = [];
+    const missing: string[] = [];
+    for (const id of ids) {
+      const hit = this.cardCache.get(id);
+      if (hit?.fresh) out.push(hit.value.card);
+      else missing.push(id);
+    }
+    // One request per 50 ids: q=(id:"a" OR id:"b" ...)
+    for (let i = 0; i < missing.length; i += 50) {
+      const chunk = missing.slice(i, i + 50);
+      const res = await this.get<{ data: ApiCard[] }>("/cards", {
+        q: `(${chunk.map((id) => `id:"${id}"`).join(" OR ")})`,
+        pageSize: "50",
+        select: SELECT,
+      });
+      for (const c of res.data) {
+        this.cacheCard(c);
+        out.push(mapApiCard(c));
+      }
+    }
+    return out;
+  }
+
+  async listSet(setId: string): Promise<CatalogCard[]> {
+    if (!SET_ID_RE.test(setId)) return [];
+    const key = `set:${setId}`;
+    const hit = this.searchCache.get(key);
+    if (hit?.fresh) return hit.value;
+    try {
+      const all: CatalogCard[] = [];
+      for (let page = 1; page <= 4; page++) {
+        const res = await this.get<{ data: ApiCard[]; totalCount?: number }>("/cards", {
+          q: `set.id:${setId}`,
+          pageSize: "250",
+          page: String(page),
+          select: SELECT,
+        });
+        for (const c of res.data) this.cacheCard(c);
+        all.push(...res.data.map(mapApiCard));
+        if (res.data.length < 250 || (res.totalCount !== undefined && all.length >= res.totalCount)) break;
+      }
+      all.sort((a, b) => compareNumbers(a.number, b.number));
+      this.searchCache.set(key, all);
+      return all;
+    } catch (err) {
+      if (hit) return hit.value;
+      throw err;
+    }
   }
 
   async getCard(catalogId: string): Promise<CatalogCardWithPrices> {

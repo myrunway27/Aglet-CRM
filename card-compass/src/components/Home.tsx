@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useEffect, useRef, useState, type ChangeEvent, type FormEvent } from "react";
 import { ClientApiError, readJson, type ScanResponse, type SearchResponse } from "@/lib/api-types";
 import type { CatalogCard } from "@/lib/catalog/types";
@@ -127,6 +128,12 @@ export function Home({ initialMode }: { initialMode: "mock" | "live" }) {
               className="sr-only"
             />
           </label>
+          <p className="mt-2 text-sm text-slate-700">
+            Scanning a stack?{" "}
+            <Link href="/scan/bulk" className="font-medium text-brand-700 underline">
+              Bulk scan
+            </Link>
+          </p>
         </section>
 
         <section aria-labelledby="search-h" className="rounded-xl border border-slate-200 bg-white p-4 shadow-sm">

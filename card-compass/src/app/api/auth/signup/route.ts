@@ -4,15 +4,17 @@ import { hashPassword } from "@/lib/auth/password";
 import { Signup } from "@/lib/auth/schemas";
 import { createSession } from "@/lib/auth/session";
 import { db } from "@/lib/db";
+import { env } from "@/lib/env";
 import { ValidationError } from "@/lib/errors";
 import { KeyedLimiter } from "@/lib/rate-limit";
 
 export const runtime = "nodejs";
-const limiter = new KeyedLimiter(5);
+let limiter: KeyedLimiter | undefined;
 
 export async function POST(req: Request) {
   try {
     assertSameOrigin(req);
+    limiter ??= new KeyedLimiter(env().AUTH_LIMIT_PER_MINUTE);
     limiter.check(clientKey(req));
     const client = db();
     if (!client) throw new ValidationError("Accounts are unavailable: no database configured.");

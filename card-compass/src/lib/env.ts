@@ -33,7 +33,8 @@ const schema = z.object({
   GOOGLE_CLOUD_VISION_API_KEY: optionalString,
   GOOGLE_CLOUD_VISION_TIMEOUT_MS: optionalInt(10_000),
   MAX_UPLOAD_BYTES: optionalInt(8_000_000),
-  SCAN_LIMIT_PER_MINUTE: optionalInt(10),
+  SCAN_LIMIT_PER_MINUTE: optionalInt(20),
+  AUTH_LIMIT_PER_MINUTE: optionalInt(5),
   // Live offers: "none" hides the section, "mock" shows labeled demo listings.
   OFFERS_PROVIDER: z.enum(["none", "mock", "ebay"]).default("mock"),
   EBAY_CLIENT_ID: optionalString,
