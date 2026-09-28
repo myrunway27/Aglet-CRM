@@ -1,20 +1,9 @@
 "use client";
 
 import { useSyncExternalStore } from "react";
+import { REGIONS, type Region } from "@/lib/regions";
 
-export const REGIONS = {
-  US: { label: "United States", currency: "USD" },
-  GB: { label: "United Kingdom", currency: "GBP" },
-  DE: { label: "Germany", currency: "EUR" },
-  FR: { label: "France", currency: "EUR" },
-  IT: { label: "Italy", currency: "EUR" },
-  ES: { label: "Spain", currency: "EUR" },
-  NL: { label: "Netherlands", currency: "EUR" },
-  CA: { label: "Canada", currency: "CAD" },
-  AU: { label: "Australia", currency: "AUD" },
-  JP: { label: "Japan", currency: "JPY" },
-} as const;
-export type Region = keyof typeof REGIONS;
+export { REGIONS, type Region } from "@/lib/regions";
 
 const KEY = "cardcompass.region";
 const listeners = new Set<() => void>();
@@ -69,9 +58,9 @@ export function PreferenceSelector() {
         </select>
       </label>
       <p className="text-xs text-slate-600">
-        Display preference only: prices stay in their original currency. We don&apos;t convert, because no dated
-        exchange-rate feed is connected, and we don&apos;t estimate shipping or import duties to{" "}
-        {REGIONS[region].label}.
+        Market references below stay in their original currency and are never converted. Listings further down are
+        converted to {REGIONS[region].currency} with dated exchange rates, including shipping and import charges to{" "}
+        {REGIONS[region].label} where they&apos;re known.
       </p>
     </div>
   );

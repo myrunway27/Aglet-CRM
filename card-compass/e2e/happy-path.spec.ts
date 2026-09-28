@@ -42,12 +42,12 @@ test("scan a card, confirm the exact variant, see source-tagged references and n
   await expect(cm).toContainText("Cardmarket");
   await expect(cm).toContainText(/EUR\s0\.50/);
 
-  // Demo data is labeled, live offers are disabled, and nothing claims to be "cheapest".
+  // Demo data is labeled; reference prices are not ranked; listings are clearly demo and have no links.
   await expect(page.getByText("Demo mode.")).toBeVisible();
-  await expect(page.getByRole("heading", { name: "Live offers" })).toBeVisible();
-  await expect(page.getByRole("button", { name: "Show live offers" })).toBeDisabled();
-  await expect(page.getByText(/cheapest/i)).toHaveCount(1); // only the disclaimer sentence
-  await expect(page.getByRole("link", { name: /buy/i })).toHaveCount(0);
+  await expect(page.getByText(/so we don't rank them or pick a "cheapest"/)).toBeVisible();
+  const offers = page.getByTestId("offers");
+  await expect(offers.getByText("Demo listings")).toBeVisible();
+  await expect(offers.getByRole("link", { name: /View on eBay/ })).toHaveCount(0);
 });
 
 test("manual search works without OCR, and graded cards get a clear caveat", async ({ page }) => {

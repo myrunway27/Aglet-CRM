@@ -1,9 +1,10 @@
 import "server-only";
 import { NotFoundError, RateLimitedError, UpstreamError, ValidationError } from "./errors";
 import { log } from "./log";
+import { UnauthorizedError } from "./auth/guard";
 
 export interface ApiErrorBody {
-  error: { code: "rate_limited" | "not_found" | "invalid" | "upstream_unavailable" | "internal"; message: string; retryAfterSeconds?: number };
+  error: { code: "rate_limited" | "unauthorized" | "not_found" | "invalid" | "upstream_unavailable" | "internal"; message: string; retryAfterSeconds?: number };
 }
 
 export function errorResponse(err: unknown, route: string): Response {
@@ -16,6 +17,9 @@ export function errorResponse(err: unknown, route: string): Response {
       { error: { code: "rate_limited", message, retryAfterSeconds: err.retryAfterSeconds } } satisfies ApiErrorBody,
       { status: 429, headers: { "Retry-After": String(err.retryAfterSeconds) } },
     );
+  }
+  if (err instanceof UnauthorizedError) {
+    return Response.json({ error: { code: "unauthorized", message: err.message } } satisfies ApiErrorBody, { status: 401 });
   }
   if (err instanceof NotFoundError) {
     return Response.json({ error: { code: "not_found", message: err.message } } satisfies ApiErrorBody, { status: 404 });

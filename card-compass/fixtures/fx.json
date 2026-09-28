@@ -1,0 +1,4 @@
+{
+  "_note": "DEMO FX fixture for mock mode and tests. Rates are illustrative, not real ECB data. The date is set relative to 'today' at load time so the demo does not go stale.",
+  "rates": { "USD": 1.12, "GBP": 0.84, "CAD": 1.55, "AUD": 1.70, "JPY": 165 }
+}

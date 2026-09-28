@@ -34,6 +34,20 @@ const schema = z.object({
   GOOGLE_CLOUD_VISION_TIMEOUT_MS: optionalInt(10_000),
   MAX_UPLOAD_BYTES: optionalInt(8_000_000),
   SCAN_LIMIT_PER_MINUTE: optionalInt(10),
+  // Live offers: "none" hides the section, "mock" shows labeled demo listings.
+  OFFERS_PROVIDER: z.enum(["none", "mock", "ebay"]).default("mock"),
+  EBAY_CLIENT_ID: optionalString,
+  EBAY_CLIENT_SECRET: optionalString,
+  EBAY_MARKETPLACES: z.string().default("EBAY_US,EBAY_GB,EBAY_DE"),
+  EBAY_LIMIT_PER_DAY: optionalInt(5000),
+  EBAY_LIMIT_PER_MINUTE: optionalInt(60),
+  EBAY_MIN_FEEDBACK_PCT: optionalInt(98),
+  EBAY_MIN_FEEDBACK_SCORE: optionalInt(20),
+  FX_PROVIDER: z.enum(["mock", "ecb"]).default("mock"),
+  CRON_SECRET: optionalString,
+  NEXT_PUBLIC_VAPID_PUBLIC_KEY: optionalString,
+  VAPID_PRIVATE_KEY: optionalString,
+  VAPID_SUBJECT: optionalString,
 });
 
 export type Env = ReturnType<typeof loadEnv>;

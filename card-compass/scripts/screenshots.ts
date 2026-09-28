@@ -30,6 +30,33 @@ async function run(label: string, width: number, height: number) {
   await page.getByRole("heading", { name: "Market references" }).waitFor();
   await page.getByText("Other finishes").first().click();
   await shot("3-results");
+
+  // Account flows
+  await page.goto(`${BASE}/login?next=/collection`);
+  await page.getByRole("button", { name: "New here? Create an account" }).click();
+  await page.getByLabel("Email").fill(`shots-${label}-${Date.now()}@example.com`);
+  await page.getByLabel("Password").fill("screenshot-password");
+  await page.getByRole("button", { name: "Create account" }).click();
+  await page.getByRole("heading", { name: "My collection" }).waitFor();
+  for (const url of [
+    "/cards/fxa-25?finish=reverseHolofoil&lang=en&grading=raw&condition=NM",
+    "/cards/fxa-125?finish=holofoil&lang=en&grading=raw&condition=NM",
+  ]) {
+    await page.goto(BASE + url);
+    const add = page.getByRole("form", { name: "Add to collection" });
+    await add.getByRole("button", { name: "Add to collection" }).click();
+    await add.getByRole("status").waitFor();
+  }
+  const alert = page.getByRole("form", { name: "Create price alert" });
+  await alert.getByLabel(/^Price \(/).fill("20.00");
+  await alert.getByRole("button", { name: "Create alert" }).click();
+  await alert.getByRole("status").waitFor();
+  await page.goto(`${BASE}/collection`);
+  await page.getByText("Value on TCGplayer basis").waitFor();
+  await shot("4-collection");
+  await page.goto(`${BASE}/alerts`);
+  await page.getByRole("heading", { name: "Price alerts" }).waitFor();
+  await shot("5-alerts");
   await browser.close();
 }
 

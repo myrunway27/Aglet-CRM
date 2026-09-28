@@ -1,7 +1,9 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { PriceResults } from "@/components/PriceResults";
+import { currentUser } from "@/lib/auth/session";
 import { CATALOG_ID_RE } from "@/lib/catalog/types";
+import { env } from "@/lib/env";
 import { Selection } from "@/lib/selection";
 
 export default async function CardPage({ params, searchParams }: PageProps<"/cards/[id]">) {
@@ -32,5 +34,13 @@ export default async function CardPage({ params, searchParams }: PageProps<"/car
       </div>
     );
   }
-  return <PriceResults cardId={id} selection={selection.data} />;
+  const user = await currentUser();
+  return (
+    <PriceResults
+      cardId={id}
+      selection={selection.data}
+      signedIn={Boolean(user)}
+      offersEnabled={env().OFFERS_PROVIDER !== "none"}
+    />
+  );
 }

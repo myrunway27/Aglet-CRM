@@ -24,6 +24,117 @@ model Card {
   scans     Scan[]
 }
 
+/// Account. Passwords are stored only as scrypt hashes.
+model User {
+  id               String                    @id @default(cuid())
+  email            String                    @unique
+  passwordHash     String
+  country          String                    @default("US")
+  createdAt        DateTime                  @default(now())
+  sessions         Session[]
+  items            CollectionItem[]
+  valueSnapshots   CollectionValueSnapshot[]
+  alerts           PriceAlert[]
+  notifications    Notification[]
+  pushSubscriptions PushSubscription[]
+}
+
+/// Server-side session. The cookie holds a random token; only its SHA-256 is stored.
+model Session {
+  id        String   @id @default(cuid())
+  tokenHash String   @unique
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+
+  @@index([userId])
+}
+
+/// One owned copy (or several) of a specific printing in a user's collection.
+model CollectionItem {
+  id                 String   @id @default(cuid())
+  userId             String
+  user               User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  catalogId          String
+  name               String
+  setName            String
+  number             String
+  finish             String
+  language           String
+  grading            String
+  condition          String?
+  grader             String?
+  grade              String?
+  quantity           Int      @default(1)
+  purchasePriceMinor Int?
+  purchaseCurrency   String?
+  createdAt          DateTime @default(now())
+
+  @@index([userId])
+}
+
+/// Daily collection value per reference currency. No FX mixing inside a snapshot.
+model CollectionValueSnapshot {
+  id          String   @id @default(cuid())
+  userId      String
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  day         DateTime @db.Date
+  currency    String
+  source      String
+  amountMinor Int
+  itemsPriced Int
+  itemsTotal  Int
+
+  @@unique([userId, day, source])
+}
+
+/// Notify when a reference price crosses a threshold.
+model PriceAlert {
+  id              String    @id @default(cuid())
+  userId          String
+  user            User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  catalogId       String
+  cardName        String
+  finish          String
+  source          String
+  subtype         String
+  currency        String
+  direction       String
+  thresholdMinor  Int
+  active          Boolean   @default(true)
+  lastValueMinor  Int?
+  lastCheckedAt   DateTime?
+  lastTriggeredAt DateTime?
+  createdAt       DateTime  @default(now())
+
+  @@index([active])
+  @@index([userId])
+}
+
+model Notification {
+  id        String    @id @default(cuid())
+  userId    String
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  title     String
+  body      String
+  url       String
+  createdAt DateTime  @default(now())
+  readAt    DateTime?
+
+  @@index([userId, createdAt])
+}
+
+model PushSubscription {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  endpoint  String   @unique
+  p256dh    String
+  auth      String
+  createdAt DateTime @default(now())
+}
+
 /// A scan attempt. Raw photos are never stored (imageRetained stays false).
 model Scan {
   id             String   @id @default(cuid())

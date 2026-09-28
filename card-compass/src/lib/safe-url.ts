@@ -8,9 +8,18 @@ const ALLOWED_LINK_HOSTS = [
   "www.tcgplayer.com",
   "cardmarket.com",
   "www.cardmarket.com",
+  "www.ebay.com",
+  "www.ebay.co.uk",
+  "www.ebay.de",
+  "www.ebay.fr",
+  "www.ebay.it",
+  "www.ebay.es",
+  "www.ebay.nl",
+  "www.ebay.ca",
+  "www.ebay.com.au",
 ];
 
-const ALLOWED_IMAGE_HOSTS = ["images.pokemontcg.io"];
+const ALLOWED_IMAGE_HOSTS = ["images.pokemontcg.io", "i.ebayimg.com"];
 
 function check(raw: string | null | undefined, hosts: string[]): string | null {
   if (!raw) return null;

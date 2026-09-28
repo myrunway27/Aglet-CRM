@@ -17,7 +17,7 @@ export default defineConfig({
     command: `npx next start -p ${PORT}`,
     url: `http://localhost:${PORT}`,
     reuseExistingServer: !process.env.CI,
-    env: { CATALOG_PROVIDER: "mock", OCR_PROVIDER: "mock" },
+    env: { CATALOG_PROVIDER: "mock", OCR_PROVIDER: "mock", OFFERS_PROVIDER: "mock", FX_PROVIDER: "mock", CRON_SECRET: "e2e-cron-secret" },
     timeout: 60_000,
   },
 });
