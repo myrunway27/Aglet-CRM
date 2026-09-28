@@ -1,0 +1,64 @@
+{
+  "_note": "DEMO FIXTURES for mock mode and tests. Sets, cards and every price below are invented sample data shaped like Pokémon TCG API v2 responses. They are not real market prices and carry no source links.",
+  "cards": [
+    {
+      "id": "fxa-25", "name": "Pikachu", "number": "25", "rarity": "Common",
+      "set": { "id": "fxa", "name": "Fixture Set Alpha", "series": "Demo", "printedTotal": 198, "ptcgoCode": "FXA", "releaseDate": "2026/03/01" },
+      "tcgplayer": { "updatedAt": "2026/09/27", "prices": {
+        "normal": { "low": 0.1, "mid": 0.25, "high": 2.0, "market": 0.21 },
+        "reverseHolofoil": { "low": 0.3, "mid": 0.6, "high": 3.5, "market": 0.55 } } },
+      "cardmarket": { "updatedAt": "2026/09/27", "prices": { "trendPrice": 0.22, "averageSellPrice": 0.19, "lowPrice": 0.05, "avg7": 0.2, "avg30": 0.24, "reverseHoloTrend": 0.5, "reverseHoloLow": 0.2 } }
+    },
+    {
+      "id": "fxb-25", "name": "Pikachu", "number": "25", "rarity": "Rare Holo",
+      "set": { "id": "fxb", "name": "Fixture Set Beta", "series": "Demo", "printedTotal": 108, "ptcgoCode": "FXB", "releaseDate": "2025/05/10" },
+      "tcgplayer": { "updatedAt": "2026/09/27", "prices": {
+        "holofoil": { "low": 4.0, "mid": 6.1, "high": 20.0, "market": 5.8 },
+        "reverseHolofoil": { "low": 5.0, "mid": 7.5, "high": 25.0, "market": 7.1 } } },
+      "cardmarket": { "updatedAt": "2026/09/26", "prices": { "trendPrice": 5.4, "averageSellPrice": 5.1, "lowPrice": 3.0, "avg30": 5.6, "reverseHoloTrend": 6.9 } }
+    },
+    {
+      "id": "fxg-58", "name": "Pikachu", "number": "58", "rarity": "Common",
+      "set": { "id": "fxg", "name": "Fixture Set Gamma", "series": "Demo", "printedTotal": 165, "ptcgoCode": "FXG", "releaseDate": "2024/09/20" },
+      "tcgplayer": { "updatedAt": "2026/09/27", "prices": { "normal": { "low": 0.15, "mid": 0.4, "market": 0.33 } } }
+    },
+    {
+      "id": "fxa-125", "name": "Charizard ex", "number": "125", "rarity": "Double Rare",
+      "set": { "id": "fxa", "name": "Fixture Set Alpha", "series": "Demo", "printedTotal": 198, "ptcgoCode": "FXA", "releaseDate": "2026/03/01" },
+      "tcgplayer": { "updatedAt": "2026/09/27", "prices": { "holofoil": { "low": 18.0, "mid": 24.0, "high": 60.0, "market": 22.5 } } },
+      "cardmarket": { "updatedAt": "2026/09/27", "prices": { "trendPrice": 19.9, "averageSellPrice": 18.4, "lowPrice": 14.0, "avg7": 19.1 } }
+    },
+    {
+      "id": "fxb-4", "name": "Charizard", "number": "4", "rarity": "Rare Holo",
+      "set": { "id": "fxb", "name": "Fixture Set Beta", "series": "Demo", "printedTotal": 108, "ptcgoCode": "FXB", "releaseDate": "2025/05/10" },
+      "tcgplayer": { "updatedAt": "2025/11/02", "prices": { "holofoil": { "low": 70.0, "mid": 95.0, "high": 250.0, "market": 88.0 } } },
+      "cardmarket": { "updatedAt": "2025/11/02", "prices": { "trendPrice": 79.0, "lowPrice": 55.0 } }
+    },
+    {
+      "id": "fxg-6", "name": "Charizard", "number": "6", "rarity": "Rare",
+      "set": { "id": "fxg", "name": "Fixture Set Gamma", "series": "Demo", "printedTotal": 165, "ptcgoCode": "FXG", "releaseDate": "2024/09/20" }
+    },
+    {
+      "id": "fxa-26", "name": "Raichu", "number": "26", "rarity": "Uncommon",
+      "set": { "id": "fxa", "name": "Fixture Set Alpha", "series": "Demo", "printedTotal": 198, "ptcgoCode": "FXA", "releaseDate": "2026/03/01" },
+      "tcgplayer": { "updatedAt": "2026/09/27", "prices": { "normal": { "low": 0.1, "market": 0.18 }, "reverseHolofoil": { "low": 0.25, "market": 0.4 } } },
+      "cardmarket": { "updatedAt": "2026/09/27", "prices": { "trendPrice": 0.15 } }
+    },
+    {
+      "id": "fxg-151", "name": "Mew", "number": "151", "rarity": "Rare Holo",
+      "set": { "id": "fxg", "name": "Fixture Set Gamma", "series": "Demo", "printedTotal": 165, "ptcgoCode": "FXG", "releaseDate": "2024/09/20" },
+      "tcgplayer": { "updatedAt": "2026/09/27", "prices": { "holofoil": { "low": 2.0, "mid": 3.1, "market": 2.9 } } },
+      "cardmarket": { "updatedAt": "2026/09/27", "prices": { "trendPrice": 2.7, "averageSellPrice": 0, "lowPrice": null } }
+    },
+    {
+      "id": "fxg-133", "name": "Eevee", "number": "133", "rarity": "Common",
+      "set": { "id": "fxg", "name": "Fixture Set Gamma", "series": "Demo", "printedTotal": 165, "ptcgoCode": "FXG", "releaseDate": "2024/09/20" },
+      "cardmarket": { "updatedAt": "2026/09/27", "prices": { "trendPrice": 0.3, "lowPrice": 0.08 } }
+    },
+    {
+      "id": "fxa-TG05", "name": "Pikachu", "number": "TG05", "rarity": "Trainer Gallery Rare Holo",
+      "set": { "id": "fxa", "name": "Fixture Set Alpha", "series": "Demo", "printedTotal": 198, "ptcgoCode": "FXA", "releaseDate": "2026/03/01" },
+      "tcgplayer": { "updatedAt": "2026/09/27", "prices": { "holofoil": { "low": 3.0, "market": 4.2 } } }
+    }
+  ]
+}

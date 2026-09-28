@@ -1,0 +1,78 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+/// A catalog card (one specific printing as identified by the catalog provider).
+model Card {
+  id        String          @id @default(cuid())
+  catalogId String          @unique
+  name      String
+  number    String
+  setId     String
+  setName   String
+  imageUrl  String?
+  rarity    String?
+  createdAt DateTime        @default(now())
+  updatedAt DateTime        @updatedAt
+  snapshots PriceSnapshot[]
+  offers    Offer[]
+  scans     Scan[]
+}
+
+/// A scan attempt. Raw photos are never stored (imageRetained stays false).
+model Scan {
+  id             String   @id @default(cuid())
+  parsedName     String?
+  parsedNumber   String?
+  selectedCardId String?
+  selectedCard   Card?    @relation(fields: [selectedCardId], references: [id])
+  createdAt      DateTime @default(now())
+  imageRetained  Boolean  @default(false)
+}
+
+/// Informational reference price (e.g. TCGplayer market, Cardmarket trend) as
+/// reported by the catalog source. NOT a purchasable listing.
+model PriceSnapshot {
+  id            String   @id @default(cuid())
+  cardId        String
+  card          Card     @relation(fields: [cardId], references: [id], onDelete: Cascade)
+  source        String
+  sourceCardUrl String?
+  currency      String
+  amountMinor   Int
+  subtype       String
+  finish        String
+  observedAt    DateTime
+  fetchedAt     DateTime
+  isDemo        Boolean  @default(false)
+
+  @@unique([cardId, source, subtype, finish, observedAt])
+  @@index([cardId, fetchedAt])
+}
+
+/// Reserved for future licensed live-offer adapters. Not populated in the MVP.
+model Offer {
+  id            String   @id @default(cuid())
+  cardId        String
+  card          Card     @relation(fields: [cardId], references: [id], onDelete: Cascade)
+  provider      String
+  listingId     String
+  url           String
+  currency      String
+  itemMinor     Int
+  shippingMinor Int?
+  taxMinor      Int?
+  location      String
+  language      String
+  finish        String
+  condition     String
+  observedAt    DateTime
+  available     Boolean
+
+  @@unique([provider, listingId, cardId, finish])
+}

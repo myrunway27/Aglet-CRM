@@ -1,0 +1,4 @@
+STAGE 2
+Charizard HP 1
+Evolves from Charmeleon
+Fire Spin

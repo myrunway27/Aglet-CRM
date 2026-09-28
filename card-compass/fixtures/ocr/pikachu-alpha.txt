@@ -1,0 +1,8 @@
+BASIC
+Pikachu HP 60
+Gnaw 10
+Thunder Jolt 50
+weakness x2 resistance retreat 1
+Illus. Demo Artist
+025/198 FXA
+©2026 Fixture
