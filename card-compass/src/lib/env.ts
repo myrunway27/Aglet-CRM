@@ -46,6 +46,12 @@ const schema = z.object({
   EBAY_MIN_FEEDBACK_SCORE: optionalInt(20),
   FX_PROVIDER: z.enum(["mock", "ecb"]).default("mock"),
   CRON_SECRET: optionalString,
+  // Public base URL used in emailed links (never derived from the Host header).
+  APP_URL: z.string().url().default("http://localhost:3000"),
+  // "outbox" writes emails to ./.outbox (dev/test), "resend" sends via the Resend API, "none" disables email.
+  MAIL_PROVIDER: z.enum(["none", "outbox", "resend"]).default("outbox"),
+  MAIL_FROM: z.string().default("Card Compass <no-reply@example.com>"),
+  RESEND_API_KEY: optionalString,
   NEXT_PUBLIC_VAPID_PUBLIC_KEY: optionalString,
   VAPID_PRIVATE_KEY: optionalString,
   VAPID_SUBJECT: optionalString,

@@ -1,4 +1,5 @@
 import { clientKey, errorResponse } from "@/lib/api";
+import { sendVerification } from "@/lib/auth/email-tokens";
 import { assertSameOrigin } from "@/lib/auth/guard";
 import { hashPassword } from "@/lib/auth/password";
 import { Signup } from "@/lib/auth/schemas";
@@ -26,6 +27,7 @@ export async function POST(req: Request) {
       data: { email: body.data.email, passwordHash: await hashPassword(body.data.password), country: body.data.country },
     });
     await createSession(user.id, req);
+    await sendVerification(user.id, user.email);
     return Response.json({ ok: true });
   } catch (err) {
     return errorResponse(err, "signup");

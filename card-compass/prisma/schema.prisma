@@ -30,6 +30,9 @@ model User {
   email            String                    @unique
   passwordHash     String
   country          String                    @default("US")
+  emailVerifiedAt  DateTime?
+  emailAlerts      Boolean                   @default(false)
+  emailTokens      EmailToken[]
   createdAt        DateTime                  @default(now())
   sessions         Session[]
   items            CollectionItem[]
@@ -70,6 +73,20 @@ model WishlistItem {
   createdAt      DateTime @default(now())
 
   @@unique([userId, catalogId, finish])
+}
+
+/// Single-use emailed token (verify address / reset password). Only the SHA-256 is stored.
+model EmailToken {
+  id        String    @id @default(cuid())
+  userId    String
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  purpose   String
+  tokenHash String    @unique
+  expiresAt DateTime
+  usedAt    DateTime?
+  createdAt DateTime  @default(now())
+
+  @@index([userId, purpose])
 }
 
 /// Server-side session. The cookie holds a random token; only its SHA-256 is stored.

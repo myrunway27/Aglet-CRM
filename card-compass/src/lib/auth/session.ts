@@ -36,7 +36,7 @@ export async function destroySession(): Promise<void> {
   jar.delete(SESSION_COOKIE);
 }
 
-export type SafeUser = Pick<User, "id" | "email" | "country">;
+export type SafeUser = Pick<User, "id" | "email" | "country" | "emailVerifiedAt" | "emailAlerts">;
 
 /** The signed-in user, or null. Never throws (a DB outage means "signed out"). */
 export async function currentUser(): Promise<SafeUser | null> {
@@ -47,7 +47,7 @@ export async function currentUser(): Promise<SafeUser | null> {
   try {
     const s = await client.session.findUnique({
       where: { tokenHash: hashToken(token) },
-      include: { user: { select: { id: true, email: true, country: true } } },
+      include: { user: { select: { id: true, email: true, country: true, emailVerifiedAt: true, emailAlerts: true } } },
     });
     if (!s || s.expiresAt < new Date()) return null;
     return s.user;

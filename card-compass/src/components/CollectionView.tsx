@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { ClientApiError } from "@/lib/api-types";
 import { finishLabel } from "@/lib/catalog/types";
 import { api } from "@/lib/client-api";
@@ -56,19 +56,29 @@ export function CollectionView({ country }: { country: string }) {
   const [newBinder, setNewBinder] = useState("");
   const [binderMsg, setBinderMsg] = useState<string | null>(null);
 
+  // Always load the currently selected binder, and apply only the newest
+  // response, so a slow earlier request can't overwrite a newer view.
+  const binderRef = useRef(binder);
+  const seq = useRef(0);
+  useEffect(() => {
+    binderRef.current = binder;
+  }, [binder]);
   const load = useCallback(async () => {
+    const mine = ++seq.current;
     setError(null);
     try {
-      setData(await api<Data>(`/api/collection?country=${country}&binder=${encodeURIComponent(binder)}`));
+      const d = await api<Data>(`/api/collection?country=${country}&binder=${encodeURIComponent(binderRef.current)}`);
+      if (mine === seq.current) setData(d);
     } catch (err) {
-      setError(err instanceof ClientApiError ? err.message : "Network error.");
+      if (mine === seq.current) setError(err instanceof ClientApiError ? err.message : "Network error.");
     }
-  }, [country, binder]);
+  }, [country]);
 
   useEffect(() => {
+    binderRef.current = binder;
     // eslint-disable-next-line react-hooks/set-state-in-effect -- fetch on mount / binder change
     void load();
-  }, [load]);
+  }, [load, binder]);
 
   if (error)
     return (

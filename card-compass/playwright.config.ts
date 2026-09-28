@@ -18,7 +18,7 @@ export default defineConfig({
     command: `npx next start -p ${PORT}`,
     url: `http://localhost:${PORT}`,
     reuseExistingServer: !process.env.CI,
-    env: { CATALOG_PROVIDER: "mock", OCR_PROVIDER: "mock", OFFERS_PROVIDER: "mock", FX_PROVIDER: "mock", CRON_SECRET: "e2e-cron-secret", AUTH_LIMIT_PER_MINUTE: "100", SCAN_LIMIT_PER_MINUTE: "100" },
+    env: { CATALOG_PROVIDER: "mock", OCR_PROVIDER: "mock", OFFERS_PROVIDER: "mock", FX_PROVIDER: "mock", CRON_SECRET: "e2e-cron-secret", AUTH_LIMIT_PER_MINUTE: "100", SCAN_LIMIT_PER_MINUTE: "100", MAIL_PROVIDER: "outbox", APP_URL: `http://localhost:${PORT}` },
     timeout: 60_000,
   },
 });

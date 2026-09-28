@@ -7,6 +7,8 @@ import { mapLimit, referencesFor } from "./references";
 import { subtypeLabel, SOURCES, type SourceId } from "./prices";
 import { shouldTrigger, totalCollection, valueItem, type AlertDirection } from "./valuation";
 import { log } from "./log";
+import { env } from "./env";
+import { sendMail } from "./mail";
 
 const today = (now: number) => new Date(new Date(now).toISOString().slice(0, 10) + "T00:00:00Z");
 
@@ -72,6 +74,14 @@ export async function checkAlerts(now = Date.now()) {
     const url = `/cards/${encodeURIComponent(a.catalogId)}?finish=${encodeURIComponent(a.finish)}&lang=en&grading=raw&condition=NM`;
     await client.notification.create({ data: { userId: a.userId, title, body, url } });
     await pushToUser(a.userId, { title, body, url });
+    const owner = await client.user.findUnique({ where: { id: a.userId }, select: { email: true, emailAlerts: true, emailVerifiedAt: true } });
+    if (owner?.emailAlerts && owner.emailVerifiedAt) {
+      await sendMail({
+        to: owner.email,
+        subject: title,
+        text: `${body}\n\n${env().APP_URL}${url}\n\nTurn off email alerts on your Account page.`,
+      });
+    }
   }
   log.info("jobs.alerts_checked", { checked: alerts.length, triggered });
   return { checked: alerts.length, triggered };

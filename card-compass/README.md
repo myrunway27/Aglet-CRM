@@ -32,6 +32,7 @@ Out of the box everything runs in **demo mode**, with bundled, clearly labeled s
 | Binders, profit/loss, wishlist, sets, CSV, bulk scan | needs `DATABASE_URL` | Working, covered by E2E tests. |
 | Price history + market movers | needs `DATABASE_URL` | Built from the reference-price snapshots this app stores. History starts when a card is first looked up or tracked (the cron job refreshes tracked cards daily). Demo mode seeds 90 days of **demo** history. These are reference prices, not completed sales. |
 | Web push | `NEXT_PUBLIC_VAPID_PUBLIC_KEY`, `VAPID_PRIVATE_KEY`, `VAPID_SUBJECT` | Implemented. iOS delivers push only to the installed app (iOS 16.4+). |
+| Email (confirm address, reset password, alert emails) | `MAIL_PROVIDER=none\|outbox\|resend`, `APP_URL`, `MAIL_FROM`, `RESEND_API_KEY` | `outbox` (dev) writes messages to `./.outbox`. The Resend adapter is written, but not tested against the live service. |
 | Scheduled job | `CRON_SECRET` | `POST /api/cron/run` checks alerts and snapshots collection values. |
 
 ## Architecture
@@ -134,6 +135,9 @@ The E2E tests cover the scan flow and listings ranked per country. They also cov
 
 - Photos are processed in memory, re-encoded without metadata and never stored.
 - Passwords are stored as scrypt hashes. Sessions are random tokens, and only their SHA-256 is stored. The cookie is HttpOnly, SameSite=Lax, and Secure over HTTPS.
+- Email tokens are random, single-use and short-lived (reset: 1 hour; confirm: 48 hours), and only their hash is stored.
+- A password reset signs out every session. Forgot-password answers the same way for unknown emails.
+- The confirm link needs a button click (POST), so email link scanners can't use it up.
 - Every write route checks the Origin header. Login and signup are rate-limited, and failed logins take the same time whether or not the email exists.
 - Account deletion removes everything linked to the user.
 - External links go only to allow-listed https hosts.
@@ -148,7 +152,7 @@ The E2E tests cover the scan flow and listings ranked per country. They also cov
 - [ ] ECB reference-rate usage terms; state that card issuers apply their own rates.
 - [ ] Privacy policy (accounts, email, push endpoints) and terms of use. Pokémon and marketplace trademark notices.
 - [ ] Move in-memory caches and rate limiters to a shared store (e.g. Redis) if running more than one instance.
-- [ ] Add email verification and password reset. Both need an email provider and aren't built yet.
+- [ ] Set up an email provider (Resend, or add an SMTP adapter in `src/lib/mail.ts`), with SPF/DKIM on your sending domain. Set `APP_URL` to your https origin.
 
 ## Known limitations
 
@@ -169,4 +173,3 @@ The E2E tests cover the scan flow and listings ranked per country. They also cov
    - Catalog sources for Japanese cards and sealed product.
 2. **App store version:** Capacitor wrapper, native camera and native push. Apple may reject apps that are only a website in a wrapper, so the native features matter.
 3. **Image-based live recognition**, once licensed card images are available.
-- No password reset or email verification yet.

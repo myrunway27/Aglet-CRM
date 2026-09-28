@@ -73,6 +73,11 @@ export function AuthForm({ next }: { next: string }) {
       <button disabled={busy} className="rounded-md bg-brand-700 px-4 py-3 font-semibold text-white disabled:opacity-60">
         {busy ? "Please wait…" : mode === "login" ? "Sign in" : "Create account"}
       </button>
+      {mode === "login" && (
+        <a href="/forgot" className="text-sm text-brand-700 underline">
+          Forgot your password?
+        </a>
+      )}
       <button
         type="button"
         onClick={() => {
