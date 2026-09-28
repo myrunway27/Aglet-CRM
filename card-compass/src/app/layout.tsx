@@ -1,7 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import Link from "next/link";
 import { NativeBridge } from "@/components/NativeBridge";
-import { NavBar } from "@/components/NavBar";
+import { BottomTabs, NavBar } from "@/components/NavBar";
 import { PwaClient } from "@/components/PwaClient";
 import { currentUser } from "@/lib/auth/session";
 import { db } from "@/lib/db";
@@ -25,7 +25,7 @@ export default async function RootLayout({ children }: LayoutProps<"/">) {
     : 0;
   return (
     <html lang="en" className="h-full antialiased">
-      <body className="flex min-h-full flex-col font-sans">
+      <body className="flex min-h-full flex-col pb-16 font-sans sm:pb-0">
         <a
           href="#main"
           className="sr-only focus:not-sr-only focus:absolute focus:left-2 focus:top-2 focus:z-50 focus:rounded focus:bg-white focus:px-3 focus:py-2"
@@ -43,7 +43,7 @@ export default async function RootLayout({ children }: LayoutProps<"/">) {
         </header>
         <PwaClient />
         <NativeBridge />
-        <main id="main" className="mx-auto w-full max-w-5xl flex-1 px-4 py-6">
+        <main id="main" className="mx-auto w-full max-w-5xl flex-1 px-4 pt-4 pb-6 sm:pt-6">
           {children}
         </main>
         <footer className="border-t border-slate-200 bg-white">
@@ -53,6 +53,7 @@ export default async function RootLayout({ children }: LayoutProps<"/">) {
             with The Pokémon Company, Nintendo, eBay, TCGplayer or Cardmarket.
           </div>
         </footer>
+        <BottomTabs unread={unread} />
       </body>
     </html>
   );

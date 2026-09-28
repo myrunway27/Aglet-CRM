@@ -1,261 +1,401 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useRef, useState, type ChangeEvent, type FormEvent } from "react";
+import { useRouter } from "next/navigation";
+import { useCallback, useEffect, useId, useRef, useState, type KeyboardEvent } from "react";
 import { ClientApiError, readJson, type ScanResponse, type SearchResponse } from "@/lib/api-types";
 import type { CatalogCard } from "@/lib/catalog/types";
-import { isNative, takeNativePhoto } from "@/lib/native";
-import { CandidateList } from "./CandidateList";
-import { ConfirmForm } from "./ConfirmForm";
+import { CameraScanner } from "./CameraScanner";
+import { CardArt } from "./CardArt";
 import { DemoBanner } from "./DemoBanner";
 
-type Status =
+type Recent = Pick<CatalogCard, "catalogId" | "name" | "setName" | "number">;
+type ScanState =
   | { kind: "idle" }
-  | { kind: "busy"; message: string }
-  | { kind: "error"; message: string; retryAfter?: number; retry?: () => void };
+  | { kind: "reading"; preview: string }
+  | { kind: "done"; preview: string; scan: ScanResponse; showAll: boolean }
+  | { kind: "error"; preview: string | null; message: string };
 
-function toStatus(err: unknown, retry?: () => void): Status {
-  if (err instanceof ClientApiError) {
-    return {
-      kind: "error",
-      message: err.status === 429 ? `${err.message} (try again in about ${err.retryAfterSeconds ?? 60}s)` : err.message,
-      retryAfter: err.retryAfterSeconds,
-      retry,
-    };
+const RECENT_KEY = "cc.recent";
+function loadRecent(): Recent[] {
+  try {
+    return JSON.parse(localStorage.getItem(RECENT_KEY) ?? "[]").slice(0, 8);
+  } catch {
+    return [];
   }
-  return { kind: "error", message: "Network error. Check your connection and try again.", retry };
+}
+function saveRecent(c: Recent) {
+  try {
+    const next = [c, ...loadRecent().filter((r) => r.catalogId !== c.catalogId)].slice(0, 8);
+    localStorage.setItem(RECENT_KEY, JSON.stringify(next));
+  } catch {
+    /* storage unavailable */
+  }
 }
 
+const CameraIcon = () => (
+  <svg aria-hidden viewBox="0 0 24 24" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M4 8h3l2-3h6l2 3h3v11H4z" />
+    <circle cx="12" cy="13" r="3.5" />
+  </svg>
+);
+const SearchIcon = () => (
+  <svg aria-hidden viewBox="0 0 24 24" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
+    <circle cx="11" cy="11" r="6.5" />
+    <path d="m16 16 4.5 4.5" />
+  </svg>
+);
+
 export function Home({ initialMode }: { initialMode: "mock" | "live" }) {
-  const [status, setStatus] = useState<Status>({ kind: "idle" });
-  const [scan, setScan] = useState<ScanResponse | null>(null);
+  const router = useRouter();
+  const listId = useId();
   const [query, setQuery] = useState("");
-  const [search, setSearch] = useState<SearchResponse | null>(null);
-  const [selected, setSelected] = useState<CatalogCard | null>(null);
-  const [mode, setMode] = useState<"mock" | "live">(initialMode);
-  const fileRef = useRef<HTMLInputElement>(null);
-  const searchRef = useRef<HTMLInputElement>(null);
-  const confirmRef = useRef<HTMLDivElement>(null);
+  const [suggestions, setSuggestions] = useState<CatalogCard[]>([]);
+  const [open, setOpen] = useState(false);
+  const [active, setActive] = useState(-1);
+  const [searching, setSearching] = useState(false);
+  const [results, setResults] = useState<CatalogCard[] | null>(null);
+  const [searchError, setSearchError] = useState<string | null>(null);
+  const [camera, setCamera] = useState(false);
+  const [scan, setScan] = useState<ScanState>({ kind: "idle" });
+  const [recent, setRecent] = useState<Recent[]>([]);
+  const scanRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    if (selected) confirmRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
-  }, [selected]);
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- read per-device history after mount
+    setRecent(loadRecent());
+  }, []);
 
-  async function upload(file: File) {
-    setStatus({ kind: "busy", message: "Reading your card…" });
-    setSelected(null);
-    setSearch(null);
+  // Type-ahead suggestions (debounced)
+  useEffect(() => {
+    const q = query.trim();
+    if (q.length < 2) return; // cleared in the input's change handler
+    const t = setTimeout(async () => {
+      try {
+        const r = await readJson<SearchResponse>(await fetch(`/api/cards/search?q=${encodeURIComponent(q)}`));
+        setSuggestions(r.results.slice(0, 6));
+        setActive(-1);
+      } catch {
+        setSuggestions([]);
+      }
+    }, 250);
+    return () => clearTimeout(t);
+  }, [query]);
+
+  const openCard = useCallback(
+    (card: CatalogCard, scanId?: string | null) => {
+      saveRecent({ catalogId: card.catalogId, name: card.name, setName: card.setName, number: card.number });
+      if (scanId) {
+        void fetch(`/api/scans/${encodeURIComponent(scanId)}/confirm`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ catalogId: card.catalogId }),
+        }).catch(() => undefined);
+      }
+      router.push(`/cards/${encodeURIComponent(card.catalogId)}`);
+    },
+    [router],
+  );
+
+  async function runSearch(q: string) {
+    setOpen(false);
+    if (q.trim().length < 2) return setSearchError("Type at least 2 characters.");
+    setSearching(true);
+    setSearchError(null);
+    try {
+      const r = await readJson<SearchResponse>(await fetch(`/api/cards/search?q=${encodeURIComponent(q.trim())}`));
+      setResults(r.results);
+    } catch (err) {
+      setSearchError(err instanceof ClientApiError ? err.message : "Network error. Check your connection.");
+    }
+    setSearching(false);
+  }
+
+  const onImage = useCallback(async (file: File) => {
+    const preview = URL.createObjectURL(file);
+    setResults(null);
+    setScan({ kind: "reading", preview });
+    setTimeout(() => scanRef.current?.scrollIntoView({ behavior: "smooth", block: "start" }), 50);
     const form = new FormData();
     form.set("image", file);
     try {
-      const data = await readJson<ScanResponse>(await fetch("/api/scan", { method: "POST", body: form }));
-      setScan(data);
-      setMode(data.mode);
-      if (data.parsed.name) setQuery(data.parsed.name);
-      setStatus({ kind: "idle" });
+      const s = await readJson<ScanResponse>(await fetch("/api/scan", { method: "POST", body: form }));
+      setScan({ kind: "done", preview, scan: s, showAll: false });
     } catch (err) {
-      setStatus(toStatus(err, () => upload(file)));
+      setScan({ kind: "error", preview, message: err instanceof ClientApiError ? err.message : "Network error. Check your connection." });
     }
+  }, []);
+  const closeCamera = useCallback(() => setCamera(false), []);
+
+  function onKey(e: KeyboardEvent<HTMLInputElement>) {
+    if (e.key === "ArrowDown" && suggestions.length) {
+      e.preventDefault();
+      setOpen(true);
+      setActive((a) => (a + 1) % suggestions.length);
+    } else if (e.key === "ArrowUp" && suggestions.length) {
+      e.preventDefault();
+      setActive((a) => (a <= 0 ? suggestions.length - 1 : a - 1));
+    } else if (e.key === "Enter") {
+      e.preventDefault();
+      if (open && active >= 0 && suggestions[active]) openCard(suggestions[active]);
+      else void runSearch(query);
+    } else if (e.key === "Escape") setOpen(false);
   }
 
-  function onFile(e: ChangeEvent<HTMLInputElement>) {
-    const file = e.target.files?.[0];
-    e.target.value = ""; // allow re-selecting the same photo
-    if (file) void upload(file);
-  }
-
-  async function runSearch(q: string) {
-    setStatus({ kind: "busy", message: "Searching the catalog…" });
-    setSelected(null);
-    try {
-      const data = await readJson<SearchResponse>(await fetch(`/api/cards/search?q=${encodeURIComponent(q)}`));
-      setSearch(data);
-      setMode(data.mode);
-      setStatus({ kind: "idle" });
-    } catch (err) {
-      setStatus(toStatus(err, () => runSearch(q)));
-    }
-  }
-
-  function onSearch(e: FormEvent) {
-    e.preventDefault();
-    if (query.trim().length >= 2) void runSearch(query.trim());
-    else setStatus({ kind: "error", message: "Enter at least 2 characters to search." });
-  }
-
-  function noneOfThese() {
-    setSelected(null);
-    setScan(null);
-    searchRef.current?.focus();
-  }
-
-  const candidates = scan?.match.candidates ?? [];
+  const top = scan.kind === "done" ? scan.scan.match.candidates[0] : undefined;
+  const confident = scan.kind === "done" && top?.confidence === "high" && !scan.scan.match.ambiguous;
 
   return (
-    <div className="grid gap-6">
-      <section aria-labelledby="intro" className="grid gap-2">
-        <h1 id="intro" className="text-2xl font-bold tracking-tight sm:text-3xl">
-          What is my Pokémon card worth?
-        </h1>
-        <p className="max-w-2xl text-slate-700">
-          Photograph a card, confirm the exact printing, and compare source-attributed reference prices
-          from the US (TCGplayer, USD) and EU (Cardmarket, EUR). No sign-up. Photos are processed in memory
-          and not stored.
-        </p>
-      </section>
+    <div className="grid grid-cols-[minmax(0,1fr)] gap-6">
+      <section aria-labelledby="find-h" className="grid grid-cols-[minmax(0,1fr)] gap-4 pt-2 sm:pt-6">
+        <div className="grid gap-1">
+          <h1 id="find-h" className="text-3xl font-bold tracking-tight sm:text-4xl">
+            Find any Pokémon card
+          </h1>
+          <p className="text-slate-700">Type a name or number, or scan the card with your camera.</p>
+        </div>
 
-      {mode === "mock" && <DemoBanner />}
-
-      <div className="grid gap-4 md:grid-cols-2">
-        <section aria-labelledby="scan-h" className="rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
-          <h2 id="scan-h" className="text-lg font-semibold">
-            Scan a card
-          </h2>
-          <p className="mt-1 text-sm text-slate-700">
-            Lay the card flat in good light, avoid glare, and fill the frame. JPEG, PNG or WebP up to 8 MB.
-          </p>
-          <label
-            htmlFor="card-photo"
-            onClick={(e) => {
-              if (!isNative()) return;
-              e.preventDefault(); // use the native camera inside the app
-              void takeNativePhoto().then((f) => f && upload(f));
+        {/* Search bar with a scan button inside */}
+        <div className="relative">
+          <form
+            role="search"
+            onSubmit={(e) => {
+              e.preventDefault();
+              void runSearch(query);
             }}
-            className="mt-3 flex cursor-pointer items-center justify-center rounded-md bg-brand-700 px-4 py-3 font-semibold text-white hover:bg-brand-800 focus-within:outline focus-within:outline-3 focus-within:outline-offset-2 focus-within:outline-brand-700"
+            className="flex items-center gap-2 rounded-2xl border-2 border-slate-300 bg-white py-1.5 pr-1.5 pl-3 shadow-sm focus-within:border-brand-700"
           >
-            Take photo or upload
-            <input
-              ref={fileRef}
-              id="card-photo"
-              type="file"
-              accept="image/jpeg,image/png,image/webp,image/*"
-              capture="environment"
-              onChange={onFile}
-              className="sr-only"
-            />
-          </label>
-          <p className="mt-2 text-sm text-slate-700">
-            Scanning a stack?{" "}
-            <Link href="/scan/bulk" className="font-medium text-brand-700 underline">
-              Bulk scan
-            </Link>
-            {" · "}Have a PSA slab?{" "}
-            <Link href="/graded" className="font-medium text-brand-700 underline">
-              Add by cert number
-            </Link>
-          </p>
-        </section>
-
-        <section aria-labelledby="search-h" className="rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
-          <h2 id="search-h" className="text-lg font-semibold">
-            Search manually
-          </h2>
-          <p className="mt-1 text-sm text-slate-700">By name (e.g. Pikachu) or collector number (e.g. 025/198).</p>
-          <form onSubmit={onSearch} role="search" className="mt-3 flex gap-2">
+            <span className="text-slate-500">
+              <SearchIcon />
+            </span>
             <label htmlFor="q" className="sr-only">
               Card name or number
             </label>
             <input
-              ref={searchRef}
               id="q"
+              role="combobox"
+              aria-expanded={open && suggestions.length > 0}
+              aria-controls={listId}
+              aria-autocomplete="list"
+              aria-activedescendant={active >= 0 ? `${listId}-${active}` : undefined}
+              autoComplete="off"
               value={query}
-              onChange={(e) => setQuery(e.target.value)}
+              onChange={(e) => {
+                setQuery(e.target.value);
+                if (e.target.value.trim().length < 2) setSuggestions([]);
+                setOpen(true);
+              }}
+              onFocus={() => setOpen(true)}
+              onBlur={() => setTimeout(() => setOpen(false), 150)}
+              onKeyDown={onKey}
               maxLength={80}
-              placeholder="Pikachu or 025/198"
-              className="min-w-0 flex-1 rounded-md border border-slate-300 px-3 py-2 text-base"
+              placeholder="Pikachu, Charizard ex, 025/198…"
+              className="w-0 min-w-0 flex-1 bg-transparent py-2 text-lg outline-none focus-visible:outline-none"
             />
-            <button type="submit" className="rounded-md border border-brand-700 px-4 py-2 font-semibold text-brand-700 hover:bg-brand-50">
-              Search
+            <button
+              type="button"
+              onClick={() => setCamera(true)}
+              className="flex items-center gap-2 rounded-xl bg-brand-700 px-4 py-2.5 font-semibold text-white hover:bg-brand-800"
+            >
+              <CameraIcon />
+              Scan
             </button>
           </form>
-        </section>
-      </div>
 
-      <div aria-live="polite" className="min-h-0">
-        {status.kind === "busy" && (
-          <p className="flex items-center gap-2 text-slate-700">
-            <span aria-hidden className="h-4 w-4 animate-spin rounded-full border-2 border-brand-700 border-t-transparent" />
-            {status.message}
-          </p>
-        )}
-        {status.kind === "error" && (
-          <div role="alert" className="flex flex-wrap items-center gap-3 rounded-md border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-800">
-            <span>{status.message}</span>
-            {status.retry && (
-              <button onClick={status.retry} className="rounded border border-red-800 px-2 py-1 font-medium">
-                Retry
-              </button>
-            )}
+          {open && suggestions.length > 0 && (
+            <ul id={listId} role="listbox" aria-label="Suggestions" className="absolute inset-x-0 top-full z-20 mt-1 max-h-96 overflow-auto rounded-xl border border-slate-200 bg-white p-1 shadow-lg">
+              {suggestions.map((c, idx) => (
+                <li
+                  key={c.catalogId}
+                  id={`${listId}-${idx}`}
+                  role="option"
+                  aria-selected={idx === active}
+                  onMouseDown={(e) => e.preventDefault()}
+                  onClick={() => openCard(c)}
+                  className={`flex cursor-pointer items-center gap-3 rounded-lg p-2 ${idx === active ? "bg-brand-50" : "hover:bg-slate-50"}`}
+                >
+                  <CardArt card={c} />
+                  <span className="min-w-0">
+                    <span className="block font-semibold">{c.name}</span>
+                    <span className="block text-sm text-slate-700">
+                      {c.setName} · #{c.number}
+                      {c.setPrintedTotal ? `/${c.setPrintedTotal}` : ""}
+                    </span>
+                    {c.rarity && <span className="block text-xs text-slate-600">{c.rarity}</span>}
+                  </span>
+                </li>
+              ))}
+            </ul>
+          )}
+        </div>
+
+        <div className="flex flex-wrap gap-x-4 gap-y-1 text-sm">
+          <Link href="/scan/bulk" className="font-medium text-brand-700 underline">Scan a stack of cards</Link>
+          <Link href="/graded" className="font-medium text-brand-700 underline">Add a PSA slab</Link>
+          <Link href="/market" className="font-medium text-brand-700 underline">See what&apos;s moving</Link>
+        </div>
+
+        {recent.length > 0 && scan.kind === "idle" && !results && (
+          <div className="grid gap-2">
+            <h2 className="text-sm font-semibold text-slate-700">Recently viewed</h2>
+            <div className="flex flex-wrap gap-2">
+              {recent.map((r) => (
+                <Link
+                  key={r.catalogId}
+                  href={`/cards/${encodeURIComponent(r.catalogId)}`}
+                  className="rounded-full border border-slate-300 bg-white px-3 py-1.5 text-sm hover:border-slate-500"
+                >
+                  {r.name} <span className="text-slate-600">· {r.setName} #{r.number}</span>
+                </Link>
+              ))}
+            </div>
           </div>
         )}
+      </section>
+
+      {initialMode === "mock" && <DemoBanner />}
+
+      <div ref={scanRef} aria-live="polite" className="scroll-mt-4">
+        {scan.kind === "reading" && (
+          <div className="flex items-center gap-4 rounded-2xl border border-slate-200 bg-white p-4">
+            {/* eslint-disable-next-line @next/next/no-img-element -- local photo preview */}
+            <img src={scan.preview} alt="Your photo" className="h-24 w-16 rounded object-cover" />
+            <p className="flex items-center gap-2 text-lg font-medium">
+              <span aria-hidden className="h-5 w-5 animate-spin rounded-full border-2 border-brand-700 border-t-transparent" />
+              Reading your card…
+            </p>
+          </div>
+        )}
+
+        {scan.kind === "error" && (
+          <div role="alert" className="grid gap-3 rounded-2xl border border-red-200 bg-red-50 p-4 text-red-900">
+            <p className="font-semibold">{scan.message}</p>
+            <div className="flex flex-wrap gap-2">
+              <button onClick={() => setCamera(true)} className="rounded-lg bg-red-800 px-3 py-2 font-medium text-white">Try again</button>
+              <button onClick={() => setScan({ kind: "idle" })} className="rounded-lg border border-red-800 px-3 py-2 font-medium">Cancel</button>
+            </div>
+          </div>
+        )}
+
+        {scan.kind === "done" && scan.scan.match.candidates.length === 0 && (
+          <div className="grid gap-3 rounded-2xl border border-slate-200 bg-white p-4">
+            <h2 className="text-xl font-semibold">We couldn&apos;t read that card</h2>
+            <ul className="list-disc pl-5 text-slate-700">
+              <li>Fill the frame with the whole card and hold still</li>
+              <li>Tilt it slightly to get rid of glare</li>
+              <li>Or type the name or the number at the bottom (like 025/198) in the search bar</li>
+            </ul>
+            <div className="flex flex-wrap gap-2">
+              <button onClick={() => setCamera(true)} className="rounded-lg bg-brand-700 px-4 py-2 font-semibold text-white">Scan again</button>
+              <button
+                onClick={() => {
+                  setScan({ kind: "idle" });
+                  document.getElementById("q")?.focus();
+                }}
+                className="rounded-lg border border-slate-300 px-4 py-2 font-medium"
+              >
+                Type instead
+              </button>
+            </div>
+          </div>
+        )}
+
+        {scan.kind === "done" && top && confident && !scan.showAll && (
+          <section aria-labelledby="match-h" className="flex gap-4 rounded-2xl border-2 border-brand-700 bg-white p-4">
+            <CardArt card={top.card} size="md" />
+            <div className="grid min-w-0 content-start gap-3">
+              <h2 id="match-h" className="text-sm font-semibold uppercase tracking-wide text-brand-700">Is this your card?</h2>
+              <div>
+                <p className="text-2xl font-bold">{top.card.name}</p>
+                <p className="text-slate-700">
+                  {top.card.setName} · #{top.card.number}
+                  {top.card.setPrintedTotal ? `/${top.card.setPrintedTotal}` : ""}
+                  {top.card.rarity ? ` · ${top.card.rarity}` : ""}
+                </p>
+                <p className="mt-1 text-sm text-slate-600">Matched on: {top.reasons.join(", ").toLowerCase()}</p>
+              </div>
+              <div className="flex flex-wrap gap-2">
+                <button onClick={() => openCard(top.card, scan.scan.scanId)} className="rounded-xl bg-brand-700 px-5 py-3 text-lg font-semibold text-white hover:bg-brand-800">
+                  Yes, show prices
+                </button>
+                <button onClick={() => setScan({ ...scan, showAll: true })} className="rounded-xl border border-slate-300 px-4 py-3 font-medium">
+                  No, show other matches
+                </button>
+              </div>
+            </div>
+          </section>
+        )}
+
+        {scan.kind === "done" && scan.scan.match.candidates.length > 0 && (!confident || scan.showAll) && (
+          <section aria-labelledby="which-h" className="grid gap-3">
+            <div>
+              <h2 id="which-h" className="text-xl font-semibold">Which one is yours?</h2>
+              <p className="text-sm text-slate-700">
+                {scan.scan.match.ambiguous || scan.scan.match.duplicatePrintings
+                  ? "A few printings look alike. Check the set name and the number at the bottom of your card."
+                  : "Tap the card that matches."}
+              </p>
+            </div>
+            <ul className="grid gap-2 sm:grid-cols-2">
+              {scan.scan.match.candidates.map((c) => (
+                <li key={c.card.catalogId}>
+                  <button
+                    onClick={() => openCard(c.card, scan.scan.scanId)}
+                    className="flex w-full items-center gap-3 rounded-xl border border-slate-200 bg-white p-3 text-left hover:border-brand-700"
+                  >
+                    <CardArt card={c.card} />
+                    <span className="min-w-0">
+                      <span className="block font-semibold">{c.card.name}</span>
+                      <span className="block text-sm text-slate-700">
+                        {c.card.setName} · #{c.card.number}
+                        {c.card.setPrintedTotal ? `/${c.card.setPrintedTotal}` : ""}
+                      </span>
+                      <span className="block text-xs text-slate-600">{c.confidence === "high" ? "Strong match" : c.confidence === "medium" ? "Possible match" : "Weak match"}</span>
+                    </span>
+                  </button>
+                </li>
+              ))}
+            </ul>
+            <p className="text-sm text-slate-700">
+              Not here?{" "}
+              <button className="font-medium text-brand-700 underline" onClick={() => setCamera(true)}>Scan again</button> or type it in the search bar.
+            </p>
+          </section>
+        )}
       </div>
 
-      {scan && (
-        <section aria-labelledby="review-h" className="grid gap-3">
-          <h2 id="review-h" className="text-xl font-semibold">
-            Review matches
-          </h2>
-          <dl className="grid grid-cols-[auto_1fr] gap-x-3 gap-y-1 rounded-md bg-slate-100 px-3 py-2 text-sm">
-            <dt className="text-slate-600">Name read</dt>
-            <dd>{scan.parsed.name ?? "—"}</dd>
-            <dt className="text-slate-600">Number read</dt>
-            <dd>{scan.parsed.rawNumber ?? "—"}</dd>
-          </dl>
-          {[...scan.ocr.warnings, ...scan.parsed.notes].map((w) => (
-            <p key={w} className="text-sm text-slate-700">
-              ⓘ {w}
-            </p>
-          ))}
-          {candidates.length === 0 ? (
-            <p className="rounded-md border border-slate-200 bg-white px-3 py-3 text-slate-800">
-              No catalog match. Try a clearer photo, or search manually above.
-            </p>
-          ) : (
-            <>
-              {(scan.match.ambiguous || scan.match.duplicatePrintings) && (
-                <p className="rounded-md border border-amber-300 bg-amber-50 px-3 py-2 text-sm text-amber-900">
-                  Several printings look alike. Compare the set name, set symbol and number carefully.
-                </p>
-              )}
-              <CandidateList
-                name="scan-candidate"
-                legend="Pick the card that matches yours (nothing is selected until you choose)"
-                items={candidates.map((c) => ({ card: c.card, candidate: c }))}
-                selectedId={selected?.catalogId ?? null}
-                onSelect={setSelected}
-              />
-            </>
-          )}
-          <button onClick={noneOfThese} className="justify-self-start text-sm font-medium text-brand-700 underline">
-            None of these — search manually
-          </button>
-        </section>
-      )}
-
-      {search && (
-        <section aria-labelledby="results-h" className="grid gap-3">
+      {(searching || searchError || results) && (
+        <section aria-labelledby="results-h" className="grid gap-3" aria-live="polite">
           <h2 id="results-h" className="text-xl font-semibold">
-            Search results
+            {searching ? "Searching…" : results ? `${results.length} card${results.length === 1 ? "" : "s"} found` : "Search"}
           </h2>
-          {search.results.length === 0 ? (
-            <p className="rounded-md border border-slate-200 bg-white px-3 py-3">No cards found. Check spelling or try the collector number.</p>
-          ) : (
-            <CandidateList
-              name="search-candidate"
-              legend={`${search.results.length} card${search.results.length === 1 ? "" : "s"} found — pick yours`}
-              items={search.results.map((card) => ({ card }))}
-              selectedId={selected?.catalogId ?? null}
-              onSelect={setSelected}
-            />
+          {searchError && <p role="alert" className="text-red-800">{searchError}</p>}
+          {results && results.length === 0 && (
+            <p className="rounded-xl border border-slate-200 bg-white p-4">No cards found. Check the spelling, or try the number printed at the bottom of the card.</p>
+          )}
+          {results && results.length > 0 && (
+            <ul className="grid gap-2 sm:grid-cols-2">
+              {results.map((c) => (
+                <li key={c.catalogId}>
+                  <button onClick={() => openCard(c)} className="flex w-full items-center gap-3 rounded-xl border border-slate-200 bg-white p-3 text-left hover:border-brand-700">
+                    <CardArt card={c} />
+                    <span className="min-w-0">
+                      <span className="block font-semibold">{c.name}</span>
+                      <span className="block text-sm text-slate-700">
+                        {c.setName} · #{c.number}
+                        {c.setPrintedTotal ? `/${c.setPrintedTotal}` : ""}
+                      </span>
+                      {c.rarity && <span className="block text-xs text-slate-600">{c.rarity}</span>}
+                    </span>
+                  </button>
+                </li>
+              ))}
+            </ul>
           )}
         </section>
       )}
 
-      {selected && (
-        <div ref={confirmRef} className="scroll-mt-4">
-          <ConfirmForm key={selected.catalogId} card={selected} scanId={scan?.scanId ?? null} />
-        </div>
-      )}
+      <CameraScanner open={camera} onClose={closeCamera} onImage={onImage} />
     </div>
   );
 }

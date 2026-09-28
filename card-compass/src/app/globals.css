@@ -23,3 +23,10 @@ body {
   outline: 3px solid #4338ca;
   outline-offset: 2px;
 }
+
+/* Keep scrolled-to content clear of the phone tab bar */
+@media (max-width: 639px) {
+  html {
+    scroll-padding-bottom: 5rem;
+  }
+}

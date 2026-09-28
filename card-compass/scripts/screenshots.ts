@@ -11,23 +11,29 @@ const OUT = path.join(process.cwd(), "docs", "screenshots");
 const FIXTURE = path.join(process.cwd(), "fixtures", "ocr", "pikachu-alpha.png");
 
 async function run(label: string, width: number, height: number) {
-  const browser = await chromium.launch();
-  const page = await browser.newPage({ viewport: { width, height }, deviceScaleFactor: 1 });
+  // A fake camera (Chromium test pattern) stands in for the phone camera.
+  const browser = await chromium.launch({ args: ["--use-fake-ui-for-media-stream", "--use-fake-device-for-media-stream"] });
+  const page = await browser.newPage({ viewport: { width, height }, deviceScaleFactor: 1, permissions: ["camera"] });
   const shot = (name: string) => page.screenshot({ path: path.join(OUT, `${label}-${name}.png`), fullPage: true });
 
   await page.goto(BASE);
+  await page.getByLabel("Card name or number").fill("pika");
+  await page.getByRole("option").first().waitFor();
   await shot("1-landing");
-  await page.locator("#card-photo").setInputFiles(FIXTURE);
-  await page.getByRole("heading", { name: "Review matches" }).waitFor();
-  await page.getByRole("radio", { name: /Fixture Set Alpha/ }).first().check();
-  const form = page.getByRole("form", { name: "Confirm your exact card" });
-  await form.getByRole("radio", { name: /Reverse holofoil/ }).check();
-  await form.getByLabel("Condition").selectOption("NM");
-  await form.getByRole("checkbox").check();
+  await page.getByLabel("Card name or number").fill("");
+  await page.getByRole("button", { name: "Scan", exact: true }).click();
+  await page.getByRole("button", { name: "Take photo" }).waitFor();
+  await page.waitForTimeout(800);
+  await page.screenshot({ path: path.join(OUT, `${label}-12-camera.png`) });
+  await page.getByRole("dialog", { name: "Scan a card" }).getByLabel("Upload a photo instead").setInputFiles(FIXTURE);
+  await page.getByText("Is this your card?").waitFor();
   await page.waitForTimeout(400);
   await shot("2-review-confirm");
-  await form.getByRole("button", { name: /Confirm and see/ }).click();
-  await page.getByRole("heading", { name: "Market references" }).waitFor();
+  await page.getByRole("button", { name: "Yes, show prices" }).click();
+  await page.getByLabel("Finish", { exact: true }).selectOption("reverseHolofoil");
+  await page.waitForURL(/finish=reverseHolofoil/);
+  await page.getByTestId("quick-tcgplayer").getByText(/USD\s0\.55/).waitFor();
+  await page.getByText("All price details and sources").click();
   await page.getByText("Other finishes").first().click();
   await shot("3-results");
 
@@ -89,7 +95,7 @@ async function run(label: string, width: number, height: number) {
   await shot("10-shared");
 
   await page.goto(`${BASE}/cards/fxa-125?finish=holofoil&lang=en&grading=graded&grader=PSA&grade=10`);
-  await page.getByRole("heading", { name: "Market references" }).waitFor();
+  await page.getByRole("heading", { name: "Prices for your card" }).waitFor();
   await page.getByTestId("offers").getByRole("heading").first().waitFor();
   await shot("11-graded-results");
   await browser.close();

@@ -4,6 +4,50 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { api } from "@/lib/client-api";
 
+const TABS: Array<{ href: string; label: string; icon: string }> = [
+  { href: "/", label: "Search", icon: "M11 4.5a6.5 6.5 0 1 1 0 13 6.5 6.5 0 0 1 0-13zM16 16l4.5 4.5" },
+  { href: "/collection", label: "Collection", icon: "M4 6h16v13H4zM8 6V4h8v2M4 11h16" },
+  { href: "/market", label: "Market", icon: "M4 18l5-6 4 3 7-9M15 6h5v5" },
+  { href: "/alerts", label: "Alerts", icon: "M6 16V11a6 6 0 1 1 12 0v5l1.5 2h-15zM10 20a2 2 0 0 0 4 0" },
+  { href: "/more", label: "More", icon: "M5 12h.01M12 12h.01M19 12h.01" },
+];
+
+/** App-style tab bar on phones (the top links take over from the sm breakpoint). */
+export function BottomTabs({ unread }: { unread: number }) {
+  const path = usePathname();
+  const isActive = (href: string) => (href === "/" ? path === "/" : path.startsWith(href));
+  return (
+    <nav
+      aria-label="Tabs"
+      className="fixed inset-x-0 bottom-0 z-40 border-t border-slate-200 bg-white/95 backdrop-blur sm:hidden"
+      style={{ paddingBottom: "env(safe-area-inset-bottom, 0px)" }}
+    >
+      <ul className="grid grid-cols-5">
+        {TABS.map((t) => (
+          <li key={t.href}>
+            <Link
+              href={t.href}
+              aria-current={isActive(t.href) ? "page" : undefined}
+              className={`relative flex flex-col items-center gap-0.5 py-2 text-[11px] font-medium ${isActive(t.href) ? "text-brand-700" : "text-slate-600"}`}
+            >
+              <svg aria-hidden viewBox="0 0 24 24" className="h-6 w-6" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d={t.icon} />
+              </svg>
+              {t.label}
+              {t.href === "/alerts" && unread > 0 && (
+                <span className="absolute top-1 left-1/2 ml-2 rounded-full bg-red-700 px-1.5 text-[10px] font-semibold text-white">
+                  {unread}
+                  <span className="sr-only"> unread</span>
+                </span>
+              )}
+            </Link>
+          </li>
+        ))}
+      </ul>
+    </nav>
+  );
+}
+
 export function NavBar({ signedIn, unread }: { signedIn: boolean; unread: number }) {
   const path = usePathname();
   const router = useRouter();
@@ -18,11 +62,8 @@ export function NavBar({ signedIn, unread }: { signedIn: boolean; unread: number
     </Link>
   );
   return (
-    <nav
-      aria-label="Main"
-      className="-mx-4 flex w-[calc(100%+2rem)] items-center gap-1 overflow-x-auto whitespace-nowrap px-4 pb-1 text-sm sm:mx-0 sm:w-auto sm:overflow-visible sm:px-0 sm:pb-0"
-    >
-      {link("/", "Scan")}
+    <nav aria-label="Main" className="hidden items-center gap-1 whitespace-nowrap text-sm sm:flex">
+      {link("/", "Search")}
       {link("/collection", "Collection")}
       {link("/wishlist", "Wishlist")}
       {link("/sets", "Sets")}

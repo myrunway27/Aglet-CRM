@@ -73,7 +73,7 @@ test("bulk scan, binders, profit/loss, CSV export + import", async ({ page }, in
   await expect(page.getByText(/5 cards\./)).toBeVisible();
 
   // Set completion
-  await page.getByRole("navigation", { name: "Main" }).getByRole("link", { name: "Sets" }).click();
+  await page.goto("/sets");
   await expect(page.getByRole("link", { name: /Fixture Set Alpha\s*2 \/ 4 \(50%\)/ })).toBeVisible();
   await page.getByRole("link", { name: /Fixture Set Alpha/ }).click();
   await page.getByRole("button", { name: "missing" }).click();
@@ -105,7 +105,7 @@ test("wishlist with target price creates an alert; history charts and market mov
 
   await page.goto("/market");
   await expect(page.getByRole("heading", { name: "Market movers" })).toBeVisible();
-  await expect(page.getByText("Demo mode.")).toBeVisible();
+  await expect(page.getByText("Demo mode:")).toBeVisible();
   const tables = page.getByRole("table");
   await expect(tables.first().getByRole("row")).not.toHaveCount(1);
 });

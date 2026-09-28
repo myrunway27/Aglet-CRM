@@ -6,14 +6,15 @@ import { ClientApiError, readJson, type PricesResponse } from "@/lib/api-types";
 import { finishLabel } from "@/lib/catalog/types";
 import { formatMinor } from "@/lib/money";
 import { groupByFinish, subtypeLabel, SOURCES, type PriceReference, type SourceStatus } from "@/lib/prices";
-import { CONDITIONS, LANGUAGES, selectionToQuery, type Selection } from "@/lib/selection";
+import { CONDITIONS, LANGUAGES, selectionToQuery, type Selection, type SelectionField } from "@/lib/selection";
 import { CardActions } from "./CardActions";
 import { OffersSection } from "./OffersSection";
+import { SelectionBar } from "./SelectionBar";
 import { PriceHistory } from "./PriceHistory";
 import { subtypeForGrade } from "@/lib/pricecharting/match";
 import { CardArt } from "./CardArt";
 import { DemoBanner } from "./DemoBanner";
-import { PreferenceSelector, REGIONS, useRegion } from "./PreferenceSelector";
+import { REGIONS, useRegion } from "./PreferenceSelector";
 
 type State =
   | { kind: "loading" }
@@ -135,14 +136,71 @@ function SourcePanel({
   );
 }
 
+/** The one headline number per source for this exact card, each labelled with what it is. */
+function QuickPrices({ data, selection }: { data: PricesResponse; selection: Selection }) {
+  const find = (source: string, finish: string, subtype: string) =>
+    data.references.find((r) => r.source === source && r.finish === finish && r.subtype === subtype);
+  const graded = selection.grading === "graded";
+  const pcSub = graded ? subtypeForGrade(selection.grader, selection.grade) : "ungraded";
+  const tiles = [
+    !graded && {
+      key: "tcgplayer",
+      label: "TCGplayer market",
+      where: "US",
+      ref: find("tcgplayer", selection.finish, "market"),
+    },
+    !graded && {
+      key: "cardmarket",
+      label: "Cardmarket trend",
+      where: "EU",
+      ref: find("cardmarket", selection.finish === "reverseHolofoil" ? "reverseHolofoil" : "unspecified", "trend"),
+    },
+    data.sources.some((x) => x.source === "pricecharting") && {
+      key: "pricecharting",
+      label: `PriceCharting ${pcSub ? subtypeLabel(pcSub) : ""}`.trim(),
+      where: "Recent sales",
+      ref: pcSub ? find("pricecharting", selection.finish, pcSub) : undefined,
+    },
+  ].filter(Boolean) as Array<{ key: string; label: string; where: string; ref: PriceReference | undefined }>;
+
+  return (
+    <div className="grid gap-3 sm:grid-cols-3" data-testid="quick-prices">
+      {tiles.map((t) => (
+        <div key={t.key} className="grid gap-0.5 rounded-xl border border-slate-200 bg-white p-4" data-testid={`quick-${t.key}`}>
+          <span className="text-sm text-slate-700">
+            {t.label} <span className="text-slate-500">· {t.where}</span>
+          </span>
+          {t.ref ? (
+            <>
+              <span className="font-mono text-2xl font-semibold tabular-nums">{formatMinor(t.ref.amountMinor, t.ref.currency)}</span>
+              <span className="text-xs text-slate-600">
+                {t.ref.stale ? "Possibly out of date · " : ""}Updated {fmtDate(t.ref.observedAt)}
+                {t.ref.isDemo ? " · demo" : ""}
+              </span>
+            </>
+          ) : (
+            <span className="text-base font-medium text-slate-700">No price for this {graded ? "grade" : "finish"}</span>
+          )}
+        </div>
+      ))}
+      <p className="text-xs text-slate-600 sm:col-span-3">
+        Reference prices in each source&apos;s own currency, not offers. Not condition-specific
+        {graded ? "" : "; played cards usually sell for less"}.
+      </p>
+    </div>
+  );
+}
+
 export function PriceResults({
   cardId,
   selection,
+  assumed = [],
   signedIn,
   offersEnabled,
 }: {
   cardId: string;
   selection: Selection;
+  assumed?: SelectionField[];
   signedIn: boolean;
   offersEnabled: boolean;
 }) {
@@ -235,15 +293,15 @@ export function PriceResults({
   return (
     <div className="grid gap-6">
       <Link href="/" className="text-sm font-medium text-brand-700 underline">
-        ← Scan or search another card
+        ← New search
       </Link>
 
       {isDemo && <DemoBanner />}
 
-      <section aria-labelledby="card-h" className="flex flex-col gap-4 rounded-xl border border-slate-200 bg-white p-4 shadow-sm sm:flex-row">
-        <CardArt card={card} size="lg" />
-        <div className="grid content-start gap-2">
-          <h1 id="card-h" className="text-2xl font-bold">
+      <section aria-labelledby="card-h" className="flex gap-4 rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
+        <CardArt card={card} size="md" />
+        <div className="grid min-w-0 content-start gap-2">
+          <h1 id="card-h" className="text-xl font-bold sm:text-2xl">
             {card.name}
           </h1>
           <p className="text-slate-700">
@@ -251,19 +309,7 @@ export function PriceResults({
             {card.setPrintedTotal ? `/${card.setPrintedTotal}` : ""}
             {card.rarity ? ` · ${card.rarity}` : ""}
           </p>
-          <dl className="grid grid-cols-[auto_1fr] gap-x-3 gap-y-1 text-sm">
-            <dt className="text-slate-600">Finish</dt>
-            <dd>{finishLabel(selection.finish)}</dd>
-            <dt className="text-slate-600">Language</dt>
-            <dd>{LANGUAGES[selection.lang]}</dd>
-            <dt className="text-slate-600">{selection.grading === "raw" ? "Condition" : "Grade"}</dt>
-            <dd>
-              {selection.grading === "raw"
-                ? `Raw · ${selection.condition ? CONDITIONS[selection.condition] : "—"}`
-                : `${selection.grader} ${selection.grade}`}
-            </dd>
-          </dl>
-          <p className="text-xs text-slate-600">Catalog ID: {card.catalogId}</p>
+          <SelectionBar cardId={cardId} finishes={card.finishes} selection={selection} assumed={assumed} />
         </div>
       </section>
 
@@ -277,11 +323,18 @@ export function PriceResults({
         </ul>
       )}
 
-      <PreferenceSelector />
+      <section aria-labelledby="quick-h" className="grid gap-3">
+        <h2 id="quick-h" className="text-xl font-semibold">
+          Prices for your card
+        </h2>
+        <QuickPrices data={data} selection={selection} />
+      </section>
 
-      <section aria-labelledby="refs-h" className="grid gap-3">
+      <details className="group rounded-xl border border-slate-200 bg-white p-4" data-testid="price-details">
+        <summary className="cursor-pointer text-base font-semibold">All price details and sources</summary>
+      <section aria-labelledby="refs-h" className="mt-3 grid gap-3">
         <div>
-          <h2 id="refs-h" className="text-xl font-semibold">
+          <h2 id="refs-h" className="text-lg font-semibold">
             Market references
           </h2>
           <p className="text-sm text-slate-700">
@@ -314,10 +367,11 @@ export function PriceResults({
           (pokemontcg.io). Check source terms before relying on these figures.
         </p>
       </section>
+      </details>
 
       <PriceHistory cardId={cardId} finish={selection.finish} />
 
-      {offersEnabled && <OffersSection cardId={cardId} selection={selection} region={region} />}
+      {offersEnabled && <OffersSection cardId={cardId} selection={selection} />}
 
       <CardActions
         cardId={cardId}

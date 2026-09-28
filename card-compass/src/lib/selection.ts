@@ -47,3 +47,35 @@ export function selectionToQuery(s: Selection): string {
   for (const [k, v] of Object.entries(s)) if (v !== undefined) p.set(k, String(v));
   return p.toString();
 }
+
+export type SelectionField = "finish" | "lang" | "condition";
+
+/**
+ * Build a selection from (possibly partial) URL params. Anything missing is
+ * filled with the common case (English, raw, Near Mint, the card's main
+ * finish) and reported in `assumed`, so the UI can ask the user to check it.
+ */
+export function resolveSelection(
+  params: Record<string, string | undefined>,
+  cardFinishes: string[],
+): { selection: Selection; assumed: SelectionField[] } {
+  const assumed: SelectionField[] = [];
+  const finish =
+    params.finish ??
+    (assumed.push("finish"),
+    cardFinishes.includes("normal") ? "normal" : cardFinishes.includes("holofoil") ? "holofoil" : (cardFinishes[0] ?? "normal"));
+  const lang = params.lang ?? (assumed.push("lang"), "en");
+  const grading = params.grading === "graded" ? "graded" : "raw";
+  const condition = grading === "raw" ? (params.condition ?? (assumed.push("condition"), "NM")) : undefined;
+  const parsed = Selection.safeParse({
+    finish,
+    lang,
+    grading,
+    condition,
+    grader: grading === "graded" ? params.grader : undefined,
+    grade: grading === "graded" ? params.grade : undefined,
+  });
+  if (parsed.success) return { selection: parsed.data, assumed };
+  // Invalid params: fall back to the plain defaults.
+  return resolveSelection({}, cardFinishes);
+}

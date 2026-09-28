@@ -5,6 +5,7 @@ import { ClientApiError } from "@/lib/api-types";
 import { formatMinor } from "@/lib/money";
 import type { EvaluatedOffer, OffersResult } from "@/lib/offers/service";
 import { REGIONS, type Region } from "@/lib/regions";
+import { useRegion } from "./PreferenceSelector";
 import { selectionToQuery, type Selection } from "@/lib/selection";
 
 type State = { kind: "loading" } | { kind: "ok"; data: OffersResult } | { kind: "disabled" } | { kind: "error"; message: string; retryAfter?: number };
@@ -65,7 +66,8 @@ function OfferRow({ o, best }: { o: EvaluatedOffer; best?: boolean }) {
   );
 }
 
-export function OffersSection({ cardId, selection, region }: { cardId: string; selection: Selection; region: Region }) {
+export function OffersSection({ cardId, selection }: { cardId: string; selection: Selection }) {
+  const [region, setRegion] = useRegion();
   const [state, setState] = useState<State>({ kind: "loading" });
 
   const load = useCallback(async () => {
@@ -95,13 +97,28 @@ export function OffersSection({ cardId, selection, region }: { cardId: string; s
       <div>
         <div className="flex flex-wrap items-center gap-2">
           <h2 id="offers-h" className="text-xl font-semibold">Listings delivered to {REGIONS[region].label}</h2>
+          <label className="flex items-center gap-2 text-sm">
+            <span className="text-slate-700">Change country</span>
+            <select
+              value={region}
+              onChange={(e) => setRegion(e.target.value as Region)}
+              className="rounded-full border border-slate-300 bg-white px-3 py-1"
+              aria-label="Deliver to"
+            >
+              {Object.entries(REGIONS).map(([k, v]) => (
+                <option key={k} value={k}>
+                  {v.label} ({v.currency})
+                </option>
+              ))}
+            </select>
+          </label>
           {state.kind === "ok" && state.data.isDemo && (
             <span className="rounded bg-amber-100 px-2 py-0.5 text-xs font-semibold text-amber-900">Demo listings</span>
           )}
         </div>
         <p className="text-sm text-slate-700">
-          Active eBay fixed-price listings (asking prices, not completed sales). A listing is ranked only if its title matches
-          your exact card and its delivered cost is fully known. Change your country above to recalculate.
+          Cards for sale on eBay, cheapest delivered first. We only rank listings that match your exact card and whose total
+          cost (item, shipping, import tax) we can work out. These are asking prices, not completed sales.
         </p>
       </div>
 

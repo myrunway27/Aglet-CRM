@@ -23,7 +23,7 @@ test("listings are verified, ranked by delivered cost, and recalculated per buye
   await expect(offers.getByText(/Not your card \(\d+\), excluded/)).toBeVisible();
   await expect(offers.getByText(/Matches with total unknown/)).toBeVisible();
 
-  await page.getByLabel("Your country").selectOption("DE");
+  await page.getByLabel("Deliver to").selectOption("DE");
   await expect(offers.getByRole("heading", { name: "Listings delivered to Germany" })).toBeVisible();
   const first = offers.getByRole("list", { name: /Verified listings/ }).getByRole("listitem").first();
   await expect(first).toContainText("demo_karten_de");

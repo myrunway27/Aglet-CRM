@@ -37,6 +37,9 @@ test("PSA cert lookup adds a graded slab, valued at its grade with PriceCharting
 
   // Results page highlights the PSA 10 row in the sales-based panel.
   await page.goto("/cards/fxa-125?finish=holofoil&lang=en&grading=graded&grader=PSA&grade=10");
+  await expect(page.getByTestId("quick-pricecharting")).toContainText(/PSA 10/);
+  await expect(page.getByTestId("quick-pricecharting")).toContainText(/USD\s138\.00/);
+  await page.getByText("All price details and sources").click();
   const pc = page.getByTestId("source-pricecharting");
   await expect(pc).toContainText("based on completed sales");
   await expect(pc.getByRole("row", { name: /PSA 10\s*· your card/ })).toContainText(/USD\s138\.00/);
