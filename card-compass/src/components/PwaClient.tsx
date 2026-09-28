@@ -56,13 +56,13 @@ export function PwaClient() {
   };
 
   return (
-    <div role="region" aria-label="Install app" className="border-b border-brand-100 bg-brand-50">
-      <div className="mx-auto flex max-w-5xl flex-wrap items-center gap-3 px-4 py-2 text-sm text-slate-800">
+    <div role="region" aria-label="Install app" className="border-b border-line bg-primary-soft">
+      <div className="mx-auto flex max-w-5xl flex-wrap items-center gap-3 px-4 py-2 text-sm text-ink">
         {deferred ? (
           <>
             <span>Install Card Compass for quick scanning from your home screen.</span>
             <button
-              className="rounded-md bg-brand-700 px-3 py-1.5 font-semibold text-white"
+              className="rounded-xl bg-primary shadow-sm px-3 py-1.5 font-semibold text-on-primary"
               onClick={async () => {
                 await deferred.prompt();
                 await deferred.userChoice;
@@ -78,7 +78,7 @@ export function PwaClient() {
             installed app on iOS.
           </span>
         )}
-        <button onClick={close} className="ml-auto text-slate-600 underline">
+        <button onClick={close} className="ml-auto text-muted underline">
           Not now
         </button>
       </div>

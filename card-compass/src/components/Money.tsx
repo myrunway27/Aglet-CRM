@@ -4,7 +4,7 @@ import { formatMinor } from "@/lib/money";
 export function Gain({ minor, currency, pct }: { minor: number; currency: string; pct: number | null }) {
   const up = minor > 0;
   const flat = minor === 0;
-  const cls = flat ? "text-slate-700" : up ? "text-emerald-800" : "text-red-800";
+  const cls = flat ? "text-ink-2" : up ? "text-good" : "text-bad";
   return (
     <span className={`font-mono ${cls}`}>
       {flat ? "±" : up ? "+" : "−"}

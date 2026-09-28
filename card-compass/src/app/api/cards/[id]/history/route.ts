@@ -18,7 +18,8 @@ export async function GET(req: Request, ctx: RouteContext<"/api/cards/[id]/histo
     const days = Math.min(365, Math.max(7, Number(new URL(req.url).searchParams.get("days")) || 90));
     const client = db();
     if (!client) return Response.json({ series: [] });
-    const card = await client.card.findUnique({ where: { catalogId: id } });
+    // History is optional: a database hiccup shows "no history" rather than an error.
+    const card = await client.card.findUnique({ where: { catalogId: id } }).catch(() => null);
     if (!card) return Response.json({ series: [] });
     const rows = await client.priceSnapshot.findMany({
       where: {
@@ -27,7 +28,7 @@ export async function GET(req: Request, ctx: RouteContext<"/api/cards/[id]/histo
         observedAt: { gte: new Date(Date.now() - days * 86_400_000) },
       },
       orderBy: { observedAt: "asc" },
-    });
+    }).catch(() => []);
     const groups = new Map<string, typeof rows>();
     for (const r of rows) {
       const k = `${r.source}|${r.subtype}|${r.finish}`;

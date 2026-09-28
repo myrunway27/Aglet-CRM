@@ -41,7 +41,7 @@ export function PriceHistory({ cardId, finish }: { cardId: string; finish: strin
               key={d}
               aria-pressed={days === d}
               onClick={() => setDays(d)}
-              className={`rounded-full border px-3 py-1 text-sm ${days === d ? "border-brand-700 bg-brand-700 text-white" : "border-slate-300 bg-white"}`}
+              className={`rounded-full border px-3 py-1 text-sm ${days === d ? "border-ink bg-primary text-on-primary" : "border-line-strong bg-surface"}`}
             >
               {d === 365 ? "1 year" : `${d} days`}
             </button>
@@ -49,9 +49,9 @@ export function PriceHistory({ cardId, finish }: { cardId: string; finish: strin
         </div>
       </div>
       {series === null ? (
-        <div aria-busy="true" className="h-40 animate-pulse rounded-xl bg-slate-200" />
+        <div aria-busy="true" className="h-40 animate-pulse rounded-xl bg-sunken-2" />
       ) : shown.length === 0 ? (
-        <p className="rounded-md bg-slate-100 px-3 py-2 text-sm">
+        <p className="rounded-lg bg-sunken px-3 py-2 text-sm">
           No stored history for this finish yet. History builds up daily once a card is looked up, collected, wishlisted or on
           an alert.
         </p>
@@ -67,7 +67,7 @@ export function PriceHistory({ cardId, finish }: { cardId: string; finish: strin
           ))}
         </div>
       )}
-      <p className="text-xs text-slate-600">Reference prices recorded by Card Compass, not completed sales.</p>
+      <p className="text-xs text-muted">Reference prices recorded by Card Compass, not completed sales.</p>
     </section>
   );
 }

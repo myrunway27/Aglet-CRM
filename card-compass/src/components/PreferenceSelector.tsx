@@ -42,13 +42,13 @@ export function useRegion(): [Region, (r: Region) => void] {
 export function PreferenceSelector() {
   const [region, setRegion] = useRegion();
   return (
-    <div className="grid gap-1 rounded-md border border-slate-200 bg-white px-3 py-2 text-sm">
+    <div className="grid gap-1 rounded-lg border border-line bg-surface px-3 py-2 text-sm">
       <label className="flex flex-wrap items-center gap-2">
         <span className="font-medium">Your country</span>
         <select
           value={region}
           onChange={(e) => setRegion(e.target.value as Region)}
-          className="rounded border border-slate-300 bg-white px-2 py-1"
+          className="rounded border border-line-strong bg-surface px-2 py-1"
         >
           {Object.entries(REGIONS).map(([k, v]) => (
             <option key={k} value={k}>
@@ -57,7 +57,7 @@ export function PreferenceSelector() {
           ))}
         </select>
       </label>
-      <p className="text-xs text-slate-600">
+      <p className="text-xs text-muted">
         Market references below stay in their original currency and are never converted. Listings further down are
         converted to {REGIONS[region].currency} with dated exchange rates, including shipping and import charges to{" "}
         {REGIONS[region].label} where they&apos;re known.

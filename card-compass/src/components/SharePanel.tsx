@@ -46,11 +46,11 @@ export function SharePanel({ binders, defaultBinder }: { binders: Array<{ id: st
     }
   }
 
-  const field = "mt-1 block w-full rounded-md border border-slate-300 bg-white px-2 py-2 text-base";
+  const field = "mt-1 block w-full rounded-lg border border-line-strong bg-surface px-2 py-2 text-base";
   return (
-    <div className="grid gap-3 rounded-xl border border-slate-200 bg-white p-4">
+    <div className="grid gap-3 rounded-xl border border-line bg-surface p-4">
       <h3 className="font-semibold">Share a read-only link</h3>
-      <p className="text-sm text-slate-700">
+      <p className="text-sm text-ink-2">
         Great for trade lists: share a binder. Viewers see cards, condition/grade and quantities. They never see your email,
         purchase prices or cert numbers. Links aren&apos;t indexed by search engines and you can revoke them any time.
       </p>
@@ -68,24 +68,24 @@ export function SharePanel({ binders, defaultBinder }: { binders: Array<{ id: st
           <input value={title} onChange={(e) => setTitle(e.target.value)} placeholder={targetLabel} maxLength={80} className={field} />
         </label>
         <label className="flex items-center gap-2 text-sm sm:pb-2">
-          <input type="checkbox" checked={showValues} onChange={(e) => setShowValues(e.target.checked)} className="h-4 w-4 accent-brand-700" />
+          <input type="checkbox" checked={showValues} onChange={(e) => setShowValues(e.target.checked)} className="h-4 w-4 accent-ink" />
           Show values
         </label>
-        <button className="rounded-md bg-brand-700 px-3 py-2 font-semibold text-white">Create link</button>
+        <button className="rounded-xl bg-primary shadow-sm px-3 py-2 font-semibold text-on-primary">Create link</button>
       </form>
-      {msg && <p role={msg.ok ? "status" : "alert"} className={`text-sm ${msg.ok ? "text-emerald-800" : "text-red-800"}`}>{msg.text}</p>}
+      {msg && <p role={msg.ok ? "status" : "alert"} className={`text-sm ${msg.ok ? "text-good" : "text-bad"}`}>{msg.text}</p>}
       {links.length > 0 && (
         <ul className="grid gap-2" aria-label="Your share links">
           {links.map((l) => (
-            <li key={l.id} className="grid gap-1 rounded-md border border-slate-200 p-2 text-sm">
+            <li key={l.id} className="grid gap-1 rounded-lg border border-line p-2 text-sm">
               <span className="font-medium">
-                {l.title} <span className="font-normal text-slate-600">· {l.kind}{l.showValues ? " · with values" : ""} · {l.viewCount} view{l.viewCount === 1 ? "" : "s"}</span>
+                {l.title} <span className="font-normal text-muted">· {l.kind}{l.showValues ? " · with values" : ""} · {l.viewCount} view{l.viewCount === 1 ? "" : "s"}</span>
               </span>
               <div className="flex flex-wrap gap-2">
-                <input readOnly value={l.url} aria-label={`Link for ${l.title}`} className="min-w-0 flex-1 rounded border border-slate-300 bg-slate-50 px-2 py-1 font-mono text-xs" onFocus={(e) => e.target.select()} />
+                <input readOnly value={l.url} aria-label={`Link for ${l.title}`} className="min-w-0 flex-1 rounded border border-line-strong bg-surface-2 px-2 py-1 font-mono text-xs" onFocus={(e) => e.target.select()} />
                 <button
                   type="button"
-                  className="rounded border border-slate-300 px-2 py-1"
+                  className="rounded border border-line-strong px-2 py-1"
                   onClick={async () => {
                     const r = await shareLink(l.title, l.url);
                     if (r === "copied") setMsg({ ok: true, text: "Copied." });
@@ -96,7 +96,7 @@ export function SharePanel({ binders, defaultBinder }: { binders: Array<{ id: st
                 </button>
                 <button
                   type="button"
-                  className="rounded border border-red-300 px-2 py-1 text-red-800"
+                  className="rounded border border-bad-line px-2 py-1 text-bad"
                   onClick={async () => {
                     await api(`/api/shares/${l.id}`, "DELETE");
                     void load();

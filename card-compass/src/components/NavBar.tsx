@@ -19,7 +19,7 @@ export function BottomTabs({ unread }: { unread: number }) {
   return (
     <nav
       aria-label="Tabs"
-      className="fixed inset-x-0 bottom-0 z-40 border-t border-slate-200 bg-white/95 backdrop-blur sm:hidden"
+      className="fixed inset-x-0 bottom-0 z-40 border-t border-line bg-surface/90 backdrop-blur-md sm:hidden"
       style={{ paddingBottom: "env(safe-area-inset-bottom, 0px)" }}
     >
       <ul className="grid grid-cols-5">
@@ -28,14 +28,15 @@ export function BottomTabs({ unread }: { unread: number }) {
             <Link
               href={t.href}
               aria-current={isActive(t.href) ? "page" : undefined}
-              className={`relative flex flex-col items-center gap-0.5 py-2 text-[11px] font-medium ${isActive(t.href) ? "text-brand-700" : "text-slate-600"}`}
+              className={`relative flex flex-col items-center gap-0.5 pt-2.5 pb-2 text-[11px] font-semibold ${isActive(t.href) ? "text-ink" : "text-muted"}`}
             >
+              {isActive(t.href) && <span aria-hidden className="absolute top-0 h-1 w-10 rounded-b-full bg-primary" />}
               <svg aria-hidden viewBox="0 0 24 24" className="h-6 w-6" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                 <path d={t.icon} />
               </svg>
               {t.label}
               {t.href === "/alerts" && unread > 0 && (
-                <span className="absolute top-1 left-1/2 ml-2 rounded-full bg-red-700 px-1.5 text-[10px] font-semibold text-white">
+                <span className="absolute top-1 left-1/2 ml-2 rounded-full bg-bad-solid px-1.5 text-[10px] font-semibold text-white">
                   {unread}
                   <span className="sr-only"> unread</span>
                 </span>
@@ -55,7 +56,7 @@ export function NavBar({ signedIn, unread }: { signedIn: boolean; unread: number
     <Link
       href={href}
       aria-current={path === href ? "page" : undefined}
-      className={`rounded px-2 py-1 ${path === href ? "bg-brand-50 font-semibold text-brand-800" : "text-slate-700 hover:text-slate-900"}`}
+      className={`rounded-full px-3 py-1.5 font-medium transition-colors ${path === href ? "bg-ink text-bg" : "text-ink-2 hover:bg-sunken hover:text-ink"}`}
     >
       {label}
       {extra}
@@ -72,7 +73,7 @@ export function NavBar({ signedIn, unread }: { signedIn: boolean; unread: number
         "/alerts",
         "Alerts",
         unread > 0 ? (
-          <span className="ml-1 rounded-full bg-red-700 px-1.5 text-xs font-semibold text-white">
+          <span className="ml-1 rounded-full bg-bad-solid px-1.5 text-xs font-semibold text-white">
             {unread}
             <span className="sr-only"> unread</span>
           </span>
@@ -82,7 +83,7 @@ export function NavBar({ signedIn, unread }: { signedIn: boolean; unread: number
         <>
           {link("/account", "Account")}
           <button
-            className="rounded px-2 py-1 text-slate-700 hover:text-slate-900"
+            className="rounded-full px-3 py-1.5 font-medium text-ink-2 hover:bg-sunken hover:text-ink"
             onClick={async () => {
               await api("/api/auth/logout", "POST", {}).catch(() => undefined);
               router.push("/");

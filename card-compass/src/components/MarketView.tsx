@@ -20,13 +20,13 @@ interface Data {
 
 function MoverTable({ title, rows }: { title: string; rows: Mover[] }) {
   return (
-    <section className="grid content-start gap-2 rounded-xl border border-slate-200 bg-white p-4" aria-label={title}>
+    <section className="grid content-start gap-2 rounded-xl border border-line bg-surface p-4" aria-label={title}>
       <h2 className="text-lg font-semibold">{title}</h2>
       {rows.length === 0 ? (
-        <p className="text-sm text-slate-700">Not enough stored history yet.</p>
+        <p className="text-sm text-ink-2">Not enough stored history yet.</p>
       ) : (
         <table className="w-full text-left text-sm">
-          <thead className="text-slate-600">
+          <thead className="text-muted">
             <tr>
               <th scope="col" className="py-1 font-medium">Card</th>
               <th scope="col" className="py-1 text-right font-medium">Now</th>
@@ -35,15 +35,15 @@ function MoverTable({ title, rows }: { title: string; rows: Mover[] }) {
           </thead>
           <tbody>
             {rows.map((m) => (
-              <tr key={`${m.catalogId}-${m.source}-${m.finish}`} className="border-t border-slate-100 align-top">
+              <tr key={`${m.catalogId}-${m.source}-${m.finish}`} className="border-t border-line align-top">
                 <td className="py-1.5 pr-2">
                   <Link
                     href={`/cards/${encodeURIComponent(m.catalogId)}?finish=${m.finish === "unspecified" ? "normal" : m.finish}&lang=en&grading=raw&condition=NM`}
-                    className="font-medium underline decoration-slate-300"
+                    className="font-medium underline decoration-line-strong"
                   >
                     {m.name}
                   </Link>
-                  <span className="block text-xs text-slate-600">
+                  <span className="block text-xs text-muted">
                     {m.setName} · {SOURCES[m.source as SourceId]?.label} {m.subtype} · {finishLabel(m.finish)}
                   </span>
                 </td>
@@ -71,7 +71,7 @@ export function MarketView() {
     <div className="grid gap-5">
       <div>
         <h1 className="text-2xl font-bold">Market movers</h1>
-        <p className="text-slate-700">
+        <p className="text-ink-2">
           Biggest reference-price changes (TCGplayer market, Cardmarket trend) among cards Card Compass has price history for
           {data ? ` (${data.cardsTracked} cards)` : ""}. Cards under 1.00 are ignored. These are reference prices, not sales.
         </p>
@@ -83,7 +83,7 @@ export function MarketView() {
             key={w}
             aria-pressed={windowDays === w}
             onClick={() => setWindowDays(w)}
-            className={`rounded-full border px-3 py-1 text-sm ${windowDays === w ? "border-brand-700 bg-brand-700 text-white" : "border-slate-300 bg-white"}`}
+            className={`rounded-full border px-3 py-1 text-sm ${windowDays === w ? "border-ink bg-primary text-on-primary" : "border-line-strong bg-surface"}`}
           >
             {w} days
           </button>
@@ -92,7 +92,7 @@ export function MarketView() {
       {!data ? (
         <p aria-busy="true">Loading…</p>
       ) : (
-        <div className="grid gap-4 md:grid-cols-2">
+        <div className="grid items-start gap-4 md:grid-cols-2">
           <MoverTable title={`Top gainers, ${data.windowDays} days`} rows={data.gainers} />
           <MoverTable title={`Top losers, ${data.windowDays} days`} rows={data.losers} />
         </div>

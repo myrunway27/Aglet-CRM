@@ -7,7 +7,7 @@ export function SignOutButton() {
   const router = useRouter();
   return (
     <button
-      className="font-semibold text-red-800"
+      className="font-semibold text-bad"
       onClick={async () => {
         await api("/api/auth/logout", "POST", {}).catch(() => undefined);
         router.push("/");

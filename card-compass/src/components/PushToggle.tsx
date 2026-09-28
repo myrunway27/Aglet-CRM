@@ -29,7 +29,7 @@ export function PushToggle({ serverEnabled, nativeEnabled }: { serverEnabled: bo
   if (native) {
     const platform = nativePlatform() === "ios" ? "ios" : "android";
     if (!nativeEnabled?.[platform]) {
-      return <p className="text-sm text-slate-600">Notifications for the app aren&apos;t configured on this server yet. Alerts still appear below.</p>;
+      return <p className="text-sm text-muted">Notifications for the app aren&apos;t configured on this server yet. Alerts still appear below.</p>;
     }
     return (
       <div className="flex flex-wrap items-center gap-3 text-sm">
@@ -45,7 +45,7 @@ export function PushToggle({ serverEnabled, nativeEnabled }: { serverEnabled: bo
               setMsg("Couldn't turn on notifications. Try again.");
             }
           }}
-          className="rounded-md bg-brand-700 px-3 py-2 font-semibold text-white"
+          className="rounded-xl bg-primary shadow-sm px-3 py-2 font-semibold text-on-primary"
         >
           Turn on notifications
         </button>
@@ -55,11 +55,11 @@ export function PushToggle({ serverEnabled, nativeEnabled }: { serverEnabled: bo
   }
 
   if (!serverEnabled || !key) {
-    return <p className="text-sm text-slate-600">Push notifications aren&apos;t configured on this server. Alerts still appear below.</p>;
+    return <p className="text-sm text-muted">Push notifications aren&apos;t configured on this server. Alerts still appear below.</p>;
   }
   if (supported === false) {
     return (
-      <p className="text-sm text-slate-600">
+      <p className="text-sm text-muted">
         This browser doesn&apos;t support push. On iPhone, install the app to your home screen first (iOS 16.4+).
       </p>
     );
@@ -90,11 +90,11 @@ export function PushToggle({ serverEnabled, nativeEnabled }: { serverEnabled: bo
   return (
     <div className="flex flex-wrap items-center gap-3 text-sm">
       {sub ? (
-        <button onClick={disable} className="rounded-md border border-slate-300 px-3 py-2">
+        <button onClick={disable} className="rounded-lg border border-line-strong px-3 py-2">
           Turn off push on this device
         </button>
       ) : (
-        <button onClick={enable} className="rounded-md bg-brand-700 px-3 py-2 font-semibold text-white">
+        <button onClick={enable} className="rounded-xl bg-primary shadow-sm px-3 py-2 font-semibold text-on-primary">
           Turn on push notifications
         </button>
       )}

@@ -29,7 +29,7 @@ const fmtDate = (iso: string) =>
 function RefTable({ caption, rows, highlight }: { caption: string; rows: PriceReference[]; highlight?: string | null }) {
   return (
     <table className="w-full text-left text-sm">
-      <caption className="pb-1 text-left text-xs font-semibold uppercase tracking-wide text-slate-600">{caption}</caption>
+      <caption className="pb-1 text-left text-xs font-semibold uppercase tracking-wide text-muted">{caption}</caption>
       <thead className="sr-only">
         <tr>
           <th scope="col">Price type</th>
@@ -38,12 +38,12 @@ function RefTable({ caption, rows, highlight }: { caption: string; rows: PriceRe
       </thead>
       <tbody>
         {rows.map((r) => (
-          <tr key={`${r.finish}-${r.subtype}`} className={`border-t border-slate-100 ${highlight === r.subtype ? "bg-brand-50" : ""}`}>
-            <th scope="row" className="py-1.5 pr-2 font-normal text-slate-700">
+          <tr key={`${r.finish}-${r.subtype}`} className={`border-t border-line ${highlight === r.subtype ? "bg-primary-soft" : ""}`}>
+            <th scope="row" className="py-1.5 pr-2 font-normal text-ink-2">
               {subtypeLabel(r.subtype)}
-              {highlight === r.subtype && <span className="ml-1 text-xs font-semibold text-brand-800">· your card</span>}
+              {highlight === r.subtype && <span className="ml-1 text-xs font-semibold text-link">· your card</span>}
             </th>
-            <td className="py-1.5 text-right font-mono font-semibold tabular-nums text-slate-900">
+            <td className="py-1.5 text-right font-mono font-semibold tabular-nums text-ink">
               {formatMinor(r.amountMinor, r.currency)}
             </td>
           </tr>
@@ -71,15 +71,15 @@ function SourcePanel({
   return (
     <section
       aria-labelledby={`src-${status.source}`}
-      className="grid content-start gap-3 rounded-xl border border-slate-200 bg-white p-4 shadow-sm"
+      className="grid content-start gap-3 rounded-xl border border-line bg-surface p-4 shadow-sm"
       data-testid={`source-${status.source}`}
     >
       <header className="flex flex-wrap items-start justify-between gap-2">
         <div>
           <h3 id={`src-${status.source}`} className="text-base font-semibold">
-            {meta.label} <span className="font-normal text-slate-600">· {meta.region} · {meta.currency}</span>
+            {meta.label} <span className="font-normal text-muted">· {meta.region} · {meta.currency}</span>
           </h3>
-          <p className="text-xs text-slate-600">
+          <p className="text-xs text-muted">
             {status.source === "pricecharting"
               ? `Source: PriceCharting, based on completed sales${refs[0]?.isDemo ? " (demo fixture)" : ""}`
               : `Source: ${meta.label} via Pokémon TCG API${isDemo ? " (demo fixture)" : ""}`}
@@ -87,14 +87,14 @@ function SourcePanel({
           </p>
         </div>
         {status.stale && (
-          <span className="rounded bg-amber-100 px-2 py-0.5 text-xs font-semibold text-amber-900">Possibly stale</span>
+          <span className="rounded bg-warn-soft px-2 py-0.5 text-xs font-semibold text-warn">Possibly stale</span>
         )}
       </header>
 
       {status.status === "no-quote" ? (
-        <p className="rounded-md bg-slate-100 px-3 py-2 text-sm text-slate-800">
+        <p className="rounded-lg bg-sunken px-3 py-2 text-sm text-ink">
           No quote available from {meta.label} for this card.
-          {status.note && <span className="block text-xs text-slate-600">{status.note}.</span>}
+          {status.note && <span className="block text-xs text-muted">{status.note}.</span>}
         </p>
       ) : (
         <>
@@ -102,15 +102,15 @@ function SourcePanel({
             <RefTable caption={finishLabel(finish)} rows={g.exact} highlight={highlight} />
           ) : (
             finish !== "other" && (
-              <p className="rounded-md bg-slate-100 px-3 py-2 text-sm text-slate-800">
+              <p className="rounded-lg bg-sunken px-3 py-2 text-sm text-ink">
                 No quote available for the {finishLabel(finish).toLowerCase()} finish.
               </p>
             )
           )}
           {g.notFinishSpecific.length > 0 && <RefTable caption="Not finish-specific" rows={g.notFinishSpecific} />}
           {g.otherFinishes.length > 0 && (
-            <details className="rounded-md border border-slate-200 px-3 py-2">
-              <summary className="cursor-pointer text-sm font-medium text-slate-800">
+            <details className="rounded-lg border border-line px-3 py-2">
+              <summary className="cursor-pointer text-sm font-medium text-ink">
                 Other finishes (not the one you confirmed)
               </summary>
               <div className="mt-2 grid gap-3">
@@ -127,7 +127,7 @@ function SourcePanel({
           href={status.sourceCardUrl}
           target="_blank"
           rel="noopener noreferrer nofollow"
-          className="justify-self-start text-sm font-medium text-brand-700 underline"
+          className="justify-self-start text-sm font-medium text-link underline"
         >
           View on {meta.label} <span className="sr-only">(opens in a new tab)</span>↗
         </a>
@@ -166,24 +166,25 @@ function QuickPrices({ data, selection }: { data: PricesResponse; selection: Sel
   return (
     <div className="grid gap-3 sm:grid-cols-3" data-testid="quick-prices">
       {tiles.map((t) => (
-        <div key={t.key} className="grid gap-0.5 rounded-xl border border-slate-200 bg-white p-4" data-testid={`quick-${t.key}`}>
-          <span className="text-sm text-slate-700">
-            {t.label} <span className="text-slate-500">· {t.where}</span>
+        <div key={t.key} className="grid content-start gap-2 rounded-2xl border border-line bg-surface p-4 shadow-sm" data-testid={`quick-${t.key}`}>
+          <span className="flex items-center justify-between gap-2 text-sm font-semibold text-ink-2">
+            {t.label}
+            <span className="rounded-full bg-sunken px-2 py-0.5 text-[11px] font-semibold text-muted">{t.where}</span>
           </span>
           {t.ref ? (
             <>
-              <span className="font-mono text-2xl font-semibold tabular-nums">{formatMinor(t.ref.amountMinor, t.ref.currency)}</span>
-              <span className="text-xs text-slate-600">
+              <span className="font-display text-[1.75rem] leading-none font-extrabold tabular-nums">{formatMinor(t.ref.amountMinor, t.ref.currency)}</span>
+              <span className="text-xs text-muted">
                 {t.ref.stale ? "Possibly out of date · " : ""}Updated {fmtDate(t.ref.observedAt)}
                 {t.ref.isDemo ? " · demo" : ""}
               </span>
             </>
           ) : (
-            <span className="text-base font-medium text-slate-700">No price for this {graded ? "grade" : "finish"}</span>
+            <span className="text-base font-semibold text-muted">No price for this {graded ? "grade" : "finish"}</span>
           )}
         </div>
       ))}
-      <p className="text-xs text-slate-600 sm:col-span-3">
+      <p className="text-xs text-muted sm:col-span-3">
         Reference prices in each source&apos;s own currency, not offers. Not condition-specific
         {graded ? "" : "; played cards usually sell for less"}.
       </p>
@@ -228,10 +229,10 @@ export function PriceResults({
     return (
       <div aria-busy="true" aria-live="polite" className="grid gap-4">
         <p className="sr-only">Loading price references…</p>
-        <div className="h-40 animate-pulse rounded-xl bg-slate-200" />
+        <div className="h-40 animate-pulse rounded-xl bg-sunken-2" />
         <div className="grid gap-4 md:grid-cols-2">
-          <div className="h-48 animate-pulse rounded-xl bg-slate-200" />
-          <div className="h-48 animate-pulse rounded-xl bg-slate-200" />
+          <div className="h-48 animate-pulse rounded-xl bg-sunken-2" />
+          <div className="h-48 animate-pulse rounded-xl bg-sunken-2" />
         </div>
       </div>
     );
@@ -239,7 +240,7 @@ export function PriceResults({
 
   if (state.kind === "error") {
     return (
-      <div role="alert" className="grid gap-3 rounded-xl border border-red-200 bg-red-50 p-4 text-red-900">
+      <div role="alert" className="grid gap-3 rounded-xl border border-bad-line bg-bad-soft p-4 text-bad">
         <h1 className="text-lg font-semibold">
           {state.status === 404
             ? "Card not found"
@@ -253,11 +254,11 @@ export function PriceResults({
         </p>
         <div className="flex gap-3">
           {state.status !== 404 && (
-            <button onClick={load} className="rounded-md bg-red-800 px-3 py-2 font-medium text-white">
+            <button onClick={load} className="rounded-lg bg-bad-solid px-3 py-2 font-medium text-white">
               Retry
             </button>
           )}
-          <Link href="/" className="rounded-md border border-red-800 px-3 py-2 font-medium">
+          <Link href="/" className="rounded-lg border border-bad px-3 py-2 font-medium">
             Back to search
           </Link>
         </div>
@@ -292,19 +293,23 @@ export function PriceResults({
 
   return (
     <div className="grid gap-6">
-      <Link href="/" className="text-sm font-medium text-brand-700 underline">
+      <Link href="/" className="text-sm font-medium text-link underline">
         ← New search
       </Link>
 
       {isDemo && <DemoBanner />}
 
-      <section aria-labelledby="card-h" className="flex gap-4 rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
+      <section
+        aria-labelledby="card-h"
+        className="-mx-4 flex gap-4 border-y border-line bg-surface px-4 py-5 sm:mx-0 sm:gap-6 sm:rounded-3xl sm:border sm:p-6"
+        style={{ backgroundImage: "var(--hero-glow)" }}
+      >
         <CardArt card={card} size="md" />
         <div className="grid min-w-0 content-start gap-2">
-          <h1 id="card-h" className="text-xl font-bold sm:text-2xl">
+          <h1 id="card-h" className="font-display text-2xl leading-tight font-extrabold sm:text-4xl">
             {card.name}
           </h1>
-          <p className="text-slate-700">
+          <p className="text-ink-2">
             {card.setName} · #{card.number}
             {card.setPrintedTotal ? `/${card.setPrintedTotal}` : ""}
             {card.rarity ? ` · ${card.rarity}` : ""}
@@ -316,7 +321,7 @@ export function PriceResults({
       {notices.length > 0 && (
         <ul className="grid gap-2">
           {notices.map((n) => (
-            <li key={n} className="rounded-md border border-amber-300 bg-amber-50 px-3 py-2 text-sm text-amber-900">
+            <li key={n} className="rounded-lg border border-warn-line bg-warn-soft px-3 py-2 text-sm text-warn">
               {n}
             </li>
           ))}
@@ -324,20 +329,20 @@ export function PriceResults({
       )}
 
       <section aria-labelledby="quick-h" className="grid gap-3">
-        <h2 id="quick-h" className="text-xl font-semibold">
+        <h2 id="quick-h" className="text-xl font-bold">
           Prices for your card
         </h2>
         <QuickPrices data={data} selection={selection} />
       </section>
 
-      <details className="group rounded-xl border border-slate-200 bg-white p-4" data-testid="price-details">
+      <details className="group rounded-xl border border-line bg-surface p-4" data-testid="price-details">
         <summary className="cursor-pointer text-base font-semibold">All price details and sources</summary>
       <section aria-labelledby="refs-h" className="mt-3 grid gap-3">
         <div>
           <h2 id="refs-h" className="text-lg font-semibold">
             Market references
           </h2>
-          <p className="text-sm text-slate-700">
+          <p className="text-sm text-ink-2">
             Informational reference prices reported by each marketplace, shown in their original currency. They are
             not live listings, may be stale, and are not comparable across currencies or price types, so we don&apos;t
             rank them or pick a &quot;cheapest&quot;.
@@ -361,7 +366,7 @@ export function PriceResults({
             />
           ))}
         </div>
-        <p className="text-xs text-slate-600">
+        <p className="text-xs text-muted">
           Retrieved {fmtDate(data.fetchedAt)}
           {data.servedFrom === "stored" ? " from our last stored copy" : ""}. Price data via the Pokémon TCG API
           (pokemontcg.io). Check source terms before relying on these figures.

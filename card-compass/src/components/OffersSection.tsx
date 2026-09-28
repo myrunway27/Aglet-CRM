@@ -15,16 +15,16 @@ const countryName = (c: string | null) => (c && c in REGIONS ? REGIONS[c as Regi
 function OfferRow({ o, best }: { o: EvaluatedOffer; best?: boolean }) {
   const l = o.listing;
   return (
-    <li className={`grid gap-2 rounded-lg border bg-white p-3 ${best ? "border-emerald-600 ring-1 ring-emerald-600" : "border-slate-200"}`}>
+    <li className={`grid gap-2 rounded-lg border bg-surface p-3 ${best ? "border-good ring-1 ring-good" : "border-line"}`}>
       {best && (
-        <span className="justify-self-start rounded bg-emerald-100 px-2 py-0.5 text-xs font-semibold text-emerald-900">
+        <span className="justify-self-start rounded bg-good-soft px-2 py-0.5 text-xs font-semibold text-good">
           Lowest estimated delivered cost among verified listings
         </span>
       )}
       <div className="flex flex-wrap items-start justify-between gap-2">
         <div className="min-w-0 flex-1">
-          <p className="font-medium text-slate-900">{l.title}</p>
-          <p className="text-xs text-slate-600">
+          <p className="font-medium text-ink">{l.title}</p>
+          <p className="text-xs text-muted">
             Ships from {countryName(l.itemCountry)} · Seller {l.sellerName ?? "unknown"}
             {l.sellerFeedbackPct !== null && ` (${l.sellerFeedbackPct}% of ${l.sellerFeedbackScore})`} · Asking price
             {l.isDemo && " · Demo listing"}
@@ -34,16 +34,16 @@ function OfferRow({ o, best }: { o: EvaluatedOffer; best?: boolean }) {
           {o.landed.totalMinor !== null ? (
             <p className="font-mono text-lg font-semibold">{formatMinor(o.landed.totalMinor, o.landed.buyerCurrency)}</p>
           ) : (
-            <p className="font-semibold text-slate-800">Total unknown</p>
+            <p className="font-semibold text-ink">Total unknown</p>
           )}
-          <p className="text-xs text-slate-600">
+          <p className="text-xs text-muted">
             {formatMinor(l.itemMinor, l.itemCurrency)} +{" "}
             {l.shippingMinor !== null ? `${formatMinor(l.shippingMinor, l.shippingCurrency)} shipping` : "shipping not quoted"}
           </p>
         </div>
       </div>
       {o.landed.lines.length > 0 && (
-        <dl className="grid grid-cols-[1fr_auto] gap-x-4 text-xs text-slate-700 sm:max-w-sm">
+        <dl className="grid grid-cols-[1fr_auto] gap-x-4 text-xs text-ink-2 sm:max-w-sm">
           {o.landed.lines.map((line) => (
             <div key={line.label} className="contents">
               <dt>{line.label}</dt>
@@ -52,15 +52,15 @@ function OfferRow({ o, best }: { o: EvaluatedOffer; best?: boolean }) {
           ))}
         </dl>
       )}
-      {o.landed.missing.length > 0 && <p className="text-xs text-amber-900">Missing: {o.landed.missing.join("; ")}</p>}
-      {o.verification.reasons.length > 0 && <p className="text-xs text-slate-600">Checks: {o.verification.reasons.join("; ")}</p>}
-      {o.landed.caveats.length > 0 && <p className="text-xs text-slate-600">{o.landed.caveats.join(" ")}</p>}
+      {o.landed.missing.length > 0 && <p className="text-xs text-warn">Missing: {o.landed.missing.join("; ")}</p>}
+      {o.verification.reasons.length > 0 && <p className="text-xs text-muted">Checks: {o.verification.reasons.join("; ")}</p>}
+      {o.landed.caveats.length > 0 && <p className="text-xs text-muted">{o.landed.caveats.join(" ")}</p>}
       {l.url ? (
-        <a href={l.url} target="_blank" rel="noopener noreferrer nofollow" className="justify-self-start text-sm font-medium text-brand-700 underline">
+        <a href={l.url} target="_blank" rel="noopener noreferrer nofollow" className="justify-self-start text-sm font-medium text-link underline">
           View on eBay<span className="sr-only"> (opens in a new tab)</span> ↗
         </a>
       ) : (
-        l.isDemo && <span className="text-xs text-slate-500">Demo listing, no link</span>
+        l.isDemo && <span className="text-xs text-muted">Demo listing, no link</span>
       )}
     </li>
   );
@@ -98,11 +98,11 @@ export function OffersSection({ cardId, selection }: { cardId: string; selection
         <div className="flex flex-wrap items-center gap-2">
           <h2 id="offers-h" className="text-xl font-semibold">Listings delivered to {REGIONS[region].label}</h2>
           <label className="flex items-center gap-2 text-sm">
-            <span className="text-slate-700">Change country</span>
+            <span className="text-ink-2">Change country</span>
             <select
               value={region}
               onChange={(e) => setRegion(e.target.value as Region)}
-              className="rounded-full border border-slate-300 bg-white px-3 py-1"
+              className="rounded-full border border-line-strong bg-surface px-3 py-1"
               aria-label="Deliver to"
             >
               {Object.entries(REGIONS).map(([k, v]) => (
@@ -113,32 +113,32 @@ export function OffersSection({ cardId, selection }: { cardId: string; selection
             </select>
           </label>
           {state.kind === "ok" && state.data.isDemo && (
-            <span className="rounded bg-amber-100 px-2 py-0.5 text-xs font-semibold text-amber-900">Demo listings</span>
+            <span className="rounded bg-warn-soft px-2 py-0.5 text-xs font-semibold text-warn">Demo listings</span>
           )}
         </div>
-        <p className="text-sm text-slate-700">
+        <p className="text-sm text-ink-2">
           Cards for sale on eBay, cheapest delivered first. We only rank listings that match your exact card and whose total
           cost (item, shipping, import tax) we can work out. These are asking prices, not completed sales.
         </p>
       </div>
 
-      {state.kind === "loading" && <div aria-busy="true" className="h-32 animate-pulse rounded-xl bg-slate-200" />}
+      {state.kind === "loading" && <div aria-busy="true" className="h-32 animate-pulse rounded-xl bg-sunken-2" />}
       {state.kind === "disabled" && (
-        <p className="rounded-md border border-dashed border-slate-300 bg-slate-50 p-3 text-sm text-slate-700">
+        <p className="rounded-lg border border-dashed border-line-strong bg-surface-2 p-3 text-sm text-ink-2">
           Live listings aren&apos;t enabled on this server (needs eBay API credentials).
         </p>
       )}
       {state.kind === "error" && (
-        <div role="alert" className="flex flex-wrap items-center gap-3 rounded-md border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-900">
+        <div role="alert" className="flex flex-wrap items-center gap-3 rounded-lg border border-bad-line bg-bad-soft px-3 py-2 text-sm text-bad">
           {state.message}
           {state.retryAfter ? ` Try again in about ${state.retryAfter}s.` : ""}
-          <button onClick={load} className="rounded border border-red-800 px-2 py-1 font-medium">Retry</button>
+          <button onClick={load} className="rounded border border-bad px-2 py-1 font-medium">Retry</button>
         </div>
       )}
       {state.kind === "ok" && (
         <>
           {state.data.ranked.length === 0 ? (
-            <p className="rounded-md bg-slate-100 px-3 py-2 text-sm">
+            <p className="rounded-lg bg-sunken px-3 py-2 text-sm">
               No verified listing with a fully known delivered cost to {REGIONS[region].label} right now.
             </p>
           ) : (
@@ -149,24 +149,24 @@ export function OffersSection({ cardId, selection }: { cardId: string; selection
             </ol>
           )}
           {state.data.totalUnknown.length > 0 && (
-            <details className="rounded-md border border-slate-200 bg-white px-3 py-2">
+            <details className="rounded-lg border border-line bg-surface px-3 py-2">
               <summary className="cursor-pointer text-sm font-medium">Matches with total unknown ({state.data.totalUnknown.length}), not ranked</summary>
               <ul className="mt-2 grid gap-2">{state.data.totalUnknown.map((o) => <OfferRow key={o.listing.listingId} o={o} />)}</ul>
             </details>
           )}
           {state.data.unverified.length > 0 && (
-            <details className="rounded-md border border-slate-200 bg-white px-3 py-2">
+            <details className="rounded-lg border border-line bg-surface px-3 py-2">
               <summary className="cursor-pointer text-sm font-medium">Couldn&apos;t verify ({state.data.unverified.length}), not ranked</summary>
               <ul className="mt-2 grid gap-2">{state.data.unverified.map((o) => <OfferRow key={o.listing.listingId} o={o} />)}</ul>
             </details>
           )}
           {state.data.excluded.length > 0 && (
-            <details className="rounded-md border border-slate-200 bg-white px-3 py-2">
+            <details className="rounded-lg border border-line bg-surface px-3 py-2">
               <summary className="cursor-pointer text-sm font-medium">Not your card ({state.data.excluded.length}), excluded</summary>
               <ul className="mt-2 grid gap-2">{state.data.excluded.map((o) => <OfferRow key={o.listing.listingId} o={o} />)}</ul>
             </details>
           )}
-          <p className="text-xs text-slate-600">
+          <p className="text-xs text-muted">
             Prices converted to {REGIONS[region].currency} with {state.data.fx.source === "demo" ? "demo" : "ECB reference"} rates of{" "}
             {state.data.fx.date}. Import estimates cover low-value parcels to the EU, UK and Australia only; other cases show
             &quot;total unknown&quot;.

@@ -129,13 +129,13 @@ export function BulkScan() {
     }
   }
 
-  const field = "rounded border border-slate-300 bg-white px-2 py-1 text-sm";
+  const field = "rounded border border-line-strong bg-surface px-2 py-1 text-sm";
 
   return (
     <div className="grid gap-5">
       <div>
         <h1 className="text-2xl font-bold">Bulk scan</h1>
-        <p className="text-slate-700">
+        <p className="text-ink-2">
           Photograph cards one after another, or pick many photos at once. Review each match, then add them all. For graded
           slabs, use the single-card scan.
         </p>
@@ -143,7 +143,7 @@ export function BulkScan() {
 
       <div className="flex flex-wrap gap-2">
         <label
-          className="cursor-pointer rounded-md bg-brand-700 px-4 py-2 font-semibold text-white"
+          className="cursor-pointer rounded-xl bg-primary shadow-sm px-4 py-2 font-semibold text-on-primary"
           onClick={(e) => {
             if (!isNative()) return;
             e.preventDefault();
@@ -154,7 +154,7 @@ export function BulkScan() {
           <input type="file" accept="image/*" capture="environment" className="sr-only" onChange={(e) => { addFiles(e.target.files); e.target.value = ""; }} />
         </label>
         <label
-          className="cursor-pointer rounded-md border border-brand-700 bg-white px-4 py-2 font-semibold text-brand-700"
+          className="cursor-pointer rounded-lg border border-ink bg-surface px-4 py-2 font-semibold text-link"
           onClick={(e) => {
             if (!isNative()) return;
             e.preventDefault();
@@ -166,7 +166,7 @@ export function BulkScan() {
         </label>
       </div>
 
-      <fieldset className="flex flex-wrap items-end gap-3 rounded-xl border border-slate-200 bg-white p-3 text-sm">
+      <fieldset className="flex flex-wrap items-end gap-3 rounded-xl border border-line bg-surface p-3 text-sm">
         <legend className="px-1 font-medium">Applies to every card in this batch</legend>
         <label>
           Language{" "}
@@ -191,7 +191,7 @@ export function BulkScan() {
         )}
       </fieldset>
 
-      <p aria-live="polite" className="text-sm text-slate-700">
+      <p aria-live="polite" className="text-sm text-ink-2">
         {rows.length === 0 ? "No photos yet." : `${rows.length} photo${rows.length === 1 ? "" : "s"} · ${pending} still scanning · ${ready.length} ready to add`}
       </p>
 
@@ -201,12 +201,12 @@ export function BulkScan() {
           const card: CatalogCard | undefined = candidates.find((c) => c.card.catalogId === r.cardId)?.card;
           const finishes = card ? [...new Set([...card.finishes, "normal", "holofoil", "reverseHolofoil"])] : [];
           return (
-            <li key={r.id} className="flex gap-3 overflow-hidden rounded-lg border border-slate-200 bg-white p-3" data-testid="bulk-row">
+            <li key={r.id} className="flex gap-3 overflow-hidden rounded-lg border border-line bg-surface p-3" data-testid="bulk-row">
               {/* eslint-disable-next-line @next/next/no-img-element -- local object URL preview */}
               <img src={r.thumb} alt={`Photo ${r.file.name}`} className="h-24 w-16 shrink-0 rounded object-cover" />
               <div className="grid min-w-0 flex-1 gap-2 text-sm">
                 <div className="flex flex-wrap items-center justify-between gap-2">
-                  <span className="truncate text-slate-600">{r.file.name}</span>
+                  <span className="truncate text-muted">{r.file.name}</span>
                   <button
                     onClick={() => {
                       URL.revokeObjectURL(r.thumb);
@@ -218,17 +218,17 @@ export function BulkScan() {
                   </button>
                 </div>
                 {r.status !== "done" ? (
-                  <p className={r.status === "error" ? "text-red-800" : "text-slate-700"}>
+                  <p className={r.status === "error" ? "text-bad" : "text-ink-2"}>
                     {r.status === "error" ? r.message : r.status === "waiting" ? r.message : r.status === "scanning" ? "Scanning…" : "Queued"}
                   </p>
                 ) : candidates.length === 0 ? (
-                  <p className="text-slate-700">
+                  <p className="text-ink-2">
                     No match. <Link href="/" className="underline">Search manually</Link> for this one.
                   </p>
                 ) : (
                   <div className="flex flex-wrap items-end gap-2">
                     <label className="grid w-full min-w-0 gap-0.5 sm:w-auto">
-                      <span className="text-xs text-slate-600">Card {r.preselected && "(pre-selected: high confidence, please check)"}</span>
+                      <span className="text-xs text-muted">Card {r.preselected && "(pre-selected: high confidence, please check)"}</span>
                       <select value={r.cardId} onChange={(e) => update(r.id, { cardId: e.target.value, finish: "", preselected: false })} className={`${field} w-full min-w-0 sm:w-auto sm:max-w-md`}>
                         <option value="">Choose the matching card…</option>
                         {candidates.map((c) => (
@@ -240,7 +240,7 @@ export function BulkScan() {
                     </label>
                     {card && (
                       <label className="grid gap-0.5">
-                        <span className="text-xs text-slate-600">Finish</span>
+                        <span className="text-xs text-muted">Finish</span>
                         <select value={r.finish} onChange={(e) => update(r.id, { finish: e.target.value })} className={field}>
                           <option value="">Choose…</option>
                           {finishes.map((f) => <option key={f} value={f}>{finishLabel(f)}</option>)}
@@ -248,7 +248,7 @@ export function BulkScan() {
                       </label>
                     )}
                     <label className="grid gap-0.5">
-                      <span className="text-xs text-slate-600">Qty</span>
+                      <span className="text-xs text-muted">Qty</span>
                       <input type="number" min={1} max={999} value={r.qty} onChange={(e) => update(r.id, { qty: Math.max(1, Number(e.target.value) || 1) })} className={`${field} w-16`} />
                     </label>
                   </div>
@@ -260,21 +260,21 @@ export function BulkScan() {
       </ul>
 
       {ready.length > 0 && (
-        <div className="grid gap-2 rounded-xl border border-slate-200 bg-white p-4">
+        <div className="grid gap-2 rounded-xl border border-line bg-surface p-4">
           <label className="flex items-start gap-2 text-sm">
-            <input type="checkbox" checked={checked} onChange={(e) => setChecked(e.target.checked)} className="mt-1 h-4 w-4 accent-brand-700" />
+            <input type="checkbox" checked={checked} onChange={(e) => setChecked(e.target.checked)} className="mt-1 h-4 w-4 accent-ink" />
             I checked the set, number and finish of each card against the physical cards.
           </label>
-          <button onClick={addAll} className="justify-self-start rounded-md bg-brand-700 px-4 py-2 font-semibold text-white">
+          <button onClick={addAll} className="justify-self-start rounded-xl bg-primary shadow-sm px-4 py-2 font-semibold text-on-primary">
             Add {ready.length} card{ready.length === 1 ? "" : "s"} to collection
           </button>
           {rows.length > ready.length && pending === 0 && (
-            <p className="text-xs text-slate-600">Cards without a chosen match and finish are skipped.</p>
+            <p className="text-xs text-muted">Cards without a chosen match and finish are skipped.</p>
           )}
         </div>
       )}
       {result && (
-        <p role={result.ok ? "status" : "alert"} className={result.ok ? "text-emerald-800" : "text-red-800"}>
+        <p role={result.ok ? "status" : "alert"} className={result.ok ? "text-good" : "text-bad"}>
           {result.text} {result.ok && <Link href="/collection" className="underline">View collection</Link>}
         </p>
       )}

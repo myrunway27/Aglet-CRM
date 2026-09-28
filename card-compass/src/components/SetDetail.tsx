@@ -37,17 +37,17 @@ export function SetDetail({ setId }: { setId: string }) {
     void load();
   }, [load]);
 
-  if (error) return <p role="alert" className="text-red-800">{error}</p>;
+  if (error) return <p role="alert" className="text-bad">{error}</p>;
   if (!data) return <p aria-busy="true">Loading set…</p>;
   const owned = data.cards.filter((c) => c.ownedCount > 0).length;
   const rows = data.cards.filter((c) => (filter === "all" ? true : filter === "owned" ? c.ownedCount > 0 : c.ownedCount === 0));
 
   return (
     <div className="grid gap-5">
-      <Link href="/sets" className="text-sm font-medium text-brand-700 underline">← All sets</Link>
+      <Link href="/sets" className="text-sm font-medium text-link underline">← All sets</Link>
       <div>
         <h1 className="text-2xl font-bold">{data.setName}</h1>
-        <p className="text-slate-700">
+        <p className="text-ink-2">
           You own {owned} of {data.cards.length} cards ({Math.round((owned / data.cards.length) * 100)}%).
         </p>
       </div>
@@ -57,7 +57,7 @@ export function SetDetail({ setId }: { setId: string }) {
             key={f}
             aria-pressed={filter === f}
             onClick={() => setFilter(f)}
-            className={`rounded-full border px-3 py-1 text-sm capitalize ${filter === f ? "border-brand-700 bg-brand-700 text-white" : "border-slate-300 bg-white"}`}
+            className={`rounded-full border px-3 py-1 text-sm capitalize ${filter === f ? "border-ink bg-primary text-on-primary" : "border-line-strong bg-surface"}`}
           >
             {f}
           </button>
@@ -65,19 +65,19 @@ export function SetDetail({ setId }: { setId: string }) {
       </div>
       <ul className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-5">
         {rows.map((r) => (
-          <li key={r.card.catalogId} className={`grid gap-1 rounded-lg border bg-white p-2 ${r.ownedCount ? "border-emerald-600" : "border-slate-200"}`}>
-            <div className={r.ownedCount ? "" : "opacity-60"}>
-              <CardArt card={r.card} />
+          <li key={r.card.catalogId} className={`grid content-start gap-1.5 rounded-2xl border bg-surface p-2.5 ${r.ownedCount ? "border-good ring-1 ring-good" : "border-line"}`}>
+            <div className={r.ownedCount ? "" : "opacity-45 grayscale"}>
+              <CardArt card={r.card} size="fill" />
             </div>
-            <p className="text-sm font-medium">{r.card.name}</p>
-            <p className="text-xs text-slate-600">#{r.card.number}{r.card.rarity ? ` · ${r.card.rarity}` : ""}</p>
+            <p className="font-display text-sm font-bold">{r.card.name}</p>
+            <p className="text-xs text-muted">#{r.card.number}{r.card.rarity ? ` · ${r.card.rarity}` : ""}</p>
             {r.ownedCount > 0 ? (
-              <p className="text-xs font-medium text-emerald-800">Owned ×{r.ownedCount} ({[...new Set(r.ownedFinishes)].map(finishLabel).join(", ")})</p>
+              <p className="text-xs font-medium text-good">Owned ×{r.ownedCount} ({[...new Set(r.ownedFinishes)].map(finishLabel).join(", ")})</p>
             ) : r.wishlisted ? (
-              <p className="text-xs text-slate-700">On wishlist</p>
+              <p className="text-xs text-ink-2">On wishlist</p>
             ) : (
               <button
-                className="justify-self-start text-xs font-medium text-brand-700 underline"
+                className="justify-self-start text-xs font-medium text-link underline"
                 onClick={async () => {
                   await api("/api/wishlist", "POST", { catalogId: r.card.catalogId, finish: r.card.finishes[0] ?? "normal" }).catch(() => undefined);
                   void load();

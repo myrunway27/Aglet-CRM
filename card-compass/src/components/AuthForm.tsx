@@ -29,13 +29,13 @@ export function AuthForm({ next }: { next: string }) {
     }
   }
 
-  const field = "mt-1 block w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-base";
+  const field = "mt-1 block w-full rounded-lg border border-line-strong bg-surface px-3 py-2 text-base";
   return (
-    <form onSubmit={submit} aria-labelledby="auth-h" className="grid max-w-md gap-4 rounded-xl border border-slate-200 bg-white p-5 shadow-sm">
+    <form onSubmit={submit} aria-labelledby="auth-h" className="mx-auto mt-4 grid w-full max-w-md gap-4 rounded-3xl border border-line bg-surface p-6 shadow-sm sm:mt-10 sm:p-8">
       <h1 id="auth-h" className="text-2xl font-bold">
         {mode === "login" ? "Sign in" : "Create an account"}
       </h1>
-      <p className="text-sm text-slate-700">An account keeps your collection, its value history and your price alerts.</p>
+      <p className="text-sm text-ink-2">An account keeps your collection, its value history and your price alerts.</p>
       <label className="text-sm font-medium">
         Email
         <input className={field} type="email" autoComplete="email" required value={email} onChange={(e) => setEmail(e.target.value)} />
@@ -51,7 +51,7 @@ export function AuthForm({ next }: { next: string }) {
           value={password}
           onChange={(e) => setPassword(e.target.value)}
         />
-        {mode === "signup" && <span className="mt-1 block text-xs font-normal text-slate-600">At least 10 characters.</span>}
+        {mode === "signup" && <span className="mt-1 block text-xs font-normal text-muted">At least 10 characters.</span>}
       </label>
       {mode === "signup" && (
         <label className="text-sm font-medium">
@@ -66,15 +66,15 @@ export function AuthForm({ next }: { next: string }) {
         </label>
       )}
       {error && (
-        <p role="alert" className="rounded-md bg-red-50 px-3 py-2 text-sm text-red-800">
+        <p role="alert" className="rounded-lg bg-bad-soft px-3 py-2 text-sm text-bad">
           {error}
         </p>
       )}
-      <button disabled={busy} className="rounded-md bg-brand-700 px-4 py-3 font-semibold text-white disabled:opacity-60">
+      <button disabled={busy} className="rounded-xl bg-primary shadow-sm px-4 py-3 font-semibold text-on-primary disabled:opacity-60">
         {busy ? "Please wait…" : mode === "login" ? "Sign in" : "Create account"}
       </button>
       {mode === "login" && (
-        <a href="/forgot" className="text-sm text-brand-700 underline">
+        <a href="/forgot" className="text-sm text-link underline">
           Forgot your password?
         </a>
       )}
@@ -84,7 +84,7 @@ export function AuthForm({ next }: { next: string }) {
           setMode(mode === "login" ? "signup" : "login");
           setError(null);
         }}
-        className="text-sm font-medium text-brand-700 underline"
+        className="text-sm font-medium text-link underline"
       >
         {mode === "login" ? "New here? Create an account" : "Already have an account? Sign in"}
       </button>

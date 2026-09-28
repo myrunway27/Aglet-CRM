@@ -47,9 +47,9 @@ export function ImportPanel({ onDone }: { onDone: () => void }) {
   }
 
   return (
-    <div className="grid gap-3 rounded-xl border border-slate-200 bg-white p-4">
+    <div className="grid gap-3 rounded-xl border border-line bg-surface p-4">
       <h3 className="font-semibold">Import from CSV</h3>
-      <p className="text-sm text-slate-700">
+      <p className="text-sm text-ink-2">
         Use the same columns as the export. Required: <code>catalog_id</code> and <code>finish</code>; optional: language,
         grading, condition, grader, grade, quantity, purchase_price, purchase_currency, binder. You&apos;ll see a preview first.
       </p>
@@ -78,14 +78,14 @@ export function ImportPanel({ onDone }: { onDone: () => void }) {
             {preview.errors.length > 0 && `, ${preview.errors.length} problem${preview.errors.length === 1 ? "" : "s"}`}.
           </p>
           {preview.errors.length > 0 && (
-            <ul className="max-h-40 overflow-auto rounded bg-amber-50 p-2 text-amber-900">
+            <ul className="max-h-40 overflow-auto rounded bg-warn-soft p-2 text-warn">
               {preview.errors.map((e, i) => (
                 <li key={i}>Line {e.line}: {e.message}</li>
               ))}
             </ul>
           )}
           {preview.preview.length > 0 && (
-            <ul className="max-h-48 overflow-auto rounded bg-slate-50 p-2">
+            <ul className="max-h-48 overflow-auto rounded bg-surface-2 p-2">
               {preview.preview.map((p) => (
                 <li key={p.line}>
                   {p.quantity}× {p.name} — {p.setName} #{p.number} · {finishLabel(p.finish)}
@@ -97,14 +97,14 @@ export function ImportPanel({ onDone }: { onDone: () => void }) {
           <button
             disabled={busy || preview.valid === 0}
             onClick={commit}
-            className="justify-self-start rounded-md bg-brand-700 px-3 py-2 font-semibold text-white disabled:opacity-50"
+            className="justify-self-start rounded-xl bg-primary shadow-sm px-3 py-2 font-semibold text-on-primary disabled:opacity-50"
           >
             Import {preview.valid} row{preview.valid === 1 ? "" : "s"}
           </button>
         </div>
       )}
       {msg && (
-        <p role={msg.ok ? "status" : "alert"} className={`text-sm ${msg.ok ? "text-emerald-800" : "text-red-800"}`}>
+        <p role={msg.ok ? "status" : "alert"} className={`text-sm ${msg.ok ? "text-good" : "text-bad"}`}>
           {msg.text}
         </p>
       )}

@@ -6,8 +6,8 @@ import { useState, type FormEvent } from "react";
 import { ClientApiError } from "@/lib/api-types";
 import { api } from "@/lib/client-api";
 
-const field = "mt-1 block w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-base";
-const card = "grid max-w-md gap-4 rounded-xl border border-slate-200 bg-white p-5 shadow-sm";
+const field = "mt-1 block w-full rounded-lg border border-line-strong bg-surface px-3 py-2 text-base";
+const card = "mx-auto mt-4 grid w-full max-w-md gap-4 rounded-3xl border border-line bg-surface p-6 shadow-sm sm:mt-10 sm:p-8";
 
 export function ForgotForm() {
   const [email, setEmail] = useState("");
@@ -34,11 +34,11 @@ export function ForgotForm() {
             Email
             <input className={field} type="email" autoComplete="email" required value={email} onChange={(e) => setEmail(e.target.value)} />
           </label>
-          {error && <p role="alert" className="text-sm text-red-800">{error}</p>}
-          <button className="rounded-md bg-brand-700 px-4 py-3 font-semibold text-white">Send reset link</button>
+          {error && <p role="alert" className="text-sm text-bad">{error}</p>}
+          <button className="rounded-xl bg-primary shadow-sm px-4 py-3 font-semibold text-on-primary">Send reset link</button>
         </>
       )}
-      <Link href="/login" className="text-sm text-brand-700 underline">Back to sign in</Link>
+      <Link href="/login" className="text-sm text-link underline">Back to sign in</Link>
     </form>
   );
 }
@@ -64,10 +64,10 @@ export function ResetForm({ token }: { token: string }) {
       <label className="text-sm font-medium">
         New password
         <input className={field} type="password" autoComplete="new-password" minLength={10} required value={password} onChange={(e) => setPassword(e.target.value)} />
-        <span className="mt-1 block text-xs font-normal text-slate-600">At least 10 characters. This signs you out everywhere else.</span>
+        <span className="mt-1 block text-xs font-normal text-muted">At least 10 characters. This signs you out everywhere else.</span>
       </label>
-      {error && <p role="alert" className="text-sm text-red-800">{error}</p>}
-      <button className="rounded-md bg-brand-700 px-4 py-3 font-semibold text-white">Set password</button>
+      {error && <p role="alert" className="text-sm text-bad">{error}</p>}
+      <button className="rounded-xl bg-primary shadow-sm px-4 py-3 font-semibold text-on-primary">Set password</button>
     </form>
   );
 }
@@ -80,7 +80,7 @@ export function VerifyForm({ token }: { token: string }) {
       <h1 className="text-2xl font-bold">Confirm your email</h1>
       {state === "ok" ? (
         <p role="status">
-          Thanks, your email is confirmed. <Link href="/account" className="text-brand-700 underline">Go to your account</Link>
+          Thanks, your email is confirmed. <Link href="/account" className="text-link underline">Go to your account</Link>
         </p>
       ) : (
         <>
@@ -94,11 +94,11 @@ export function VerifyForm({ token }: { token: string }) {
                 setError(err instanceof ClientApiError ? err.message : "Network error.");
               }
             }}
-            className="rounded-md bg-brand-700 px-4 py-3 font-semibold text-white"
+            className="rounded-xl bg-primary shadow-sm px-4 py-3 font-semibold text-on-primary"
           >
             Confirm my email
           </button>
-          {state === "error" && <p role="alert" className="text-sm text-red-800">{error}</p>}
+          {state === "error" && <p role="alert" className="text-sm text-bad">{error}</p>}
         </>
       )}
     </div>

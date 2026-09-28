@@ -39,11 +39,13 @@ export function SelectionBar({
 
   const options = [...new Set([...finishes, ...BASE_FINISHES, selection.finish]), "other"].filter((f, i, a) => a.indexOf(f) === i);
   const chip = (field: SelectionField | null) =>
-    `relative inline-flex items-center rounded-full border px-3 py-1.5 text-sm font-medium bg-white ${
-      field && assumed.includes(field) ? "border-amber-500 ring-2 ring-amber-200" : "border-slate-300"
+    `relative inline-flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-sm font-semibold transition-colors hover:border-ink ${
+      field && assumed.includes(field) ? "border-dashed border-warn-line bg-warn-soft" : "border-line-strong bg-surface"
     }`;
   const flag = (field: SelectionField) =>
-    assumed.includes(field) ? <span className="ml-1 text-[11px] font-semibold uppercase tracking-wide text-amber-800">check</span> : null;
+    assumed.includes(field) ? (
+      <span className="rounded-full bg-surface px-1.5 py-px text-[10px] font-bold uppercase tracking-wide text-warn">check</span>
+    ) : null;
 
   return (
     <div className="grid gap-2">
@@ -137,8 +139,8 @@ export function SelectionBar({
         </label>
       </div>
       {assumed.length > 0 && (
-        <p className="text-sm text-slate-700">
-          We assumed the settings marked <span className="font-semibold text-amber-800">check</span>. Tap one to change it if your card is different.
+        <p className="text-sm text-ink-2">
+          We assumed the settings marked <span className="font-semibold text-warn">check</span>. Tap one to change it if your card is different.
         </p>
       )}
     </div>

@@ -55,8 +55,8 @@ export function CardActions({
 
   if (!signedIn) {
     return (
-      <section className="rounded-xl border border-slate-200 bg-white p-4 text-sm">
-        <Link href={`/login?next=${encodeURIComponent(returnTo)}`} className="font-medium text-brand-700 underline">
+      <section className="rounded-xl border border-line bg-surface p-4 text-sm">
+        <Link href={`/login?next=${encodeURIComponent(returnTo)}`} className="font-medium text-link underline">
           Sign in
         </Link>{" "}
         to add this card to your collection or get a price alert.
@@ -104,10 +104,10 @@ export function CardActions({
     }
   }
 
-  const field = "mt-1 block w-full rounded-md border border-slate-300 bg-white px-2 py-2 text-base";
+  const field = "mt-1 block w-full rounded-lg border border-line-strong bg-surface px-2 py-2 text-base";
   const msg = (m: { ok: boolean; text: string } | null) =>
     m && (
-      <p role={m.ok ? "status" : "alert"} className={`text-sm ${m.ok ? "text-emerald-800" : "text-red-800"}`}>
+      <p role={m.ok ? "status" : "alert"} className={`text-sm ${m.ok ? "text-good" : "text-bad"}`}>
         {m.text}
       </p>
     );
@@ -116,7 +116,7 @@ export function CardActions({
     <section aria-labelledby="track-h" className="grid gap-3">
       <h2 id="track-h" className="text-xl font-semibold">Track this card</h2>
       <div className="grid gap-4 md:grid-cols-3">
-        <form onSubmit={addToCollection} aria-label="Add to collection" className="grid content-start gap-3 rounded-xl border border-slate-200 bg-white p-4">
+        <form onSubmit={addToCollection} aria-label="Add to collection" className="grid content-start gap-3 rounded-xl border border-line bg-surface p-4">
           <h3 className="font-semibold">Add to collection</h3>
           <div className="grid grid-cols-3 gap-2">
             <label className="text-sm font-medium">
@@ -124,7 +124,7 @@ export function CardActions({
               <input type="number" min={1} max={999} value={qty} onChange={(e) => setQty(Number(e.target.value))} className={field} />
             </label>
             <label className="text-sm font-medium">
-              Paid each <span className="font-normal text-slate-600">(optional)</span>
+              Paid each <span className="font-normal text-muted">(optional)</span>
               <input inputMode="decimal" placeholder="0.00" value={paid} onChange={(e) => setPaid(e.target.value.trim())} className={field} />
             </label>
             <label className="text-sm font-medium">
@@ -143,15 +143,15 @@ export function CardActions({
               </select>
             </label>
           )}
-          <button className="rounded-md bg-brand-700 px-3 py-2 font-semibold text-white">Add to collection</button>
+          <button className="rounded-xl bg-primary shadow-sm px-3 py-2 font-semibold text-on-primary">Add to collection</button>
           {msg(colMsg)}
         </form>
 
-        <form onSubmit={addToWishlist} aria-label="Add to wishlist" className="grid content-start gap-3 rounded-xl border border-slate-200 bg-white p-4">
+        <form onSubmit={addToWishlist} aria-label="Add to wishlist" className="grid content-start gap-3 rounded-xl border border-line bg-surface p-4">
           <h3 className="font-semibold">Want it?</h3>
           <div className="grid grid-cols-2 gap-2">
             <label className="text-sm font-medium">
-              Target price <span className="font-normal text-slate-600">(optional)</span>
+              Target price <span className="font-normal text-muted">(optional)</span>
               <input inputMode="decimal" placeholder="0.00" value={wishTarget} onChange={(e) => setWishTarget(e.target.value.trim())} className={field} />
             </label>
             <label className="text-sm font-medium">
@@ -162,14 +162,14 @@ export function CardActions({
               </select>
             </label>
           </div>
-          <button className="rounded-md border border-brand-700 px-3 py-2 font-semibold text-brand-700">Add to wishlist</button>
+          <button className="rounded-lg border border-ink px-3 py-2 font-semibold text-link">Add to wishlist</button>
           {msg(wishMsg)}
         </form>
 
-        <form onSubmit={createAlert} aria-label="Create price alert" className="grid content-start gap-3 rounded-xl border border-slate-200 bg-white p-4">
+        <form onSubmit={createAlert} aria-label="Create price alert" className="grid content-start gap-3 rounded-xl border border-line bg-surface p-4">
           <h3 className="font-semibold">Price alert</h3>
           {sources.length === 0 ? (
-            <p className="text-sm text-slate-700">No reference price exists for this finish, so there is nothing to watch.</p>
+            <p className="text-sm text-ink-2">No reference price exists for this finish, so there is nothing to watch.</p>
           ) : (
             <>
               <div className="grid grid-cols-2 gap-2">
@@ -212,8 +212,8 @@ export function CardActions({
                   />
                 </label>
               </div>
-              {current && <p className="text-xs text-slate-600">Currently {formatMinor(current.amountMinor, current.currency)} (as of {current.observedAt.slice(0, 10)}).</p>}
-              <button className="rounded-md bg-brand-700 px-3 py-2 font-semibold text-white">Create alert</button>
+              {current && <p className="text-xs text-muted">Currently {formatMinor(current.amountMinor, current.currency)} (as of {current.observedAt.slice(0, 10)}).</p>}
+              <button className="rounded-xl bg-primary shadow-sm px-3 py-2 font-semibold text-on-primary">Create alert</button>
             </>
           )}
           {msg(alertMsg)}

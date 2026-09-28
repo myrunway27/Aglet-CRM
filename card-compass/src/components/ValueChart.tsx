@@ -34,6 +34,17 @@ export function ValueChart({
   const H = 160;
   const pad = { l: 8, r: 8, t: 12, b: 22 };
   if (points.length === 0) return null;
+  if (points.length === 1) {
+    return (
+      <figure className="grid gap-1 rounded-2xl border border-line bg-surface p-4">
+        <figcaption className="font-display font-bold">{title}</figcaption>
+        <p className="text-sm text-ink-2">
+          History starts today at <strong className="font-num">{formatMinor(points[0].amountMinor, currency)}</strong>. A chart
+          appears once there are two days of values.
+        </p>
+      </figure>
+    );
+  }
   const vals = points.map((p) => p.amountMinor);
   const max = Math.max(...vals);
   const min = Math.min(0, ...vals);
@@ -45,23 +56,24 @@ export function ValueChart({
   const p = points[active];
 
   return (
-    <figure className="grid gap-2 rounded-xl border border-slate-200 bg-white p-4" aria-labelledby={`${id}-t`}>
+    <figure className="grid gap-2 rounded-xl border border-line bg-surface p-4" aria-labelledby={`${id}-t`}>
       <figcaption id={`${id}-t`} className="flex flex-wrap items-baseline justify-between gap-2">
         <span className="font-semibold">{title}</span>
-        <span className="text-sm text-slate-700" aria-live="polite">
+        <span className="text-sm text-ink-2" aria-live="polite">
           {fmtDay(p.day)}: <strong className="font-mono">{formatMinor(p.amountMinor, currency)}</strong>{" "}
           {p.itemsTotal !== undefined && (
-            <span className="text-slate-600">({p.itemsPriced} of {p.itemsTotal} cards priced)</span>
+            <span className="text-muted">({p.itemsPriced} of {p.itemsTotal} cards priced)</span>
           )}
         </span>
       </figcaption>
       <svg viewBox={`0 0 ${W} ${H}`} className="h-40 w-full" role="img" aria-label={`${title}, ${points.length} ${unit}`} onMouseLeave={() => setHover(null)}>
-        <line x1={pad.l} x2={W - pad.r} y1={y(min)} y2={y(min)} stroke="#e2e8f0" strokeWidth="1" />
-        <path d={path} fill="none" stroke="#4338ca" strokeWidth="2" strokeLinejoin="round" strokeLinecap="round" />
-        {hover !== null && <line x1={x(hover)} x2={x(hover)} y1={pad.t} y2={H - pad.b} stroke="#94a3b8" strokeWidth="1" />}
+        <line x1={pad.l} x2={W - pad.r} y1={y(min)} y2={y(min)} style={{ stroke: "var(--line)" }} strokeWidth="1" />
+        <path d={`${path} L${x(points.length - 1).toFixed(1)},${y(min).toFixed(1)} L${x(0).toFixed(1)},${y(min).toFixed(1)} Z`} style={{ fill: "var(--chart)", opacity: 0.08 }} />
+        <path d={path} fill="none" style={{ stroke: "var(--chart)" }} strokeWidth="2" strokeLinejoin="round" strokeLinecap="round" />
+        {hover !== null && <line x1={x(hover)} x2={x(hover)} y1={pad.t} y2={H - pad.b} style={{ stroke: "var(--line-strong)" }} strokeWidth="1" />}
         {points.map((pt, i) => (
           <g key={pt.day}>
-            <circle cx={x(i)} cy={y(pt.amountMinor)} r={i === active ? 5 : 4} fill="#4338ca" stroke="#ffffff" strokeWidth="2" />
+            <circle cx={x(i)} cy={y(pt.amountMinor)} r={i === active ? 5 : 4} style={{ fill: "var(--chart)", stroke: "var(--surface)" }} strokeWidth="2" opacity={i === active || points.length < 40 ? 1 : 0} />
             {/* Larger invisible hit target */}
             <rect
               x={x(i) - Math.max(6, (W - pad.l - pad.r) / points.length / 2)}
@@ -73,15 +85,15 @@ export function ValueChart({
             />
           </g>
         ))}
-        <text x={pad.l} y={pad.t + 10} fontSize="11" fill="#475569">{formatMinor(max, currency)}</text>
-        <text x={pad.l} y={H - 6} fontSize="11" fill="#475569">{fmtDay(points[0].day)}</text>
-        <text x={W - pad.r} y={H - 6} fontSize="11" fill="#475569" textAnchor="end">{fmtDay(points[points.length - 1].day)}</text>
+        <text x={pad.l} y={pad.t + 10} fontSize="11" style={{ fill: "var(--muted)" }}>{formatMinor(max, currency)}</text>
+        <text x={pad.l} y={H - 6} fontSize="11" style={{ fill: "var(--muted)" }}>{fmtDay(points[0].day)}</text>
+        <text x={W - pad.r} y={H - 6} fontSize="11" style={{ fill: "var(--muted)" }} textAnchor="end">{fmtDay(points[points.length - 1].day)}</text>
       </svg>
       <details className="text-sm">
-        <summary className="cursor-pointer text-slate-700">Show as table</summary>
+        <summary className="cursor-pointer text-ink-2">Show as table</summary>
         <table className="mt-2 w-full text-left">
           <thead>
-            <tr className="text-slate-600">
+            <tr className="text-muted">
               <th scope="col" className="py-1 font-medium">Day</th>
               <th scope="col" className="py-1 text-right font-medium">Value ({currency})</th>
               {points[0].itemsTotal !== undefined && <th scope="col" className="py-1 text-right font-medium">Cards priced</th>}
@@ -89,7 +101,7 @@ export function ValueChart({
           </thead>
           <tbody>
             {points.map((pt) => (
-              <tr key={pt.day} className="border-t border-slate-100">
+              <tr key={pt.day} className="border-t border-line">
                 <td className="py-1">{pt.day}</td>
                 <td className="py-1 text-right font-mono">{formatMinor(pt.amountMinor, currency)}</td>
                 {pt.itemsTotal !== undefined && <td className="py-1 text-right">{pt.itemsPriced}/{pt.itemsTotal}</td>}

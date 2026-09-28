@@ -52,7 +52,7 @@ test("account: collection value, history and a price alert that fires via the sc
   await expect(page.getByText("Value on TCGplayer basis")).toBeVisible();
   await expect(page.getByText(/USD\s1\.10/).first()).toBeVisible(); // 2 × 0.55
   await expect(page.getByText(/EUR\s1\.00/).first()).toBeVisible(); // 2 × 0.50
-  await expect(page.getByRole("img", { name: /TCGplayer basis \(USD\), 1 daily values/ })).toBeVisible();
+  await expect(page.getByText(/History starts today at USD\s1\.10/).first()).toBeVisible();
 
   const denied = await request.post("/api/cron/run", { headers: { Authorization: "Bearer wrong" } });
   expect(denied.status()).toBe(401);

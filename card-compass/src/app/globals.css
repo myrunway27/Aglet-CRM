@@ -1,26 +1,141 @@
 @import "tailwindcss";
 
-@theme {
-  --font-sans: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-  --color-brand-50: #eef2ff;
-  --color-brand-100: #e0e7ff;
-  --color-brand-600: #4f46e5;
-  --color-brand-700: #4338ca;
-  --color-brand-800: #3730a3;
+/*
+ * Card Compass design tokens.
+ * Direction: "binder night" — navy ink, the classic yellow card border as the
+ * accent, bold grotesk display type. Light and dark follow the device setting.
+ */
+@theme inline {
+  --font-sans: var(--font-body), ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --font-display: var(--font-heading), var(--font-body), ui-sans-serif, system-ui, sans-serif;
+  --font-num: var(--font-body), ui-sans-serif, system-ui, sans-serif;
+
+  --color-bg: var(--bg);
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
+  --color-sunken: var(--sunken);
+  --color-sunken-2: var(--sunken-2);
+  --color-ink: var(--ink);
+  --color-ink-2: var(--ink-2);
+  --color-muted: var(--muted);
+  --color-line: var(--line);
+  --color-line-strong: var(--line-strong);
+  --color-primary: var(--primary);
+  --color-primary-hover: var(--primary-hover);
+  --color-on-primary: var(--on-primary);
+  --color-primary-soft: var(--primary-soft);
+  --color-link: var(--link);
+  --color-focus: var(--focus);
+  --color-good: var(--good);
+  --color-good-soft: var(--good-soft);
+  --color-warn: var(--warn);
+  --color-warn-soft: var(--warn-soft);
+  --color-warn-line: var(--warn-line);
+  --color-bad: var(--bad);
+  --color-bad-soft: var(--bad-soft);
+  --color-bad-line: var(--bad-line);
+  --color-bad-solid: var(--bad-solid);
+  --color-info: var(--info);
+  --color-info-soft: var(--info-soft);
+  --color-chart: var(--chart);
 }
 
-html {
+:root {
+  --bg: #f2f3f8;
+  --surface: #ffffff;
+  --surface-2: #f8f9fc;
+  --sunken: #eceef5;
+  --sunken-2: #dfe2ec;
+  --ink: #121634;
+  --ink-2: #353b5e;
+  --muted: #5f6688;
+  --line: #e1e4ef;
+  --line-strong: #c5cadf;
+  --primary: #ffcb2e;
+  --primary-hover: #f5bb00;
+  --on-primary: #121634;
+  --primary-soft: #fff4cc;
+  --link: #2f43c4;
+  --focus: #2f43c4;
+  --good: #0d7446;
+  --good-soft: #e2f5ea;
+  --warn: #855400;
+  --warn-soft: #fff2d3;
+  --warn-line: #eec25b;
+  --bad: #b42318;
+  --bad-soft: #fdecea;
+  --bad-line: #f3b4ac;
+  --bad-solid: #b42318;
+  --info: #0b5a86;
+  --info-soft: #e0f1fb;
+  --chart: #2f43c4;
+  --hero-glow: radial-gradient(60% 80% at 85% 0%, #ffe38a55 0%, transparent 60%), radial-gradient(50% 70% at 0% 100%, #b9c4ff55 0%, transparent 60%);
   color-scheme: light;
 }
 
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #0a0c1b;
+    --surface: #13162b;
+    --surface-2: #171b34;
+    --sunken: #1c2040;
+    --sunken-2: #262b51;
+    --ink: #eef0ff;
+    --ink-2: #c7cbe6;
+    --muted: #9198bf;
+    --line: #242948;
+    --line-strong: #363c66;
+    --primary: #ffcb2e;
+    --primary-hover: #ffd75a;
+    --on-primary: #121634;
+    --primary-soft: #3a3113;
+    --link: #a7b4ff;
+    --focus: #ffcb2e;
+    --good: #5fd49b;
+    --good-soft: #0f2d1f;
+    --warn: #ffcf66;
+    --warn-soft: #33270c;
+    --warn-line: #6d5420;
+    --bad: #ff8e80;
+    --bad-soft: #3a1512;
+    --bad-line: #6e2b24;
+    --bad-solid: #d23a2a;
+    --info: #86ccf5;
+    --info-soft: #0e2a3c;
+    --chart: #a7b4ff;
+    --hero-glow: radial-gradient(60% 80% at 85% 0%, #ffcb2e22 0%, transparent 60%), radial-gradient(50% 70% at 0% 100%, #4b5bd633 0%, transparent 60%);
+    color-scheme: dark;
+  }
+}
+
+html {
+  background: var(--bg);
+}
+
 body {
-  background: #f8fafc;
-  color: #0f172a;
+  background: var(--bg);
+  color: var(--ink);
+}
+
+h1,
+h2,
+h3 {
+  font-family: var(--font-display);
+  letter-spacing: -0.015em;
+  text-wrap: balance;
+}
+
+/* Prices and counts line up */
+.font-num,
+.font-mono {
+  font-family: var(--font-num);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.01em;
 }
 
 /* Visible keyboard focus everywhere */
 :focus-visible {
-  outline: 3px solid #4338ca;
+  outline: 3px solid var(--focus);
   outline-offset: 2px;
 }
 
@@ -28,5 +143,18 @@ body {
 @media (max-width: 639px) {
   html {
     scroll-padding-bottom: 5rem;
+  }
+}
+
+/* Foil sheen for holo art and highlights */
+.foil {
+  background-image: linear-gradient(115deg, #7dd3fc 0%, #c4b5fd 25%, #f9a8d4 45%, #fde68a 65%, #86efac 85%, #7dd3fc 100%);
+}
+@media (prefers-reduced-motion: no-preference) {
+  .card-lift {
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+  .card-lift:hover {
+    transform: translateY(-3px) rotate(-0.6deg);
   }
 }

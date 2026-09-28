@@ -69,20 +69,20 @@ export function AlertsView() {
     }
   }, [unread, router]);
 
-  if (error) return <p role="alert" className="text-red-800">{error}</p>;
+  if (error) return <p role="alert" className="text-bad">{error}</p>;
   if (!data) return <p aria-busy="true">Loading alerts…</p>;
 
   return (
     <div className="grid gap-6">
       <div>
         <h1 className="text-2xl font-bold">Price alerts</h1>
-        <p className="text-slate-700">
+        <p className="text-ink-2">
           Alerts watch a reference price (e.g. TCGplayer market) and notify you once when it crosses your threshold. Create
           one from any card&apos;s price page.
         </p>
       </div>
 
-      <section aria-labelledby="push-h" className="grid gap-2 rounded-xl border border-slate-200 bg-white p-4">
+      <section aria-labelledby="push-h" className="grid gap-2 rounded-xl border border-line bg-surface p-4">
         <h2 id="push-h" className="font-semibold">Notifications on this device</h2>
         <PushToggle serverEnabled={data.push.enabled} nativeEnabled={data.push.native} />
       </section>
@@ -90,20 +90,20 @@ export function AlertsView() {
       <section aria-labelledby="alerts-h" className="grid gap-2">
         <h2 id="alerts-h" className="text-xl font-semibold">Your alerts ({data.alerts.length})</h2>
         {data.alerts.length === 0 ? (
-          <p className="rounded-md border border-slate-200 bg-white p-3">
-            No alerts yet. <Link href="/" className="font-medium text-brand-700 underline">Find a card</Link> to create one.
+          <p className="rounded-lg border border-line bg-surface p-3">
+            No alerts yet. <Link href="/" className="font-medium text-link underline">Find a card</Link> to create one.
           </p>
         ) : (
           <ul className="grid gap-2">
             {data.alerts.map((a) => (
-              <li key={a.id} className="flex flex-wrap items-start justify-between gap-2 rounded-lg border border-slate-200 bg-white p-3">
+              <li key={a.id} className="flex flex-wrap items-start justify-between gap-2 rounded-lg border border-line bg-surface p-3">
                 <div>
                   <p className="font-semibold">{a.cardName}</p>
-                  <p className="text-sm text-slate-700">
+                  <p className="text-sm text-ink-2">
                     {SOURCES[a.source].label} {subtypeLabel(a.subtype).toLowerCase()} ({finishLabel(a.finish)}) goes {a.direction}{" "}
                     <span className="font-mono">{formatMinor(a.thresholdMinor, a.currency)}</span>
                   </p>
-                  <p className="text-xs text-slate-600">
+                  <p className="text-xs text-muted">
                     {a.lastValueMinor !== null ? `Last seen ${formatMinor(a.lastValueMinor, a.currency)}` : "Not checked yet"}
                     {a.lastCheckedAt ? ` · checked ${when(a.lastCheckedAt)}` : ""}
                     {a.lastTriggeredAt ? ` · last fired ${when(a.lastTriggeredAt)}` : ""}
@@ -114,7 +114,7 @@ export function AlertsView() {
                     await api(`/api/alerts/${a.id}`, "DELETE");
                     void load();
                   }}
-                  className="rounded border border-slate-300 px-2 py-1 text-sm"
+                  className="rounded border border-line-strong px-2 py-1 text-sm"
                 >
                   Delete<span className="sr-only"> alert for {a.cardName}</span>
                 </button>
@@ -127,14 +127,14 @@ export function AlertsView() {
       <section aria-labelledby="notes-h" className="grid gap-2">
         <h2 id="notes-h" className="text-xl font-semibold">Recent notifications</h2>
         {data.notifications.length === 0 ? (
-          <p className="text-slate-700">None yet.</p>
+          <p className="text-ink-2">None yet.</p>
         ) : (
           <ul className="grid gap-2">
             {data.notifications.map((n) => (
-              <li key={n.id} className={`rounded-lg border p-3 ${n.readAt ? "border-slate-200 bg-white" : "border-brand-700 bg-brand-50"}`}>
-                <Link href={n.url} className="font-semibold underline decoration-slate-300">{n.title}</Link>
-                <p className="text-sm text-slate-700">{n.body}</p>
-                <p className="text-xs text-slate-600">{when(n.createdAt)}{!n.readAt && " · new"}</p>
+              <li key={n.id} className={`rounded-lg border p-3 ${n.readAt ? "border-line bg-surface" : "border-ink bg-primary-soft"}`}>
+                <Link href={n.url} className="font-semibold underline decoration-line-strong">{n.title}</Link>
+                <p className="text-sm text-ink-2">{n.body}</p>
+                <p className="text-xs text-muted">{when(n.createdAt)}{!n.readAt && " · new"}</p>
               </li>
             ))}
           </ul>

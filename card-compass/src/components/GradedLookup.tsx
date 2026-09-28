@@ -60,13 +60,13 @@ export function GradedLookup() {
   }
 
   const finishes = card ? [...new Set([...card.finishes, "normal", "holofoil", "reverseHolofoil"])] : [];
-  const field = "mt-1 block w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-base";
+  const field = "mt-1 block w-full rounded-lg border border-line-strong bg-surface px-3 py-2 text-base";
 
   return (
     <div className="grid gap-5">
       <div>
         <h1 className="text-2xl font-bold">Add a graded card</h1>
-        <p className="text-slate-700">
+        <p className="text-ink-2">
           Enter the cert number from a PSA slab. We look up PSA&apos;s record, suggest the matching printing, and you confirm it.
         </p>
       </div>
@@ -79,39 +79,39 @@ export function GradedLookup() {
           placeholder="PSA cert number"
           value={certInput}
           onChange={(e) => setCertInput(e.target.value)}
-          className="min-w-0 flex-1 rounded-md border border-slate-300 px-3 py-2 text-base"
+          className="min-w-0 flex-1 rounded-lg border border-line-strong px-3 py-2 text-base"
         />
-        <button disabled={busy} className="rounded-md bg-brand-700 px-4 py-2 font-semibold text-white disabled:opacity-60">
+        <button disabled={busy} className="rounded-xl bg-primary shadow-sm px-4 py-2 font-semibold text-on-primary disabled:opacity-60">
           {busy ? "Looking up…" : "Look up"}
         </button>
       </form>
-      {error && <p role="alert" className="text-red-800">{error}</p>}
+      {error && <p role="alert" className="text-bad">{error}</p>}
 
       {data && (
         <section aria-labelledby="cert-h" className="grid gap-4">
-          <div className="rounded-xl border border-slate-200 bg-white p-4">
+          <div className="rounded-xl border border-line bg-surface p-4">
             <h2 id="cert-h" className="font-semibold">
               PSA cert {data.cert.certNumber}
-              {data.cert.isDemo && <span className="ml-2 rounded bg-amber-100 px-1.5 py-0.5 text-xs text-amber-900">Demo record</span>}
+              {data.cert.isDemo && <span className="ml-2 rounded bg-warn-soft px-1.5 py-0.5 text-xs text-warn">Demo record</span>}
             </h2>
-            <p className="text-slate-800">
+            <p className="text-ink">
               {[data.cert.year, data.cert.brand, data.cert.cardNumber ? `#${data.cert.cardNumber}` : null, data.cert.subject, data.cert.variety].filter(Boolean).join(" · ")}
             </p>
             <p className="text-lg font-semibold">{data.cert.gradeLabel ?? "No grade"}</p>
             {data.cert.population !== null && (
-              <p className="text-sm text-slate-700">
+              <p className="text-sm text-ink-2">
                 PSA population: {data.cert.population} at this grade, {data.cert.populationHigher ?? 0} higher
               </p>
             )}
-            {data.alreadyOwned && <p className="mt-1 text-sm font-medium text-amber-900">This cert is already in your collection.</p>}
+            {data.alreadyOwned && <p className="mt-1 text-sm font-medium text-warn">This cert is already in your collection.</p>}
           </div>
 
           {!data.cert.grade ? (
-            <p className="rounded-md bg-slate-100 p-3 text-sm">
+            <p className="rounded-lg bg-sunken p-3 text-sm">
               This slab has no numeric grade ({data.cert.gradeLabel}), so it can&apos;t be valued by grade. Add it from the card&apos;s page instead.
             </p>
           ) : data.candidates.length === 0 ? (
-            <p className="rounded-md bg-slate-100 p-3 text-sm">
+            <p className="rounded-lg bg-sunken p-3 text-sm">
               No catalog match for &quot;{data.parsedName}&quot;. <Link href="/" className="underline">Search manually</Link>.
             </p>
           ) : (
@@ -128,9 +128,9 @@ export function GradedLookup() {
           )}
 
           {card && data.cert.grade && (
-            <div className="grid max-w-lg gap-3 rounded-xl border border-slate-200 bg-white p-4">
+            <div className="grid max-w-lg gap-3 rounded-xl border border-line bg-surface p-4">
               <label className="text-sm font-medium">
-                Finish {data.finishHint && finish === data.finishHint && <span className="font-normal text-slate-600">(suggested by the PSA label, please check)</span>}
+                Finish {data.finishHint && finish === data.finishHint && <span className="font-normal text-muted">(suggested by the PSA label, please check)</span>}
                 <select value={finish} onChange={(e) => setFinish(e.target.value)} className={field}>
                   <option value="">Choose…</option>
                   {finishes.map((f) => <option key={f} value={f}>{finishLabel(f)}</option>)}
@@ -143,12 +143,12 @@ export function GradedLookup() {
               <button
                 disabled={!finish || data.alreadyOwned}
                 onClick={add}
-                className="justify-self-start rounded-md bg-brand-700 px-4 py-2 font-semibold text-white disabled:opacity-50"
+                className="justify-self-start rounded-xl bg-primary shadow-sm px-4 py-2 font-semibold text-on-primary disabled:opacity-50"
               >
                 Add PSA {data.cert.grade} to collection
               </button>
               {done && (
-                <p role={done.ok ? "status" : "alert"} className={done.ok ? "text-emerald-800" : "text-red-800"}>
+                <p role={done.ok ? "status" : "alert"} className={done.ok ? "text-good" : "text-bad"}>
                   {done.text} {done.ok && <Link href="/collection" className="underline">View collection</Link>}
                 </p>
               )}
