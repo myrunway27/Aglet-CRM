@@ -70,6 +70,28 @@ async function run(label: string, width: number, height: number) {
   ]);
   await page.getByText("0 still scanning").waitFor();
   await shot("8-bulk-scan");
+
+  await page.goto(`${BASE}/graded`);
+  await page.getByLabel("PSA cert number").fill("90000001");
+  await page.getByRole("button", { name: "Look up" }).click();
+  await page.getByRole("radio", { name: /Charizard ex.*Fixture Set Alpha/ }).check();
+  await page.getByLabel(/^Finish/).selectOption("holofoil");
+  await shot("9-graded");
+
+  await page.goto(`${BASE}/collection`);
+  await page.getByRole("button", { name: "Share" }).click();
+  await page.getByLabel("Title").fill("Alex's collection");
+  await page.getByLabel("Show values").check();
+  await page.getByRole("button", { name: "Create link" }).click();
+  const url = await page.getByLabel("Link for Alex's collection").inputValue();
+  await page.goto(`${BASE}${new URL(url).pathname}`);
+  await page.getByRole("heading", { name: "Alex's collection" }).waitFor();
+  await shot("10-shared");
+
+  await page.goto(`${BASE}/cards/fxa-125?finish=holofoil&lang=en&grading=graded&grader=PSA&grade=10`);
+  await page.getByRole("heading", { name: "Market references" }).waitFor();
+  await page.getByTestId("offers").getByRole("heading").first().waitFor();
+  await shot("11-graded-results");
   await browser.close();
 }
 
