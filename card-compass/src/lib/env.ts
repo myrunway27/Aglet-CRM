@@ -45,6 +45,13 @@ const schema = z.object({
   EBAY_MIN_FEEDBACK_PCT: optionalInt(98),
   EBAY_MIN_FEEDBACK_SCORE: optionalInt(20),
   FX_PROVIDER: z.enum(["mock", "ecb"]).default("mock"),
+  PRICECHARTING_PROVIDER: z.enum(["none", "mock", "live"]).default("mock"),
+  PRICECHARTING_TOKEN: optionalString,
+  PRICECHARTING_LIMIT_PER_MINUTE: optionalInt(30),
+  PRICECHARTING_LIMIT_PER_DAY: optionalInt(5000),
+  PSA_PROVIDER: z.enum(["none", "mock", "live"]).default("mock"),
+  PSA_API_TOKEN: optionalString,
+  PSA_LIMIT_PER_DAY: optionalInt(100),
   CRON_SECRET: optionalString,
   // Public base URL used in emailed links (never derived from the Host header).
   APP_URL: z.string().url().default("http://localhost:3000"),

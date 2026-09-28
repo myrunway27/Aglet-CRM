@@ -65,4 +65,5 @@ export const COLLECTION_COLUMNS = [
   "purchase_price",
   "purchase_currency",
   "binder",
+  "cert_number",
 ] as const;

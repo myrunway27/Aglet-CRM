@@ -54,8 +54,8 @@ test("bulk scan, binders, profit/loss, CSV export + import", async ({ page }, in
 
   // Export
   const csv = await (await page.request.get("/api/collection/export")).text();
-  expect(csv.split("\r\n")[0]).toBe("catalog_id,name,set_name,number,finish,language,grading,condition,grader,grade,quantity,purchase_price,purchase_currency,binder");
-  expect(csv).toContain("fxa-125,Charizard ex,Fixture Set Alpha,125,holofoil,en,raw,NM,,,1,20.00,USD,Trade");
+  expect(csv.split("\r\n")[0]).toBe("catalog_id,name,set_name,number,finish,language,grading,condition,grader,grade,quantity,purchase_price,purchase_currency,binder,cert_number");
+  expect(csv).toContain("fxa-125,Charizard ex,Fixture Set Alpha,125,holofoil,en,raw,NM,,,1,20.00,USD,Trade,");
 
   // Import with preview
   await page.getByRole("button", { name: "All cards" }).click();

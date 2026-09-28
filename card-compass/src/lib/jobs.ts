@@ -2,7 +2,9 @@ import "server-only";
 import { db } from "./db";
 import { formatMinor } from "./money";
 import { finishLabel } from "./catalog/types";
+import { pricechartingRefs } from "./pricecharting";
 import { pushToUser } from "./push";
+import { saveSnapshots } from "./repo";
 import { mapLimit, referencesFor } from "./references";
 import { subtypeLabel, SOURCES, type SourceId } from "./prices";
 import { shouldTrigger, totalCollection, valueItem, type AlertDirection } from "./valuation";
@@ -21,9 +23,20 @@ export async function valueCollection(userId: string, now = Date.now()) {
   const refsById = new Map(
     await mapLimit(ids, 4, async (id) => [id, await referencesFor(id, now)] as const),
   );
+  // PriceCharting references per printing (catalogId + finish), when enabled.
+  const printings = [...new Map(items.map((i) => [`${i.catalogId}|${i.finish}`, i])).values()];
+  const pcRefs = new Map(
+    await mapLimit(printings, 4, async (i) => {
+      const card = refsById.get(i.catalogId)?.data?.card;
+      const pc = card ? await pricechartingRefs(card, i.finish, now) : null;
+      if (card && pc?.refs.length) void saveSnapshots(card, pc.refs);
+      return [`${i.catalogId}|${i.finish}`, pc?.refs ?? []] as const;
+    }),
+  );
   const valued = items.map((item) => {
     const r = refsById.get(item.catalogId);
-    return { item, quantity: item.quantity, valuation: valueItem(item, r?.refs ?? []), fromStore: r?.fromStore ?? false };
+    const refs = [...(r?.refs ?? []), ...(pcRefs.get(`${item.catalogId}|${item.finish}`) ?? [])];
+    return { item, quantity: item.quantity, valuation: valueItem(item, refs), fromStore: r?.fromStore ?? false };
   });
   const totals = totalCollection(valued);
   if (items.length) {

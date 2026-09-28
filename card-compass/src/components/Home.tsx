@@ -133,6 +133,10 @@ export function Home({ initialMode }: { initialMode: "mock" | "live" }) {
             <Link href="/scan/bulk" className="font-medium text-brand-700 underline">
               Bulk scan
             </Link>
+            {" · "}Have a PSA slab?{" "}
+            <Link href="/graded" className="font-medium text-brand-700 underline">
+              Add by cert number
+            </Link>
           </p>
         </section>
 

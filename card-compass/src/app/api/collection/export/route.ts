@@ -33,6 +33,7 @@ export async function GET() {
           : null,
         i.purchaseCurrency,
         i.binder?.name ?? null,
+        i.certNumber,
       ]),
     ]);
     return new Response(csv, {

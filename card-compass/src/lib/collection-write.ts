@@ -10,6 +10,7 @@ export interface NewItem {
   purchasePriceMinor: number | null;
   purchaseCurrency: string | null;
   binderId: string | null;
+  certNumber?: string | null;
 }
 
 /** Insert many collection items for cards already resolved against the catalog. */
@@ -36,9 +37,12 @@ export async function insertItems(client: PrismaClient, userId: string, items: N
         purchasePriceMinor: it.purchasePriceMinor,
         purchaseCurrency: it.purchaseCurrency,
         binderId: it.binderId,
+        certNumber: it.certNumber ?? null,
       },
     ];
   });
-  if (data.length) await client.collectionItem.createMany({ data });
-  return data.length;
+  // A cert already in the collection is skipped (unique per user + grader + cert).
+  if (!data.length) return 0;
+  const r = await client.collectionItem.createMany({ data, skipDuplicates: true });
+  return r.count;
 }

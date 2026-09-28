@@ -10,6 +10,7 @@ import { CONDITIONS, LANGUAGES, selectionToQuery, type Selection } from "@/lib/s
 import { CardActions } from "./CardActions";
 import { OffersSection } from "./OffersSection";
 import { PriceHistory } from "./PriceHistory";
+import { subtypeForGrade } from "@/lib/pricecharting/match";
 import { CardArt } from "./CardArt";
 import { DemoBanner } from "./DemoBanner";
 import { PreferenceSelector, REGIONS, useRegion } from "./PreferenceSelector";
@@ -24,7 +25,7 @@ const fmtDate = (iso: string) =>
     new Date(iso),
   );
 
-function RefTable({ caption, rows }: { caption: string; rows: PriceReference[] }) {
+function RefTable({ caption, rows, highlight }: { caption: string; rows: PriceReference[]; highlight?: string | null }) {
   return (
     <table className="w-full text-left text-sm">
       <caption className="pb-1 text-left text-xs font-semibold uppercase tracking-wide text-slate-600">{caption}</caption>
@@ -36,9 +37,10 @@ function RefTable({ caption, rows }: { caption: string; rows: PriceReference[] }
       </thead>
       <tbody>
         {rows.map((r) => (
-          <tr key={`${r.finish}-${r.subtype}`} className="border-t border-slate-100">
+          <tr key={`${r.finish}-${r.subtype}`} className={`border-t border-slate-100 ${highlight === r.subtype ? "bg-brand-50" : ""}`}>
             <th scope="row" className="py-1.5 pr-2 font-normal text-slate-700">
               {subtypeLabel(r.subtype)}
+              {highlight === r.subtype && <span className="ml-1 text-xs font-semibold text-brand-800">· your card</span>}
             </th>
             <td className="py-1.5 text-right font-mono font-semibold tabular-nums text-slate-900">
               {formatMinor(r.amountMinor, r.currency)}
@@ -55,11 +57,13 @@ function SourcePanel({
   refs,
   finish,
   isDemo,
+  highlight,
 }: {
   status: SourceStatus;
   refs: PriceReference[];
   finish: string;
   isDemo: boolean;
+  highlight?: string | null;
 }) {
   const meta = SOURCES[status.source];
   const g = groupByFinish(refs, finish);
@@ -75,7 +79,9 @@ function SourcePanel({
             {meta.label} <span className="font-normal text-slate-600">· {meta.region} · {meta.currency}</span>
           </h3>
           <p className="text-xs text-slate-600">
-            Source: {meta.label} via Pokémon TCG API{isDemo ? " (demo fixture)" : ""}
+            {status.source === "pricecharting"
+              ? `Source: PriceCharting, based on completed sales${refs[0]?.isDemo ? " (demo fixture)" : ""}`
+              : `Source: ${meta.label} via Pokémon TCG API${isDemo ? " (demo fixture)" : ""}`}
             {status.observedAt && <> · Updated {fmtDate(status.observedAt)}</>}
           </p>
         </div>
@@ -87,11 +93,12 @@ function SourcePanel({
       {status.status === "no-quote" ? (
         <p className="rounded-md bg-slate-100 px-3 py-2 text-sm text-slate-800">
           No quote available from {meta.label} for this card.
+          {status.note && <span className="block text-xs text-slate-600">{status.note}.</span>}
         </p>
       ) : (
         <>
           {g.exact.length > 0 ? (
-            <RefTable caption={finishLabel(finish)} rows={g.exact} />
+            <RefTable caption={finishLabel(finish)} rows={g.exact} highlight={highlight} />
           ) : (
             finish !== "other" && (
               <p className="rounded-md bg-slate-100 px-3 py-2 text-sm text-slate-800">
@@ -145,14 +152,14 @@ export function PriceResults({
   const load = useCallback(async () => {
     setState({ kind: "loading" });
     try {
-      const data = await readJson<PricesResponse>(await fetch(`/api/cards/${encodeURIComponent(cardId)}/prices`));
+      const data = await readJson<PricesResponse>(await fetch(`/api/cards/${encodeURIComponent(cardId)}/prices?finish=${encodeURIComponent(selection.finish)}`));
       setState({ kind: "ok", data });
     } catch (err) {
       if (err instanceof ClientApiError) {
         setState({ kind: "error", status: err.status, message: err.message, retryAfter: err.retryAfterSeconds });
       } else setState({ kind: "error", status: 0, message: "Network error. Check your connection." });
     }
-  }, [cardId]);
+  }, [cardId, selection.finish]);
 
   useEffect(() => {
     // eslint-disable-next-line react-hooks/set-state-in-effect -- initial fetch on mount
@@ -214,7 +221,9 @@ export function PriceResults({
     );
   if (selection.grading === "graded")
     notices.push(
-      `You confirmed a ${selection.grader} ${selection.grade} graded card. These references are for ungraded (raw) copies and do not reflect graded prices.`,
+      data.sources.some((x) => x.source === "pricecharting" && x.status === "ok")
+        ? `You confirmed a ${selection.grader} ${selection.grade} graded card. TCGplayer and Cardmarket references are for ungraded copies; see PriceCharting for graded sales.`
+        : `You confirmed a ${selection.grader} ${selection.grade} graded card. These references are for ungraded (raw) copies and do not reflect graded prices.`,
     );
   else if (selection.condition && selection.condition !== "NM")
     notices.push(
@@ -289,6 +298,13 @@ export function PriceResults({
               refs={data.references.filter((r) => r.source === s.source)}
               finish={selection.finish}
               isDemo={isDemo}
+              highlight={
+                s.source !== "pricecharting"
+                  ? null
+                  : selection.grading === "graded"
+                    ? subtypeForGrade(selection.grader, selection.grade)
+                    : "ungraded"
+              }
             />
           ))}
         </div>

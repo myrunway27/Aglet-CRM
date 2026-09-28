@@ -4,12 +4,15 @@ import { CATALOG_ID_RE, type CatalogCard } from "@/lib/catalog/types";
 import { env } from "@/lib/env";
 import { NotFoundError, RateLimitedError, UpstreamError } from "@/lib/errors";
 import { log } from "@/lib/log";
-import { SOURCES, toReferences, type SourceId, type SourceStatus } from "@/lib/prices";
+import { CATALOG_SOURCES, SOURCES, toReferences, type SourceId, type SourceStatus } from "@/lib/prices";
+import { pricechartingRefs } from "@/lib/pricecharting";
 import { loadStoredReferences, saveSnapshots } from "@/lib/repo";
 
 export const runtime = "nodejs";
 
-export async function GET(_req: Request, ctx: RouteContext<"/api/cards/[id]/prices">) {
+const FINISH_RE = /^[A-Za-z0-9]{1,32}$/;
+
+export async function GET(req: Request, ctx: RouteContext<"/api/cards/[id]/prices">) {
   const { id } = await ctx.params;
   const e = env();
   const now = Date.now();
@@ -19,6 +22,24 @@ export async function GET(_req: Request, ctx: RouteContext<"/api/cards/[id]/pric
     try {
       const data = await catalog.getCard(id);
       const { references, sources } = toReferences(data, { now, staleAfterDays: e.PRICE_STALE_AFTER_DAYS });
+      // Sales-based PriceCharting references for the confirmed finish (when enabled).
+      const finish = new URL(req.url).searchParams.get("finish");
+      if (finish && finish !== "other" && FINISH_RE.test(finish)) {
+        const pc = await pricechartingRefs(data.card, finish, now);
+        if (pc.status !== "disabled") {
+          references.push(...pc.refs);
+          sources.push({
+            source: "pricecharting",
+            label: SOURCES.pricecharting.label,
+            currency: SOURCES.pricecharting.currency,
+            status: pc.refs.length ? "ok" : "no-quote",
+            observedAt: pc.refs[0]?.observedAt ?? null,
+            sourceCardUrl: null,
+            stale: false,
+            note: pc.note,
+          });
+        }
+      }
       void saveSnapshots(data.card, references);
       return Response.json({
         mode: data.isDemo ? "mock" : "live",
@@ -50,7 +71,7 @@ export async function GET(_req: Request, ctx: RouteContext<"/api/cards/[id]/pric
         imageLarge: stored.card.imageUrl,
         finishes: [...new Set(stored.refs.filter((r) => r.source === "tcgplayer").map((r) => r.finish))],
       };
-      const sources: SourceStatus[] = (Object.keys(SOURCES) as SourceId[]).map((s) => {
+      const sources: SourceStatus[] = CATALOG_SOURCES.map((s: SourceId) => {
         const r = stored.refs.find((x) => x.source === s);
         return {
           source: s,

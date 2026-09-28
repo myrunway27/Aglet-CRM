@@ -201,8 +201,8 @@ export function CollectionView({ country }: { country: string }) {
         </p>
       ) : (
         <>
-          <div className="grid gap-4 sm:grid-cols-2">
-            {data.totals.map((t) => {
+          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            {data.totals.filter((t) => t.source !== "pricecharting" || t.itemsPriced > 0).map((t) => {
               const conv = data.converted.values.find((v) => v.source === t.source)?.amountMinor ?? null;
               const p = data.pnl.find((x) => x.source === t.source);
               return (
@@ -232,7 +232,7 @@ export function CollectionView({ country }: { country: string }) {
           </div>
 
           <div className="grid gap-4 md:grid-cols-2">
-            {(["tcgplayer", "cardmarket"] as const).map((s) => {
+            {(["tcgplayer", "cardmarket", "pricecharting"] as const).map((s) => {
               const pts = data.history.filter((h) => h.source === s);
               return pts.length ? (
                 <ValueChart key={s} title={`Whole collection, ${SOURCES[s].label} basis (${SOURCES[s].currency})`} currency={SOURCES[s].currency} points={pts} />
@@ -272,6 +272,9 @@ export function CollectionView({ country }: { country: string }) {
                         )}
                         {it.pnl.cardmarket && (
                           <> · vs Cardmarket <Gain minor={it.pnl.cardmarket.gainMinor} currency={it.pnl.cardmarket.currency} pct={it.pnl.cardmarket.gainPct} /></>
+                        )}
+                        {it.pnl.pricecharting && (
+                          <> · vs PriceCharting <Gain minor={it.pnl.pricecharting.gainMinor} currency={it.pnl.pricecharting.currency} pct={it.pnl.pricecharting.gainPct} /></>
                         )}
                       </p>
                     )}

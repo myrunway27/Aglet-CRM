@@ -1,9 +1,12 @@
+import { subtypeForGrade } from "./pricecharting/match";
 import type { PriceReference, SourceId } from "./prices";
 
 export interface ValuedItemInput {
   finish: string;
   language: string;
   grading: string;
+  grader?: string | null;
+  grade?: string | null;
   quantity: number;
 }
 
@@ -24,19 +27,29 @@ export interface ItemValuation {
 /**
  * Value one collection item from reference prices. Only like-for-like
  * references count: TCGplayer market for the exact finish, Cardmarket trend
- * (reverse-holo trend for reverse holos). Graded and non-English copies are
- * left unpriced because the references don't cover them.
+ * (reverse-holo trend for reverse holos), PriceCharting ungraded for raw
+ * copies and PriceCharting's price for the item's exact grade for graded
+ * copies. Non-English copies are left unpriced (the catalog is English).
  */
 export function valueItem(item: ValuedItemInput, refs: PriceReference[]): ItemValuation {
-  if (item.grading === "graded") return { bySource: {}, unpricedReason: "Graded copies aren't covered by reference prices" };
   if (item.language !== "en") return { bySource: {}, unpricedReason: "Only English printings have references" };
   const pick = (source: SourceId, finish: string, subtype: string) =>
     refs.find((r) => r.source === source && r.finish === finish && r.subtype === subtype);
+  if (item.grading === "graded") {
+    const sub = subtypeForGrade(item.grader, item.grade);
+    const pc = sub ? pick("pricecharting", item.finish, sub) : undefined;
+    if (!pc) return { bySource: {}, unpricedReason: "No graded sales price for this grade" };
+    return {
+      bySource: { pricecharting: { unitMinor: pc.amountMinor, currency: pc.currency, subtype: pc.subtype, observedAt: pc.observedAt, stale: pc.stale } },
+      unpricedReason: null,
+    };
+  }
   const tcg = pick("tcgplayer", item.finish, "market");
   const cm =
     item.finish === "reverseHolofoil" ? pick("cardmarket", "reverseHolofoil", "trend") : pick("cardmarket", "unspecified", "trend");
+  const pc = pick("pricecharting", item.finish, "ungraded");
   const bySource: ItemValuation["bySource"] = {};
-  for (const [k, r] of [["tcgplayer", tcg], ["cardmarket", cm]] as const) {
+  for (const [k, r] of [["tcgplayer", tcg], ["cardmarket", cm], ["pricecharting", pc]] as const) {
     if (r) bySource[k] = { unitMinor: r.amountMinor, currency: r.currency, subtype: r.subtype, observedAt: r.observedAt, stale: r.stale };
   }
   return { bySource, unpricedReason: Object.keys(bySource).length ? null : "No matching reference for this finish" };
@@ -55,6 +68,7 @@ export function totalCollection(items: Array<{ quantity: number; valuation: Item
   const out: CollectionTotals[] = [
     { source: "tcgplayer", currency: "USD", amountMinor: 0, itemsPriced: 0, itemsTotal: 0 },
     { source: "cardmarket", currency: "EUR", amountMinor: 0, itemsPriced: 0, itemsTotal: 0 },
+    { source: "pricecharting", currency: "USD", amountMinor: 0, itemsPriced: 0, itemsTotal: 0 },
   ];
   for (const t of out) {
     for (const it of items) {

@@ -16,7 +16,7 @@ describe("valueItem / totalCollection", () => {
   });
   it("leaves graded, non-English and unpriced finishes without value", async () => {
     const r = await refs("fxa-25");
-    expect(valueItem({ finish: "normal", language: "en", grading: "graded", quantity: 1 }, r).unpricedReason).toMatch(/Graded/);
+    expect(valueItem({ finish: "normal", language: "en", grading: "graded", grader: "PSA", grade: "10", quantity: 1 }, r).unpricedReason).toMatch(/No graded sales price/);
     expect(valueItem({ finish: "normal", language: "ja", grading: "raw", quantity: 1 }, r).unpricedReason).toMatch(/English/);
     expect(valueItem({ finish: "holofoil", language: "en", grading: "raw", quantity: 1 }, await refs("fxg-6")).unpricedReason).toMatch(/No matching/);
   });
@@ -27,6 +27,7 @@ describe("valueItem / totalCollection", () => {
     expect(t).toEqual([
       { source: "tcgplayer", currency: "USD", amountMinor: 55 * 3 + 33, itemsPriced: 4, itemsTotal: 4 },
       { source: "cardmarket", currency: "EUR", amountMinor: 150, itemsPriced: 3, itemsTotal: 4 },
+      { source: "pricecharting", currency: "USD", amountMinor: 0, itemsPriced: 0, itemsTotal: 4 },
     ]);
   });
 });

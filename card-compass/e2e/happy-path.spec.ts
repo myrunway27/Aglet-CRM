@@ -62,7 +62,7 @@ test("manual search works without OCR, and graded cards get a clear caveat", asy
   await form.getByRole("textbox", { name: "Grade" }).fill("9");
   await form.getByRole("checkbox").check();
   await form.getByRole("button", { name: /Confirm and see/ }).click();
-  await expect(page.getByText(/PSA 9 graded card.*do not reflect graded prices/)).toBeVisible();
+  await expect(page.getByText(/PSA 9 graded card.*see PriceCharting for graded sales/)).toBeVisible();
   await expect(page.getByTestId("source-tcgplayer")).toContainText(/USD\s5\.80/);
 });
 

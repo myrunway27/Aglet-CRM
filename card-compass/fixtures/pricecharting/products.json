@@ -1,0 +1,12 @@
+{
+  "_note": "DEMO PriceCharting-shaped products for mock mode and tests. Names follow PriceCharting's style; every price (integer pennies) is invented.",
+  "products": [
+    { "id": "demo-pc-1", "product-name": "Pikachu #25", "console-name": "Pokemon Fixture Set Alpha", "loose-price": 25, "graded-price": 1200, "box-only-price": 1900, "manual-only-price": 4500, "bgs-10-price": 9000, "condition-17-price": 3800 },
+    { "id": "demo-pc-2", "product-name": "Pikachu [Reverse Holo] #25", "console-name": "Pokemon Fixture Set Alpha", "loose-price": 60, "graded-price": 1500, "manual-only-price": 5200 },
+    { "id": "demo-pc-3", "product-name": "Pikachu #25", "console-name": "Pokemon Fixture Set Beta", "loose-price": 610, "cib-price": 1500, "new-price": 2100, "graded-price": 3400, "box-only-price": 5200, "manual-only-price": 14500 },
+    { "id": "demo-pc-4", "product-name": "Charizard ex #125", "console-name": "Pokemon Fixture Set Alpha", "loose-price": 2350, "new-price": 3100, "graded-price": 4600, "box-only-price": 7800, "manual-only-price": 13800, "bgs-10-price": 32000, "condition-17-price": 11000, "condition-18-price": 9500 },
+    { "id": "demo-pc-5", "product-name": "Charizard ex [Prerelease Stamp] #125", "console-name": "Pokemon Fixture Set Alpha", "loose-price": 9000 },
+    { "id": "demo-pc-6", "product-name": "Charizard #4", "console-name": "Pokemon Fixture Set Beta", "loose-price": 9100, "graded-price": 26000, "manual-only-price": 120000 },
+    { "id": "demo-pc-7", "product-name": "Mew #151", "console-name": "Pokemon Fixture Set Gamma", "loose-price": 300, "graded-price": 1800, "manual-only-price": 6500 }
+  ]
+}

@@ -12,6 +12,9 @@ An installable web app (PWA) for Pokémon TCG cards:
    - **Profit/loss**: against what you paid, converted with dated FX when currencies differ.
    - **Wishlist**: an optional target price creates a price alert.
    - **Set completion**, **CSV import/export** (with a preview before anything is written), **price-history charts**, and **top movers** (7- and 30-day).
+6. **Graded cards**:
+   - Add a slab by **PSA cert number**; you confirm the printing and finish.
+   - **PriceCharting** sales-based prices (ungraded and per grade) value graded items at their exact grade.
 
 Out of the box everything runs in **demo mode**, with bundled, clearly labeled sample data and no credentials. Each integration switches on with an environment variable and your own API key.
 
@@ -27,6 +30,8 @@ Out of the box everything runs in **demo mode**, with bundled, clearly labeled s
 | OCR | `OCR_PROVIDER=mock\|google` | Mock OCR recognizes the bundled fixtures only. The Google Cloud Vision TEXT_DETECTION adapter is unit-tested; check it live. |
 | Live listings | `OFFERS_PROVIDER=none\|mock\|ebay` | Demo listings by default. The eBay Browse API adapter (client-credentials token, search, item details) is unit-tested; check it live. TCGplayer and Cardmarket listings are **not** included: they aren't granting new API access. |
 | Exchange rates | `FX_PROVIDER=mock\|ecb` | Demo rates by default. The ECB daily reference-rate adapter is unit-tested; check it live. |
+| Sales-based + graded prices | `PRICECHARTING_PROVIDER=none\|mock\|live`, `PRICECHARTING_TOKEN` | Demo products by default. The live adapter (`/api/products` search) is unit-tested against mocked HTTP; check it live. Its grade-to-field mapping (`src/lib/pricecharting/match.ts`, e.g. PSA 10 = `manual-only-price`) follows PriceCharting's API docs, but **verify it with your subscription**. Matching to a product needs name, number, set and variant to agree, and is never a guess. |
+| PSA cert lookup | `PSA_PROVIDER=none\|mock\|live`, `PSA_API_TOKEN` | Demo certs `90000001`–`90000004`. The live adapter (`GetByCertNumber`) is unit-tested; check it live. Free tiers have a small daily quota (`PSA_LIMIT_PER_DAY`). |
 | Import charges | built in | Rules for low-value parcels to the **EU** (VAT + €3 flat duty), **UK** (≤ £135, 20% VAT) and **Australia** (≤ A$1,000, 10% GST), reviewed 28 Sep 2026. Every other case, including imports into the US, CA and JP, shows "total unknown". **Have a customs specialist verify before launch.** |
 | Accounts, collection, alerts | needs `DATABASE_URL` | Working, covered by E2E tests. |
 | Binders, profit/loss, wishlist, sets, CSV, bulk scan | needs `DATABASE_URL` | Working, covered by E2E tests. |
@@ -104,9 +109,9 @@ Try it:
 
 ```bash
 npm run lint && npm run typecheck
-npm test               # Vitest: 114 unit tests
+npm test               # Vitest: 132 unit tests
 npm run build
-npm run test:e2e       # Playwright, 24 tests at desktop 1280 + mobile 390 (needs Postgres; seeds demo data; run after build)
+npm run test:e2e       # Playwright, 28 tests at desktop 1280 + mobile 390 (needs Postgres; seeds demo data; run after build)
 npm run screenshots    # app on :3100 → docs/screenshots/*.png
 ```
 
@@ -158,7 +163,7 @@ The E2E tests cover the scan flow and listings ranked per country. They also cov
 
 - Listing checks read eBay **titles** and, for raw cards, the item's condition descriptors. Titles are free text, so many genuine listings land in "Couldn't verify". This is deliberate: precision is favoured over recall.
 - Delivered cost excludes carrier handling fees and US/CA/JP domestic sales tax (flagged on each listing). Imports into the US, Canada and Japan aren't modeled.
-- Reference prices cover English, ungraded printings. Graded and non-English collection items are listed but not valued.
+- Reference prices cover English printings. Graded items are valued only through PriceCharting, at their exact grade (PSA/BGS/CGC/SGC 10, 9.5, 9, 8–8.5, 7–7.5). Non-English items are listed but not valued.
 - Collection history records one point per day, when you view the page or the cron job runs.
 - Price history and movers only cover cards this app has stored prices for. They are not a whole-market index, and they show reference prices, not sales. Sold-price history needs a licensed source (see the roadmap below).
 - Set completion counts a card once, whatever its finish. "Master set" (every finish) tracking isn't built.

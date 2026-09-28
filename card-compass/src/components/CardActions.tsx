@@ -11,6 +11,7 @@ import type { Selection } from "@/lib/selection";
 const ALERT_SUBTYPES: Record<SourceId, string[]> = {
   tcgplayer: ["market", "low", "mid"],
   cardmarket: ["trend", "averageSell", "low", "avg7", "avg30"],
+  pricecharting: [],
 };
 
 export function CardActions({

@@ -14,6 +14,7 @@ export interface ImportRow {
   purchasePriceMinor: number | null;
   purchaseCurrency: string | null;
   binder: string | null;
+  certNumber: string | null;
 }
 
 export interface ImportError {
@@ -33,6 +34,7 @@ const Row = z.object({
   purchase_price: z.string().optional(),
   purchase_currency: z.string().optional(),
   binder: z.string().max(60, "binder name is too long").optional(),
+  cert_number: z.string().regex(/^\d{6,12}$/, "cert_number must be 6–12 digits").optional(),
 });
 
 /**
@@ -87,7 +89,9 @@ export function parseCollectionCsv(text: string): { rows: ImportRow[]; errors: I
       purchasePriceMinor = parseMinor(d.purchase_price!, cur);
       purchaseCurrency = cur;
     }
-    rows.push({ line, catalogId: d.catalog_id, selection: sel.data, quantity, purchasePriceMinor, purchaseCurrency, binder: d.binder ?? null });
+    if (d.cert_number && (sel.data.grading !== "graded" || quantity !== 1))
+      return errors.push({ line, message: "cert_number is only for a single graded card" });
+    rows.push({ line, catalogId: d.catalog_id, selection: sel.data, quantity, purchasePriceMinor, purchaseCurrency, binder: d.binder ?? null, certNumber: d.cert_number ?? null });
   });
   return { rows, errors };
 }

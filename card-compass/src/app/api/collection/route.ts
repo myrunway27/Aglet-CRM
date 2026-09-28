@@ -53,6 +53,7 @@ export async function GET(req: Request) {
         pnl: {
           tcgplayer: itemPnl({ ...v.item, valuation: v.valuation }, "tcgplayer", fx, now),
           cardmarket: itemPnl({ ...v.item, valuation: v.valuation }, "cardmarket", fx, now),
+          pricecharting: itemPnl({ ...v.item, valuation: v.valuation }, "pricecharting", fx, now),
         },
       })),
       totals,
@@ -73,6 +74,7 @@ const AddItem = z.object({
   purchasePrice: z.string().regex(/^\d{1,7}(\.\d{1,2})?$/).optional(),
   purchaseCurrency: z.enum(CURRENCIES).optional(),
   binderId: z.string().max(40).nullable().optional(),
+  certNumber: z.string().regex(/^\d{6,12}$/).optional(),
 });
 
 export async function POST(req: Request) {
@@ -82,7 +84,12 @@ export async function POST(req: Request) {
     const client = requireDb();
     const body = AddItem.safeParse(await req.json().catch(() => null));
     if (!body.success) throw new ValidationError(body.error.issues[0]?.message ?? "Invalid item.");
-    const { catalogId, selection: s, quantity, purchasePrice, purchaseCurrency, binderId } = body.data;
+    const { catalogId, selection: s, quantity, purchasePrice, purchaseCurrency, binderId, certNumber } = body.data;
+    if (certNumber) {
+      if (s.grading !== "graded" || quantity !== 1) throw new ValidationError("A cert number belongs to exactly one graded card.");
+      if (await client.collectionItem.findFirst({ where: { userId: user.id, grader: s.grader, certNumber } }))
+        throw new ValidationError("That cert is already in your collection.");
+    }
     if (Boolean(purchasePrice) !== Boolean(purchaseCurrency)) throw new ValidationError("Give both a purchase price and its currency.");
     if (binderId && !(await client.binder.findFirst({ where: { id: binderId, userId: user.id } }))) throw new ValidationError("Unknown binder.");
     const count = await client.collectionItem.count({ where: { userId: user.id } });
@@ -106,6 +113,7 @@ export async function POST(req: Request) {
         purchasePriceMinor: purchasePrice && purchaseCurrency ? parseMinor(purchasePrice, purchaseCurrency) : null,
         purchaseCurrency: purchaseCurrency ?? null,
         binderId: binderId ?? null,
+        certNumber: certNumber ?? null,
       },
     });
     return Response.json({ ok: true, id: item.id });

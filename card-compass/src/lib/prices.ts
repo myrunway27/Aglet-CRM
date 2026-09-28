@@ -2,12 +2,16 @@ import type { CatalogCardWithPrices } from "./catalog/types";
 import { safeSourceUrl } from "./safe-url";
 import { toMinor, type Currency } from "./money";
 
-export type SourceId = "tcgplayer" | "cardmarket";
+export type SourceId = "tcgplayer" | "cardmarket" | "pricecharting";
 
 export const SOURCES: Record<SourceId, { label: string; currency: Currency; region: string }> = {
   tcgplayer: { label: "TCGplayer", currency: "USD", region: "US" },
   cardmarket: { label: "Cardmarket", currency: "EUR", region: "EU" },
+  pricecharting: { label: "PriceCharting", currency: "USD", region: "Sales-based" },
 };
+
+/** Sources delivered inside Pokémon TCG API card objects. */
+export const CATALOG_SOURCES = ["tcgplayer", "cardmarket"] as const satisfies readonly SourceId[];
 
 export interface PriceReference {
   source: SourceId;
@@ -30,6 +34,8 @@ export interface SourceStatus {
   observedAt: string | null;
   sourceCardUrl: string | null;
   stale: boolean;
+  /** Extra context, e.g. how a PriceCharting product was matched. */
+  note?: string;
 }
 
 export const SUBTYPE_LABELS: Record<string, string> = {
@@ -44,6 +50,15 @@ export const SUBTYPE_LABELS: Record<string, string> = {
   avg1: "1-day average",
   avg7: "7-day average",
   avg30: "30-day average",
+  ungraded: "Ungraded",
+  grade7: "Grade 7 / 7.5",
+  grade8: "Grade 8 / 8.5",
+  grade9: "Grade 9",
+  grade9_5: "Grade 9.5",
+  psa10: "PSA 10",
+  bgs10: "BGS 10",
+  cgc10: "CGC 10",
+  sgc10: "SGC 10",
 };
 export const subtypeLabel = (s: string) => SUBTYPE_LABELS[s] ?? s;
 
@@ -137,7 +152,7 @@ export function toReferences(
     }
   }
 
-  const sources: SourceStatus[] = (Object.keys(SOURCES) as SourceId[]).map((source) => {
+  const sources: SourceStatus[] = CATALOG_SOURCES.map((source) => {
     const has = refs.find((r) => r.source === source);
     const observedAt = source === "tcgplayer" ? tcgObserved : cmObserved;
     return {

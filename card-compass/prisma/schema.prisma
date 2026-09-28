@@ -115,6 +115,8 @@ model CollectionItem {
   language           String
   binderId           String?
   binder             Binder?  @relation(fields: [binderId], references: [id], onDelete: SetNull)
+  /// Grading-company certificate number (graded slabs), e.g. from a PSA cert lookup.
+  certNumber         String?
   grading            String
   condition          String?
   grader             String?
@@ -126,6 +128,7 @@ model CollectionItem {
 
   @@index([userId])
   @@index([userId, setId])
+  @@unique([userId, grader, certNumber])
 }
 
 /// Daily collection value per reference currency. No FX mixing inside a snapshot.

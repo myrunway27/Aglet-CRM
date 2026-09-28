@@ -1,0 +1,9 @@
+{
+  "_note": "DEMO PSA cert records (shaped like the PSA public API's PSACert object) for mock mode and tests. Cert numbers, labels and populations are invented.",
+  "certs": {
+    "90000001": { "CertNumber": "90000001", "Year": "2026", "Brand": "POKEMON FIXTURE SET ALPHA", "Subject": "CHARIZARD ex", "CardNumber": "125", "Variety": "", "CardGrade": "GEM MT 10", "GradeDescription": "GEM MINT 10", "TotalPopulation": 812, "PopulationHigher": 0 },
+    "90000002": { "CertNumber": "90000002", "Year": "2026", "Brand": "POKEMON FIXTURE SET ALPHA", "Subject": "PIKACHU", "CardNumber": "025", "Variety": "REVERSE HOLO", "CardGrade": "MINT 9", "GradeDescription": "MINT 9", "TotalPopulation": 1500, "PopulationHigher": 340 },
+    "90000003": { "CertNumber": "90000003", "Year": "2025", "Brand": "POKEMON FIXTURE SET BETA", "Subject": "PIKACHU-HOLO", "CardNumber": "25", "Variety": "", "CardGrade": "GEM MT 10", "GradeDescription": "GEM MINT 10", "TotalPopulation": 95, "PopulationHigher": 0 },
+    "90000004": { "CertNumber": "90000004", "Year": "2024", "Brand": "POKEMON JAPANESE PROMO", "Subject": "MYSTERY CARD", "CardNumber": "001", "Variety": "", "CardGrade": "AUTHENTIC", "GradeDescription": "AUTHENTIC", "TotalPopulation": 3, "PopulationHigher": 0 }
+  }
+}
