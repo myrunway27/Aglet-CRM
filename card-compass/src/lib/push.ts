@@ -3,6 +3,7 @@ import webpush from "web-push";
 import { db } from "./db";
 import { env } from "./env";
 import { log } from "./log";
+import { nativePushToUser } from "./native-push";
 
 let configured: boolean | undefined;
 
@@ -14,10 +15,11 @@ export function pushEnabled(): boolean {
   return configured;
 }
 
-/** Send to every device the user subscribed. Expired subscriptions are removed. */
+/** Send to every device the user subscribed (web push + native app). Expired subscriptions are removed. */
 export async function pushToUser(userId: string, payload: { title: string; body: string; url: string }) {
+  const native = await nativePushToUser(userId, payload);
   const client = db();
-  if (!client || !pushEnabled()) return 0;
+  if (!client || !pushEnabled()) return native;
   const subs = await client.pushSubscription.findMany({ where: { userId } });
   let sent = 0;
   for (const s of subs) {
@@ -34,5 +36,5 @@ export async function pushToUser(userId: string, payload: { title: string; body:
       else log.warn("push.send_failed", { status: status ?? null });
     }
   }
-  return sent;
+  return sent + native;
 }

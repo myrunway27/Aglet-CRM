@@ -43,6 +43,19 @@ model User {
   binders          Binder[]
   wishlist         WishlistItem[]
   shareLinks       ShareLink[]
+  nativePushTokens NativePushToken[]
+}
+
+/// Device token from the native app (FCM registration token on Android, APNs token on iOS).
+model NativePushToken {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  token     String   @unique
+  platform  String
+  createdAt DateTime @default(now())
+
+  @@index([userId])
 }
 
 /// Public read-only link to a collection, one binder (e.g. a trade list) or the wishlist.

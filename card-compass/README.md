@@ -41,6 +41,7 @@ Out of the box everything runs in **demo mode**, with bundled, clearly labeled s
 | Binders, profit/loss, wishlist, sets, CSV, bulk scan | needs `DATABASE_URL` | Working, covered by E2E tests. |
 | Price history + market movers | needs `DATABASE_URL` | Built from the reference-price snapshots this app stores. History starts when a card is first looked up or tracked (the cron job refreshes tracked cards daily). Demo mode seeds 90 days of **demo** history. These are reference prices, not completed sales. |
 | Web push | `NEXT_PUBLIC_VAPID_PUBLIC_KEY`, `VAPID_PRIVATE_KEY`, `VAPID_SUBJECT` | Implemented. iOS delivers push only to the installed app (iOS 16.4+). |
+| Native apps (iOS/Android) | `CAP_SERVER_URL`, `CAP_APP_ID`; push: `FCM_*`, `APNS_*` | Capacitor projects generated in `android/` and `ios/`, with native camera, push (FCM + APNs senders, unit-tested) and share sheet. **Not compiled here** (no Android SDK or macOS). See [docs/MOBILE.md](docs/MOBILE.md). |
 | Email (confirm address, reset password, alert emails) | `MAIL_PROVIDER=none\|outbox\|resend`, `APP_URL`, `MAIL_FROM`, `RESEND_API_KEY` | `outbox` (dev) writes messages to `./.outbox`. The Resend adapter is written, but not tested against the live service. |
 | Scheduled job | `CRON_SECRET` | `POST /api/cron/run` checks alerts and snapshots collection values. |
 
@@ -113,7 +114,7 @@ Try it:
 
 ```bash
 npm run lint && npm run typecheck
-npm test               # Vitest: 132 unit tests
+npm test               # Vitest: 137 unit tests
 npm run build
 npm run test:e2e       # Playwright, 30 tests at desktop 1280 + mobile 390 (needs Postgres; seeds demo data; run after build)
 npm run screenshots    # app on :3100 → docs/screenshots/*.png
@@ -181,5 +182,5 @@ The E2E tests cover the scan flow and listings ranked per country. They also cov
    - Price out PriceCharting's API for sold/graded history.
    - PSA's cert-lookup API for graded slabs.
    - Catalog sources for Japanese cards and sealed product.
-2. **App store version:** Capacitor wrapper, native camera and native push. Apple may reject apps that are only a website in a wrapper, so the native features matter.
+2. **App store version:** scaffolded (see docs/MOBILE.md). Next: build on your machine, test on devices, then submit to the stores.
 3. **Image-based live recognition**, once licensed card images are available.

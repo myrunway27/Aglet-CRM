@@ -5,6 +5,7 @@ import { useEffect, useRef, useState } from "react";
 import { ClientApiError, readJson, type ScanResponse } from "@/lib/api-types";
 import { finishLabel, type CatalogCard } from "@/lib/catalog/types";
 import { api } from "@/lib/client-api";
+import { chooseNativePhotos, isNative, takeNativePhoto } from "@/lib/native";
 import { CONDITIONS, LANGUAGES } from "@/lib/selection";
 
 type Status = "queued" | "scanning" | "waiting" | "done" | "error";
@@ -85,7 +86,7 @@ export function BulkScan() {
     running.current = false;
   }
 
-  function addFiles(files: FileList | null) {
+  function addFiles(files: FileList | File[] | null) {
     if (!files) return;
     const room = MAX_FILES - rowsRef.current.length;
     const add = [...files].slice(0, Math.max(0, room)).map<Row>((file) => ({
@@ -141,11 +142,25 @@ export function BulkScan() {
       </div>
 
       <div className="flex flex-wrap gap-2">
-        <label className="cursor-pointer rounded-md bg-brand-700 px-4 py-2 font-semibold text-white">
+        <label
+          className="cursor-pointer rounded-md bg-brand-700 px-4 py-2 font-semibold text-white"
+          onClick={(e) => {
+            if (!isNative()) return;
+            e.preventDefault();
+            void takeNativePhoto().then((f) => f && addFiles([f]));
+          }}
+        >
           Take photo
           <input type="file" accept="image/*" capture="environment" className="sr-only" onChange={(e) => { addFiles(e.target.files); e.target.value = ""; }} />
         </label>
-        <label className="cursor-pointer rounded-md border border-brand-700 bg-white px-4 py-2 font-semibold text-brand-700">
+        <label
+          className="cursor-pointer rounded-md border border-brand-700 bg-white px-4 py-2 font-semibold text-brand-700"
+          onClick={(e) => {
+            if (!isNative()) return;
+            e.preventDefault();
+            void chooseNativePhotos(MAX_FILES).then((fs) => fs.length && addFiles(fs));
+          }}
+        >
           Choose photos
           <input type="file" accept="image/jpeg,image/png,image/webp" multiple className="sr-only" onChange={(e) => { addFiles(e.target.files); e.target.value = ""; }} />
         </label>

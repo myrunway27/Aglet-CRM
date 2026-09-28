@@ -62,6 +62,18 @@ const schema = z.object({
   NEXT_PUBLIC_VAPID_PUBLIC_KEY: optionalString,
   VAPID_PRIVATE_KEY: optionalString,
   VAPID_SUBJECT: optionalString,
+  // Native app push: FCM (Android) service account and APNs (iOS) .p8 token auth.
+  FCM_PROJECT_ID: optionalString,
+  FCM_CLIENT_EMAIL: optionalString,
+  FCM_PRIVATE_KEY: optionalString,
+  APNS_TEAM_ID: optionalString,
+  APNS_KEY_ID: optionalString,
+  APNS_PRIVATE_KEY: optionalString,
+  APNS_BUNDLE_ID: optionalString,
+  APNS_PRODUCTION: z
+    .string()
+    .optional()
+    .transform((v) => v === "true"),
 });
 
 export type Env = ReturnType<typeof loadEnv>;

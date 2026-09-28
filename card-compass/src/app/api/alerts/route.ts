@@ -7,6 +7,7 @@ import { CATALOG_ID_RE } from "@/lib/catalog/types";
 import { ValidationError } from "@/lib/errors";
 import { parseMinor } from "@/lib/money";
 import { SOURCES } from "@/lib/prices";
+import { nativePushEnabled } from "@/lib/native-push";
 import { pushEnabled } from "@/lib/push";
 
 export const runtime = "nodejs";
@@ -20,7 +21,7 @@ export async function GET() {
       client.notification.findMany({ where: { userId: user.id }, orderBy: { createdAt: "desc" }, take: 50 }),
       client.pushSubscription.count({ where: { userId: user.id } }),
     ]);
-    return Response.json({ alerts, notifications, push: { enabled: pushEnabled(), devices: pushSubs } });
+    return Response.json({ alerts, notifications, push: { enabled: pushEnabled(), devices: pushSubs, native: nativePushEnabled() } });
   } catch (err) {
     return errorResponse(err, "alerts.get");
   }

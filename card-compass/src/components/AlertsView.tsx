@@ -35,7 +35,7 @@ interface Note {
 interface Data {
   alerts: Alert[];
   notifications: Note[];
-  push: { enabled: boolean; devices: number };
+  push: { enabled: boolean; devices: number; native: { ios: boolean; android: boolean } };
 }
 
 const when = (iso: string) =>
@@ -84,7 +84,7 @@ export function AlertsView() {
 
       <section aria-labelledby="push-h" className="grid gap-2 rounded-xl border border-slate-200 bg-white p-4">
         <h2 id="push-h" className="font-semibold">Notifications on this device</h2>
-        <PushToggle serverEnabled={data.push.enabled} />
+        <PushToggle serverEnabled={data.push.enabled} nativeEnabled={data.push.native} />
       </section>
 
       <section aria-labelledby="alerts-h" className="grid gap-2">

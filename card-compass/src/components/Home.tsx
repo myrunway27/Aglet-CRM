@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useEffect, useRef, useState, type ChangeEvent, type FormEvent } from "react";
 import { ClientApiError, readJson, type ScanResponse, type SearchResponse } from "@/lib/api-types";
 import type { CatalogCard } from "@/lib/catalog/types";
+import { isNative, takeNativePhoto } from "@/lib/native";
 import { CandidateList } from "./CandidateList";
 import { ConfirmForm } from "./ConfirmForm";
 import { DemoBanner } from "./DemoBanner";
@@ -115,6 +116,11 @@ export function Home({ initialMode }: { initialMode: "mock" | "live" }) {
           </p>
           <label
             htmlFor="card-photo"
+            onClick={(e) => {
+              if (!isNative()) return;
+              e.preventDefault(); // use the native camera inside the app
+              void takeNativePhoto().then((f) => f && upload(f));
+            }}
             className="mt-3 flex cursor-pointer items-center justify-center rounded-md bg-brand-700 px-4 py-3 font-semibold text-white hover:bg-brand-800 focus-within:outline focus-within:outline-3 focus-within:outline-offset-2 focus-within:outline-brand-700"
           >
             Take photo or upload

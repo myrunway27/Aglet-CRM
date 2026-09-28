@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useState, type FormEvent } from "react";
 import { ClientApiError } from "@/lib/api-types";
 import { api } from "@/lib/client-api";
+import { shareLink } from "@/lib/native";
 
 interface Link {
   id: string;
@@ -86,15 +87,12 @@ export function SharePanel({ binders, defaultBinder }: { binders: Array<{ id: st
                   type="button"
                   className="rounded border border-slate-300 px-2 py-1"
                   onClick={async () => {
-                    try {
-                      await navigator.clipboard.writeText(l.url);
-                      setMsg({ ok: true, text: "Copied." });
-                    } catch {
-                      setMsg({ ok: false, text: "Couldn't copy; select the link and copy it." });
-                    }
+                    const r = await shareLink(l.title, l.url);
+                    if (r === "copied") setMsg({ ok: true, text: "Copied." });
+                    else if (r === "failed") setMsg({ ok: false, text: "Couldn't share; select the link and copy it." });
                   }}
                 >
-                  Copy
+                  Share / copy
                 </button>
                 <button
                   type="button"

@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { api } from "@/lib/client-api";
+import { isNative, nativePlatform, registerNativePush } from "@/lib/native";
 
 function urlBase64ToUint8Array(base64: string) {
   const padding = "=".repeat((4 - (base64.length % 4)) % 4);
@@ -9,18 +10,49 @@ function urlBase64ToUint8Array(base64: string) {
   return Uint8Array.from(raw, (c) => c.charCodeAt(0));
 }
 
-export function PushToggle({ serverEnabled }: { serverEnabled: boolean }) {
+export function PushToggle({ serverEnabled, nativeEnabled }: { serverEnabled: boolean; nativeEnabled?: { ios: boolean; android: boolean } }) {
   const [supported, setSupported] = useState<boolean | null>(null);
   const [sub, setSub] = useState<PushSubscription | null>(null);
   const [msg, setMsg] = useState<string | null>(null);
   const key = process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY;
 
+  const native = isNative();
+
   useEffect(() => {
+    if (native) return;
     const ok = "serviceWorker" in navigator && "PushManager" in window && "Notification" in window;
     // eslint-disable-next-line react-hooks/set-state-in-effect -- feature detection on mount
     setSupported(ok);
     if (ok) navigator.serviceWorker.ready.then((r) => r.pushManager.getSubscription()).then(setSub).catch(() => undefined);
-  }, []);
+  }, [native]);
+
+  if (native) {
+    const platform = nativePlatform() === "ios" ? "ios" : "android";
+    if (!nativeEnabled?.[platform]) {
+      return <p className="text-sm text-slate-600">Notifications for the app aren&apos;t configured on this server yet. Alerts still appear below.</p>;
+    }
+    return (
+      <div className="flex flex-wrap items-center gap-3 text-sm">
+        <button
+          onClick={async () => {
+            setMsg(null);
+            const r = await registerNativePush();
+            if (!r) return setMsg("Notifications were not allowed.");
+            try {
+              await api("/api/push/native", "POST", r);
+              setMsg("Notifications are on for this device.");
+            } catch {
+              setMsg("Couldn't turn on notifications. Try again.");
+            }
+          }}
+          className="rounded-md bg-brand-700 px-3 py-2 font-semibold text-white"
+        >
+          Turn on notifications
+        </button>
+        {msg && <span role="status">{msg}</span>}
+      </div>
+    );
+  }
 
   if (!serverEnabled || !key) {
     return <p className="text-sm text-slate-600">Push notifications aren&apos;t configured on this server. Alerts still appear below.</p>;
