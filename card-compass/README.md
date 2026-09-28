@@ -15,6 +15,10 @@ An installable web app (PWA) for Pokémon TCG cards:
 6. **Graded cards**:
    - Add a slab by **PSA cert number**; you confirm the printing and finish.
    - **PriceCharting** sales-based prices (ungraded and per grade) value graded items at their exact grade.
+7. **Sharing**: read-only public links to your collection, a binder (e.g. a trade list) or your wishlist.
+   - You choose whether values are shown.
+   - Never shown: email, purchase prices, cert numbers.
+   - Links are 128-bit random, noindex, and can be revoked immediately.
 
 Out of the box everything runs in **demo mode**, with bundled, clearly labeled sample data and no credentials. Each integration switches on with an environment variable and your own API key.
 
@@ -111,7 +115,7 @@ Try it:
 npm run lint && npm run typecheck
 npm test               # Vitest: 132 unit tests
 npm run build
-npm run test:e2e       # Playwright, 28 tests at desktop 1280 + mobile 390 (needs Postgres; seeds demo data; run after build)
+npm run test:e2e       # Playwright, 30 tests at desktop 1280 + mobile 390 (needs Postgres; seeds demo data; run after build)
 npm run screenshots    # app on :3100 → docs/screenshots/*.png
 ```
 
@@ -143,6 +147,7 @@ The E2E tests cover the scan flow and listings ranked per country. They also cov
 - Email tokens are random, single-use and short-lived (reset: 1 hour; confirm: 48 hours), and only their hash is stored.
 - A password reset signs out every session. Forgot-password answers the same way for unknown emails.
 - The confirm link needs a button click (POST), so email link scanners can't use it up.
+- Share pages are read-only: an allow-list of fields, cached for 10 minutes so anonymous views don't hit upstream APIs. Revocation is checked on every view.
 - Every write route checks the Origin header. Login and signup are rate-limited, and failed logins take the same time whether or not the email exists.
 - Account deletion removes everything linked to the user.
 - External links go only to allow-listed https hosts.

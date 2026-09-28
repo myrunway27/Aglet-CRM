@@ -14,15 +14,12 @@ import { sendMail } from "./mail";
 
 const today = (now: number) => new Date(new Date(now).toISOString().slice(0, 10) + "T00:00:00Z");
 
-/** Value a user's collection and upsert today's snapshot per source. */
-export async function valueCollection(userId: string, now = Date.now()) {
-  const client = db();
-  if (!client) return null;
-  const items = await client.collectionItem.findMany({ where: { userId }, orderBy: { createdAt: "desc" } });
+type ItemRow = Parameters<typeof valueItem>[0] & { catalogId: string; finish: string; quantity: number };
+
+/** Value collection rows from current references (Pokémon TCG API + PriceCharting). No side effects on history. */
+export async function valueRows<T extends ItemRow>(items: T[], now = Date.now()) {
   const ids = [...new Set(items.map((i) => i.catalogId))];
-  const refsById = new Map(
-    await mapLimit(ids, 4, async (id) => [id, await referencesFor(id, now)] as const),
-  );
+  const refsById = new Map(await mapLimit(ids, 4, async (id) => [id, await referencesFor(id, now)] as const));
   // PriceCharting references per printing (catalogId + finish), when enabled.
   const printings = [...new Map(items.map((i) => [`${i.catalogId}|${i.finish}`, i])).values()];
   const pcRefs = new Map(
@@ -33,11 +30,19 @@ export async function valueCollection(userId: string, now = Date.now()) {
       return [`${i.catalogId}|${i.finish}`, pc?.refs ?? []] as const;
     }),
   );
-  const valued = items.map((item) => {
+  return items.map((item) => {
     const r = refsById.get(item.catalogId);
     const refs = [...(r?.refs ?? []), ...(pcRefs.get(`${item.catalogId}|${item.finish}`) ?? [])];
     return { item, quantity: item.quantity, valuation: valueItem(item, refs), fromStore: r?.fromStore ?? false };
   });
+}
+
+/** Value a user's collection and upsert today's snapshot per source. */
+export async function valueCollection(userId: string, now = Date.now()) {
+  const client = db();
+  if (!client) return null;
+  const items = await client.collectionItem.findMany({ where: { userId }, orderBy: { createdAt: "desc" } });
+  const valued = await valueRows(items, now);
   const totals = totalCollection(valued);
   if (items.length) {
     await Promise.all(

@@ -42,6 +42,24 @@ model User {
   pushSubscriptions PushSubscription[]
   binders          Binder[]
   wishlist         WishlistItem[]
+  shareLinks       ShareLink[]
+}
+
+/// Public read-only link to a collection, one binder (e.g. a trade list) or the wishlist.
+model ShareLink {
+  id         String    @id @default(cuid())
+  userId     String
+  user       User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  slug       String    @unique
+  kind       String
+  binderId   String?
+  title      String
+  showValues Boolean   @default(false)
+  createdAt  DateTime  @default(now())
+  revokedAt  DateTime?
+  viewCount  Int       @default(0)
+
+  @@index([userId])
 }
 
 /// A named folder of collection items (e.g. "Trade binder", "PC").

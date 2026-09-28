@@ -11,6 +11,7 @@ import { SOURCES, type SourceId } from "@/lib/prices";
 import { CONDITIONS, LANGUAGES } from "@/lib/selection";
 import type { CollectionTotals, ItemValuation } from "@/lib/valuation";
 import { ImportPanel } from "./ImportPanel";
+import { SharePanel } from "./SharePanel";
 import { Gain } from "./Money";
 import { ValueChart, type Point } from "./ValueChart";
 
@@ -53,6 +54,7 @@ export function CollectionView({ country }: { country: string }) {
   const [data, setData] = useState<Data | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [showImport, setShowImport] = useState(false);
+  const [showShare, setShowShare] = useState(false);
   const [newBinder, setNewBinder] = useState("");
   const [binderMsg, setBinderMsg] = useState<string | null>(null);
 
@@ -120,10 +122,14 @@ export function CollectionView({ country }: { country: string }) {
           <button onClick={() => setShowImport(!showImport)} aria-expanded={showImport} className="rounded-md border border-slate-300 bg-white px-3 py-2 font-medium">
             Import CSV
           </button>
+          <button onClick={() => setShowShare(!showShare)} aria-expanded={showShare} className="rounded-md border border-slate-300 bg-white px-3 py-2 font-medium">
+            Share
+          </button>
         </div>
       </div>
 
       {showImport && <ImportPanel onDone={load} />}
+      {showShare && <SharePanel binders={data.binders} defaultBinder={binder} />}
 
       <section aria-label="Binders" className="grid gap-2">
         <div className="flex flex-wrap items-center gap-2">
