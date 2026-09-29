@@ -32,6 +32,7 @@ test("PSA cert lookup adds a graded slab, valued at its grade with PriceCharting
 
   await page.goto("/collection");
   await expect(page.getByText("Value on PriceCharting basis")).toBeVisible();
+  await page.getByRole("button", { name: "list", exact: true }).click();
   await expect(page.getByText(/PriceCharting:\s*USD\s138\.00/)).toBeVisible();
   await expect(page.getByText(/vs PriceCharting\s*\+USD\s38\.00 \(\+38\.0%\)/)).toBeVisible();
 

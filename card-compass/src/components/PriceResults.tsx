@@ -10,6 +10,7 @@ import { CONDITIONS, LANGUAGES, selectionToQuery, type Selection, type Selection
 import { CardActions } from "./CardActions";
 import { OffersSection } from "./OffersSection";
 import { SelectionBar } from "./SelectionBar";
+import { speciesOf } from "@/lib/portfolio";
 import { PriceHistory } from "./PriceHistory";
 import { subtypeForGrade } from "@/lib/pricecharting/match";
 import { CardArt } from "./CardArt";
@@ -314,6 +315,9 @@ export function PriceResults({
             {card.setPrintedTotal ? `/${card.setPrintedTotal}` : ""}
             {card.rarity ? ` · ${card.rarity}` : ""}
           </p>
+          <Link href={`/pokedex/${encodeURIComponent(speciesOf(card.name))}`} className="justify-self-start text-sm font-semibold text-link underline">
+            All {speciesOf(card.name)} cards →
+          </Link>
           <SelectionBar cardId={cardId} finishes={card.finishes} selection={selection} assumed={assumed} />
         </div>
       </section>

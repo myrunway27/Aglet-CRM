@@ -139,8 +139,8 @@ h3 {
   outline-offset: 2px;
 }
 
-/* Keep scrolled-to content clear of the phone tab bar */
-@media (max-width: 639px) {
+/* Keep scrolled-to content clear of the phone/tablet tab bar */
+@media (max-width: 1023px) {
   html {
     scroll-padding-bottom: 5rem;
   }
@@ -157,4 +157,16 @@ h3 {
   .card-lift:hover {
     transform: translateY(-3px) rotate(-0.6deg);
   }
+}
+
+/* Accent colours (picked on the More / Account page). Bright accents keep ink text for contrast. */
+html[data-accent="blue"] { --primary: #6cb8ff; --primary-hover: #4ea5f5; --primary-soft: #e1f0ff; }
+html[data-accent="pink"] { --primary: #ff8fc7; --primary-hover: #f873b6; --primary-soft: #ffe6f2; }
+html[data-accent="green"] { --primary: #5ee39a; --primary-hover: #3fd384; --primary-soft: #dcf8e8; }
+html[data-accent="purple"] { --primary: #b69cff; --primary-hover: #a184fb; --primary-soft: #eee8ff; }
+@media (prefers-color-scheme: dark) {
+  html[data-accent="blue"] { --primary-soft: #13263b; --primary-hover: #8ac7ff; }
+  html[data-accent="pink"] { --primary-soft: #3a1628; --primary-hover: #ffa6d2; }
+  html[data-accent="green"] { --primary-soft: #0f2d1f; --primary-hover: #7eeaae; }
+  html[data-accent="purple"] { --primary-soft: #231a3d; --primary-hover: #c7b3ff; }
 }

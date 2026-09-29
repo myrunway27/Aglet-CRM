@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { AccentPicker } from "@/components/AccentPicker";
 import { SignOutButton } from "@/components/SignOutButton";
 import { currentUser } from "@/lib/auth/session";
 
@@ -7,6 +8,7 @@ export const metadata = { title: "More — Card Compass" };
 const ITEMS = [
   { href: "/wishlist", label: "Wishlist", hint: "Cards you want, with target prices" },
   { href: "/sets", label: "Set completion", hint: "What you own and what's missing" },
+  { href: "/pokedex", label: "Pokédex", hint: "Every card of one Pokémon" },
   { href: "/scan/bulk", label: "Scan a stack", hint: "Add many cards at once" },
   { href: "/graded", label: "Add a PSA slab", hint: "Look up a cert number" },
 ];
@@ -29,6 +31,9 @@ export default async function MorePage() {
           </li>
         ))}
       </ul>
+      <section className="rounded-xl border border-line bg-surface p-4">
+        <AccentPicker />
+      </section>
       <ul className="grid divide-y divide-line overflow-hidden rounded-xl border border-line bg-surface">
         {user ? (
           <>

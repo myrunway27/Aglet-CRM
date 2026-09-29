@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import { isNative, takeNativePhoto } from "@/lib/native";
+import { contrast, frameDiff, nextSteady, STEADY_TICKS, toGray } from "@/lib/steady";
 
 type Status = "starting" | "live" | "denied" | "unsupported";
 
@@ -16,6 +17,8 @@ export function CameraScanner({ open, onClose, onImage }: { open: boolean; onClo
   const shutterRef = useRef<HTMLButtonElement>(null);
   const [status, setStatus] = useState<Status>("starting");
   const [torch, setTorch] = useState<{ available: boolean; on: boolean }>({ available: false, on: false });
+  const [auto, setAuto] = useState(true);
+  const [steady, setSteady] = useState(0);
 
   const stop = useCallback(() => {
     streamRef.current?.getTracks().forEach((t) => t.stop());
@@ -73,6 +76,39 @@ export function CameraScanner({ open, onClose, onImage }: { open: boolean; onClo
     return () => window.removeEventListener("keydown", onKey);
   }, [open, onClose]);
 
+  // Auto-capture: sample small frames 4×/s; snap once the picture is still and not blank.
+  useEffect(() => {
+    if (!open || status !== "live" || !auto) return;
+    const v = videoRef.current;
+    const c = document.createElement("canvas");
+    c.width = 64;
+    c.height = 48;
+    const ctx = c.getContext("2d", { willReadFrequently: true });
+    let prev: Uint8Array | null = null;
+    let ticks = 0;
+    const id = window.setInterval(() => {
+      if (!v || !ctx || !v.videoWidth) return;
+      ctx.drawImage(v, 0, 0, 64, 48);
+      const cur = toGray(ctx.getImageData(0, 0, 64, 48).data);
+      ticks = prev ? nextSteady(ticks, frameDiff(prev, cur), contrast(cur)) : 0;
+      prev = cur;
+      setSteady(Math.min(ticks, STEADY_TICKS));
+      if (ticks >= STEADY_TICKS) {
+        window.clearInterval(id);
+        captureRef.current();
+      }
+    }, 250);
+    return () => {
+      window.clearInterval(id);
+      setSteady(0);
+    };
+  }, [open, status, auto]);
+
+  const captureRef = useRef<() => void>(() => undefined);
+  useEffect(() => {
+    captureRef.current = capture;
+  });
+
   function capture() {
     const v = videoRef.current;
     if (!v || !v.videoWidth) return;
@@ -112,11 +148,18 @@ export function CameraScanner({ open, onClose, onImage }: { open: boolean; onClo
         <button onClick={onClose} className="rounded-full bg-white/15 px-4 py-2 text-sm font-semibold">
           Close
         </button>
+        <div className="flex gap-2">
+        {status === "live" && (
+          <button onClick={() => setAuto(!auto)} aria-pressed={auto} className={`rounded-full px-4 py-2 text-sm font-semibold ${auto ? "bg-white text-black" : "bg-white/15"}`}>
+            Auto {auto ? "on" : "off"}
+          </button>
+        )}
         {torch.available && (
           <button onClick={toggleTorch} aria-pressed={torch.on} className="rounded-full bg-white/15 px-4 py-2 text-sm font-semibold">
             {torch.on ? "Light on" : "Light off"}
           </button>
         )}
+        </div>
       </div>
 
       <div className="relative flex-1 overflow-hidden">
@@ -145,16 +188,28 @@ export function CameraScanner({ open, onClose, onImage }: { open: boolean; onClo
 
       <div className="grid justify-items-center gap-3 px-4 pt-3" style={{ paddingBottom: "max(16px, env(safe-area-inset-bottom))" }}>
         <p className="text-center text-sm text-white/85">
-          {status === "live" ? "Fit the whole card inside the frame. Avoid glare." : "Use a photo from your camera or gallery."}
+          {status !== "live"
+            ? "Use a photo from your camera or gallery."
+            : auto
+              ? steady > 0
+                ? "Hold steady…"
+                : "Fit the whole card inside the frame and hold still. It snaps by itself."
+              : "Fit the whole card inside the frame. Avoid glare."}
         </p>
         {status === "live" && (
           <button
             ref={shutterRef}
             onClick={capture}
             aria-label="Take photo"
-            className="h-18 w-18 rounded-full border-4 border-white bg-white/25 outline-offset-4 active:bg-white/60"
+            className="relative rounded-full border-4 border-white bg-white/25 outline-offset-4 active:bg-white/60"
             style={{ height: 72, width: 72 }}
-          />
+          >
+            {auto && steady > 0 && (
+              <svg viewBox="0 0 36 36" className="absolute -inset-2.5 -rotate-90" aria-hidden>
+                <circle cx="18" cy="18" r="17" fill="none" stroke="#ffcb2e" strokeWidth="2" strokeDasharray={`${(steady / STEADY_TICKS) * 106.8} 106.8`} strokeLinecap="round" />
+              </svg>
+            )}
+          </button>
         )}
         <label className="cursor-pointer text-sm font-semibold text-white underline underline-offset-4">
           Upload a photo instead

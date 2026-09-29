@@ -68,6 +68,8 @@ export interface CatalogProvider {
   getCards(catalogIds: string[]): Promise<CatalogCard[]>;
   /** Every card in a set, sorted by collector number. */
   listSet(setId: string): Promise<CatalogCard[]>;
+  /** Cards whose name starts with this Pokémon's name (all sets), newest first. */
+  listByName(name: string): Promise<CatalogCard[]>;
 }
 
 export const SET_ID_RE = /^[A-Za-z0-9][A-Za-z0-9.]{0,31}$/;

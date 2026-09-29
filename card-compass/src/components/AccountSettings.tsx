@@ -4,6 +4,7 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { api } from "@/lib/client-api";
 import { REGIONS } from "@/lib/regions";
+import { AccentPicker } from "./AccentPicker";
 import { useRegion } from "./PreferenceSelector";
 
 export function AccountSettings({
@@ -95,6 +96,7 @@ export function AccountSettings({
         </select>
       </label>
       {msg && <p role="status" className="text-sm text-good">{msg}</p>}
+      <AccentPicker />
       <section className="grid gap-2 rounded-xl border border-bad-line bg-bad-soft p-4">
         <h2 className="font-semibold text-bad">Delete account</h2>
         <p className="text-sm text-bad">Permanently deletes your account, collection, value history, alerts and push subscriptions.</p>

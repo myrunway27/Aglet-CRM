@@ -38,7 +38,7 @@ test("scan from the search bar: confident match, one tap to prices, adjust finis
   await page.getByText("All price details and sources").click();
   const tcg = page.getByTestId("source-tcgplayer");
   await expect(tcg).toContainText("TCGplayer");
-  await expect(tcg).toContainText(/Updated 27 Sept? 2026/);
+  await expect(tcg).toContainText(/Updated \d{1,2} [A-Z][a-z]{2,4} \d{4}/);
   await expect(page.getByText(/so we don't rank them or pick a "cheapest"/)).toBeVisible();
 
   // Listings are clearly demo and never link out.

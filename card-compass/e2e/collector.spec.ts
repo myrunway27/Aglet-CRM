@@ -48,6 +48,7 @@ test("bulk scan, binders, profit/loss, CSV export + import", async ({ page }, in
   await expect(page.getByRole("button", { name: "Trade", pressed: true })).toBeVisible();
   await expect(page.getByText("No cards in this binder yet.")).toBeVisible();
   await page.getByRole("button", { name: "All cards" }).click();
+  await page.getByRole("button", { name: "list", exact: true }).click();
   await page.getByLabel("Binder for Charizard ex").selectOption({ label: "Trade" });
   await page.getByRole("button", { name: "Trade" }).click();
   await expect(page.getByText(/1 card in Trade/)).toBeVisible();
@@ -74,7 +75,7 @@ test("bulk scan, binders, profit/loss, CSV export + import", async ({ page }, in
 
   // Set completion
   await page.goto("/sets");
-  await expect(page.getByRole("link", { name: /Fixture Set Alpha\s*2 \/ 4 \(50%\)/ })).toBeVisible();
+  await expect(page.getByRole("link", { name: /Fixture Set Alpha\s*2 of 4 cards/ })).toBeVisible();
   await page.getByRole("link", { name: /Fixture Set Alpha/ }).click();
   await page.getByRole("button", { name: "missing" }).click();
   await page.getByRole("button", { name: "Add to wishlist Raichu" }).click();

@@ -29,8 +29,16 @@ export default async function RootLayout({ children }: LayoutProps<"/">) {
         .catch(() => 0)
     : 0;
   return (
-    <html lang="en" className={`h-full antialiased ${body.variable} ${heading.variable}`}>
-      <body className="flex min-h-full flex-col pb-16 font-sans sm:pb-0">
+    <html lang="en" className={`h-full antialiased ${body.variable} ${heading.variable}`} suppressHydrationWarning>
+      <head>
+        {/* Apply the saved accent colour before first paint (no flash). */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `try{var a=localStorage.getItem("cc.accent");if(a&&/^[a-z]{3,8}$/.test(a))document.documentElement.dataset.accent=a}catch(e){}`,
+          }}
+        />
+      </head>
+      <body className="flex min-h-full flex-col pb-16 font-sans lg:pb-0">
         <a
           href="#main"
           className="sr-only focus:not-sr-only focus:absolute focus:left-2 focus:top-2 focus:z-50 focus:rounded focus:bg-surface focus:px-3 focus:py-2 focus:text-ink"

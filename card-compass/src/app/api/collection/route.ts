@@ -34,6 +34,10 @@ export async function GET(req: Request) {
     const valued = result!.valued.filter((v) =>
       binder === "all" ? true : binder === "none" ? v.item.binderId === null : v.item.binderId === binder,
     );
+    // Card metadata (rarity, images) for picture views and insights; cached by the catalog.
+    const meta = new Map(
+      (await getCatalog().getCards([...new Set(valued.map((v) => v.item.catalogId))]).catch(() => [])).map((c) => [c.catalogId, c]),
+    );
     const totals = totalCollection(valued);
     const pnlInputs = valued.map((v) => ({ ...v.item, valuation: v.valuation }));
     const pnl = totals.map((t) => totalPnl(pnlInputs, t.source, t.currency, fx, now));
@@ -48,6 +52,10 @@ export async function GET(req: Request) {
       binders: binders.map((b) => ({ id: b.id, name: b.name })),
       items: valued.map((v) => ({
         ...v.item,
+        rarity: meta.get(v.item.catalogId)?.rarity ?? null,
+        imageSmall: meta.get(v.item.catalogId)?.imageSmall ?? null,
+        imageLarge: meta.get(v.item.catalogId)?.imageLarge ?? null,
+        setPrintedTotal: meta.get(v.item.catalogId)?.setPrintedTotal ?? null,
         valuation: v.valuation,
         fromStore: v.fromStore,
         pnl: {

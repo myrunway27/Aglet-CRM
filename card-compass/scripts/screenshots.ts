@@ -98,6 +98,18 @@ async function run(label: string, width: number, height: number) {
   await page.getByRole("heading", { name: "Prices for your card" }).waitFor();
   await page.getByTestId("offers").getByRole("heading").first().waitFor();
   await shot("11-graded-results");
+
+  await page.goto(`${BASE}/`);
+  await page.getByTestId("portfolio-value").waitFor();
+  await page.getByRole("img", { name: /Collection value over/ }).waitFor();
+  await shot("13-portfolio-home");
+  await page.goto(`${BASE}/collection`);
+  await page.getByRole("button", { name: "binder" }).click();
+  await page.getByTestId("binder").waitFor();
+  await shot("14-binder");
+  await page.goto(`${BASE}/pokedex/Charizard`);
+  await page.getByTestId("pokedex-grid").waitFor();
+  await shot("15-pokedex");
   await browser.close();
 }
 

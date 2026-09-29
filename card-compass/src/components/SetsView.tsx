@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { ClientApiError } from "@/lib/api-types";
 import { api } from "@/lib/client-api";
+import { ProgressRing } from "./ProgressRing";
 
 interface SetRow {
   setId: string;
@@ -38,18 +39,15 @@ export function SetsView() {
       ) : (
         <ul className="grid gap-2 sm:grid-cols-2">
           {sets.map((s) => {
-            const pct = s.total ? Math.round((s.owned / s.total) * 100) : null;
             return (
               <li key={s.setId}>
-                <Link href={`/sets/${encodeURIComponent(s.setId)}`} className="grid gap-2 rounded-lg border border-line bg-surface p-3 hover:border-line-strong">
-                  <span className="flex items-baseline justify-between gap-2">
-                    <span className="font-semibold">{s.setName}</span>
-                    <span className="text-sm text-ink-2">
-                      {s.owned} / {s.total ?? "?"} {pct !== null && `(${pct}%)`}
+                <Link href={`/sets/${encodeURIComponent(s.setId)}`} className="flex items-center gap-4 rounded-2xl border border-line bg-surface p-4 hover:border-ink">
+                  <ProgressRing owned={s.owned} total={s.total ?? 0} />
+                  <span className="min-w-0">
+                    <span className="block truncate font-display text-lg font-bold">{s.setName}</span>
+                    <span className="block text-sm text-ink-2">
+                      {s.owned} of {s.total ?? "?"} cards
                     </span>
-                  </span>
-                  <span className="block h-2 overflow-hidden rounded-full bg-sunken-2" aria-hidden>
-                    <span className="block h-full rounded-full bg-primary" style={{ width: `${pct ?? 0}%` }} />
                   </span>
                 </Link>
               </li>

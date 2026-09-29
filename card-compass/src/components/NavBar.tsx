@@ -12,14 +12,14 @@ const TABS: Array<{ href: string; label: string; icon: string }> = [
   { href: "/more", label: "More", icon: "M5 12h.01M12 12h.01M19 12h.01" },
 ];
 
-/** App-style tab bar on phones (the top links take over from the sm breakpoint). */
+/** App-style tab bar on phones and tablets (the top links take over at laptop widths). */
 export function BottomTabs({ unread }: { unread: number }) {
   const path = usePathname();
   const isActive = (href: string) => (href === "/" ? path === "/" : path.startsWith(href));
   return (
     <nav
       aria-label="Tabs"
-      className="fixed inset-x-0 bottom-0 z-40 border-t border-line bg-surface/90 backdrop-blur-md sm:hidden"
+      className="fixed inset-x-0 bottom-0 z-40 border-t border-line bg-surface/90 backdrop-blur-md lg:hidden"
       style={{ paddingBottom: "env(safe-area-inset-bottom, 0px)" }}
     >
       <ul className="grid grid-cols-5">
@@ -63,11 +63,12 @@ export function NavBar({ signedIn, unread }: { signedIn: boolean; unread: number
     </Link>
   );
   return (
-    <nav aria-label="Main" className="hidden items-center gap-1 whitespace-nowrap text-sm sm:flex">
+    <nav aria-label="Main" className="hidden items-center gap-1 whitespace-nowrap text-sm lg:flex">
       {link("/", "Search")}
       {link("/collection", "Collection")}
       {link("/wishlist", "Wishlist")}
       {link("/sets", "Sets")}
+      {link("/pokedex", "Pokédex")}
       {link("/market", "Market")}
       {link(
         "/alerts",

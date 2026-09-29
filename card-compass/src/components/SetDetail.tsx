@@ -6,6 +6,7 @@ import { ClientApiError } from "@/lib/api-types";
 import { finishLabel, type CatalogCard } from "@/lib/catalog/types";
 import { api } from "@/lib/client-api";
 import { CardArt } from "./CardArt";
+import { ProgressRing } from "./ProgressRing";
 
 interface Row {
   card: CatalogCard;
@@ -45,11 +46,14 @@ export function SetDetail({ setId }: { setId: string }) {
   return (
     <div className="grid gap-5">
       <Link href="/sets" className="text-sm font-medium text-link underline">← All sets</Link>
-      <div>
-        <h1 className="text-2xl font-bold">{data.setName}</h1>
-        <p className="text-ink-2">
-          You own {owned} of {data.cards.length} cards ({Math.round((owned / data.cards.length) * 100)}%).
-        </p>
+      <div className="flex items-center gap-4">
+        <ProgressRing owned={owned} total={data.cards.length} size={72} />
+        <div>
+          <h1 className="text-2xl font-extrabold sm:text-3xl">{data.setName}</h1>
+          <p className="text-ink-2">
+            You own {owned} of {data.cards.length} cards ({Math.round((owned / data.cards.length) * 100)}%).
+          </p>
+        </div>
       </div>
       <div className="flex gap-2" role="group" aria-label="Filter cards">
         {(["all", "missing", "owned"] as const).map((f) => (

@@ -194,6 +194,29 @@ export class PokemonTcgProvider implements CatalogProvider {
     return out;
   }
 
+  async listByName(name: string): Promise<CatalogCard[]> {
+    const term = sanitizeTerm(name);
+    if (!term) return [];
+    const key = `species:${term.toLowerCase()}`;
+    const hit = this.searchCache.get(key);
+    if (hit?.fresh) return hit.value;
+    try {
+      const res = await this.get<{ data: ApiCard[] }>("/cards", {
+        q: `name:"${term}*"`,
+        pageSize: "250",
+        orderBy: "-set.releaseDate",
+        select: SELECT,
+      });
+      for (const c of res.data) this.cacheCard(c);
+      const cards = res.data.map(mapApiCard);
+      this.searchCache.set(key, cards);
+      return cards;
+    } catch (err) {
+      if (hit) return hit.value;
+      throw err;
+    }
+  }
+
   async listSet(setId: string): Promise<CatalogCard[]> {
     if (!SET_ID_RE.test(setId)) return [];
     const key = `set:${setId}`;

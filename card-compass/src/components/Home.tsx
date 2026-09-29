@@ -8,6 +8,7 @@ import type { CatalogCard } from "@/lib/catalog/types";
 import { CameraScanner } from "./CameraScanner";
 import { CardArt } from "./CardArt";
 import { DemoBanner } from "./DemoBanner";
+import { PortfolioPanel } from "./PortfolioPanel";
 
 type Recent = Pick<CatalogCard, "catalogId" | "name" | "setName" | "number">;
 type ScanState =
@@ -81,7 +82,7 @@ function HeroCards() {
   );
 }
 
-export function Home({ initialMode }: { initialMode: "mock" | "live" }) {
+export function Home({ initialMode, signedIn = false }: { initialMode: "mock" | "live"; signedIn?: boolean }) {
   const router = useRouter();
   const listId = useId();
   const [query, setQuery] = useState("");
@@ -182,16 +183,17 @@ export function Home({ initialMode }: { initialMode: "mock" | "live" }) {
 
   return (
     <div className="grid grid-cols-[minmax(0,1fr)] gap-6">
+      {signedIn && <PortfolioPanel />}
       <section
         aria-labelledby="find-h"
-        className="relative -mx-4 grid grid-cols-[minmax(0,1fr)] gap-5 overflow-hidden border-b border-line bg-surface px-4 pt-6 pb-7 sm:mx-0 sm:rounded-3xl sm:border sm:p-10 md:grid-cols-[minmax(0,1fr)_280px]"
+        className={`relative -mx-4 grid grid-cols-[minmax(0,1fr)] gap-5 overflow-hidden border-b border-line bg-surface px-4 pt-6 pb-7 sm:mx-0 sm:rounded-3xl sm:border ${signedIn ? "sm:p-7" : "sm:p-10 md:grid-cols-[minmax(0,1fr)_280px]"}`}
         style={{ backgroundImage: "var(--hero-glow)" }}
       >
-        <HeroCards />
+        {!signedIn && <HeroCards />}
         <div className="grid grid-cols-[minmax(0,1fr)] gap-5 md:col-start-1 md:row-start-1">
         <div className="grid gap-2">
           <p className="text-xs font-bold uppercase tracking-[0.14em] text-muted">Pokémon TCG price checker</p>
-          <h1 id="find-h" className="font-display text-[2.1rem] leading-[1.05] font-extrabold sm:text-5xl">
+          <h1 id="find-h" className={`font-display leading-[1.05] font-extrabold ${signedIn ? "text-2xl sm:text-3xl" : "text-[2.1rem] sm:text-5xl"}`}>
             Find any Pokémon card
           </h1>
           <p className="max-w-md text-base text-ink-2 sm:text-lg">Type a name or number, or scan the card with your camera.</p>
@@ -304,7 +306,7 @@ export function Home({ initialMode }: { initialMode: "mock" | "live" }) {
 
       {initialMode === "mock" && <DemoBanner />}
 
-      {scan.kind === "idle" && !results && !searching && (
+      {!signedIn && scan.kind === "idle" && !results && !searching && (
         <section aria-labelledby="how-h" className="grid gap-3">
           <h2 id="how-h" className="text-xs font-bold uppercase tracking-[0.12em] text-muted">How it works</h2>
           <ol className="grid gap-3 sm:grid-cols-3">

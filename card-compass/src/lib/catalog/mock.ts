@@ -62,6 +62,15 @@ export class MockCatalogProvider implements CatalogProvider {
       .sort((a, b) => compareNumbers(a.number, b.number));
   }
 
+  async listByName(name: string): Promise<CatalogCard[]> {
+    const q = normalizeName(name);
+    if (!q) return [];
+    return this.cards
+      .filter((c) => normalizeName(c.name).startsWith(q))
+      .map(mapApiCard)
+      .sort((a, b) => (b.releaseDate ?? "").localeCompare(a.releaseDate ?? ""));
+  }
+
   async getCard(catalogId: string): Promise<CatalogCardWithPrices> {
     const c = this.cards.find((x) => x.id === catalogId);
     if (!c) throw new NotFoundError("Card not found");

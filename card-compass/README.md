@@ -20,11 +20,18 @@ An installable web app (PWA) for Pokémon TCG cards:
    - Never shown: email, purchase prices, cert numbers.
    - Links are 128-bit random, noindex, and can be revoked immediately.
 
+8. **Home and browsing**:
+   - Signed in, the home screen opens on your **portfolio**: collection value per source (TCGplayer, Cardmarket, PriceCharting sales) with a 7/30/90-day chart, today's change, and the biggest gains and drops. Sources and currencies are never mixed.
+   - The collection shows as a **picture grid**, a **3×3 binder** or a list (remembered per device). Tappable **insight cards** (by set, rarity, raw or graded) filter it.
+   - **Completion rings** on sets, and a **Pokédex**: every card of a Pokémon, with owned and missing filters.
+   - **Accent colours** (yellow, blue, pink, green, purple) on the More page and in Account settings.
+   - **Auto-capture**: the camera snaps by itself once the card is held still (can be switched off).
+
 Out of the box everything runs in **demo mode**, with bundled, clearly labeled sample data and no credentials. Each integration switches on with an environment variable and your own API key.
 
-| Results (mobile) | Collection (desktop) |
-|---|---|
-| ![](docs/screenshots/mobile-390-3-results.png) | ![](docs/screenshots/desktop-1280-4-collection.png) |
+| Portfolio home (mobile) | Results (mobile) | Collection (desktop) |
+|---|---|---|
+| ![](docs/screenshots/mobile-390-13-portfolio-home.png) | ![](docs/screenshots/mobile-390-3-results.png) | ![](docs/screenshots/desktop-1280-4-collection.png) |
 
 ## Integrations and status
 
