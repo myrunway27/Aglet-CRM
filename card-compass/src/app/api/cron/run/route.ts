@@ -25,3 +25,6 @@ export async function POST(req: Request) {
     return errorResponse(err, "cron");
   }
 }
+
+/** Vercel Cron calls with GET and the same "Authorization: Bearer $CRON_SECRET" header. */
+export const GET = POST;

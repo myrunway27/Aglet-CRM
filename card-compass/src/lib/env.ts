@@ -44,6 +44,9 @@ const schema = z.object({
   EBAY_LIMIT_PER_MINUTE: optionalInt(60),
   EBAY_MIN_FEEDBACK_PCT: optionalInt(98),
   EBAY_MIN_FEEDBACK_SCORE: optionalInt(20),
+  // Marketplace account-deletion notifications (required by eBay for production keys).
+  EBAY_VERIFICATION_TOKEN: optionalString,
+  EBAY_DELETION_ENDPOINT: optionalString,
   FX_PROVIDER: z.enum(["mock", "ecb"]).default("mock"),
   PRICECHARTING_PROVIDER: z.enum(["none", "mock", "live"]).default("mock"),
   PRICECHARTING_TOKEN: optionalString,
@@ -54,6 +57,9 @@ const schema = z.object({
   PSA_LIMIT_PER_DAY: optionalInt(100),
   CRON_SECRET: optionalString,
   // Public base URL used in emailed links (never derived from the Host header).
+  // Shown on /privacy and /terms. While unset, those pages are marked as drafts.
+  LEGAL_OPERATOR_NAME: optionalString,
+  LEGAL_CONTACT_EMAIL: optionalString,
   APP_URL: z.string().url().default("http://localhost:3000"),
   // "outbox" writes emails to ./.outbox (dev/test), "resend" sends via the Resend API, "none" disables email.
   MAIL_PROVIDER: z.enum(["none", "outbox", "resend"]).default("outbox"),

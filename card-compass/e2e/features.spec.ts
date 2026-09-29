@@ -52,18 +52,18 @@ test("collection opens as a picture grid with insight filters and a binder view"
   await expect(page.getByTestId("binder")).toBeVisible();
 });
 
-test("Pokédex shows every card of a Pokémon and what you own", async ({ page }, info) => {
+test("Browse by Pokémon shows every card of a Pokémon and what you own", async ({ page }, info) => {
   await signUpWithCards(page, `dex-${info.project.name}`);
   await page.goto("/cards/fxa-125?finish=holofoil&lang=en&grading=raw&condition=NM");
   await page.getByRole("link", { name: "All Charizard cards →" }).click();
-  await expect(page).toHaveURL(/\/pokedex\/Charizard$/);
+  await expect(page).toHaveURL(/\/pokemon\/Charizard$/);
   await expect(page.getByRole("heading", { name: "Charizard" })).toBeVisible();
   await expect(page.getByText(/3 cards · you own 1/)).toBeVisible();
-  await expect(page.getByTestId("pokedex-grid").getByRole("link")).toHaveCount(3);
+  await expect(page.getByTestId("species-grid").getByRole("link")).toHaveCount(3);
   await page.getByRole("button", { name: "owned", exact: true }).click();
-  await expect(page.getByTestId("pokedex-grid").getByRole("link")).toHaveCount(1);
+  await expect(page.getByTestId("species-grid").getByRole("link")).toHaveCount(1);
 
-  await page.goto("/pokedex");
+  await page.goto("/pokemon");
   await expect(page.getByRole("link", { name: /Pikachu/ })).toBeVisible();
   await page.getByLabel("Pokémon name").fill("Mew");
   await page.getByRole("button", { name: "Open" }).click();
@@ -79,4 +79,15 @@ test("accent colour can be changed and is remembered", async ({ page }) => {
   await page.goto("/more");
   await page.getByText("Yellow", { exact: true }).click();
   await expect(page.locator("html")).not.toHaveAttribute("data-accent", /.+/);
+});
+
+test("legal pages are linked, old Pokédex links redirect, eBay endpoint refuses until configured", async ({ page, request }) => {
+  await page.goto("/pokedex/Charizard");
+  await expect(page).toHaveURL(/\/pokemon\/Charizard$/);
+  await page.getByRole("contentinfo").getByRole("link", { name: "Privacy" }).click();
+  await expect(page.getByRole("heading", { name: "Privacy", level: 1 })).toBeVisible();
+  await expect(page.getByRole("note")).toContainText("Draft");
+  await page.goto("/terms");
+  await expect(page.getByRole("heading", { name: "Terms of use" })).toBeVisible();
+  expect((await request.get("/api/ebay/account-deletion?challenge_code=x")).status()).toBe(503);
 });

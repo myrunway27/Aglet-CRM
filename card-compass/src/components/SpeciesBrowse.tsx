@@ -9,13 +9,13 @@ import { api } from "@/lib/client-api";
 import { CardArt } from "./CardArt";
 import { ProgressRing } from "./ProgressRing";
 
-export function PokedexIndex({ signedIn }: { signedIn: boolean }) {
+export function SpeciesIndex({ signedIn }: { signedIn: boolean }) {
   const router = useRouter();
   const [q, setQ] = useState("");
   const [species, setSpecies] = useState<Array<{ species: string; distinct: number; quantity: number }> | null>(null);
   useEffect(() => {
     if (!signedIn) return;
-    api<{ species: Array<{ species: string; distinct: number; quantity: number }> }>("/api/pokedex")
+    api<{ species: Array<{ species: string; distinct: number; quantity: number }> }>("/api/species")
       .then((r) => setSpecies(r.species))
       .catch(() => setSpecies([]));
   }, [signedIn]);
@@ -23,14 +23,14 @@ export function PokedexIndex({ signedIn }: { signedIn: boolean }) {
   return (
     <div className="grid gap-6">
       <div className="grid gap-1">
-        <h1 className="text-3xl font-extrabold">Pokédex</h1>
+        <h1 className="text-3xl font-extrabold">Browse by Pokémon</h1>
         <p className="text-ink-2">Every card of one Pokémon in one place, across all sets and forms (ex, V, VMAX…).</p>
       </div>
       <form
         role="search"
         onSubmit={(e) => {
           e.preventDefault();
-          if (q.trim().length >= 2) router.push(`/pokedex/${encodeURIComponent(q.trim())}`);
+          if (q.trim().length >= 2) router.push(`/pokemon/${encodeURIComponent(q.trim())}`);
         }}
         className="flex max-w-lg gap-2"
       >
@@ -55,7 +55,7 @@ export function PokedexIndex({ signedIn }: { signedIn: boolean }) {
             <ul className="flex flex-wrap gap-2">
               {species.map((s) => (
                 <li key={s.species}>
-                  <Link href={`/pokedex/${encodeURIComponent(s.species)}`} className="flex items-center gap-2 rounded-full border border-line bg-surface px-3 py-1.5 font-semibold hover:border-ink">
+                  <Link href={`/pokemon/${encodeURIComponent(s.species)}`} className="flex items-center gap-2 rounded-full border border-line bg-surface px-3 py-1.5 font-semibold hover:border-ink">
                     {s.species}
                     <span className="rounded-full bg-sunken px-1.5 text-xs font-bold text-muted">{s.distinct}</span>
                   </Link>
@@ -66,7 +66,7 @@ export function PokedexIndex({ signedIn }: { signedIn: boolean }) {
         </section>
       ) : (
         <p className="text-ink-2">
-          <Link href="/login?next=/pokedex" className="font-semibold text-link underline">Sign in</Link> to see which Pokémon you already own.
+          <Link href="/login?next=/pokemon" className="font-semibold text-link underline">Sign in</Link> to see which Pokémon you already own.
         </p>
       )}
     </div>
@@ -79,12 +79,12 @@ interface SpeciesData {
   signedIn: boolean;
 }
 
-export function PokedexSpecies({ name }: { name: string }) {
+export function SpeciesDetail({ name }: { name: string }) {
   const [data, setData] = useState<SpeciesData | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [filter, setFilter] = useState<"all" | "owned" | "missing">("all");
   useEffect(() => {
-    api<SpeciesData>(`/api/pokedex?name=${encodeURIComponent(name)}`)
+    api<SpeciesData>(`/api/species?name=${encodeURIComponent(name)}`)
       .then(setData)
       .catch((err) => setError(err instanceof ClientApiError ? err.message : "Network error."));
   }, [name]);
@@ -96,7 +96,7 @@ export function PokedexSpecies({ name }: { name: string }) {
 
   return (
     <div className="grid gap-5">
-      <Link href="/pokedex" className="text-sm font-semibold text-link underline">← Pokédex</Link>
+      <Link href="/pokemon" className="text-sm font-semibold text-link underline">← All Pokémon</Link>
       <div className="flex items-center gap-4">
         {data.signedIn && <ProgressRing owned={owned} total={data.cards.length} size={72} />}
         <div>
@@ -124,7 +124,7 @@ export function PokedexSpecies({ name }: { name: string }) {
       {data.cards.length === 0 ? (
         <p className="rounded-2xl border border-line bg-surface p-4">No cards found for &quot;{name}&quot;. Check the spelling.</p>
       ) : (
-        <ul className="grid grid-cols-3 gap-3 sm:grid-cols-4 lg:grid-cols-6" data-testid="pokedex-grid">
+        <ul className="grid grid-cols-3 gap-3 sm:grid-cols-4 lg:grid-cols-6" data-testid="species-grid">
           {rows.map(({ card, ownedCount }) => (
             <li key={card.catalogId}>
               <Link href={`/cards/${encodeURIComponent(card.catalogId)}`} className="card-lift grid gap-1 rounded-2xl p-1.5 hover:bg-surface">

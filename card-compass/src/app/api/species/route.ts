@@ -9,7 +9,7 @@ import { speciesOf } from "@/lib/portfolio";
 export const runtime = "nodejs";
 
 /**
- * Pokédex view. With ?name=: every card of that Pokémon (all sets, incl.
+ * Browse-by-Pokémon view. With ?name=: every card of that Pokémon (all sets, incl.
  * ex/V/VMAX forms) and which you own. Without: the species in your collection.
  */
 export async function GET(req: Request) {
@@ -49,6 +49,6 @@ export async function GET(req: Request) {
       signedIn: Boolean(user),
     });
   } catch (err) {
-    return errorResponse(err, "pokedex");
+    return errorResponse(err, "species");
   }
 }

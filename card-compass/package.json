@@ -16,6 +16,7 @@
     "db:seed": "prisma db seed",
     "fixtures": "tsx scripts/make-fixtures.ts",
     "screenshots": "tsx scripts/screenshots.ts",
+    "check:live": "tsx --conditions=react-server scripts/check-live.ts",
     "postinstall": "prisma generate",
     "cap:sync": "cap sync",
     "cap:android": "cap open android",

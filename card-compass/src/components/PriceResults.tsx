@@ -315,7 +315,7 @@ export function PriceResults({
             {card.setPrintedTotal ? `/${card.setPrintedTotal}` : ""}
             {card.rarity ? ` · ${card.rarity}` : ""}
           </p>
-          <Link href={`/pokedex/${encodeURIComponent(speciesOf(card.name))}`} className="justify-self-start text-sm font-semibold text-link underline">
+          <Link href={`/pokemon/${encodeURIComponent(speciesOf(card.name))}`} className="justify-self-start text-sm font-semibold text-link underline">
             All {speciesOf(card.name)} cards →
           </Link>
           <SelectionBar cardId={cardId} finishes={card.finishes} selection={selection} assumed={assumed} />

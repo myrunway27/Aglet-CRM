@@ -68,7 +68,7 @@ export function NavBar({ signedIn, unread }: { signedIn: boolean; unread: number
       {link("/collection", "Collection")}
       {link("/wishlist", "Wishlist")}
       {link("/sets", "Sets")}
-      {link("/pokedex", "Pokédex")}
+      {link("/pokemon", "Pokémon")}
       {link("/market", "Market")}
       {link(
         "/alerts",

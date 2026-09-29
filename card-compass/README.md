@@ -23,7 +23,7 @@ An installable web app (PWA) for Pokémon TCG cards:
 8. **Home and browsing**:
    - Signed in, the home screen opens on your **portfolio**: collection value per source (TCGplayer, Cardmarket, PriceCharting sales) with a 7/30/90-day chart, today's change, and the biggest gains and drops. Sources and currencies are never mixed.
    - The collection shows as a **picture grid**, a **3×3 binder** or a list (remembered per device). Tappable **insight cards** (by set, rarity, raw or graded) filter it.
-   - **Completion rings** on sets, and a **Pokédex**: every card of a Pokémon, with owned and missing filters.
+   - **Completion rings** on sets, and **Browse by Pokémon**: every card of a Pokémon, with owned and missing filters.
    - **Accent colours** (yellow, blue, pink, green, purple) on the More page and in Account settings.
    - **Auto-capture**: the camera snaps by itself once the card is held still (can be switched off).
 
@@ -32,6 +32,8 @@ Out of the box everything runs in **demo mode**, with bundled, clearly labeled s
 | Portfolio home (mobile) | Results (mobile) | Collection (desktop) |
 |---|---|---|
 | ![](docs/screenshots/mobile-390-13-portfolio-home.png) | ![](docs/screenshots/mobile-390-3-results.png) | ![](docs/screenshots/desktop-1280-4-collection.png) |
+
+**Going live:** see [docs/DEPLOY.md](docs/DEPLOY.md) for the accounts, keys and hosting steps, and run `npm run check:live` to test your keys.
 
 ## Integrations and status
 
@@ -105,13 +107,7 @@ Try it:
 
 ## Going live: what you need to do
 
-1. **Pokémon TCG API:** get a key at pokemontcg.io, then set `CATALOG_PROVIDER=pokemontcg` and `POKEMONTCG_API_KEY`.
-2. **Google Cloud Vision:** enable the Vision API, create an API key restricted to it, then set `OCR_PROVIDER=google` and `GOOGLE_CLOUD_VISION_API_KEY`.
-3. **eBay:** join the eBay Developers Program and create a Production keyset. Set `OFFERS_PROVIDER=ebay`, `EBAY_CLIENT_ID` and `EBAY_CLIENT_SECRET`. Read the eBay API License Agreement: display, caching and linking rules apply, and consider the eBay Partner Network for affiliate links.
-4. **FX:** set `FX_PROVIDER=ecb`. It needs no key.
-5. **Push:** run `npx web-push generate-vapid-keys`, then set the three `VAPID` variables.
-6. **Cron:** set `CRON_SECRET` and schedule `POST /api/cron/run` hourly or daily, using your host's cron, a GitHub Action or Vercel Cron.
-7. **Test each integration live** with real cards before announcing anything. See the checklist below.
+Follow [docs/DEPLOY.md](docs/DEPLOY.md): the accounts and keys to get, hosting on Vercel with Postgres, and the checks to do before launch. Then run `npm run check:live` to test every key against the real services, and test with real cards before announcing anything.
 
 ## Environment variables
 
@@ -125,6 +121,7 @@ npm test               # Vitest: 137 unit tests
 npm run build
 npm run test:e2e       # Playwright, 30 tests at desktop 1280 + mobile 390 (needs Postgres; seeds demo data; run after build)
 npm run screenshots    # app on :3100 → docs/screenshots/*.png
+npm run check:live     # test real API keys; see docs/DEPLOY.md
 ```
 
 The unit tests cover:

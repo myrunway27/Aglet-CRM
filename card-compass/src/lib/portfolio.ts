@@ -123,7 +123,7 @@ export function change(points: PortfolioPoint[], back: number) {
   return { minor: last.valueMinor - prev.valueMinor, pct: (last.valueMinor - prev.valueMinor) / prev.valueMinor };
 }
 
-/** Species for Pokédex grouping: "Charizard ex" -> "Charizard", "Pikachu V" -> "Pikachu". */
+/** Species for browse-by-Pokémon grouping: "Charizard ex" -> "Charizard", "Pikachu V" -> "Pikachu". */
 export function speciesOf(cardName: string): string {
   return cardName
     .replace(/\s+(ex|EX|GX|V|VMAX|VSTAR|V-UNION|BREAK|LV\.?\s?X|Prime|δ|◇|☆|Star)$/u, "")

@@ -107,9 +107,9 @@ async function run(label: string, width: number, height: number) {
   await page.getByRole("button", { name: "binder" }).click();
   await page.getByTestId("binder").waitFor();
   await shot("14-binder");
-  await page.goto(`${BASE}/pokedex/Charizard`);
-  await page.getByTestId("pokedex-grid").waitFor();
-  await shot("15-pokedex");
+  await page.goto(`${BASE}/pokemon/Charizard`);
+  await page.getByTestId("species-grid").waitFor();
+  await shot("15-pokemon");
   await browser.close();
 }
 
